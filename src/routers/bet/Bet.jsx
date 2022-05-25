@@ -15,6 +15,7 @@ export default function Bet() {
   return (
     <>
       <DefaultHeader />
+
       <BetBox>
         <section className="innerBox">
           <article className="tokenArea">
@@ -220,7 +221,7 @@ const BetBox = styled.main`
             align-items: center;
             gap: 4px;
             font-size: 12px;
-            opacity: 0.4;
+            color: rgba(255, 255, 255, 0.4);
 
             img {
               width: 12px;

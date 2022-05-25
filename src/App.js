@@ -5,6 +5,8 @@ import GlobalStyle from "./components/common/globalStyle";
 import Auth from "./routers/auth/Auth";
 import Bet from "./routers/bet/Bet";
 import Market from "./routers/market/Market";
+import Position from "./routers/position/Position";
+import Setting from "./routers/setting/Setting";
 
 export default function App() {
   return (
@@ -27,8 +29,11 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Auth />} />
           <Route path="/auth/*" element={<Auth />} />
-          <Route path="/bet" element={<Bet />} />
           <Route path="/market/*" element={<Market />} />
+          <Route path="/bet" element={<Bet />} />
+          <Route path="/position/*" element={<Position />} />
+
+          <Route path="/setting/*" element={<Setting />} />
         </Routes>
       </HashRouter>
     </AppBox>

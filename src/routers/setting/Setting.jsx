@@ -2,18 +2,18 @@ import { Route, Routes } from "react-router";
 import styled from "styled-components";
 import DefaultHeader from "../../components/header/DefaultHeader";
 import LeftNav from "../../components/common/LeftNav";
-import Deposit from "./Deposit";
-import { D_marketLeftBarList } from "../../data/D_market";
+import MyProfile from "./MyProfile";
+import { D_settingNavList } from "../../data/D_setting";
 
-export default function Market() {
+export default function Setting() {
   return (
     <MarketBox>
       <DefaultHeader />
 
-      <LeftNav list={D_marketLeftBarList} baseUrl={"market"}/>
+      <LeftNav list={D_settingNavList} baseUrl={"market"} />
 
       <Routes>
-        <Route path="/deposit" element={<Deposit />} />
+        <Route path="/prof" element={<MyProfile />} />
       </Routes>
     </MarketBox>
   );

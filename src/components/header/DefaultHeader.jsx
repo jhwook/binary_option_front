@@ -1,12 +1,23 @@
 import { useLocation, useNavigate } from "react-router";
 import styled from "styled-components";
-import { D_headerList } from "../../data/D_header";
+import { D_headerList, D_lngList } from "../../data/D_header";
 import L_yellow from "../../img/logo/L_yellow.svg";
 import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
+import PopupBg from "../common/PopupBg";
+import SelLngPopup from "./SelLngPopup";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import ProfPopup from "./ProfPopup";
 
 export default function DefaultHeader({ white }) {
   const navigate = useNavigate();
   const location = useLocation();
+  const { i18n } = useTranslation();
+
+  const [lngPopup, setLngPopup] = useState(false);
+  const [profPopup, setProfPopup] = useState(false);
+
+  const token = localStorage.getItem("token");
 
   return (
     <>
@@ -16,41 +27,61 @@ export default function DefaultHeader({ white }) {
             <img src={L_yellow} alt="" />
           </button>
 
-          <ul className="navList">
-            {D_headerList.map((v, i) => (
-              <li
-                key={i}
-                className={`${
-                  location.pathname.indexOf(
-                    String(v.key).toLocaleLowerCase()
-                  ) !== -1 && "on"
-                }`}
-                onClick={() => navigate(v.url)}
-              >
-                {v.key}
-              </li>
-            ))}
+          {token && (
+            <ul className="navList">
+              {D_headerList.map((v, i) => (
+                <li
+                  key={i}
+                  className={`${
+                    location.pathname.indexOf(
+                      String(v.key).toLocaleLowerCase()
+                    ) !== -1 && "on"
+                  }`}
+                  onClick={() => navigate(v.url)}
+                >
+                  {v.key}
+                </li>
+              ))}
 
-            <button className="moreBtn" onClick={() => {}}>
-              <p>More</p>
-              <img src={I_dnPolWhite} alt="" />
-            </button>
-          </ul>
+              <button className="moreBtn" onClick={() => {}}>
+                <p>More</p>
+                <img src={I_dnPolWhite} alt="" />
+              </button>
+            </ul>
+          )}
         </article>
 
         <article className="rightArea">
-          {1 ? (
+          {token ? (
             <>
               <span className="accountBox">{`Demo $1000`}</span>
 
-              <button className="myBtn" onClick={() => {}}>
-                MY
-              </button>
+              <span className="profBox">
+                <button className="myBtn" onClick={() => setProfPopup(true)}>
+                  MY
+                </button>
+
+                {profPopup && (
+                  <>
+                    <ProfPopup off={setProfPopup} />
+                    <PopupBg off={setProfPopup} />
+                  </>
+                )}
+              </span>
             </>
           ) : (
-            <button className="lngBtn" onClick={() => {}}>
-              ENGLISH
-            </button>
+            <div className="lngBox">
+              <button className="lngBtn" onClick={() => setLngPopup(true)}>
+                {D_lngList.find((e) => e.value === i18n.language).key}
+              </button>
+
+              {lngPopup && (
+                <>
+                  <SelLngPopup off={setLngPopup} />
+                  <PopupBg off={setLngPopup} />
+                </>
+              )}
+            </div>
           )}
         </article>
       </DefaultHeaderBox>
@@ -70,6 +101,7 @@ const DefaultHeaderBox = styled.header`
   left: 0;
   position: fixed;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  z-index: 3;
 
   &.white {
     color: #2a2a2a;
@@ -121,8 +153,8 @@ const DefaultHeaderBox = styled.header`
     gap: 8px;
     font-size: 14px;
 
-    .accountBox,
-    .myBtn {
+    & > .accountBox,
+    .profBox .myBtn {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -140,9 +172,16 @@ const DefaultHeaderBox = styled.header`
       }
     }
 
-    .lngBtn {
-      font-size: 14px;
-      font-weight: 700;
+    .profBox {
+    }
+
+    .lngBox {
+      position: relative;
+
+      .lngBtn {
+        font-size: 14px;
+        font-weight: 700;
+      }
     }
   }
 `;
