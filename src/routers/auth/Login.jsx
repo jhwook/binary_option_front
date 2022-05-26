@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { D_joinData, D_loginCategoryList } from "../../data/D_auth";
 import Email from "./common/Email";
@@ -21,7 +21,7 @@ export default function Login() {
 
     if (category)
       signDataForm = {
-        phone: `${userData.phoneLoc}${userData.phone}`,
+        phone: `${userData.phoneLoc} ${userData.phone}`,
         password: userData.pw,
       };
     else signDataForm = { email: userData.email, password: userData.pw };
@@ -33,6 +33,7 @@ export default function Login() {
       .then(({ data }) => {
         console.log(data);
         localStorage.setItem("token", data.accessToken);
+        navigate("/");
       })
       .catch((err) => console.error(err));
   }
@@ -40,6 +41,13 @@ export default function Login() {
   function responseGoogle(e) {
     console.log(e);
   }
+
+  useEffect(() => {
+    console.log(userData.phone);
+
+    if (userData.phone[0] === '0')
+      setUserData({ ...userData, phone: userData.phone.slice(1) });
+  }, [userData.phone]);
 
   return (
     <>
@@ -76,7 +84,7 @@ export default function Login() {
                 <p className="or">or</p>
 
                 <GoogleLogin
-                  clientId="511516218336-9gbsps8s7q5kqvr4jrno5e9nemp5a14t.apps.googleusercontent.com"
+                  clientId="657336551097-o4l4nef4iq0pvvkj2m4jsn8a0326m6pk.apps.googleusercontent.com"
                   onSuccess={responseGoogle}
                   onFailure={responseGoogle}
                   cookiePolicy="single_host_origin"

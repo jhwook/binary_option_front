@@ -4,6 +4,7 @@ import EventListener from "./components/common/EventListener";
 import GlobalStyle from "./components/common/globalStyle";
 import Auth from "./routers/auth/Auth";
 import Bet from "./routers/bet/Bet";
+import Finance from "./routers/finance/Finance";
 import Market from "./routers/market/Market";
 import Position from "./routers/position/Position";
 import Setting from "./routers/setting/Setting";
@@ -32,6 +33,7 @@ export default function App() {
           <Route path="/market/*" element={<Market />} />
           <Route path="/bet" element={<Bet />} />
           <Route path="/position/*" element={<Position />} />
+          <Route path="/finance/*" element={<Finance />} />
 
           <Route path="/setting/*" element={<Setting />} />
         </Routes>

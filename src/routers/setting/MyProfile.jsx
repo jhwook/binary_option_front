@@ -1,21 +1,61 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import PopupBg from "../../components/common/PopupBg";
-import EmailVerificationPopup from "../../components/setting/EmailVerificationPopup";
+import EmailVerificationPopup from "../../components/setting/myProfile/EmailVerificationPopup";
+import axios from "axios";
+import { API } from "../../configs/api";
 
 export default function MyProfile() {
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
   const [changePw, setChangePw] = useState(false);
   const [pwChk, setPwChk] = useState("");
+  const [pwAlarm, setPwAlarm] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [emailVerificationPopup, setEmailVerificationPopup] = useState(false);
 
+  function getProfData() {
+    axios
+      .get(`${API.LOGIN_CHECK}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then(async ({ data }) => {
+        console.log(data);
+        data.email && setEmail(data.email);
+        data.phone && setPhone(data.phone);
+        data.firstName && setFirstName(data.firstName);
+        data.lastName && setLastName(data.lastName);
+      });
+  }
+
+  function onclickSaveBtn() {
+    axios.patch(
+      `${API.USER_PROFILE}`,
+      { email, password: pw, firstName, lastName, phone },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+  }
+
   useEffect(() => {
+    getProfData();
+
     setEmailVerificationPopup(true);
   }, []);
+
+  useEffect(() => {
+    if (!(pw && pwChk)) return;
+
+    if (pw === pwChk) setPwAlarm("");
+    else setPwAlarm("The password you have entered does not coincide");
+  }, [pw, pwChk]);
 
   return (
     <>
@@ -49,7 +89,7 @@ export default function MyProfile() {
 
               <li>
                 <p className="key">Password*</p>
-                <div className="value">
+                <div className={`${pwAlarm && "alarmBox"} value`}>
                   <input
                     type="password"
                     value={pw}
@@ -68,7 +108,7 @@ export default function MyProfile() {
               {changePw && (
                 <li>
                   <p className="key">Confirm Password*</p>
-                  <div className="value">
+                  <div className={`${pwAlarm && "alarmBox"} value`}>
                     <input
                       type="password"
                       value={pwChk}
@@ -76,6 +116,8 @@ export default function MyProfile() {
                       placeholder=""
                     />
                   </div>
+
+                  {pwAlarm && <p className="alarm">{pwAlarm}</p>}
                 </li>
               )}
 
@@ -118,13 +160,14 @@ export default function MyProfile() {
               disabled={
                 !(email && pw && firstName && lastName) || (changePw && !pwChk)
               }
-              onClick={() => {}}
+              onClick={onclickSaveBtn}
             >
               Save
             </button>
           </article>
         </section>
       </MyProfileBox>
+
       {emailVerificationPopup && (
         <>
           <EmailVerificationPopup off={setEmailVerificationPopup} />
@@ -201,6 +244,10 @@ const MyProfileBox = styled.main`
               }
             }
 
+            &.alarmBox {
+              border-color: #ff5353;
+            }
+
             input {
               flex: 1;
               height: 100%;
@@ -209,10 +256,16 @@ const MyProfileBox = styled.main`
             .verified {
               color: #f7ab1f;
             }
-            
+
             button {
               color: rgba(255, 255, 255, 0.4);
             }
+          }
+
+          .alarm {
+            margin: 6px 0 0 0;
+            font-size: 16px;
+            color: #ff5353;
           }
         }
       }

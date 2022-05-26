@@ -17,11 +17,9 @@ export default function EventListener() {
           },
         })
         .then(async ({ data }) => {
-            console.log(data);
-          //   // if (data.status == "OK")
-          //   //   localStorage.setItem("address", data.username.toLowerCase());
-          //   // else localStorage.clear();
-        });
+          console.log(data);
+        })
+        .catch((err) => localStorage.removeItem("token"));
     }
     //dispatch(setLogin(token));
   }, []);

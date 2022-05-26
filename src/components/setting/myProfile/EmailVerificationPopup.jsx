@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { keyframes } from "styled-components";
-import I_spinnerYellow from "../../img/icon/I_spinnerYellow.svg";
+import I_spinnerYellow from "../../../img/icon/I_spinnerYellow.svg";
 
 export default function EmailVerificationPopup({ off }) {
   const [loading, setLoading] = useState(true);

@@ -1,8 +1,13 @@
 import { useState } from "react";
 import styled from "styled-components";
+import PopupBg from "../../../components/common/PopupBg";
+import SelectPopup from "../../../components/common/SelectPopup";
 import I_dnPol from "../../../img/icon/I_dnPol.svg";
+import { D_locNumList } from "../../../data/D_auth";
 
 export default function Phone({ userData, setUserData }) {
+  const [selLocPopup, setSelLocPopup] = useState(false);
+
   return (
     <>
       <PhoneBox>
@@ -10,11 +15,30 @@ export default function Phone({ userData, setUserData }) {
           <p className="key">Phone Number</p>
           <div className="value">
             <div className="selectBox local">
-              <button className="selectBtn" onClick={() => {}}>
+              <button
+                className="selectBtn"
+                onClick={() => setSelLocPopup(true)}
+              >
                 <p>+{userData?.phoneLoc}</p>
 
                 <img src={I_dnPol} alt="" />
               </button>
+
+              {selLocPopup && (
+                <>
+                  <SelectPopup
+                    list={D_locNumList}
+                    setCont={(v) =>
+                      setUserData({
+                        ...userData,
+                        phoneLoc: v,
+                      })
+                    }
+                    off={setSelLocPopup}
+                  />
+                  <PopupBg off={setSelLocPopup} />
+                </>
+              )}
             </div>
             <div className="inputBox">
               <input
@@ -69,6 +93,7 @@ const PhoneBox = styled.ul`
           width: 90px;
           border-radius: 8px;
           border: 1px solid #ddd;
+          position: relative;
 
           &:focus-within {
             border-color: #f7ab1f;
