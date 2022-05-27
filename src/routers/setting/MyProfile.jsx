@@ -6,7 +6,10 @@ import axios from "axios";
 import { API } from "../../configs/api";
 
 export default function MyProfile() {
+  const [profData, setProfData] = useState("");
+  const [uid, setUid] = useState("");
   const [email, setEmail] = useState("");
+  const [emailSend, setEmailSend] = useState(false);
   const [pw, setPw] = useState("");
   const [changePw, setChangePw] = useState(false);
   const [pwChk, setPwChk] = useState("");
@@ -25,11 +28,22 @@ export default function MyProfile() {
       })
       .then(async ({ data }) => {
         console.log(data);
+        data.id && setUid(data.id);
         data.email && setEmail(data.email);
         data.phone && setPhone(data.phone);
         data.firstName && setFirstName(data.firstName);
         data.lastName && setLastName(data.lastName);
+
+        setProfData(data);
       });
+  }
+
+  function onClickVeriEmailBtn() {
+    console.log("post");
+    axios
+      .post(API.USER_CERTIFICATION_EMAIL, { email:"bakujin.dev@gmail.com" })
+      .then((res) => console.log(res))
+      .then((err) => console.error(err));
   }
 
   function onclickSaveBtn() {
@@ -46,8 +60,6 @@ export default function MyProfile() {
 
   useEffect(() => {
     getProfData();
-
-    setEmailVerificationPopup(true);
   }, []);
 
   useEffect(() => {
@@ -56,6 +68,10 @@ export default function MyProfile() {
     if (pw === pwChk) setPwAlarm("");
     else setPwAlarm("The password you have entered does not coincide");
   }, [pw, pwChk]);
+
+  function onBlurPhone() {
+    if (phone[0] === "0") setPhone(phone.slice(1));
+  }
 
   return (
     <>
@@ -71,19 +87,9 @@ export default function MyProfile() {
           <article className="contArea">
             <ul className="inputList">
               <li>
-                <p className="key">Email*</p>
+                <p className="key">UID</p>
                 <div className="value">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder=""
-                  />
-
-                  {/* <p className="verified">Verified</p> */}
-                  <button className="resendBtn" onClick={() => {}}>
-                    Resend
-                  </button>
+                  <input disabled value={uid} />
                 </div>
               </li>
 
@@ -144,12 +150,39 @@ export default function MyProfile() {
               </li>
 
               <li>
+                <p className="key">Email*</p>
+                <div className="value">
+                  <input
+                    type="email"
+                    disabled={profData.email}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder=""
+                  />
+
+                  {profData.email_certification ? (
+                    <p className="verified">Verified</p>
+                  ) : (
+                    <button
+                      className={`${!emailSend && "init"} sendBtn`}
+                      onClick={onClickVeriEmailBtn}
+                    >
+                      {emailSend ? "Resend" : "Unverified"}
+                    </button>
+                  )}
+                </div>
+              </li>
+
+              <li>
                 <p className="key">Phone</p>
                 <div className="value">
                   <input
+                    type="number"
                     value={phone}
+                    disabled={profData.phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder=""
+                    onBlur={onBlurPhone}
                   />
                 </div>
               </li>
@@ -157,9 +190,7 @@ export default function MyProfile() {
 
             <button
               className="saveBtn"
-              disabled={
-                !(email && pw && firstName && lastName) || (changePw && !pwChk)
-              }
+              disabled={!(firstName && lastName) || (changePw && !pwChk)}
               onClick={onclickSaveBtn}
             >
               Save
@@ -179,14 +210,20 @@ export default function MyProfile() {
 }
 
 const MyProfileBox = styled.main`
-  display: flex;
-  gap: 100px;
+  flex: 1;
   padding: 70px 140px;
+
+  @media (max-width: 1440px) {
+    max-width: 1020px;
+    padding: 70px 40px 70px 80px;
+  }
 
   .innerBox {
     display: flex;
     flex-direction: column;
     gap: 40px;
+    height: 100%;
+    overflow-y: scroll;
 
     .titleArea {
       display: flex;
@@ -257,8 +294,12 @@ const MyProfileBox = styled.main`
               color: #f7ab1f;
             }
 
-            button {
+            .sendBtn {
               color: rgba(255, 255, 255, 0.4);
+
+              &.init {
+                color: #ff5353;
+              }
             }
           }
 

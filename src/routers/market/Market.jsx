@@ -10,7 +10,7 @@ export default function Market() {
     <MarketBox>
       <DefaultHeader />
 
-      <LeftNav list={D_marketLeftBarList} baseUrl={"market"}/>
+      <LeftNav list={D_marketLeftBarList} baseUrl={"market"} />
 
       <Routes>
         <Route path="/deposit" element={<Deposit />} />
@@ -20,8 +20,11 @@ export default function Market() {
 }
 
 const MarketBox = styled.main`
+  display: flex;
+  width: 100vw;
   height: 100vh;
-  padding: 60px 0 0 348px;
+  padding: 60px 0 0 0;
   color: #fff;
   background: #0a0e17;
+  overflow: hidden;
 `;

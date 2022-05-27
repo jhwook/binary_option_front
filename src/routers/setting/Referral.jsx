@@ -85,11 +85,18 @@ export default function Referral() {
 }
 
 const ReferralBox = styled.main`
-  height: 100%;
+  flex: 1;
   padding: 70px 140px;
-  overflow-y: scroll;
+
+  @media (max-width: 1440px) {
+    max-width: 1020px;
+    padding: 70px 40px 70px 80px;
+  }
 
   .innerBox {
+    height: 100%;
+    overflow-y: scroll;
+
     .titleArea {
       display: flex;
       flex-direction: column;
@@ -160,8 +167,8 @@ const ReferralBox = styled.main`
       display: flex;
       flex-direction: column;
       gap: 20px;
+      max-width: 100%;
       margin: 80px 0 0 0;
-      width: 1292px;
 
       .categoryList {
         display: flex;

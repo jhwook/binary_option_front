@@ -9,6 +9,7 @@ import QRCode from "react-qr-code";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import { API } from "../../configs/api";
+import { gCliId } from "../../configs/setting";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -38,16 +39,19 @@ export default function Login() {
       .catch((err) => console.error(err));
   }
 
-  function responseGoogle(e) {
-    console.log(e);
+  function resGLogin({ profileObj }) {
+    console.log(profileObj);
+
+    axios
+      .post(API.LOGIN_GOOGLE, { user: profileObj })
+      .then(({ data }) => {
+        console.log(data);
+        localStorage.setItem("token", data.accessToken);
+        navigate("/");
+      })
+      .catch((err) => console.error(err));
   }
 
-  useEffect(() => {
-    console.log(userData.phone);
-
-    if (userData.phone[0] === '0')
-      setUserData({ ...userData, phone: userData.phone.slice(1) });
-  }, [userData.phone]);
 
   return (
     <>
@@ -84,9 +88,9 @@ export default function Login() {
                 <p className="or">or</p>
 
                 <GoogleLogin
-                  clientId="657336551097-o4l4nef4iq0pvvkj2m4jsn8a0326m6pk.apps.googleusercontent.com"
-                  onSuccess={responseGoogle}
-                  onFailure={responseGoogle}
+                  clientId={gCliId}
+                  onSuccess={resGLogin}
+                  onFailure={(err) => console.error(err)}
                   cookiePolicy="single_host_origin"
                   render={(renderProps) => (
                     <button className="googleBtn" onClick={renderProps.onClick}>

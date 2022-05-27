@@ -101,13 +101,20 @@ export default function MyPosition() {
 }
 
 const MyPositionBox = styled.main`
-  padding: 58px 140px;
+  flex: 1;
+  padding: 70px 140px;
+
+  @media (max-width: 1440px) {
+    max-width: 1020px;
+    padding: 70px 40px 70px 80px;
+  }
 
   .innerBox {
     display: flex;
     flex-direction: column;
     gap: 50px;
-    width: 1292px;
+    height: 100%;
+    overflow-y: scroll;
 
     .posArea {
       display: flex;
@@ -175,11 +182,12 @@ const MyPositionBox = styled.main`
       height: 256px;
       border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 20px;
+      overflow-x: scroll;
 
       .detBox {
         display: flex;
         flex-direction: column;
-        width: 562px;
+        min-width: 562px;
 
         .posBox {
           display: flex;
@@ -258,7 +266,8 @@ const MyPositionBox = styled.main`
       }
 
       .chartBox {
-        flex: 1;
+        min-width: 730px;
+        width: 730px;
         border-left: 1px solid rgba(255, 255, 255, 0.2);
       }
     }

@@ -26,8 +26,11 @@ export default function Setting() {
 }
 
 const MarketBox = styled.main`
+  display: flex;
+  width: 100vw;
   height: 100vh;
-  padding: 60px 0 0 348px;
+  padding: 60px 0 0 0;
   color: #fff;
   background: #0a0e17;
+  overflow: hidden;
 `;

@@ -199,11 +199,18 @@ export default function Data() {
 }
 
 const DataBox = styled.main`
-  height: 100%;
+  flex: 1;
   padding: 70px 140px;
-  overflow-y: scroll;
+
+  @media (max-width: 1440px) {
+    max-width: 1020px;
+    padding: 70px 40px 70px 80px;
+  }
 
   .innerBox {
+    height: 100%;
+    overflow-y: scroll;
+
     .titleArea {
       display: flex;
       flex-direction: column;
@@ -269,7 +276,7 @@ const DataBox = styled.main`
       display: flex;
       flex-direction: column;
       gap: 20px;
-      width: 1292px;
+      margin: 60px 0 0 0;
 
       .filterBar {
         display: flex;
@@ -349,6 +356,7 @@ const DataBox = styled.main`
       .listBox {
         border: 1px solid #3b3e45;
         border-radius: 14px;
+        overflow-x: scroll;
 
         .listHeader {
           display: flex;
@@ -363,10 +371,10 @@ const DataBox = styled.main`
 
           li {
             display: flex;
-            border-top: 1px solid #3b3e45;
 
             span {
               height: 60px;
+              border-top: 1px solid #3b3e45;
 
               .price {
                 color: #3fb68b;
@@ -387,7 +395,7 @@ const DataBox = styled.main`
         .listHeader li,
         .list li span {
           display: flex;
-          justify-content: center;
+
           align-items: center;
           font-size: 14px;
 
@@ -397,36 +405,52 @@ const DataBox = styled.main`
             text-overflow: ellipsis;
           }
 
+          &:first-of-type {
+            padding: 0 0 0 20px;
+          }
+
+          &:last-of-type {
+            padding: 0 20px 0 0;
+          }
+
           &:nth-of-type(1) {
             width: 236px;
+            min-width: 236px;
           }
 
           &:nth-of-type(2) {
             width: 164px;
+            min-width: 164px;
           }
 
           &:nth-of-type(3) {
             width: 188px;
+            min-width: 188px;
           }
 
           &:nth-of-type(4) {
             width: 156px;
+            min-width: 156px;
           }
 
           &:nth-of-type(5) {
             width: 194px;
+            min-width: 194px;
           }
 
           &:nth-of-type(6) {
             width: 162px;
+            min-width: 162px;
           }
 
           &:nth-of-type(7) {
             width: 166px;
+            min-width: 166px;
           }
 
           &:nth-of-type(8) {
-            flex: 1;
+            width: 166px;
+            min-width: 166px;
           }
         }
       }

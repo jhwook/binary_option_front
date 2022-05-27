@@ -3,12 +3,24 @@ import { useNavigate } from "react-router";
 import GoogleLogin from "react-google-login";
 import L_google from "../../img/logo/L_google.svg";
 import B_auth from "../../img/bg/B_auth.png";
+import { gCliId } from "../../configs/setting";
+import axios from "axios";
+import { API } from "../../configs/api";
 
 export default function Index() {
   const navigate = useNavigate();
 
-  function responseGoogle(e) {
-    console.log(e);
+  function resGLogin({ profileObj }) {
+    console.log(profileObj);
+
+    axios
+      .post(API.LOGIN_GOOGLE, { user: profileObj })
+      .then(({ data }) => {
+        console.log(data);
+        localStorage.setItem("token", data.accessToken);
+        navigate("/");
+      })
+      .catch((err) => console.error(err));
   }
 
   return (
@@ -35,9 +47,9 @@ export default function Index() {
               <p className="or">or</p>
 
               <GoogleLogin
-                clientId="511516218336-9gbsps8s7q5kqvr4jrno5e9nemp5a14t.apps.googleusercontent.com"
-                onSuccess={responseGoogle}
-                onFailure={responseGoogle}
+                clientId={gCliId}
+                onSuccess={resGLogin}
+                onFailure={(err) => console.error(err)}
                 cookiePolicy="single_host_origin"
                 render={(renderProps) => (
                   <button className="googleBtn" onClick={renderProps.onClick}>

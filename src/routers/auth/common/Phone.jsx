@@ -8,6 +8,11 @@ import { D_locNumList } from "../../../data/D_auth";
 export default function Phone({ userData, setUserData }) {
   const [selLocPopup, setSelLocPopup] = useState(false);
 
+  function onBlurPhone() {
+    if (userData.phone[0] === "0")
+      setUserData({ ...userData, phone: userData.phone.slice(1) });
+  }
+
   return (
     <>
       <PhoneBox>
@@ -47,6 +52,7 @@ export default function Phone({ userData, setUserData }) {
                 onChange={(e) =>
                   setUserData({ ...userData, phone: e.target.value })
                 }
+                onBlur={onBlurPhone}
                 placeholder=""
               />
             </div>

@@ -132,14 +132,19 @@ export default function Notifications() {
 }
 
 const NotificationsBox = styled.main`
-  height: 100%;
+  flex: 1;
   padding: 70px 140px;
-  overflow-y: scroll;
+
+  @media (max-width: 1440px) {
+    padding: 70px 40px 70px 80px;
+  }
 
   .innerBox {
     display: flex;
     flex-direction: column;
     gap: 40px;
+    height: 100%;
+    overflow-y: scroll;
 
     .titleArea {
       display: flex;

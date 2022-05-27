@@ -197,13 +197,20 @@ export default function TradingHistory() {
 }
 
 const TradingHistoryBox = styled.main`
+  flex: 1;
   padding: 70px 140px;
+
+  @media (max-width: 1440px) {
+    max-width: 1020px;
+    padding: 70px 40px 70px 80px;
+  }
 
   .innerBox {
     display: flex;
     flex-direction: column;
-    gap: 60px;
-    width: 1292px;
+    gap: 40px;
+    height: 100%;
+    overflow-y: scroll;
 
     .categoryList {
       display: flex;
@@ -307,6 +314,7 @@ const TradingHistoryBox = styled.main`
       .listBox {
         border: 1px solid #3b3e45;
         border-radius: 14px;
+        overflow-x: scroll;
 
         .listHeader {
           display: flex;
@@ -321,10 +329,10 @@ const TradingHistoryBox = styled.main`
 
           li {
             display: flex;
-            border-top: 1px solid #3b3e45;
 
             span {
               height: 60px;
+              border-top: 1px solid #3b3e45;
 
               &:nth-of-type(1) {
                 gap: 14px;
@@ -358,44 +366,62 @@ const TradingHistoryBox = styled.main`
             text-overflow: ellipsis;
           }
 
+          &:first-of-type {
+            padding: 0 0 0 20px;
+          }
+
+          &:last-of-type {
+            padding: 0 20px 0 0;
+          }
+
           &:nth-of-type(1) {
             width: 60px;
+            min-width: 60px;
           }
 
           &:nth-of-type(2) {
             width: 312px;
+            min-width: 312px;
           }
 
           &:nth-of-type(3) {
             width: 72px;
+            min-width: 72px;
           }
 
           &:nth-of-type(4) {
             width: 98px;
+            min-width: 98px;
           }
 
           &:nth-of-type(5) {
             width: 162px;
+            min-width: 162px;
           }
 
           &:nth-of-type(6) {
             width: 162px;
+            min-width: 162px;
           }
 
           &:nth-of-type(7) {
             width: 94px;
+            min-width: 94px;
           }
 
           &:nth-of-type(8) {
             width: 94px;
+            min-width: 94px;
           }
 
           &:nth-of-type(9) {
             width: 102px;
+            min-width: 102px;
           }
 
           &:nth-of-type(10) {
-            flex: 1;
+            width: 124px;
+            min-width: 124px;
           }
         }
       }

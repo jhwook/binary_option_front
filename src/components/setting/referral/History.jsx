@@ -101,12 +101,13 @@ const HistoryBox = styled.div`
   .listBox {
     border: 1px solid #3b3e45;
     border-radius: 14px;
+    overflow-x: scroll;
 
     .listHeader {
       display: flex;
       align-items: center;
       height: 46px;
-      padding: 20px;
+      padding: 0 20px;
       color: rgba(255, 255, 255, 0.6);
     }
 
@@ -116,11 +117,11 @@ const HistoryBox = styled.div`
 
       li {
         display: flex;
-        border-top: 1px solid #3b3e45;
         padding: 0 20px;
 
         span {
           height: 60px;
+          border-top: 1px solid #3b3e45;
 
           .price {
             color: #3fb68b;
@@ -143,26 +144,32 @@ const HistoryBox = styled.div`
 
       &:nth-of-type(1) {
         width: 92px;
+        min-width: 92px;
       }
 
       &:nth-of-type(2) {
         width: 474px;
+        min-width: 474px;
       }
 
       &:nth-of-type(3) {
         width: 156px;
+        min-width: 156px;
       }
 
       &:nth-of-type(4) {
         width: 154px;
+        min-width: 154px;
       }
 
       &:nth-of-type(5) {
         width: 162px;
+        min-width: 162px;
       }
-
+      
       &:nth-of-type(6) {
-        flex: 1;
+        width: 140px;
+        min-width: 140px;
       }
     }
   }

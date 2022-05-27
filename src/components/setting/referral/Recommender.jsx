@@ -109,12 +109,13 @@ const RecommenderBox = styled.div`
   .listBox {
     border: 1px solid #3b3e45;
     border-radius: 14px;
+    overflow-x: scroll;
 
     .listHeader {
       display: flex;
       align-items: center;
       height: 46px;
-      padding: 20px;
+
       color: rgba(255, 255, 255, 0.6);
     }
 
@@ -124,11 +125,10 @@ const RecommenderBox = styled.div`
 
       li {
         display: flex;
-        border-top: 1px solid #3b3e45;
-        padding: 0 20px;
 
         span {
           height: 60px;
+          border-top: 1px solid #3b3e45;
 
           .price {
             color: #3fb68b;
@@ -149,32 +149,47 @@ const RecommenderBox = styled.div`
         text-overflow: ellipsis;
       }
 
+      &:first-of-type {
+        padding: 0 0 0 20px;
+      }
+
+      &:last-of-type {
+        padding: 0 20px 0 0;
+      }
+
       &:nth-of-type(1) {
-        width: 106px;
+        width: 126px;
+        min-width: 126px;
       }
 
       &:nth-of-type(2) {
         width: 260px;
+        min-width: 260px;
       }
 
       &:nth-of-type(3) {
         width: 172px;
+        min-width: 172px;
       }
 
       &:nth-of-type(4) {
         width: 212px;
+        min-width: 212px;
       }
 
       &:nth-of-type(5) {
         width: 148px;
+        min-width: 148px;
       }
 
       &:nth-of-type(6) {
         width: 202px;
+        min-width: 202px;
       }
 
       &:nth-of-type(7) {
-        flex: 1;
+        width: 170px;
+        min-width: 170px;
       }
     }
   }

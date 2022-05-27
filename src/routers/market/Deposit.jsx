@@ -158,9 +158,15 @@ export default function Deposit() {
 }
 
 const DepositBox = styled.main`
+  flex: 1;
   display: flex;
   gap: 100px;
   padding: 70px 140px;
+
+  @media (max-width: 1440px) {
+    max-width: 1020px;
+    padding: 70px 40px 70px 80px;
+  }
 
   article {
     display: flex;

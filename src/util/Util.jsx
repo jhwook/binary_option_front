@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { gCliId } from "../configs/setting";
 
 export function strDot(str, startNum = 0, endNum = 0) {
   if (!str?.length) return;

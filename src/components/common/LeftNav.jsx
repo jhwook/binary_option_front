@@ -31,12 +31,10 @@ export default function LeftNav({ list, baseUrl }) {
 }
 
 const LeftNavBox = styled.aside`
-  width: 348px;
-  padding: 70px 14px 14px 14px;
-  top: 60px;
-  left: 0;
-  bottom: 0;
-  position: fixed;
+  width: 100%;
+  min-width: 200px;
+  max-width: 348px;
+  padding: 130px 14px 14px 14px;
   border-right: 1px solid rgba(255, 255, 255, 0.2);
 
   .navList {

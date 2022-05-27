@@ -104,14 +104,20 @@ export default function Security() {
 }
 
 const SecurityBox = styled.main`
-  height: 100%;
+  flex: 1;
   padding: 70px 140px;
-  overflow-y: scroll;
+
+  @media (max-width: 1440px) {
+    max-width: 1020px;
+    padding: 70px 40px 70px 80px;
+  }
 
   .innerBox {
     display: flex;
     flex-direction: column;
     gap: 40px;
+    height: 100%;
+    overflow-y: scroll;
 
     .titleArea {
       display: flex;
@@ -130,17 +136,16 @@ const SecurityBox = styled.main`
     }
 
     .contArea {
-      width: 1292px;
-
       .listBox {
         border: 1px solid #3b3e45;
         border-radius: 14px;
+        overflow-x: scroll;
 
         .listHeader {
           display: flex;
           align-items: center;
           height: 46px;
-          padding: 20px;
+
           color: rgba(255, 255, 255, 0.6);
         }
 
@@ -150,11 +155,10 @@ const SecurityBox = styled.main`
 
           li {
             display: flex;
-            border-top: 1px solid #3b3e45;
-            padding: 0 20px;
 
             span {
               height: 60px;
+              border-top: 1px solid #3b3e45;
             }
           }
         }
@@ -171,28 +175,42 @@ const SecurityBox = styled.main`
             text-overflow: ellipsis;
           }
 
+          &:first-of-type {
+            padding: 0 0 0 20px;
+          }
+
+          &:last-of-type {
+            padding: 0 20px 0 0;
+          }
+
           &:nth-of-type(1) {
             width: 284px;
+            min-width: 284px;
           }
 
           &:nth-of-type(2) {
             width: 192px;
+            min-width: 192px;
           }
 
           &:nth-of-type(3) {
             width: 226px;
+            min-width: 226px;
           }
 
           &:nth-of-type(4) {
             width: 168px;
+            min-width: 168px;
           }
 
           &:nth-of-type(5) {
             width: 190px;
+            min-width: 190px;
           }
 
           &:nth-of-type(6) {
-            flex: 1;
+            width: 200px;
+            min-width: 200px;
           }
         }
       }
