@@ -3,34 +3,31 @@ import styled from "styled-components";
 import { keyframes } from "styled-components";
 import I_spinnerYellow from "../../../img/icon/I_spinnerYellow.svg";
 
-export default function EmailVerificationPopup({ off }) {
+export default function VerificationPopup({ title, explain, off }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 10000);
+    }, 5000);
   }, []);
 
   return (
-    <EmailVerificationPopupBox>
+    <VerificationPopupBox className="defaultPopup">
       {loading ? (
         <img className="spinner" src={I_spinnerYellow} alt="" />
       ) : (
         <>
-          <p className="title">Email verification</p>
+          <p className="title">{title}</p>
 
-          <p className="explain">
-            Please complete your email address validation in order to secure
-            your account and funds on it.
-          </p>
+          <p className="explain">{explain}</p>
 
           <button className="confirmBtn" onClick={() => off()}>
             Confirm
           </button>
         </>
       )}
-    </EmailVerificationPopupBox>
+    </VerificationPopupBox>
   );
 }
 
@@ -43,7 +40,7 @@ const spin = keyframes`
   }
 `;
 
-const EmailVerificationPopupBox = styled.section`
+const VerificationPopupBox = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -51,18 +48,7 @@ const EmailVerificationPopupBox = styled.section`
   width: 380px;
   min-height: 280px;
   padding: 30px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1.4px solid rgba(255, 255, 255, 0.14);
-  border-radius: 20px;
-  backdrop-filter: blur(40px);
-  box-shadow: inset 0px 3px 3px rgba(255, 255, 255, 0.4),
-    0px 10px 40px rgba(0, 0, 0, 0.2);
-  -webkit-backdrop-filter: blur(40px);
-  top: 50%;
-  left: 50%;
-  position: fixed;
-  transform: translate(-50%, -50%);
-  z-index: 6;
+  
 
   .spinner {
     width: 74px;

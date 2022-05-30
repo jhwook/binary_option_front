@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import PopupBg from "../../components/common/PopupBg";
-import EmailVerificationPopup from "../../components/setting/myProfile/EmailVerificationPopup";
+import VerificationPopup from "../../components/setting/myProfile/VerificationPopup";
 import axios from "axios";
 import { API } from "../../configs/api";
 
@@ -17,7 +17,7 @@ export default function MyProfile() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
-  const [emailVerificationPopup, setEmailVerificationPopup] = useState(false);
+  const [verificationPopup, setVerificationPopup] = useState(false);
 
   function getProfData() {
     axios
@@ -39,11 +39,18 @@ export default function MyProfile() {
   }
 
   function onClickVeriEmailBtn() {
-    console.log("post");
-    axios
-      .post(API.USER_CERTIFICATION_EMAIL, { email:"bakujin.dev@gmail.com" })
-      .then((res) => console.log(res))
-      .then((err) => console.error(err));
+    setVerificationPopup("email");
+    // axios
+    //   .post(API.USER_CERTIFICATION_EMAIL, { email })
+    //   .then((res) => {
+    //     console.log(res);
+    //     setVerificationPopup("email");
+    //   })
+    //   .then((err) => console.error(err));
+  }
+
+  function onClickVeriPhoneBtn() {
+    setVerificationPopup("phone");
   }
 
   function onclickSaveBtn() {
@@ -60,6 +67,12 @@ export default function MyProfile() {
 
   useEffect(() => {
     getProfData();
+
+    window.addEventListener("focus", getProfData);
+
+    return () => {
+      window.removeEventListener("focus", getProfData);
+    };
   }, []);
 
   useEffect(() => {
@@ -184,6 +197,17 @@ export default function MyProfile() {
                     placeholder=""
                     onBlur={onBlurPhone}
                   />
+
+                  {profData.phone_certification ? (
+                    <p className="verified">Verified</p>
+                  ) : (
+                    <button
+                      className={`${!emailSend && "init"} sendBtn`}
+                      onClick={onClickVeriPhoneBtn}
+                    >
+                      {emailSend ? "Resend" : "Unverified"}
+                    </button>
+                  )}
                 </div>
               </li>
             </ul>
@@ -199,10 +223,25 @@ export default function MyProfile() {
         </section>
       </MyProfileBox>
 
-      {emailVerificationPopup && (
+      {verificationPopup === "email" && (
         <>
-          <EmailVerificationPopup off={setEmailVerificationPopup} />
-          <PopupBg off={setEmailVerificationPopup} />
+          <VerificationPopup
+            title="Email verification"
+            explain="Please complete your email address validation in order to secure
+            your account and funds on it."
+            off={setVerificationPopup}
+          />
+          <PopupBg off={setVerificationPopup} />
+        </>
+      )}
+
+      {verificationPopup === "phone" && (
+        <>
+          <VerificationPopup
+            title="Phone Number verification"
+            off={setVerificationPopup}
+          />
+          <PopupBg off={setVerificationPopup} />
         </>
       )}
     </>

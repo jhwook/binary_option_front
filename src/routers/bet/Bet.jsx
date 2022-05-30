@@ -1,6 +1,10 @@
 import styled from "styled-components";
 import DefaultHeader from "../../components/header/DefaultHeader";
-import { D_tokenList } from "../../data/D_bet";
+import {
+  D_candleChartList,
+  D_tokenList,
+  D_volumeChartList,
+} from "../../data/D_bet";
 import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
 import I_starYellow from "../../img/icon/I_starYellow.svg";
 import I_qnaWhite from "../../img/icon/I_qnaWhite.svg";
@@ -10,21 +14,141 @@ import I_dollarWhite from "../../img/icon/I_dollarWhite.svg";
 import I_highArwGreen from "../../img/icon/I_highArwGreen.svg";
 import I_lowArwRed from "../../img/icon/I_lowArwRed.svg";
 import I_plusWhite from "../../img/icon/I_plusWhite.svg";
+import I_xWhite from "../../img/icon/I_xWhite.svg";
+import { createChart } from "lightweight-charts";
+import { useEffect, useState } from "react";
+import { chartOpt } from "../../configs/setting";
+import LiveTradePopup from "../../components/bet/LiveTradePopup";
+import PopupBg from "../../components/common/PopupBg";
 
 export default function Bet() {
+  let a = 1;
+
+  const [candleChart, setCandleChart] = useState("");
+  const [volumeChart, setVolumeChart] = useState("");
+  const [liveTradePopup, setLiveTradePopup] = useState(false);
+  const [hotKeyPopup, setHotKeyPopup] = useState(true);
+
+  function markUpChart() {
+    const chartBox = document.getElementById("ChartBox");
+    if (!chartBox) return;
+
+    var chart = createChart(chartBox, {
+      rightPriceScale: {
+        scaleMargins: {
+          top: 0.3,
+          bottom: 0.25,
+        },
+        borderVisible: false,
+      },
+      layout: {
+        backgroundColor: "#181c25",
+        textColor: "#d1d4dc",
+      },
+      grid: {
+        vertLines: {
+          color: "rgba(42, 46, 57, 0)",
+        },
+        horzLines: {
+          color: "rgba(42, 46, 57, 0.6)",
+        },
+      },
+    });
+
+    let candleChart = chart.addCandlestickSeries({
+      upColor: chartOpt.color.upColor,
+      downColor: chartOpt.color.dnColor,
+      borderUpColor: chartOpt.color.upColor,
+      borderDownColor: chartOpt.color.dnColor,
+      wickUpColor: chartOpt.color.upColor,
+      wickDownColor: chartOpt.color.dnColor,
+    });
+
+    setCandleChart(candleChart);
+
+    var volumeChart = chart.addHistogramSeries({
+      priceFormat: {
+        type: "volume",
+      },
+      priceScaleId: "",
+      scaleMargins: {
+        top: 0.8,
+        bottom: 0,
+      },
+    });
+
+    setVolumeChart(volumeChart);
+
+    candleChart.setData(D_candleChartList);
+
+    volumeChart.setData(D_volumeChartList);
+  }
+
+  function getChartLive(candleChart) {
+    const d = new Date();
+
+    candleChart.update({
+      open: 59.21,
+      high: 59.66,
+      low: a,
+      close: a,
+      time: {
+        year: d.getUTCFullYear(),
+        month: d.getUTCMonth() + 1,
+        day: d.getUTCDate() + a,
+      },
+    });
+
+    volumeChart.update({
+      time: {
+        year: d.getUTCFullYear(),
+        month: d.getUTCMonth() + 1,
+        day: d.getUTCDate() + a,
+      },
+      value: 21737523.0 + a * 1000000,
+      color: "rgba(0, 150, 136, 0.8)",
+    });
+
+    a++;
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === "W" && e.shiftKey) {
+      console.log("A");
+    }
+  }
+
+  useEffect(() => {
+    markUpChart();
+
+    setLiveTradePopup(true);
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  useEffect(() => {
+    const chartInterval = setInterval(() => {
+      getChartLive(candleChart);
+    }, 200);
+
+    return () => clearInterval(chartInterval);
+  }, [candleChart]);
+
   return (
     <>
-      <DefaultHeader />
+      <DefaultHeader border />
 
-      <BetBox>
+      <BetBox onKeyDown={handleKeyDown}>
         <section className="innerBox">
           <article className="tokenArea">
-            <button className="selectBox" onClick={() => {}}>
+            <div className="selectBox">
               <button className="selectBtn" onClick={() => {}}>
                 <p>Ethereum</p>
                 <img src={I_dnPolWhite} alt="" />
               </button>
-            </button>
+            </div>
 
             <ul className="tokenList">
               {D_tokenList.map((v, i) => (
@@ -42,7 +166,46 @@ export default function Bet() {
           </article>
 
           <article className="contArea">
-            <div className="chartBox"></div>
+            <div className="chartBox" id="ChartBox">
+              {hotKeyPopup && (
+                <div className="hotKeyPopup">
+                  <div className="topBar">
+                    <span className="blank" />
+                    <p className="title">Hotkeys</p>
+
+                    <button
+                      className="closeBtn"
+                      onClick={() => setHotKeyPopup(false)}
+                    >
+                      <img src={I_xWhite} alt="" />
+                    </button>
+                  </div>
+
+                  <ul className="hotKeyList">
+                    <li>
+                      <p className="key">Shift + W</p>
+                      <p className="value">Higher(New trade)</p>
+                    </li>
+                    <li>
+                      <p className="key">Shift + S</p>
+                      <p className="value">Lower(New trade)</p>
+                    </li>
+                    <li>
+                      <p className="key">Shift + A</p>
+                      <p className="value">Decrease trade amount</p>
+                    </li>
+                    <li>
+                      <p className="key">Shift + D</p>
+                      <p className="value">Increase trade amount</p>
+                    </li>
+                    <li>
+                      <p className="key">Shift + TAB</p>
+                      <p className="value">Next favorite asset</p>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
 
             <div className="actionBox">
               <div className="timeBox">
@@ -102,6 +265,13 @@ export default function Bet() {
           </footer>
         </section>
       </BetBox>
+
+      {liveTradePopup && (
+        <>
+          <LiveTradePopup off={setLiveTradePopup} />
+          <PopupBg off={setLiveTradePopup} />
+        </>
+      )}
     </>
   );
 }
@@ -198,6 +368,67 @@ const BetBox = styled.main`
         flex: 1;
         background: #181c25;
         border-radius: 12px;
+        position: relative;
+
+        .hotKeyPopup {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          padding: 16px;
+          background: rgba(50, 50, 61, 0.8);
+          border-radius: 6px;
+          right: 18px;
+          bottom: 26px;
+          position: absolute;
+          z-index: 3;
+
+          .topBar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .title {
+              font-size: 12px;
+            }
+
+            .blank,
+            .closeBtn img {
+              width: 10px;
+            }
+
+            .closeBtn {
+              display: flex;
+              align-items: center;
+            }
+          }
+
+          .hotKeyList {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 12px;
+
+            li {
+              display: flex;
+              gap: 12px;
+
+              p {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+
+                &.key {
+                  width: 58px;
+                }
+
+                &.value {
+                  color: rgba(255, 255, 255, 0.4);
+                  width: 130px;
+                }
+              }
+            }
+          }
+        }
       }
 
       .actionBox {

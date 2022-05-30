@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router";
 import GoogleLogin from "react-google-login";
 import L_google from "../../img/logo/L_google.svg";
-import B_auth from "../../img/bg/B_auth.png";
+import B_auth from "../../img/bg/auth/B_auth.png";
 import { gCliId } from "../../configs/setting";
 import axios from "axios";
 import { API } from "../../configs/api";

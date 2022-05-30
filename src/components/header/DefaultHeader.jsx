@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import ProfPopup from "./ProfPopup";
 
-export default function DefaultHeader({ white }) {
+export default function DefaultHeader({ white, border }) {
   const navigate = useNavigate();
   const location = useLocation();
   const { i18n } = useTranslation();
@@ -21,13 +21,13 @@ export default function DefaultHeader({ white }) {
 
   return (
     <>
-      <DefaultHeaderBox className={`${white && "white"}`}>
+      <DefaultHeaderBox className={`${white && "white"} ${border && "border"}`}>
         <article className="leftArea">
           <button className="logoBtn" onClick={() => navigate("/")}>
             <img src={L_yellow} alt="" />
           </button>
 
-          {token && (
+          
             <ul className="navList">
               {D_headerList.map((v, i) => (
                 <li
@@ -48,7 +48,6 @@ export default function DefaultHeader({ white }) {
                 <img src={I_dnPolWhite} alt="" />
               </button>
             </ul>
-          )}
         </article>
 
         <article className="rightArea">
@@ -70,18 +69,27 @@ export default function DefaultHeader({ white }) {
               </span>
             </>
           ) : (
-            <div className="lngBox">
-              <button className="lngBtn" onClick={() => setLngPopup(true)}>
-                {D_lngList.find((e) => e.value === i18n.language).key}
-              </button>
+            <>
+              <div className="lngBox">
+                <button className="lngBtn" onClick={() => setLngPopup(true)}>
+                  {D_lngList.find((e) => e.value === i18n.language).key}
+                </button>
 
-              {lngPopup && (
-                <>
-                  <SelLngPopup off={setLngPopup} />
-                  <PopupBg off={setLngPopup} />
-                </>
-              )}
-            </div>
+                {lngPopup && (
+                  <>
+                    <SelLngPopup off={setLngPopup} />
+                    <PopupBg off={setLngPopup} />
+                  </>
+                )}
+              </div>
+
+              <button
+                className="loginBtn"
+                onClick={() => navigate("/auth/login")}
+              >
+                LOGIN
+              </button>
+            </>
           )}
         </article>
       </DefaultHeaderBox>
@@ -100,13 +108,33 @@ const DefaultHeaderBox = styled.header`
   right: 0;
   left: 0;
   position: fixed;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   z-index: 3;
+
+  &.border {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  }
 
   &.white {
     color: #2a2a2a;
     background: #fff;
     border-bottom: none;
+
+    .rightArea {
+      .profBox {
+        .profPopup {
+          color: #fff;
+          background: #2a2a2a;
+        }
+      }
+
+      .lngBox {
+      }
+
+      .loginBtn {
+        color: #2a2a2a;
+        border: 1px solid #2a2a2a;
+      }
+    }
   }
 
   .leftArea {
@@ -179,8 +207,38 @@ const DefaultHeaderBox = styled.header`
       position: relative;
 
       .lngBtn {
+        height: 30px;
+        padding: 0 12px;
         font-size: 14px;
         font-weight: 700;
+        border-radius: 6px;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.1);
+        }
+      }
+
+      .selectPopup {
+        background: #22262e;
+
+        li {
+          &.on {
+            color: #fff;
+          }
+        }
+      }
+    }
+
+    .loginBtn {
+      width: 132px;
+      height: 34px;
+      font-weight: 700;
+      border: 1px solid #fff;
+      border-radius: 28px;
+
+      &:hover {
+        color: #f7ab1f;
+        border-color: #f7ab1f;
       }
     }
   }

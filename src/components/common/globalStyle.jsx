@@ -109,11 +109,13 @@ const GlobalStyle = createGlobalStyle`
   }
 
   .defaultPopup {
-    width: 500px;
-    padding: 40px;
-    background: #fff;
-    box-shadow: 0px 3px 6px #00000029;
-    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1.4px solid rgba(255, 255, 255, 0.14);
+    border-radius: 20px;
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    box-shadow: inset 0px 3px 3px rgba(255, 255, 255, 0.4),
+      0px 10px 40px rgba(0, 0, 0, 0.2);
     top: 50%;
     left: 50%;
     position: fixed;

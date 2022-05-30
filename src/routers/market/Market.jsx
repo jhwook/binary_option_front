@@ -8,7 +8,7 @@ import { D_marketLeftBarList } from "../../data/D_market";
 export default function Market() {
   return (
     <MarketBox>
-      <DefaultHeader />
+      <DefaultHeader border />
 
       <LeftNav list={D_marketLeftBarList} baseUrl={"market"} />
 

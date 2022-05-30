@@ -8,7 +8,7 @@ import Data from "./Data";
 export default function Finance() {
   return (
     <FinanceBox>
-      <DefaultHeader />
+      <DefaultHeader border/>
 
       <LeftNav list={D_financeNavList} baseUrl={"finance"} />
 

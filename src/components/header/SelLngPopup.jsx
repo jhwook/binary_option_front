@@ -36,7 +36,7 @@ const PselLangPopupBox = styled.ul`
   background: #fff;
   border-radius: 6px;
   box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.2);
-  top: 28px;
+  top: 40px;
   right: 0;
   position: absolute;
   z-index: 6;

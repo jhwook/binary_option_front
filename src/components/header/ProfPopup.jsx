@@ -11,7 +11,7 @@ export default function ProfPopup({ off }) {
   }
 
   return (
-    <ProfPopupBox>
+    <ProfPopupBox className="profPopup">
       <button className="exitBtn" onClick={() => off()}>
         <img src={I_x} alt="" />
       </button>

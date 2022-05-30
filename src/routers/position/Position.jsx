@@ -10,7 +10,7 @@ import TradingHistory from "./TradingHistory";
 export default function Position() {
   return (
     <PositionBox>
-      <DefaultHeader />
+      <DefaultHeader border/>
 
       <LeftBar list={D_posNavList} baseUrl={"position"} />
 
