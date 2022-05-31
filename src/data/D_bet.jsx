@@ -1,3 +1,7 @@
+import I_candleChartWhite from "../img/icon/I_candleChartWhite.svg";
+import I_lIneChartWhite from "../img/icon/I_lIneChartWhite.svg";
+import I_heikenChartWhite from "../img/icon/I_heikenChartWhite.svg";
+
 export const D_tokenList = [
   { key: "EUR/NZD OTC", value: 92 },
   { key: "AUD/CHF OTC", value: 85 },
@@ -1534,4 +1538,27 @@ export const D_volumeChartList = [
   { time: "2019-05-23", value: 11707083.0, color: "rgba(255,82,82, 0.8)" },
   { time: "2019-05-24", value: 8755506.0, color: "rgba(0, 150, 136, 0.8)" },
   { time: "2019-05-28", value: 3097125.0, color: "rgba(0, 150, 136, 0.8)" },
+];
+
+export const D_screenList = ["M10", "M30", "H1", "H4", "D1", "D7", "D14"];
+
+export const D_chartTypeList = [
+  { icon: I_candleChartWhite, text: "Line" },
+  { icon: I_lIneChartWhite, text: "Candles" },
+  { icon: I_heikenChartWhite, text: "Heiken Ashi" },
+];
+
+export const D_timeList = [
+  "5s",
+  "10s",
+  "15s",
+  "30s",
+  "1m",
+  "3m",
+  "5m",
+  "10m",
+  "30m",
+  "1h",
+  "4h",
+  "1d",
 ];

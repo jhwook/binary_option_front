@@ -23,11 +23,8 @@ export default function SelectPopup({ off, list, setCont }) {
 const PselectPopupBox = styled.ul`
   display: flex;
   flex-direction: column;
-  gap: 2px;
   width: 100%;
-  padding: 10px 8px;
-  background: #fff;
-  border: 1px solid #d6d6d6;
+  background: rgba(0, 0, 0, 0.4);
   border-radius: inherit;
   top: 0;
   position: absolute;
@@ -38,13 +35,8 @@ const PselectPopupBox = styled.ul`
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 24px;
-    font-size: 14px;
-    color: #b1b1b1;
+    height: 22px;
+    font-size: 12px;
     cursor: pointer;
-
-    &:hover {
-      color: #0044a7;
-    }
   }
 `;

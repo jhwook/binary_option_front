@@ -3,31 +3,61 @@ import styled from "styled-components";
 import { D_headerList, D_lngList } from "../../data/D_header";
 import L_yellow from "../../img/logo/L_yellow.svg";
 import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
+import { ReactComponent as I_hamburger } from "../../img/icon/I_hamburger.svg";
 import PopupBg from "../common/PopupBg";
 import SelLngPopup from "./SelLngPopup";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import ProfPopup from "./ProfPopup";
+import { useSelector } from "react-redux";
 
 export default function DefaultHeader({ white, border }) {
   const navigate = useNavigate();
   const location = useLocation();
   const { i18n } = useTranslation();
 
+  const isMobile = useSelector((state) => state.common.isMobile);
+
   const [lngPopup, setLngPopup] = useState(false);
   const [profPopup, setProfPopup] = useState(false);
 
   const token = localStorage.getItem("token");
 
-  return (
-    <>
-      <DefaultHeaderBox className={`${white && "white"} ${border && "border"}`}>
-        <article className="leftArea">
-          <button className="logoBtn" onClick={() => navigate("/")}>
-            <img src={L_yellow} alt="" />
-          </button>
+  if (isMobile)
+    return (
+      <>
+        <MdefaultHeaderBox
+          className={`${white && "white"} ${border && "border"}`}
+        >
+          <article className="leftArea">
+            {token ? (
+              <span className="accountBox">{`Demo $1000`}</span>
+            ) : (
+              <button className="logoBtn" onClick={() => navigate("/")}>
+                <img src={L_yellow} alt="" />
+              </button>
+            )}
+          </article>
 
-          
+          <article className="rightArea">
+            <button className="menuBtn" onClick={() => {}}>
+              <I_hamburger />
+            </button>
+          </article>
+        </MdefaultHeaderBox>
+      </>
+    );
+  else
+    return (
+      <>
+        <PdefaultHeaderBox
+          className={`${white && "white"} ${border && "border"}`}
+        >
+          <article className="leftArea">
+            <button className="logoBtn" onClick={() => navigate("/")}>
+              <img src={L_yellow} alt="" />
+            </button>
+
             <ul className="navList">
               {D_headerList.map((v, i) => (
                 <li
@@ -48,56 +78,119 @@ export default function DefaultHeader({ white, border }) {
                 <img src={I_dnPolWhite} alt="" />
               </button>
             </ul>
-        </article>
+          </article>
 
-        <article className="rightArea">
-          {token ? (
-            <>
-              <span className="accountBox">{`Demo $1000`}</span>
+          <article className="rightArea">
+            {token ? (
+              <>
+                <span className="accountBox">{`Demo $1000`}</span>
 
-              <span className="profBox">
-                <button className="myBtn" onClick={() => setProfPopup(true)}>
-                  MY
+                <span className="profBox">
+                  <button className="myBtn" onClick={() => setProfPopup(true)}>
+                    MY
+                  </button>
+
+                  {profPopup && (
+                    <>
+                      <ProfPopup off={setProfPopup} />
+                      <PopupBg off={setProfPopup} />
+                    </>
+                  )}
+                </span>
+              </>
+            ) : (
+              <>
+                <div className="lngBox">
+                  <button className="lngBtn" onClick={() => setLngPopup(true)}>
+                    {D_lngList.find((e) => e.value === i18n.language).key}
+                  </button>
+
+                  {lngPopup && (
+                    <>
+                      <SelLngPopup off={setLngPopup} />
+                      <PopupBg off={setLngPopup} />
+                    </>
+                  )}
+                </div>
+
+                <button
+                  className="loginBtn"
+                  onClick={() => navigate("/auth/login")}
+                >
+                  LOGIN
                 </button>
-
-                {profPopup && (
-                  <>
-                    <ProfPopup off={setProfPopup} />
-                    <PopupBg off={setProfPopup} />
-                  </>
-                )}
-              </span>
-            </>
-          ) : (
-            <>
-              <div className="lngBox">
-                <button className="lngBtn" onClick={() => setLngPopup(true)}>
-                  {D_lngList.find((e) => e.value === i18n.language).key}
-                </button>
-
-                {lngPopup && (
-                  <>
-                    <SelLngPopup off={setLngPopup} />
-                    <PopupBg off={setLngPopup} />
-                  </>
-                )}
-              </div>
-
-              <button
-                className="loginBtn"
-                onClick={() => navigate("/auth/login")}
-              >
-                LOGIN
-              </button>
-            </>
-          )}
-        </article>
-      </DefaultHeaderBox>
-    </>
-  );
+              </>
+            )}
+          </article>
+        </PdefaultHeaderBox>
+      </>
+    );
 }
 
-const DefaultHeaderBox = styled.header`
+const MdefaultHeaderBox = styled.header`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 15.55vw;
+  padding: 0 5.55vw;
+  color: #fff;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  top: 0;
+  right: 0;
+  left: 0;
+  position: fixed;
+  z-index: 3;
+
+  &.border {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  &.white {
+    color: #2a2a2a;
+    background: #fff;
+    border-bottom: none;
+    box-shadow: unset;
+
+    .rightArea {
+      .menuBtn {
+        svg {
+          width: 5vw;
+
+          .fill {
+            fill: #000;
+          }
+        }
+      }
+    }
+  }
+
+  .leftArea {
+    .logoBtn {
+      display: flex;
+      align-items: center;
+
+      img {
+        height: 5vw;
+      }
+    }
+  }
+
+  .rightArea {
+    .menuBtn {
+      svg {
+        width: 5vw;
+
+        .fill {
+          fill: #fff;
+        }
+      }
+    }
+  }
+`;
+
+const PdefaultHeaderBox = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;

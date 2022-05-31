@@ -2,6 +2,7 @@ import styled from "styled-components";
 import DefaultHeader from "../../components/header/DefaultHeader";
 import {
   D_candleChartList,
+  D_screenList,
   D_tokenList,
   D_volumeChartList,
 } from "../../data/D_bet";
@@ -15,11 +16,16 @@ import I_highArwGreen from "../../img/icon/I_highArwGreen.svg";
 import I_lowArwRed from "../../img/icon/I_lowArwRed.svg";
 import I_plusWhite from "../../img/icon/I_plusWhite.svg";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
+import I_upPolWhite from "../../img/icon/I_upPolWhite.svg";
+import I_candleChartWhite from "../../img/icon/I_candleChartWhite.svg";
+import I_3dotWhite from "../../img/icon/I_3dotWhite.svg";
 import { createChart } from "lightweight-charts";
 import { useEffect, useState } from "react";
 import { chartOpt } from "../../configs/setting";
 import LiveTradePopup from "../../components/bet/LiveTradePopup";
 import PopupBg from "../../components/common/PopupBg";
+import SelectPopup from "../../components/common/SelectPopup";
+import ChartPopup from "../../components/bet/ChartPopup";
 
 export default function Bet() {
   let a = 1;
@@ -27,7 +33,10 @@ export default function Bet() {
   const [candleChart, setCandleChart] = useState("");
   const [volumeChart, setVolumeChart] = useState("");
   const [liveTradePopup, setLiveTradePopup] = useState(false);
+  const [chartPopup, setChartPopup] = useState(false);
   const [hotKeyPopup, setHotKeyPopup] = useState(true);
+  const [screen, setScreen] = useState(D_screenList[0]);
+  const [screenPopup, setScreenPopup] = useState(false);
 
   function markUpChart() {
     const chartBox = document.getElementById("ChartBox");
@@ -166,7 +175,36 @@ export default function Bet() {
           </article>
 
           <article className="contArea">
-            <div className="chartBox" id="ChartBox">
+            <div className="chartBox">
+              {/* <div className="chartBox" id="ChartBox"> */}
+              <span className="utilBox">
+                <ul className="btnList">
+                  <li>
+                    <button
+                      className="chartBtn"
+                      onClick={() => setChartPopup(true)}
+                    >
+                      <img src={I_candleChartWhite} alt="" />
+                    </button>
+
+                    {chartPopup && (
+                      <>
+                        <ChartPopup />
+                        <PopupBg off={setChartPopup} />
+                      </>
+                    )}
+                  </li>
+
+                  <li>
+                    <button className="moreBtn" onClick={() => {}}>
+                      <img src={I_3dotWhite} alt="" />
+                    </button>
+                  </li>
+                </ul>
+
+                <span className="typeBox">{`Chart type : Candle`}</span>
+              </span>
+
               {hotKeyPopup && (
                 <div className="hotKeyPopup">
                   <div className="topBar">
@@ -205,6 +243,32 @@ export default function Bet() {
                   </ul>
                 </div>
               )}
+
+              <span className="screenCont">
+                <p className="key">Screen size</p>
+
+                <span className="screenBox">
+                  <button
+                    className="screenBtn"
+                    onClick={() => setScreenPopup(true)}
+                  >
+                    <p>{screen}</p>
+
+                    <img src={I_upPolWhite} alt="" />
+                  </button>
+
+                  {screenPopup && (
+                    <>
+                      <SelectPopup
+                        off={setScreenPopup}
+                        list={D_screenList}
+                        setCont={setScreen}
+                      />
+                      <PopupBg off={setScreenPopup} />
+                    </>
+                  )}
+                </span>
+              </span>
             </div>
 
             <div className="actionBox">
@@ -370,6 +434,44 @@ const BetBox = styled.main`
         border-radius: 12px;
         position: relative;
 
+        .utilBox {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          top: 24px;
+          left: 24px;
+          position: absolute;
+
+          .btnList {
+            display: flex;
+            gap: 8px;
+
+            & > li {
+              position: relative;
+
+              & > button {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 38px;
+                height: 38px;
+                background: rgba(246, 246, 246, 0.1);
+                border-radius: 6px;
+              }
+            }
+          }
+
+          .typeBox {
+            display: flex;
+            align-items: center;
+            height: 34px;
+            padding: 0 12px;
+            font-size: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+          }
+        }
+
         .hotKeyPopup {
           display: flex;
           flex-direction: column;
@@ -424,6 +526,54 @@ const BetBox = styled.main`
                 &.value {
                   color: rgba(255, 255, 255, 0.4);
                   width: 130px;
+                }
+              }
+            }
+          }
+        }
+
+        .screenCont {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          height: 36px;
+          padding: 0 6px;
+          font-size: 12px;
+          background: rgba(246, 246, 246, 0.1);
+          border-radius: 6px;
+          bottom: 30px;
+          left: 30px;
+          position: absolute;
+          z-index: 3;
+
+          .screenBox {
+            width: 62px;
+            height: 26px;
+            border-radius: 4px;
+            position: relative;
+
+            .screenBtn {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              width: 100%;
+              height: 100%;
+              padding: 0 10px;
+              background: rgba(0, 0, 0, 0.4);
+            }
+
+            .selectPopup {
+              padding: 4px;
+              top: unset;
+              bottom: 38px;
+
+              li {
+                color: rgba(255, 255, 255, 0.6);
+                border-radius: inherit;
+
+                &:hover {
+                  color: #fff;
+                  background: rgba(255, 255, 255, 0.1);
                 }
               }
             }

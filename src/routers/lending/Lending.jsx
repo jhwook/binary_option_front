@@ -6,104 +6,210 @@ import { D_featureList, D_futureList } from "../../data/D_lending";
 import B_lending1 from "../../img/bg/lending/B_lending1.png";
 import B_lending2 from "../../img/bg/lending/B_lending2.png";
 import B_lending3 from "../../img/bg/lending/B_lending3.svg";
+import B_lending4 from "../../img/bg/lending/B_lending4.svg";
+import B_lending5 from "../../img/bg/lending/B_lending5.png";
 import I_thunderGrad from "../../img/icon/I_thunderGrad.svg";
 import I_rtArw3White from "../../img/icon/I_rtArw3White.svg";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
+import { useSelector } from "react-redux";
 
 export default function Lending() {
-  return (
-    <>
-      <DefaultHeader />
-      <LendingBox>
-        <section className="placeSec">
-          <span className="banner">
-            <div className="contBox">
-              <img className="icon" src={I_thunderGrad} alt="" />
+  const isMobile = useSelector((state) => state.common.isMobile);
 
-              <strong className="cont">Start trading on Beteit today.</strong>
-            </div>
+  if (isMobile)
+    return (
+      <>
+        <DefaultHeader />
+        <MlendingBox>
+          <section className="placeSec">
+            <span className="banner">
+              <div className="contBox">
+                <img className="icon" src={I_thunderGrad} alt="" />
 
-            <div className="btnBox">
-              <button className="" onClick={() => {}}>
-                <img src={I_rtArw3White} alt="" />
-              </button>
-
-              <button className="" onClick={() => {}}>
-                <img src={I_xWhite} alt="" />
-              </button>
-            </div>
-          </span>
-
-          <article className="textArea">
-            <strong className="explain">
-              THE RIGHT PLACE
-              <br /> FOR ONLINE TRADING ON FINANCIAL MARKETS
-            </strong>
-
-            <strong className="do">Place Your Trades On Best Conditions</strong>
-          </article>
-
-          <button className="tradeBtn" onClick={() => {}}>
-            Trade Now
-          </button>
-        </section>
-
-        <section className="featureSec">
-          <article className="windowArea">
-            <div className="window">
-              <div className="imgBox">
-                <img src={B_lending2} alt="" />
+                <strong className="cont">Start trading on Beteit today.</strong>
               </div>
-            </div>
-          </article>
 
-          <ul className="featureList">
-            {D_featureList.map((v, i) => (
-              <li key={i}>
-                <div className="shadowBox">
-                  <span className="shadow" />
+              <div className="btnBox">
+                <button className="" onClick={() => {}}>
+                  <img src={I_rtArw3White} alt="" />
+                </button>
+
+                <button className="" onClick={() => {}}>
+                  <img src={I_xWhite} alt="" />
+                </button>
+              </div>
+            </span>
+
+            <article className="textArea">
+              <strong className="explain">
+                THE RIGHT PLACE
+                <br /> FOR ONLINE TRADING ON FINANCIAL MARKETS
+              </strong>
+
+              <strong className="do">
+                Place Your Trades On Best Conditions
+              </strong>
+            </article>
+
+            <button className="tradeBtn" onClick={() => {}}>
+              Trade Now
+            </button>
+          </section>
+
+          <section className="featureSec">
+            <article className="windowArea">
+              <div className="window">
+                <div className="imgBox">
+                  <img src={B_lending4} alt="" />
                 </div>
+              </div>
+            </article>
 
-                <span className="iconBox">
-                  <div className="borderBox">
-                    <img src={v.icon} alt="" />
+            <ul className="featureList">
+              {D_featureList.map((v, i) => (
+                <li key={i}>
+                  <div className="shadowBox">
+                    <span className="shadow" />
                   </div>
-                </span>
 
-                <p>{v.text}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
+                  <span className="iconBox">
+                    <div className="borderBox">
+                      <img src={v.icon} alt="" />
+                    </div>
+                  </span>
 
-        <section className="rollSec">
-          <p>{`Lightntig quick Mobile friendly`}</p>
-          <p>{`Lightntig quick Mobile friendly`}</p>
-        </section>
+                  <p>{v.text}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
 
-        <section className="futureSec">
-          <div className="titleBox">
-            <strong className="title">Start trading on BETBIT</strong>
+          <section className="rollSec">
+            <p>Lightntig quick Mobile friendly</p>
+            <p>Lightntig quick Mobile friendly</p>
+          </section>
 
-            <strong className="explain">
-              Enjoy incredible accessibility to crypto futures
-            </strong>
-          </div>
+          <section className="futureSec">
+            <img className="bg" src={B_lending5} alt="" />
 
-          <ul className="futureList">
-            {D_futureList.map((v, i) => (
-              <li key={i}>
-                <strong className="key">{v.title}</strong>
-                <p className="value">{v.cont}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
+            <div className="titleBox">
+              <strong className="title">Start trading on BETBIT</strong>
 
-        <LendingFooter />
-      </LendingBox>
-    </>
-  );
+              <strong className="explain">
+                Enjoy incredible accessibility to crypto futures
+              </strong>
+            </div>
+
+            <ul className="futureList">
+              {D_futureList.map((v, i) => (
+                <li key={i}>
+                  <strong className="key">{v.title}</strong>
+                  <p className="value">{v.cont}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <LendingFooter />
+        </MlendingBox>
+      </>
+    );
+  else
+    return (
+      <>
+        <DefaultHeader />
+        <PlendingBox>
+          <section className="placeSec">
+            <span className="banner">
+              <div className="contBox">
+                <img className="icon" src={I_thunderGrad} alt="" />
+
+                <strong className="cont">Start trading on Beteit today.</strong>
+              </div>
+
+              <div className="btnBox">
+                <button className="" onClick={() => {}}>
+                  <img src={I_rtArw3White} alt="" />
+                </button>
+
+                <button className="" onClick={() => {}}>
+                  <img src={I_xWhite} alt="" />
+                </button>
+              </div>
+            </span>
+
+            <article className="textArea">
+              <strong className="explain">
+                THE RIGHT PLACE
+                <br /> FOR ONLINE TRADING ON FINANCIAL MARKETS
+              </strong>
+
+              <strong className="do">
+                Place Your Trades On Best Conditions
+              </strong>
+            </article>
+
+            <button className="tradeBtn" onClick={() => {}}>
+              Trade Now
+            </button>
+          </section>
+
+          <section className="featureSec">
+            <article className="windowArea">
+              <div className="window">
+                <div className="imgBox">
+                  <img src={B_lending2} alt="" />
+                </div>
+              </div>
+            </article>
+
+            <ul className="featureList">
+              {D_featureList.map((v, i) => (
+                <li key={i}>
+                  <div className="shadowBox">
+                    <span className="shadow" />
+                  </div>
+
+                  <span className="iconBox">
+                    <div className="borderBox">
+                      <img src={v.icon} alt="" />
+                    </div>
+                  </span>
+
+                  <p>{v.text}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="rollSec">
+            <p>Lightntig quick Mobile friendly</p>
+            <p>Lightntig quick Mobile friendly</p>
+          </section>
+
+          <section className="futureSec">
+            <div className="titleBox">
+              <strong className="title">Start trading on BETBIT</strong>
+
+              <strong className="explain">
+                Enjoy incredible accessibility to crypto futures
+              </strong>
+            </div>
+
+            <ul className="futureList">
+              {D_futureList.map((v, i) => (
+                <li key={i}>
+                  <strong className="key">{v.title}</strong>
+                  <p className="value">{v.cont}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <LendingFooter />
+        </PlendingBox>
+      </>
+    );
 }
 
 const tranlate = keyframes`
@@ -124,7 +230,358 @@ const tranlate2 = keyframes`
   }
 `;
 
-const LendingBox = styled.main`
+const MlendingBox = styled.main`
+  width: 100vw;
+  height: 100vh;
+  color: #fff;
+  background: #0a0e17;
+  overflow-y: scroll;
+
+  .placeSec {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 11.11vw;
+    height: 200vw;
+    padding: 0 5.55vw 69.44vw;
+    background: url(${B_lending1});
+    position: relative;
+
+    .banner {
+      display: flex;
+      align-items: center;
+      gap: 5.55vw;
+      width: 88.88vw;
+      height: 15vw;
+      padding: 0 6.11vw;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 8.33vw;
+      bottom: 15vw;
+      position: absolute;
+
+      .contBox {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 4.44vw;
+        overflow: hidden;
+
+        .icon {
+          height: 7.77vw;
+        }
+
+        .cont {
+          flex: 1;
+          font-size: 4.44vw;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+      }
+
+      .btnBox {
+        display: flex;
+        align-items: center;
+        gap: 3.33vw;
+
+        button {
+          display: flex;
+          align-items: center;
+
+          img {
+            height: 5.55vw;
+          }
+        }
+      }
+    }
+
+    .textArea {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      gap: 3.88vw;
+
+      .explain {
+        font-size: 6.66vw;
+        font-weight: 800;
+        font-family: "Open Sans", sans-serif;
+      }
+
+      .do {
+        font-size: 3.88vw;
+      }
+    }
+
+    .tradeBtn {
+      width: 61.11vw;
+      height: 13.88vw;
+      font-size: 5.55vw;
+      font-weight: 700;
+      border: 1px solid #fff;
+      border-radius: 7.77vw;
+
+      &:hover {
+        color: #0a0e17;
+        background: #fff;
+      }
+    }
+  }
+
+  .featureSec {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+
+    .windowArea {
+      display: flex;
+      justify-content: center;
+      padding: 32.77vw 0;
+
+      .window {
+        width: 59.44vw;
+        .imgBox {
+          img {
+          }
+        }
+      }
+    }
+
+    .featureList {
+      display: flex;
+      flex-direction: column;
+      gap: 25vw;
+      padding: 6.11vw 11.11vw 0;
+
+      li {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 41.66vw;
+        padding: 0 12.22vw;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 3.88vw;
+        position: relative;
+
+        &:nth-of-type(1) {
+          &:hover {
+            .shadowBox {
+              .shadow {
+                box-shadow: 0px 30px 60px rgba(251, 246, 40, 0.4);
+              }
+            }
+          }
+
+          .shadowBox {
+            .shadow {
+              box-shadow: 0px 30px 60px rgba(251, 246, 40, 0.2);
+            }
+          }
+
+          .iconBox {
+            background: radial-gradient(
+              171.41% 92.71% at 50% 0%,
+              rgba(251, 246, 40, 0.3) 0%,
+              rgba(251, 246, 40, 0) 100%
+            );
+
+            .borderBox {
+              border-color: rgba(251, 246, 40, 0.2);
+            }
+          }
+        }
+
+        &:nth-of-type(2) {
+          &:hover {
+            .shadowBox {
+              .shadow {
+                box-shadow: 0px 30px 60px rgba(247, 65, 207, 0.4);
+              }
+            }
+          }
+
+          .shadowBox {
+            .shadow {
+              box-shadow: 0px 30px 60px rgba(247, 65, 207, 0.2);
+            }
+          }
+
+          .iconBox {
+            background: radial-gradient(
+              171.41% 92.71% at 50% 0%,
+              rgba(247, 65, 207, 0.3) 0%,
+              rgba(247, 65, 207, 0) 100%
+            );
+
+            .borderBox {
+              border-color: rgba(247, 65, 207, 0.2);
+            }
+          }
+        }
+
+        &:nth-of-type(3) {
+          &:hover {
+            .shadowBox {
+              .shadow {
+                box-shadow: 0px 30px 60px rgba(247, 171, 31, 0.4);
+              }
+            }
+          }
+
+          .shadowBox {
+            .shadow {
+              box-shadow: 0px 30px 60px rgba(247, 171, 31, 0.2);
+            }
+          }
+
+          .iconBox {
+            background: radial-gradient(
+              171.41% 92.71% at 50% 0%,
+              rgba(247, 171, 31, 0.3) 0%,
+              rgba(247, 171, 31, 0) 100%
+            );
+
+            .borderBox {
+              border-color: rgba(247, 171, 31, 0.2);
+            }
+          }
+        }
+
+        .shadowBox {
+          display: flex;
+          justify-content: center;
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          overflow: hidden;
+
+          .shadow {
+            width: 45.55vw;
+            height: 20vw;
+            top: -20vw;
+            position: absolute;
+          }
+        }
+
+        .iconBox {
+          width: 22.22vw;
+          height: 22.22vw;
+          border: 3px solid rgba(255, 255, 255, 0.3);
+          border-radius: 5.55vw;
+          top: -13.88vw;
+          position: absolute;
+
+          .borderBox {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: inherit;
+            height: inherit;
+            padding: 5vw;
+            border: 3px solid;
+            border-radius: inherit;
+            top: -3px;
+            left: -3px;
+            position: absolute;
+
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+            }
+          }
+        }
+
+        p {
+          font-size: 3.88vw;
+          color: rgba(255, 255, 255, 0.7);
+          text-align: center;
+        }
+      }
+    }
+  }
+
+  .rollSec {
+    display: flex;
+    padding: 38.88vw 0 0 0;
+
+    p {
+      padding: 0 0 0 11.11vw;
+      font-size: 22.22vw;
+      font-family: "Open Sans Hebrew";
+      white-space: nowrap;
+
+      &:nth-of-type(1) {
+        animation: ${tranlate} 20s infinite linear;
+      }
+
+      &:nth-of-type(2) {
+        animation: ${tranlate2} 20s 10s infinite linear;
+      }
+    }
+  }
+
+  .futureSec {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 22.22vw 5.55vw 0;
+
+    .bg {
+      align-self: flex-end;
+    }
+
+    .titleBox {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2.77vw;
+      margin: 3.33vw 0 0 0;
+      text-align: center;
+
+      .title {
+        font-size: 6.11vw;
+      }
+
+      .explain {
+        font-size: 3.88vw;
+        color: rgba(255, 255, 255, 0.6);
+      }
+    }
+
+    .futureList {
+      display: flex;
+      flex-direction: column;
+      gap: 3.33vw;
+      margin: 16.66vw 0 0 0;
+
+      li {
+        display: flex;
+        flex-direction: column;
+        gap: 2.77vw;
+        height: 35.55vw;
+        padding: 4.44vw 5.55vw;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2.77vw;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+
+        .key {
+          font-size: 5vw;
+        }
+
+        .value {
+          font-size: 3.88vw;
+          color: rgba(255, 255, 255, 0.6);
+        }
+      }
+    }
+  }
+`;
+
+const PlendingBox = styled.main`
   height: 100vh;
   color: #fff;
   background: #0a0e17;
@@ -158,6 +615,7 @@ const LendingBox = styled.main`
         display: flex;
         align-items: center;
         gap: 20px;
+        overflow: hidden;
 
         .icon {
           height: 28px;
@@ -275,6 +733,14 @@ const LendingBox = styled.main`
         position: relative;
 
         &:nth-of-type(1) {
+          &:hover {
+            .shadowBox {
+              .shadow {
+                box-shadow: 0px 30px 60px rgba(251, 246, 40, 0.4);
+              }
+            }
+          }
+
           .shadowBox {
             .shadow {
               box-shadow: 0px 30px 60px rgba(251, 246, 40, 0.2);
@@ -295,6 +761,14 @@ const LendingBox = styled.main`
         }
 
         &:nth-of-type(2) {
+          &:hover {
+            .shadowBox {
+              .shadow {
+                box-shadow: 0px 30px 60px rgba(247, 65, 207, 0.4);
+              }
+            }
+          }
+
           .shadowBox {
             .shadow {
               box-shadow: 0px 30px 60px rgba(247, 65, 207, 0.2);
@@ -315,6 +789,14 @@ const LendingBox = styled.main`
         }
 
         &:nth-of-type(3) {
+          &:hover {
+            .shadowBox {
+              .shadow {
+                box-shadow: 0px 30px 60px rgba(247, 171, 31, 0.4);
+              }
+            }
+          }
+
           .shadowBox {
             .shadow {
               box-shadow: 0px 30px 60px rgba(247, 171, 31, 0.2);
@@ -385,14 +867,12 @@ const LendingBox = styled.main`
   .rollSec {
     display: flex;
     padding: 140px 0 30px;
-    gap: 40px;
 
     p {
+      padding: 0 0 0 40px;
       font-size: 128px;
       font-family: "Open Sans Hebrew";
-      color: rgba(10, 14, 23, 1);
       white-space: nowrap;
-      text-shadow: -1px 0 #fff, 0 1px #fff, 1px 0 #fff, 0 -1px #fff;
 
       &:nth-of-type(1) {
         animation: ${tranlate} 20s infinite linear;

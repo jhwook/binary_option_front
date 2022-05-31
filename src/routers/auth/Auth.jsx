@@ -1,8 +1,10 @@
 import { Route, Routes } from "react-router";
-import styled from "styled-components";
 import DefaultHeader from "../../components/header/DefaultHeader";
+import CompPw from "./CompPw";
 import Index from "./Index";
 import Login from "./Login";
+import ResetPw from "./ResetPw";
+import SetPw from "./SetPw";
 import Signup from "./SignUp";
 
 export default function Auth() {
@@ -10,21 +12,15 @@ export default function Auth() {
     <>
       <DefaultHeader white />
 
-      <CopyRight>© 2022 Betbit.com. All rights reserved</CopyRight>
-
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+
+        <Route path="/resetpw" element={<ResetPw />} />
+        <Route path="/setpw/:code" element={<SetPw />} />
+        <Route path="/comppw" element={<CompPw />} />
       </Routes>
     </>
   );
 }
-
-const CopyRight = styled.p`
-  font-size: 12px;
-  bottom: 30px;
-  left: 50%;
-  position: fixed;
-  transform: translate(-50%);
-`;

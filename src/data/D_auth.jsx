@@ -5,7 +5,11 @@ export const D_joinData = {
   pw: "",
   phone: "",
   phoneLoc: "82",
-  emailAlarm: false,
+  emailAlarm: "",
+  pwAlarm: "",
 };
 
-export const D_locNumList = [82, 1, 1340, 1670, 1671, 1684, 1787, 1939, 1441];
+export const D_locNumList = [
+  82, 1, 1340, 1670, 1671, 1684, 1787, 1939, 1441, 82, 1, 1340, 1670, 1671,
+  1684, 1787, 1939, 1441,
+];

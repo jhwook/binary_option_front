@@ -3,9 +3,17 @@ import { useEffect, useLayoutEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { API } from "../../configs/api";
 import { gCliId } from "../../configs/setting";
+import { useDispatch } from "react-redux";
+import { setMobile } from "../../reducers/common";
 
 export default function EventListener() {
   const location = useLocation();
+  const dispatch = useDispatch();
+
+  function handleResize() {
+    if (window.innerWidth >= 1200) dispatch(setMobile(false));
+    else dispatch(setMobile(true));
+  }
 
   function getLoginChk() {
     const token = localStorage.getItem("token");
@@ -39,6 +47,12 @@ export default function EventListener() {
   useLayoutEffect(() => {
     getLoginChk();
     initGApi();
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {

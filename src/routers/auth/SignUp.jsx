@@ -9,9 +9,12 @@ import QRCode from "react-qr-code";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import { API } from "../../configs/api";
+import { useSelector } from "react-redux";
 
 export default function Signup() {
   const navigate = useNavigate();
+
+  const isMobile = useSelector((state) => state.common.isMobile);
 
   const [category, setCategory] = useState(0);
   const [chkTerm, setChkTerm] = useState(false);
@@ -40,112 +43,366 @@ export default function Signup() {
       .catch((err) => console.error(err));
   }
 
-  return (
-    <>
-      <SignupBox>
-        <section className="innerBox">
-          <div className="titleBox">
-            <strong className="pgTitle">Create Betbit Account</strong>
-            <p className="explain">Register with your email or mobile</p>
-          </div>
+  if (isMobile)
+    return (
+      <>
+        <MsignupBox>
+          <section className="innerBox">
+            <div className="titleBox">
+              <strong className="pgTitle">Create Betbit Account</strong>
+            </div>
 
-          <article className="contArea">
-            <div className="loginArc">
-              <div className="contBox">
-                <ul className="categoryList">
-                  {D_loginCategoryList.map((v, i) => (
-                    <li key={i} className={`${category === i && "on"}`}>
-                      <button onClick={() => setCategory(i)}>{v}</button>
-                    </li>
-                  ))}
-                </ul>
+            <article className="contArea">
+              <div className="loginArc">
+                <div className="contBox">
+                  <ul className="categoryList">
+                    {D_loginCategoryList.map((v, i) => (
+                      <li key={i} className={`${category === i && "on"}`}>
+                        <button onClick={() => setCategory(i)}>{v}</button>
+                      </li>
+                    ))}
+                  </ul>
 
-                {category === 0 && (
-                  <Email userData={userData} setUserData={setUserData} />
-                )}
-                {category === 1 && (
-                  <Phone userData={userData} setUserData={setUserData} />
-                )}
+                  {category === 0 && (
+                    <Email userData={userData} setUserData={setUserData} />
+                  )}
+                  {category === 1 && (
+                    <Phone userData={userData} setUserData={setUserData} />
+                  )}
 
-                <details className="referralDet">
-                  <summary>
-                    <p>Referral ID (Optional)</p>
-                    <img src={I_dnPol} alt="" />
-                  </summary>
-                </details>
-              </div>
+                  <details className="referralDet">
+                    <summary>
+                      <p>Referral ID (Optional)</p>
+                      <img src={I_dnPol} alt="" />
+                    </summary>
+                  </details>
+                </div>
 
-              <div className="btnBox">
-                <div className="termBox">
+                <div className="btnBox">
+                  <div className="termBox">
+                    <button
+                      className={`${chkTerm && "on"} chkBtn`}
+                      onClick={() => setChkTerm(!chkTerm)}
+                    >
+                      <img src={I_chkYellow} alt="" />
+                    </button>
+
+                    <span className="agreeBox">
+                      <p className="agree">I have read and agree to Betbit’s</p>
+                      <button className="termBtn" onClick={() => {}}>
+                        Terms of Service
+                      </button>
+                    </span>
+                  </div>
+
                   <button
-                    className={`${chkTerm && "on"} chkBtn`}
-                    onClick={() => setChkTerm(!chkTerm)}
+                    className="nextBtn"
+                    disabled={
+                      !chkTerm ||
+                      !(userData.email || userData.phone) ||
+                      !userData.pw ||
+                      userData.emailAlarm ||
+                      userData.pwAlarm
+                    }
+                    onClick={onClickSignup}
                   >
-                    <img src={I_chkYellow} alt="" />
+                    Next
                   </button>
+                </div>
 
-                  <span className="agreeBox">
-                    <p className="agree">I have read and agree to Betbit’s</p>
-                    &nbsp;
-                    <button className="termBtn" onClick={() => {}}>
-                      Terms of Service
+                <div className="utilBox">
+                  <span className="loginBox">
+                    <p className="login">Already registered?</p>&nbsp;
+                    <button
+                      className="loginBtn"
+                      onClick={() => navigate("/auth/login")}
+                    >
+                      LogIn
                     </button>
                   </span>
                 </div>
-
-                <button
-                  className="nextBtn"
-                  disabled={
-                    !chkTerm ||
-                    !(userData.email || userData.phone) ||
-                    !userData.pw ||
-                    userData.emailAlarm
-                  }
-                  onClick={onClickSignup}
-                >
-                  Next
-                </button>
               </div>
+            </article>
+          </section>
 
-              <div className="utilBox">
-                <span className="loginBox">
-                  <p className="login">Already registered?</p>&nbsp;
+          <p className="cpRight">© 2022 Betbit.com. All rights reserved</p>
+        </MsignupBox>
+      </>
+    );
+  else
+    return (
+      <>
+        <PsignupBox>
+          <section className="innerBox">
+            <div className="titleBox">
+              <strong className="pgTitle">Create Betbit Account</strong>
+              <p className="explain">Register with your email or mobile</p>
+            </div>
+
+            <article className="contArea">
+              <div className="loginArc">
+                <div className="contBox">
+                  <ul className="categoryList">
+                    {D_loginCategoryList.map((v, i) => (
+                      <li key={i} className={`${category === i && "on"}`}>
+                        <button onClick={() => setCategory(i)}>{v}</button>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {category === 0 && (
+                    <Email userData={userData} setUserData={setUserData} />
+                  )}
+                  {category === 1 && (
+                    <Phone userData={userData} setUserData={setUserData} />
+                  )}
+
+                  <details className="referralDet">
+                    <summary>
+                      <p>Referral ID (Optional)</p>
+                      <img src={I_dnPol} alt="" />
+                    </summary>
+                  </details>
+                </div>
+
+                <div className="btnBox">
+                  <div className="termBox">
+                    <button
+                      className={`${chkTerm && "on"} chkBtn`}
+                      onClick={() => setChkTerm(!chkTerm)}
+                    >
+                      <img src={I_chkYellow} alt="" />
+                    </button>
+
+                    <span className="agreeBox">
+                      <p className="agree">I have read and agree to Betbit’s</p>
+                      &nbsp;
+                      <button className="termBtn" onClick={() => {}}>
+                        Terms of Service
+                      </button>
+                    </span>
+                  </div>
+
                   <button
-                    className="loginBtn"
-                    onClick={() => navigate("/auth/login")}
+                    className="nextBtn"
+                    disabled={
+                      !chkTerm ||
+                      !(userData.email || userData.phone) ||
+                      !userData.pw ||
+                      userData.emailAlarm ||
+                      userData.pwAlarm
+                    }
+                    onClick={onClickSignup}
                   >
-                    LogIn
+                    Next
                   </button>
-                </span>
-              </div>
-            </div>
+                </div>
 
-            <div className="qrArea">
-              <div className="qrBox">
-                <QRCode
-                  size={220}
-                  style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-                  value={"http://users.options1.net/#/auth/login"}
-                  viewBox={`0 0 220 220`}
-                />
+                <div className="utilBox">
+                  <span className="loginBox">
+                    <p className="login">Already registered?</p>&nbsp;
+                    <button
+                      className="loginBtn"
+                      onClick={() => navigate("/auth/login")}
+                    >
+                      LogIn
+                    </button>
+                  </span>
+                </div>
               </div>
 
-              <div className="textBox">
-                <strong className="title">Mobile with QR code</strong>
+              <div className="qrArea">
+                <div className="qrBox">
+                  <QRCode
+                    size={220}
+                    style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                    value={"http://users.options1.net/#/auth/login"}
+                    viewBox={`0 0 220 220`}
+                  />
+                </div>
 
-                <p className="explain">
-                  Scan this code and you will be taken to your mobile login.
-                </p>
+                <div className="textBox">
+                  <strong className="title">Mobile with QR code</strong>
+
+                  <p className="explain">
+                    Scan this code and you will be taken to your mobile login.
+                  </p>
+                </div>
               </div>
-            </div>
-          </article>
-        </section>
-      </SignupBox>
-    </>
-  );
+            </article>
+          </section>
+
+          <p className="cpRight">© 2022 Betbit.com. All rights reserved</p>
+        </PsignupBox>
+      </>
+    );
 }
 
-const SignupBox = styled.main`
+const MsignupBox = styled.main`
+  padding: 15.55vw 0 0 0;
+
+  .innerBox {
+    display: flex;
+    flex-direction: column;
+    gap: 11.11vw;
+    padding: 11.11vw 4.44vw 0;
+
+    .titleBox {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      .pgTitle {
+        font-size: 6.11vw;
+      }
+    }
+
+    .contArea {
+      .loginArc {
+        .contBox {
+          .categoryList {
+            display: flex;
+            margin: 0 0 11.11vw 0;
+
+            li {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 8.88vw;
+              color: #ddd;
+
+              &.on {
+                color: inherit;
+                border: solid transparent;
+                border-width: 2px 2px 0 2px;
+                background-image: linear-gradient(#fff, #fff),
+                  linear-gradient(
+                    180deg,
+                    #000000 -12.12%,
+                    rgba(0, 0, 0, 0) 131.82%
+                  );
+                border-radius: 2.22vw 2.22vw 0 0;
+                background-origin: border-box;
+                background-clip: content-box, border-box;
+              }
+
+              button {
+                width: 100%;
+                height: 100%;
+                padding: 0 5.55vw;
+              }
+            }
+          }
+
+          .referralDet {
+            margin: 5.55vw 0 0 0;
+
+            &[open] {
+              summary {
+                img {
+                  transform: rotate(180deg);
+                }
+              }
+            }
+
+            summary {
+              display: flex;
+              align-items: center;
+              gap: 1.66vw;
+              font-size: 3.88vw;
+
+              img {
+                width: 2.22vw;
+              }
+            }
+          }
+        }
+
+        .btnBox {
+          display: flex;
+          flex-direction: column;
+          gap: 3.88vw;
+          margin: 11.11vw 0 0 0;
+
+          .termBox {
+            display: flex;
+            align-items: flex-start;
+            gap: 2.77vw;
+
+            .chkBtn {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 5.55vw;
+              height: 5.55vw;
+              border-radius: 1.11vw;
+              box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.3);
+
+              &.on {
+                img {
+                  display: block;
+                }
+              }
+
+              img {
+                display: none;
+                width: 3.88vw;
+              }
+            }
+
+            .agreeBox {
+              font-size: 3.88vw;
+
+              .termBtn {
+                color: #f7ab1f;
+              }
+            }
+          }
+
+          .nextBtn {
+            height: 13.88vw;
+            font-size: 4.44vw;
+            font-weight: 700;
+            color: #fff;
+            background: #2a2a2a;
+            border-radius: 2.22vw;
+          }
+        }
+
+        .utilBox {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 2.77vw;
+          margin: 5.55vw 0 0 0;
+          font-size: 3.88vw;
+
+          .loginBox {
+            display: flex;
+            align-items: center;
+          }
+
+          button {
+            font-size: 3.88vw;
+            color: #f7ab1f;
+          }
+        }
+      }
+    }
+  }
+
+  .cpRight {
+    font-size: 3.33vw;
+    white-space: nowrap;
+    color: #ddd;
+    bottom: 30px;
+    left: 50%;
+    position: fixed;
+    transform: translate(-50%);
+  }
+`;
+
+const PsignupBox = styled.main`
   display: flex;
   justify-content: center;
   padding: 70px 0;
@@ -278,10 +535,10 @@ const SignupBox = styled.main`
           .nextBtn {
             height: 56px;
             font-size: 18px;
-            border-radius: 8px;
             font-weight: 700;
             color: #fff;
             background: #2a2a2a;
+            border-radius: 8px;
           }
         }
 
@@ -340,5 +597,13 @@ const SignupBox = styled.main`
         }
       }
     }
+  }
+
+  .cpRight {
+    font-size: 12px;
+    bottom: 30px;
+    left: 50%;
+    position: fixed;
+    transform: translate(-50%);
   }
 `;

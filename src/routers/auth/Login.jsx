@@ -10,9 +10,12 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 import { API } from "../../configs/api";
 import { gCliId } from "../../configs/setting";
+import { useSelector } from "react-redux";
 
 export default function Login() {
   const navigate = useNavigate();
+
+  const isMobile = useSelector((state) => state.common.isMobile);
 
   const [category, setCategory] = useState(0);
   const [userData, setUserData] = useState(D_joinData);
@@ -52,95 +55,298 @@ export default function Login() {
       .catch((err) => console.error(err));
   }
 
+  if (isMobile)
+    return (
+      <>
+        <MloginBox>
+          <section className="innerBox">
+            <div className="titleBox">
+              <strong className="pgTitle">Betbit Account Login</strong>
+            </div>
 
-  return (
-    <>
-      <LoginBox>
-        <section className="innerBox">
-          <div className="titleBox">
-            <strong className="pgTitle">Betbit Account Login</strong>
-          </div>
+            <article className="contArea">
+              <div className="loginArc">
+                <div className="contBox">
+                  <ul className="categoryList">
+                    {D_loginCategoryList.map((v, i) => (
+                      <li key={i} className={`${category === i && "on"}`}>
+                        <button onClick={() => setCategory(i)}>{v}</button>
+                      </li>
+                    ))}
+                  </ul>
 
-          <article className="contArea">
-            <div className="loginArc">
-              <div className="contBox">
-                <ul className="categoryList">
-                  {D_loginCategoryList.map((v, i) => (
-                    <li key={i} className={`${category === i && "on"}`}>
-                      <button onClick={() => setCategory(i)}>{v}</button>
-                    </li>
-                  ))}
-                </ul>
-
-                {category === 0 && (
-                  <Email userData={userData} setUserData={setUserData} />
-                )}
-                {category === 1 && (
-                  <Phone userData={userData} setUserData={setUserData} />
-                )}
-              </div>
-
-              <div className="btnBox">
-                <button className="loginBtn" onClick={onClickLoginBtn}>
-                  Login
-                </button>
-
-                <p className="or">or</p>
-
-                <GoogleLogin
-                  clientId={gCliId}
-                  onSuccess={resGLogin}
-                  onFailure={(err) => console.error(err)}
-                  cookiePolicy="single_host_origin"
-                  render={(renderProps) => (
-                    <button className="googleBtn" onClick={renderProps.onClick}>
-                      <img src={L_google} alt="" />
-                      <p>Continue with Google</p>
-                    </button>
+                  {category === 0 && (
+                    <Email userData={userData} setUserData={setUserData} />
                   )}
-                />
-              </div>
+                  {category === 1 && (
+                    <Phone userData={userData} setUserData={setUserData} />
+                  )}
+                </div>
 
-              <div className="utilBox">
-                <button className="forgetBtn" onClick={() => {}}>
-                  Forgot password?
-                </button>
+                <div className="btnBox">
+                  <button className="loginBtn" onClick={onClickLoginBtn}>
+                    Login
+                  </button>
 
-                <button
-                  className="signupBtn"
-                  onClick={() => navigate("/auth/signup")}
-                >
-                  Register now
-                </button>
+                  <p className="or">or</p>
+
+                  <GoogleLogin
+                    clientId={gCliId}
+                    onSuccess={resGLogin}
+                    onFailure={(err) => console.error(err)}
+                    cookiePolicy="single_host_origin"
+                    render={(renderProps) => (
+                      <button
+                        className="googleBtn"
+                        onClick={renderProps.onClick}
+                      >
+                        <img src={L_google} alt="" />
+                        <p>Continue with Google</p>
+                      </button>
+                    )}
+                  />
+                </div>
+
+                <div className="utilBox">
+                  <button
+                    className="forgetBtn"
+                    onClick={() => navigate("/auth/resetpw")}
+                  >
+                    Forgot password?
+                  </button>
+
+                  <button
+                    className="signupBtn"
+                    onClick={() => navigate("/auth/signup")}
+                  >
+                    Register now
+                  </button>
+                </div>
               </div>
+            </article>
+          </section>
+
+          <p className="cpRight">© 2022 Betbit.com. All rights reserved</p>
+        </MloginBox>
+      </>
+    );
+  else
+    return (
+      <>
+        <PloginBox>
+          <section className="innerBox">
+            <div className="titleBox">
+              <strong className="pgTitle">Betbit Account Login</strong>
             </div>
 
-            <div className="qrArea">
-              <div className="qrBox">
-                <QRCode
-                  size={220}
-                  style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-                  value={"http://users.options1.net/#/auth/login"}
-                  viewBox={`0 0 220 220`}
-                />
+            <article className="contArea">
+              <div className="loginArc">
+                <div className="contBox">
+                  <ul className="categoryList">
+                    {D_loginCategoryList.map((v, i) => (
+                      <li key={i} className={`${category === i && "on"}`}>
+                        <button onClick={() => setCategory(i)}>{v}</button>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {category === 0 && (
+                    <Email userData={userData} setUserData={setUserData} />
+                  )}
+                  {category === 1 && (
+                    <Phone userData={userData} setUserData={setUserData} />
+                  )}
+                </div>
+
+                <div className="btnBox">
+                  <button className="loginBtn" onClick={onClickLoginBtn}>
+                    Login
+                  </button>
+
+                  <p className="or">or</p>
+
+                  <GoogleLogin
+                    clientId={gCliId}
+                    onSuccess={resGLogin}
+                    onFailure={(err) => console.error(err)}
+                    cookiePolicy="single_host_origin"
+                    render={(renderProps) => (
+                      <button
+                        className="googleBtn"
+                        onClick={renderProps.onClick}
+                      >
+                        <img src={L_google} alt="" />
+                        <p>Continue with Google</p>
+                      </button>
+                    )}
+                  />
+                </div>
+
+                <div className="utilBox">
+                  <button className="forgetBtn" onClick={() => {}}>
+                    Forgot password?
+                  </button>
+
+                  <button
+                    className="signupBtn"
+                    onClick={() => navigate("/auth/signup")}
+                  >
+                    Register now
+                  </button>
+                </div>
               </div>
 
-              <div className="textBox">
-                <strong className="title">Mobile with QR code</strong>
+              <div className="qrArea">
+                <div className="qrBox">
+                  <QRCode
+                    size={220}
+                    style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                    value={"http://users.options1.net/#/auth/login"}
+                    viewBox={`0 0 220 220`}
+                  />
+                </div>
 
-                <p className="explain">
-                  Scan this code and you will be taken to your mobile login.
-                </p>
+                <div className="textBox">
+                  <strong className="title">Mobile with QR code</strong>
+
+                  <p className="explain">
+                    Scan this code and you will be taken to your mobile login.
+                  </p>
+                </div>
               </div>
-            </div>
-          </article>
-        </section>
-      </LoginBox>
-    </>
-  );
+            </article>
+          </section>
+
+          <p className="cpRight">© 2022 Betbit.com. All rights reserved</p>
+        </PloginBox>
+      </>
+    );
 }
 
-const LoginBox = styled.main`
+const MloginBox = styled.main`
+  padding: 15.55vw 0 0 0;
+
+  .innerBox {
+    display: flex;
+    flex-direction: column;
+    gap: 11.11vw;
+    padding: 11.11vw 4.44vw 0;
+
+    .titleBox {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      .pgTitle {
+        font-size: 6.11vw;
+      }
+    }
+
+    .contArea {
+      .loginArc {
+        .contBox {
+          .categoryList {
+            display: flex;
+            margin: 0 0 11.11vw 0;
+
+            li {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 8.88vw;
+              color: #ddd;
+
+              &.on {
+                color: inherit;
+                border: solid transparent;
+                border-width: 2px 2px 0 2px;
+                background-image: linear-gradient(#fff, #fff),
+                  linear-gradient(
+                    180deg,
+                    #000000 -12.12%,
+                    rgba(0, 0, 0, 0) 131.82%
+                  );
+                border-radius: 2.22vw 2.22vw 0 0;
+                background-origin: border-box;
+                background-clip: content-box, border-box;
+              }
+
+              button {
+                width: 100%;
+                height: 100%;
+                padding: 0 5.55vw;
+              }
+            }
+          }
+        }
+
+        .btnBox {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 3.88vw;
+          margin: 8.33vw 0 0 0;
+
+          button {
+            width: 100%;
+            height: 13.88vw;
+            font-size: 4.44vw;
+            border-radius: 2.22vw;
+
+            &.loginBtn {
+              font-weight: 700;
+              color: #fff;
+              background: #2a2a2a;
+            }
+
+            &.googleBtn {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              gap: 3.88vw;
+              border: 1px solid #e6e6e6;
+            }
+          }
+
+          .or {
+            font-size: 4.44vw;
+          }
+        }
+
+        .utilBox {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 2.77vw;
+          margin: 5.55vw 0 0 0;
+          font-size: 3.88vw;
+
+          .loginBox {
+            display: flex;
+            align-items: center;
+          }
+
+          button {
+            font-size: 3.88vw;
+            color: #f7ab1f;
+          }
+        }
+      }
+    }
+  }
+
+  .cpRight {
+    font-size: 3.33vw;
+    white-space: nowrap;
+    color: #ddd;
+    bottom: 30px;
+    left: 50%;
+    position: fixed;
+    transform: translate(-50%);
+  }
+`;
+
+const PloginBox = styled.main`
   display: flex;
   justify-content: center;
   padding: 70px 0;
@@ -285,5 +491,13 @@ const LoginBox = styled.main`
         }
       }
     }
+  }
+
+  .cpRight {
+    font-size: 12px;
+    bottom: 30px;
+    left: 50%;
+    position: fixed;
+    transform: translate(-50%);
   }
 `;
