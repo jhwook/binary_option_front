@@ -1,6 +1,8 @@
 import I_candleChartWhite from "../img/icon/I_candleChartWhite.svg";
 import I_lIneChartWhite from "../img/icon/I_lIneChartWhite.svg";
 import I_heikenChartWhite from "../img/icon/I_heikenChartWhite.svg";
+import E_eur from "../img/example/bet/E_eur.png";
+import E_usd from "../img/example/bet/E_usd.png";
 
 export const D_tokenList = [
   { key: "EUR/NZD OTC", value: 92 },
@@ -1543,8 +1545,8 @@ export const D_volumeChartList = [
 export const D_screenList = ["M10", "M30", "H1", "H4", "D1", "D7", "D14"];
 
 export const D_chartTypeList = [
-  { icon: I_candleChartWhite, text: "Line" },
-  { icon: I_lIneChartWhite, text: "Candles" },
+  { icon: I_lIneChartWhite, text: "Line" },
+  { icon: I_candleChartWhite, text: "Candles" },
   { icon: I_heikenChartWhite, text: "Heiken Ashi" },
 ];
 
@@ -1561,4 +1563,154 @@ export const D_timeList = [
   "1h",
   "4h",
   "1d",
+];
+
+export const D_tokenCategoryList = ["Currencies", "Crypto", "Stocks"];
+
+export const D_currencyList = [
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+  { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },
+];
+
+export const D_historyCategoryList = ["DEPOSIT", "WITHDRAWAL"];
+
+export const D_historyListHeader = [
+  "ID",
+  "Date",
+  "Amount",
+  "Method",
+  "Type",
+  "Status",
+];
+
+export const D_historyList = [
+  {
+    id: "ioimmoj@gmail.com",
+    date: new Date(),
+    amount: 10000,
+    method: "Tether (ERC20/TRC20)",
+    type: "Deposit",
+    status: "Expired",
+  },
+  {
+    id: "ioimmoj@gmail.com",
+    date: new Date(),
+    amount: 10000,
+    method: "Tether (ERC20/TRC20)",
+    type: "Deposit",
+    status: "Expired",
+  },
+  {
+    id: "ioimmoj@gmail.com",
+    date: new Date(),
+    amount: 10000,
+    method: "Tether (ERC20/TRC20)",
+    type: "Deposit",
+    status: "Expired",
+  },
+  {
+    id: "ioimmoj@gmail.com",
+    date: new Date(),
+    amount: 10000,
+    method: "Tether (ERC20/TRC20)",
+    type: "Deposit",
+    status: "Expired",
+  },
+  {
+    id: "ioimmoj@gmail.com",
+    date: new Date(),
+    amount: 10000,
+    method: "Tether (ERC20/TRC20)",
+    type: "Deposit",
+    status: "Expired",
+  },
+  {
+    id: "ioimmoj@gmail.com",
+    date: new Date(),
+    amount: 10000,
+    method: "Tether (ERC20/TRC20)",
+    type: "Deposit",
+    status: "Expired",
+  },
+  {
+    id: "ioimmoj@gmail.com",
+    date: new Date(),
+    amount: 10000,
+    method: "Tether (ERC20/TRC20)",
+    type: "Deposit",
+    status: "Expired",
+  },
+  {
+    id: "ioimmoj@gmail.com",
+    date: new Date(),
+    amount: 10000,
+    method: "Tether (ERC20/TRC20)",
+    type: "Deposit",
+    status: "Expired",
+  },
+  {
+    id: "ioimmoj@gmail.com",
+    date: new Date(),
+    amount: 10000,
+    method: "Tether (ERC20/TRC20)",
+    type: "Deposit",
+    status: "Expired",
+  },
+  {
+    id: "ioimmoj@gmail.com",
+    date: new Date(),
+    amount: 10000,
+    method: "Tether (ERC20/TRC20)",
+    type: "Deposit",
+    status: "Expired",
+  },
+];
+
+export const D_timeBtnList = [
+  { key: "5s", value: 5 },
+  { key: "15s", value: 15 },
+  { key: "30s", value: 30 },
+  { key: "1m", value: 60 },
+  { key: "3m", value: 180 },
+  { key: "5m", value: 300 },
+  { key: "30m", value: 1800 },
+  { key: "1h", value: 3600 },
+  { key: "4h", value: 14400 },
 ];

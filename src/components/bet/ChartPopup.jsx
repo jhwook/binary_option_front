@@ -1,8 +1,11 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { D_chartTypeList, D_timeList } from "../../data/D_bet";
+import { useSelector } from "react-redux";
 
-export default function ChartPopup() {
+export default function ChartPopup({ off }) {
+  const isMobile = useSelector((state) => state.common.isMobile);
+
   const [type, setType] = useState(D_chartTypeList[0].text);
   const [time, setTime] = useState(D_timeList[0]);
   const [toggleList, setToggleList] = useState(new Array(2).fill(false));
@@ -14,61 +17,46 @@ export default function ChartPopup() {
     setToggleList([...dataList]);
   }
 
-  return (
-    <ChartPopupBox>
-      <article className="typeArea">
-        <p className="key">Chart types</p>
-        <ul className="value">
-          {D_chartTypeList.map((v, i) => (
-            <li
-              key={i}
-              className={`${type === v.text && "on"}`}
-              onClick={() => setType(v.text)}
-            >
-              <img src={v.icon} alt="" />
-              <p>{v.text}</p>
-            </li>
-          ))}
-        </ul>
-      </article>
-
-      <article className="timeArea">
-        <p className="key">Time frames</p>
-
-        <ul className="value">
-          {D_timeList.map((v, i) => (
-            <li
-              key={i}
-              className={`${time === v && "on"}`}
-              onClick={() => setTime(v)}
-            >
-              <strong>{v}</strong>
-            </li>
-          ))}
-        </ul>
-      </article>
-
-      <article className="setArea">
-        <p className="key">Settings</p>
-
-        <ul className="value">
-          {type === "Line" && (
-            <li>
-              <button
-                className={`${toggleList[0] && "on"} toggleBtn`}
-                onClick={() => onClickToggleBtn(0)}
+  if (isMobile)
+    return (
+      <MchartPopupBox>
+        <article className="typeArea">
+          <p className="key">Chart types</p>
+          <ul className="value">
+            {D_chartTypeList.map((v, i) => (
+              <li
+                key={i}
+                className={`${type === v.text && "on"}`}
+                onClick={() => setType(v.text)}
               >
-                <p className="on">on</p>
-                <span />
-                <p className="off">off</p>
-              </button>
+                <img src={v.icon} alt="" />
+                <p>{v.text}</p>
+              </li>
+            ))}
+          </ul>
+        </article>
 
-              <p className="setCont">Show area</p>
-            </li>
-          )}
+        <article className="timeArea">
+          <p className="key">Time frames</p>
 
-          {type === "Candles" && (
-            <>
+          <ul className="value">
+            {D_timeList.map((v, i) => (
+              <li
+                key={i}
+                className={`${time === v && "on"}`}
+                onClick={() => setTime(v)}
+              >
+                <strong>{v}</strong>
+              </li>
+            ))}
+          </ul>
+        </article>
+
+        <article className="setArea">
+          <p className="key">Settings</p>
+
+          <ul className="value">
+            {type === "Line" && (
               <li>
                 <button
                   className={`${toggleList[0] && "on"} toggleBtn`}
@@ -79,8 +67,82 @@ export default function ChartPopup() {
                   <p className="off">off</p>
                 </button>
 
-                <p className="setCont">Enable timer</p>
+                <p className="setCont">Show area</p>
               </li>
+            )}
+
+            {type === "Candles" && (
+              <>
+                <li>
+                  <button
+                    className={`${toggleList[0] && "on"} toggleBtn`}
+                    onClick={() => onClickToggleBtn(0)}
+                  >
+                    <p className="on">on</p>
+                    <span />
+                    <p className="off">off</p>
+                  </button>
+
+                  <p className="setCont">Enable timer</p>
+                </li>
+                <li>
+                  <button
+                    className={`${toggleList[0] && "on"} toggleBtn`}
+                    onClick={() => onClickToggleBtn(0)}
+                  >
+                    <p className="on">on</p>
+                    <span />
+                    <p className="off">off</p>
+                  </button>
+
+                  <p className="setCont">Enable grid snap</p>
+                </li>
+              </>
+            )}
+          </ul>
+        </article>
+      </MchartPopupBox>
+    );
+  else
+    return (
+      <PchartPopupBox>
+        <article className="typeArea">
+          <p className="key">Chart types</p>
+          <ul className="value">
+            {D_chartTypeList.map((v, i) => (
+              <li
+                key={i}
+                className={`${type === v.text && "on"}`}
+                onClick={() => setType(v.text)}
+              >
+                <img src={v.icon} alt="" />
+                <p>{v.text}</p>
+              </li>
+            ))}
+          </ul>
+        </article>
+
+        <article className="timeArea">
+          <p className="key">Time frames</p>
+
+          <ul className="value">
+            {D_timeList.map((v, i) => (
+              <li
+                key={i}
+                className={`${time === v && "on"}`}
+                onClick={() => setTime(v)}
+              >
+                <strong>{v}</strong>
+              </li>
+            ))}
+          </ul>
+        </article>
+
+        <article className="setArea">
+          <p className="key">Settings</p>
+
+          <ul className="value">
+            {type === "Line" && (
               <li>
                 <button
                   className={`${toggleList[0] && "on"} toggleBtn`}
@@ -91,17 +153,210 @@ export default function ChartPopup() {
                   <p className="off">off</p>
                 </button>
 
-                <p className="setCont">Enable grid snap</p>
+                <p className="setCont">Show area</p>
               </li>
-            </>
-          )}
-        </ul>
-      </article>
-    </ChartPopupBox>
-  );
+            )}
+
+            {type === "Candles" && (
+              <>
+                <li>
+                  <button
+                    className={`${toggleList[0] && "on"} toggleBtn`}
+                    onClick={() => onClickToggleBtn(0)}
+                  >
+                    <p className="on">on</p>
+                    <span />
+                    <p className="off">off</p>
+                  </button>
+
+                  <p className="setCont">Enable timer</p>
+                </li>
+                <li>
+                  <button
+                    className={`${toggleList[0] && "on"} toggleBtn`}
+                    onClick={() => onClickToggleBtn(0)}
+                  >
+                    <p className="on">on</p>
+                    <span />
+                    <p className="off">off</p>
+                  </button>
+
+                  <p className="setCont">Enable grid snap</p>
+                </li>
+              </>
+            )}
+          </ul>
+        </article>
+      </PchartPopupBox>
+    );
 }
 
-const ChartPopupBox = styled.section`
+const MchartPopupBox = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: 8.33vw;
+  padding: 5.55vw;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 5.55vw 5.55vw 0 0;
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  position: fixed;
+  z-index: 6;
+
+  article {
+    display: flex;
+    flex-direction: column;
+    gap: 2.77vw;
+    color: rgba(255, 255, 255, 0.4);
+
+    .key {
+      font-size: 3.88vw;
+    }
+
+    .value {
+    }
+
+    &.typeArea {
+      .value {
+        display: flex;
+        gap: 2.77vw;
+
+        li {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          gap: 2.22vw;
+          aspect-ratio: 1;
+          font-size: 3.33vw;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          border-radius: 2.22vw;
+          cursor: pointer;
+
+          &.on {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #fff;
+
+            img {
+              opacity: 1;
+            }
+          }
+
+          img {
+            width: 13.33vw;
+            opacity: 0.4;
+          }
+        }
+      }
+    }
+
+    &.timeArea {
+      .value {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+
+        li {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 20vw;
+          height: 10.55vw;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          border-radius: 2.22vw;
+          cursor: pointer;
+
+          &.on {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #fff;
+          }
+        }
+      }
+    }
+
+    &.setArea {
+      .value {
+        display: flex;
+        flex-direction: column;
+        gap: 2.77vw;
+
+        li {
+          display: flex;
+          align-items: center;
+          gap: 2.77vw;
+          color: #fff;
+
+          .toggleBtn {
+            display: flex;
+            align-items: center;
+            width: 16.11vw;
+            height: 6.66vw;
+            padding: 0.83vw;
+            font-size: 3.88vw;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3.33vw;
+            position: relative;
+
+            &,
+            * {
+              transition: all 0.3s;
+            }
+
+            &.on {
+              background: rgba(247, 171, 31, 0.2);
+
+              span {
+                margin: 0 0 0 9.44vw;
+                background: rgba(247, 171, 31, 0.8);
+              }
+
+              p {
+                &.on {
+                  opacity: 1;
+                }
+
+                &.off {
+                  opacity: 0;
+                }
+              }
+            }
+
+            span {
+              width: 5vw;
+              aspect-ratio: 1;
+              border-radius: 50%;
+              background: rgba(255, 255, 255, 0.8);
+            }
+
+            p {
+              top: 50%;
+              transform: translate(0, -50%);
+              position: absolute;
+
+              &.on {
+                opacity: 0;
+                left: 3.33vw;
+              }
+
+              &.off {
+                opacity: 1;
+                right: 3.33vw;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const PchartPopupBox = styled.section`
   display: flex;
   flex-direction: column;
   gap: 30px;

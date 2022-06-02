@@ -108,6 +108,14 @@ const GlobalStyle = createGlobalStyle`
     position: absolute;
   }
 
+  
+  .posBox{
+    position: relative;
+  }
+  
+  
+  //custom 
+  
   .defaultPopup {
     background: rgba(255, 255, 255, 0.1);
     border: 1.4px solid rgba(255, 255, 255, 0.14);
@@ -123,12 +131,20 @@ const GlobalStyle = createGlobalStyle`
     z-index: 6;
   }
 
-  .posBox{
-    position: relative;
+  .datePickerHeader{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    height: 34px;
+    padding: 0 26px;
+
+    p{
+      flex:1;
+      font-size: 16px;
+      text-align: start;
+    }
+
   }
-
-
-  //custom 
   
 `;
 

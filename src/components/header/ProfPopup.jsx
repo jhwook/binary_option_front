@@ -70,10 +70,9 @@ export default function ProfPopup({ off }) {
         </li>
         <li>
           <button className="navBtn" onClick={() => {}}>
-            Notifications
+            <p>Notifications</p>
+            <p className="new">new</p>
           </button>
-
-          <p className="new">new</p>
         </li>
         <li>
           <button className="navBtn" onClick={() => {}}>
@@ -192,21 +191,29 @@ const ProfPopupBox = styled.section`
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 22px;
-    padding: 24px 10px;
+    padding: 12px 0;
     border-top: 1.4px solid rgba(255, 255, 255, 0.2);
 
     li {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-
       button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        height: 100%;
+        padding: 0 14px;
+        height: 40px;
+        border-radius: 6px;
         color: rgba(255, 255, 255, 0.4);
-      }
 
-      .new {
-        color: #ff5353;
+        &:hover {
+          color: #fff;
+          background: rgba(255, 255, 255, 0.1);
+        }
+
+        .new {
+          color: #ff5353;
+        }
       }
     }
   }

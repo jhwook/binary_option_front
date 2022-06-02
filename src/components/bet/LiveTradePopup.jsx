@@ -1,31 +1,86 @@
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 export default function LiveTradePopup({ off }) {
+  const isMobile = useSelector((state) => state.common.isMobile);
+
   function onClickDepositBtn() {
     off();
   }
 
-  return (
-    <LiveTradePopupBox className="defaultPopup">
-      <p className="explain">
-        Please first top up the balance to start Live Trading. (Minimum
-        investment amount is $5)
-      </p>
+  if (isMobile)
+    return (
+      <MliveTradePopupBox className="defaultPopup">
+        <p className="explain">
+          Please first top up the balance to start Live Trading.
+        </p>
 
-      <div className="buttonBox">
-        <button className="depositBtn" onClick={onClickDepositBtn}>
-          Deposit now
-        </button>
+        <div className="buttonBox">
+          <button className="depositBtn" onClick={onClickDepositBtn}>
+            Deposit now
+          </button>
 
-        <button className="demoBtn" onClick={() => off()}>
-          Demo trading
-        </button>
-      </div>
-    </LiveTradePopupBox>
-  );
+          <button className="demoBtn" onClick={() => off()}>
+            Demo trading
+          </button>
+        </div>
+      </MliveTradePopupBox>
+    );
+  else
+    return (
+      <PliveTradePopupBox className="defaultPopup">
+        <p className="explain">
+          Please first top up the balance to start Live Trading. (Minimum
+          investment amount is $5)
+        </p>
+
+        <div className="buttonBox">
+          <button className="depositBtn" onClick={onClickDepositBtn}>
+            Deposit now
+          </button>
+
+          <button className="demoBtn" onClick={() => off()}>
+            Demo trading
+          </button>
+        </div>
+      </PliveTradePopupBox>
+    );
 }
 
-const LiveTradePopupBox = styled.section`
+const MliveTradePopupBox = styled.section`
+  width: 83.33vw;
+  font-size: 3.88vw;
+  color: #fff;
+  border-radius: 3.88vw;
+  overflow: hidden;
+
+  .explain {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 28.88vw;
+    padding: 0 12.5vw;
+    text-align: center;
+  }
+
+  .buttonBox {
+    display: flex;
+    gap: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+
+    button {
+      flex: 1;
+      height: 13.88vw;
+      color: #f7ab1f;
+
+      &:nth-of-type(n + 2) {
+        border-left: 1px solid rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+`;
+
+const PliveTradePopupBox = styled.section`
   display: flex;
   flex-direction: column;
   gap: 30px;

@@ -340,7 +340,11 @@ const MlendingBox = styled.main`
 
       .window {
         width: 59.44vw;
+        
         .imgBox {
+          display: flex;
+          justify-content: center;
+          
           img {
           }
         }

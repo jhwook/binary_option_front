@@ -7,7 +7,7 @@ import {
   D_volumeChartList,
 } from "../../data/D_bet";
 import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
-import I_starYellow from "../../img/icon/I_starYellow.svg";
+import I_starYellowO from "../../img/icon/I_starYellowO.svg";
 import I_qnaWhite from "../../img/icon/I_qnaWhite.svg";
 import I_langWhite from "../../img/icon/I_langWhite.svg";
 import I_timeWhite from "../../img/icon/I_timeWhite.svg";
@@ -26,9 +26,15 @@ import LiveTradePopup from "../../components/bet/LiveTradePopup";
 import PopupBg from "../../components/common/PopupBg";
 import SelectPopup from "../../components/common/SelectPopup";
 import ChartPopup from "../../components/bet/ChartPopup";
+import TokenPopup from "../../components/bet/TokenPopup";
+import { useSelector } from "react-redux";
+import TimePopup from "../../components/bet/TimePopup";
+import {SetAlarmBar} from "../../util/SetAlarmBar";
 
 export default function Bet() {
   let a = 1;
+
+  const isMobile = useSelector((state) => state.common.isMobile);
 
   const [candleChart, setCandleChart] = useState("");
   const [volumeChart, setVolumeChart] = useState("");
@@ -37,6 +43,8 @@ export default function Bet() {
   const [hotKeyPopup, setHotKeyPopup] = useState(true);
   const [screen, setScreen] = useState(D_screenList[0]);
   const [screenPopup, setScreenPopup] = useState(false);
+  const [tokenPopup, setTokenPopup] = useState(false);
+  const [timePopup, setTimePopup] = useState(false);
 
   function markUpChart() {
     const chartBox = document.getElementById("ChartBox");
@@ -127,6 +135,27 @@ export default function Bet() {
     }
   }
 
+  function onClickPayBtn(type) {
+    switch (type) {
+      case "high":
+        SetAlarmBar({
+          cont: <p className="title">Trade order placed</p>,
+          // <>
+          //   <p className="title">Trade order placed</p>
+
+          //   <img src={I_highArwGreen} alt="" />
+          // </>
+        });
+        break;
+
+      case "low":
+        break;
+
+      default:
+        break;
+    }
+  }
+
   useEffect(() => {
     markUpChart();
 
@@ -145,202 +174,527 @@ export default function Bet() {
     return () => clearInterval(chartInterval);
   }, [candleChart]);
 
-  return (
-    <>
-      <DefaultHeader border />
+  if (isMobile)
+    return (
+      <>
+        <DefaultHeader />
 
-      <BetBox onKeyDown={handleKeyDown}>
-        <section className="innerBox">
-          <article className="tokenArea">
-            <div className="selectBox">
-              <button className="selectBtn" onClick={() => {}}>
-                <p>Ethereum</p>
-                <img src={I_dnPolWhite} alt="" />
-              </button>
-            </div>
+        <MbetBox onKeyDown={handleKeyDown}>
+          <section className="innerBox">
+            <article className="contArea">
+              <div className="chartBox">
+                {/* <div className="chartBox" id="ChartBox"> */}
+                <span className="utilBox">
+                  <ul className="btnList">
+                    <li>
+                      <button
+                        className="tokenBtn"
+                        onClick={() => setTokenPopup(true)}
+                      >
+                        <p>Ethereum</p>
+                        <img src={I_dnPolWhite} alt="" />
+                      </button>
 
-            <ul className="tokenList">
-              {D_tokenList.map((v, i) => (
-                <li key={i}>
-                  <img src={I_starYellow} alt="" />
-                  <span className="textBox">
-                    <p className="key">{v.key}</p>
-                    <p className="value">{v.value}</p>
-                  </span>
-                </li>
-              ))}
+                      {tokenPopup && (
+                        <>
+                          <TokenPopup off={setTokenPopup} />
+                          <PopupBg off={setTokenPopup} />
+                        </>
+                      )}
+                    </li>
 
-              <span className="filter" />
-            </ul>
-          </article>
+                    <li>
+                      <button
+                        className="chartBtn"
+                        onClick={() => setChartPopup(true)}
+                      >
+                        <img src={I_candleChartWhite} alt="" />
+                      </button>
 
-          <article className="contArea">
-            <div className="chartBox">
-              {/* <div className="chartBox" id="ChartBox"> */}
-              <span className="utilBox">
-                <ul className="btnList">
-                  <li>
+                      {chartPopup && (
+                        <>
+                          <ChartPopup off={setChartPopup} />
+                          <PopupBg bg off={setChartPopup} />
+                        </>
+                      )}
+                    </li>
+                  </ul>
+                </span>
+              </div>
+
+              <div className="actionBox">
+                <div className="infoBox">
+                  <div className="timeBox contBox">
+                    <p className="key">Time</p>
+
+                    <div className="value">
+                      <button
+                        className="contBtn"
+                        onClick={() => setTimePopup(true)}
+                      >
+                        <p>00:01:00</p>
+
+                        <img src={I_timeWhite} alt="" />
+                      </button>
+
+                      {timePopup && (
+                        <>
+                          <TimePopup off={setTimePopup} />
+                          <PopupBg off={setTimePopup} />
+                        </>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="amountBox contBox">
+                    <p className="key">Amount</p>
+
+                    <div className="value">
+                      <p>$ 100</p>
+
+                      <img src={I_dollarWhite} alt="" />
+                    </div>
+                  </div>
+                </div>
+
+                <p className="payout">Your payout : $3.40</p>
+
+                <div className="btnBox">
+                  <button className="highBtn" onClick={() => {}}>
+                    <img src={I_highArwGreen} alt="" />
+                    <p>HIGH</p>
+                  </button>
+
+                  <button className="lowBtn" onClick={() => {}}>
+                    <img src={I_lowArwRed} alt="" />
+                    <p>LOW</p>
+                  </button>
+                </div>
+              </div>
+            </article>
+          </section>
+        </MbetBox>
+
+        {liveTradePopup && (
+          <>
+            <LiveTradePopup off={setLiveTradePopup} />
+            <PopupBg off={setLiveTradePopup} />
+          </>
+        )}
+      </>
+    );
+  else
+    return (
+      <>
+        <DefaultHeader border />
+
+        <PbetBox onKeyDown={handleKeyDown}>
+          <section className="innerBox">
+            <article className="tokenArea">
+              <div className="selectBox">
+                <button
+                  className="selectBtn"
+                  onClick={() => setTokenPopup(true)}
+                >
+                  <p>Ethereum</p>
+                  <img src={I_dnPolWhite} alt="" />
+                </button>
+
+                {tokenPopup && (
+                  <>
+                    <TokenPopup off={setTokenPopup} />
+                    <PopupBg off={setTokenPopup} />
+                  </>
+                )}
+              </div>
+
+              <ul className="tokenList">
+                {D_tokenList.map((v, i) => (
+                  <li key={i}>
+                    <img src={I_starYellowO} alt="" />
+                    <span className="textBox">
+                      <p className="key">{v.key}</p>
+                      <p className="value">{v.value}</p>
+                    </span>
+                  </li>
+                ))}
+
+                <span className="filter" />
+              </ul>
+            </article>
+
+            <article className="contArea">
+              <div className="chartBox">
+                {/* <div className="chartBox" id="ChartBox"> */}
+                <span className="utilBox">
+                  <ul className="btnList">
+                    <li>
+                      <button
+                        className="chartBtn"
+                        onClick={() => setChartPopup(true)}
+                      >
+                        <img src={I_candleChartWhite} alt="" />
+                      </button>
+
+                      {chartPopup && (
+                        <>
+                          <ChartPopup />
+                          <PopupBg off={setChartPopup} />
+                        </>
+                      )}
+                    </li>
+
+                    <li>
+                      <button className="moreBtn" onClick={() => {}}>
+                        <img src={I_3dotWhite} alt="" />
+                      </button>
+                    </li>
+                  </ul>
+
+                  <span className="typeBox">{`Chart type : Candle`}</span>
+                </span>
+
+                {hotKeyPopup && (
+                  <div className="hotKeyPopup">
+                    <div className="topBar">
+                      <span className="blank" />
+                      <p className="title">Hotkeys</p>
+
+                      <button
+                        className="closeBtn"
+                        onClick={() => setHotKeyPopup(false)}
+                      >
+                        <img src={I_xWhite} alt="" />
+                      </button>
+                    </div>
+
+                    <ul className="hotKeyList">
+                      <li>
+                        <p className="key">Shift + W</p>
+                        <p className="value">Higher(New trade)</p>
+                      </li>
+                      <li>
+                        <p className="key">Shift + S</p>
+                        <p className="value">Lower(New trade)</p>
+                      </li>
+                      <li>
+                        <p className="key">Shift + A</p>
+                        <p className="value">Decrease trade amount</p>
+                      </li>
+                      <li>
+                        <p className="key">Shift + D</p>
+                        <p className="value">Increase trade amount</p>
+                      </li>
+                      <li>
+                        <p className="key">Shift + TAB</p>
+                        <p className="value">Next favorite asset</p>
+                      </li>
+                    </ul>
+                  </div>
+                )}
+
+                <span className="screenCont">
+                  <p className="key">Screen size</p>
+
+                  <span className="screenBox">
                     <button
-                      className="chartBtn"
-                      onClick={() => setChartPopup(true)}
+                      className="screenBtn"
+                      onClick={() => setScreenPopup(true)}
                     >
-                      <img src={I_candleChartWhite} alt="" />
+                      <p>{screen}</p>
+
+                      <img src={I_upPolWhite} alt="" />
                     </button>
 
-                    {chartPopup && (
+                    {screenPopup && (
                       <>
-                        <ChartPopup />
-                        <PopupBg off={setChartPopup} />
+                        <SelectPopup
+                          off={setScreenPopup}
+                          list={D_screenList}
+                          setCont={setScreen}
+                        />
+                        <PopupBg off={setScreenPopup} />
                       </>
                     )}
-                  </li>
+                  </span>
+                </span>
+              </div>
 
-                  <li>
-                    <button className="moreBtn" onClick={() => {}}>
-                      <img src={I_3dotWhite} alt="" />
-                    </button>
-                  </li>
-                </ul>
+              <div className="actionBox">
+                <div className="timeBox contBox">
+                  <div className="key">
+                    <p>Time</p>
 
-                <span className="typeBox">{`Chart type : Candle`}</span>
-              </span>
+                    <button className="infoBtn">
+                      <img src={I_qnaWhite} alt="" />
 
-              {hotKeyPopup && (
-                <div className="hotKeyPopup">
-                  <div className="topBar">
-                    <span className="blank" />
-                    <p className="title">Hotkeys</p>
-
-                    <button
-                      className="closeBtn"
-                      onClick={() => setHotKeyPopup(false)}
-                    >
-                      <img src={I_xWhite} alt="" />
+                      <span className="hoverPopup">
+                        <p>
+                          Set the time (UTC+2) when your trading operation will
+                          be dosed. By placing a “Higher” or “Lower” forecast
+                          you will receve the result exactly at 17.05.2022
+                          11:45:16.
+                        </p>
+                      </span>
                     </button>
                   </div>
 
-                  <ul className="hotKeyList">
-                    <li>
-                      <p className="key">Shift + W</p>
-                      <p className="value">Higher(New trade)</p>
-                    </li>
-                    <li>
-                      <p className="key">Shift + S</p>
-                      <p className="value">Lower(New trade)</p>
-                    </li>
-                    <li>
-                      <p className="key">Shift + A</p>
-                      <p className="value">Decrease trade amount</p>
-                    </li>
-                    <li>
-                      <p className="key">Shift + D</p>
-                      <p className="value">Increase trade amount</p>
-                    </li>
-                    <li>
-                      <p className="key">Shift + TAB</p>
-                      <p className="value">Next favorite asset</p>
-                    </li>
-                  </ul>
-                </div>
-              )}
+                  <button className="value">
+                    <button
+                      className="contBtn"
+                      onClick={() => setTimePopup(true)}
+                    >
+                      <p>00:01:00</p>
 
-              <span className="screenCont">
-                <p className="key">Screen size</p>
+                      <img src={I_timeWhite} alt="" />
+                    </button>
 
-                <span className="screenBox">
-                  <button
-                    className="screenBtn"
-                    onClick={() => setScreenPopup(true)}
-                  >
-                    <p>{screen}</p>
-
-                    <img src={I_upPolWhite} alt="" />
+                    {timePopup && (
+                      <>
+                        <TimePopup off={setTimePopup} />
+                        <PopupBg off={setTimePopup} />
+                      </>
+                    )}
                   </button>
-
-                  {screenPopup && (
-                    <>
-                      <SelectPopup
-                        off={setScreenPopup}
-                        list={D_screenList}
-                        setCont={setScreen}
-                      />
-                      <PopupBg off={setScreenPopup} />
-                    </>
-                  )}
-                </span>
-              </span>
-            </div>
-
-            <div className="actionBox">
-              <div className="timeBox">
-                <div className="key">
-                  <p>Time</p>
-
-                  <img src={I_qnaWhite} alt="" />
                 </div>
 
-                <div className="value">
-                  <p>00:01:00</p>
+                <div className="amountBox contBox">
+                  <div className="key">
+                    <p>Amount</p>
 
-                  <img src={I_timeWhite} alt="" />
+                    <button className="infoBtn" onClick={() => {}}>
+                      <img src={I_qnaWhite} alt="" />
+
+                      <span className="hoverPopup">
+                        <p>
+                          Specify the percentage of the trading account balance
+                          used calculate your trade amount.
+                        </p>
+                      </span>
+                    </button>
+                  </div>
+
+                  <div className="value">
+                    <p>$ 100</p>
+
+                    <img src={I_dollarWhite} alt="" />
+                  </div>
                 </div>
+
+                <p className="payout">Your payout : $3.40</p>
+
+                <button
+                  className="highBtn"
+                  onClick={() => onClickPayBtn("high")}
+                >
+                  <img src={I_highArwGreen} alt="" />
+                  <p>HIGH</p>
+                </button>
+
+                <button className="lowBtn" onClick={() => onClickPayBtn("low")}>
+                  <img src={I_lowArwRed} alt="" />
+                  <p>LOW</p>
+                </button>
               </div>
 
-              <div className="amountBox">
-                <div className="key">
-                  <p>Amount</p>
+              <button className="plusBtn" onClick={() => {}}>
+                <img src={I_plusWhite} alt="" />
+              </button>
+            </article>
 
-                  <img src={I_qnaWhite} alt="" />
-                </div>
-
-                <div className="value">
-                  <p>$ 100</p>
-
-                  <img src={I_dollarWhite} alt="" />
-                </div>
-              </div>
-
-              <p className="payout">Your payout : $3.40</p>
-
-              <button className="highBtn" onClick={() => {}}>
-                <img src={I_highArwGreen} alt="" />
-                <p>HIGH</p>
+            <footer>
+              <button className="qnaBtn" onClick={() => {}}>
+                <img src={I_qnaWhite} alt="" />
               </button>
 
-              <button className="lowBtn" onClick={() => {}}>
-                <img src={I_lowArwRed} alt="" />
-                <p>LOW</p>
+              <button className="langBtn" onClick={() => {}}>
+                <img src={I_langWhite} alt="" />
               </button>
-            </div>
+            </footer>
+          </section>
+        </PbetBox>
 
-            <button className="plusBtn" onClick={() => {}}>
-              <img src={I_plusWhite} alt="" />
-            </button>
-          </article>
-
-          <footer>
-            <button className="qnaBtn" onClick={() => {}}>
-              <img src={I_qnaWhite} alt="" />
-            </button>
-
-            <button className="langBtn" onClick={() => {}}>
-              <img src={I_langWhite} alt="" />
-            </button>
-          </footer>
-        </section>
-      </BetBox>
-
-      {liveTradePopup && (
-        <>
-          <LiveTradePopup off={setLiveTradePopup} />
-          <PopupBg off={setLiveTradePopup} />
-        </>
-      )}
-    </>
-  );
+        {liveTradePopup && (
+          <>
+            <LiveTradePopup off={setLiveTradePopup} />
+            <PopupBg off={setLiveTradePopup} />
+          </>
+        )}
+      </>
+    );
 }
 
-const BetBox = styled.main`
+const MbetBox = styled.main`
+  height: 100vh;
+  padding: 60px 0 0 0;
+  color: #fff;
+  background: #0a0e17;
+
+  .innerBox {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .contArea {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+
+      .chartBox {
+        flex: 1;
+        background: #181c25;
+        position: relative;
+
+        .utilBox {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          top: 3.88vw;
+          left: 4.44vw;
+          position: absolute;
+
+          .btnList {
+            display: flex;
+            gap: 2.22vw;
+
+            & > li {
+              position: relative;
+
+              .tokenBtn {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 31.66vw;
+                height: 9.44vw;
+                padding: 0 4.44vw;
+                font-size: 3.88vw;
+                font-weight: 700;
+                border: 1px solid #fff;
+                border-radius: 5.55vw;
+
+                img {
+                  width: 2.22vw;
+                }
+              }
+
+              .chartBtn {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 9.44vw;
+                aspect-ratio: 1;
+                border: 1px solid #fff;
+                border-radius: 50%;
+
+                img {
+                  height: 3.88vw;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .actionBox {
+        display: flex;
+        flex-direction: column;
+        gap: 2.22vw;
+        height: 52.77vw;
+        padding: 4.44vw 4.44vw 6.66vw 4.44vw;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.14) 0%,
+          rgba(10, 14, 23, 0.14) 100%
+        );
+        border-radius: 5.55vw 5.55vw 0 0;
+
+        .infoBox {
+          display: flex;
+          gap: 3.33vw;
+
+          .contBox {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1.66vw;
+
+            .key {
+              font-size: 3.88vw;
+              color: rgba(255, 255, 255, 0.4);
+            }
+
+            .value {
+              display: flex;
+              align-items: center;
+              height: 11.11vw;
+              padding: 0 3.88vw;
+              font-size: 4.44vw;
+              border: 1px solid rgba(255, 255, 255, 0.4);
+              border-radius: 2.22vw;
+              position: relative;
+
+              .contBtn {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                height: 100%;
+              }
+
+              p {
+                flex: 1;
+                text-align: start;
+              }
+
+              img {
+                height: 5.55vw;
+              }
+            }
+          }
+        }
+
+        .payout {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 6.11vw;
+          font-size: 3.88vw;
+          background: rgba(0, 0, 0, 0.4);
+          border-radius: 2.22vw;
+        }
+
+        .btnBox {
+          display: flex;
+          gap: 3.33vw;
+
+          button {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5.55vw;
+            height: 13.33vw;
+            font-size: 16px;
+            font-weight: 700;
+            border: 1.2px solid;
+            border-radius: 8px;
+
+            &.highBtn {
+              color: #3fb68b;
+              border-color: #3fb68b;
+            }
+
+            &.lowBtn {
+              color: #ff5353;
+              border-color: #ff5353;
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const PbetBox = styled.main`
   height: 100vh;
   padding: 60px 0 0 0;
   color: #fff;
@@ -359,6 +713,8 @@ const BetBox = styled.main`
       height: 60px;
 
       .selectBox {
+        position: relative;
+
         .selectBtn {
           display: flex;
           justify-content: space-between;
@@ -377,7 +733,7 @@ const BetBox = styled.main`
         }
       }
 
-      .tokenList {
+      & > .tokenList {
         flex: 1;
         display: flex;
         gap: 8px;
@@ -591,8 +947,7 @@ const BetBox = styled.main`
         background: #181c25;
         border-radius: 12px;
 
-        .timeBox,
-        .amountBox {
+        .contBox {
           display: flex;
           flex-direction: column;
           gap: 6px;
@@ -604,8 +959,35 @@ const BetBox = styled.main`
             font-size: 12px;
             color: rgba(255, 255, 255, 0.4);
 
-            img {
-              width: 12px;
+            .infoBtn {
+              position: relative;
+
+              &:hover {
+                .hoverPopup {
+                  display: block;
+                }
+              }
+
+              img {
+                width: 12px;
+              }
+
+              .hoverPopup {
+                display: none;
+                width: 210px;
+                padding: 10px 12px;
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 4px;
+                backdrop-filter: blur(40px);
+                -webkit-backdrop-filter: blur(40px);
+                top: 18px;
+                right: 0;
+                position: absolute;
+
+                p {
+                  color: #fff;
+                }
+              }
             }
           }
 
@@ -613,13 +995,22 @@ const BetBox = styled.main`
             display: flex;
             align-items: center;
             height: 48px;
-            padding: 18px;
+            padding: 0 18px;
             font-size: 16px;
             border: 1px solid rgba(255, 255, 255, 0.4);
             border-radius: 8px;
+            position: relative;
+
+            .contBtn {
+              display: flex;
+              align-items: center;
+              width: 100%;
+              height: 100%;
+            }
 
             p {
               flex: 1;
+              text-align: start;
             }
 
             img {
@@ -662,12 +1053,14 @@ const BetBox = styled.main`
         }
       }
 
-      .plusBtn {
-        height: 12px;
+      & > .plusBtn {
+        display: flex;
+        align-items: flex-start;
+        padding: 10px;
         opacity: 0.4;
 
         img {
-          height: 100%;
+          height: 20px;
         }
       }
     }

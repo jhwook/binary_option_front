@@ -1,29 +1,27 @@
 import { forwardRef, useState } from "react";
 import styled from "styled-components";
-import {
-  D_historyCategoryList,
-  D_trandingList,
-  D_trandingListHeader,
-} from "../../data/D_position";
-import DatePicker from "react-datepicker";
+import DatePicker, { registerLocale } from "react-datepicker";
+import ko from "date-fns/locale/ko";
 import "../../util/react-datepicker.css";
 import I_calender from "../../img/icon/I_calender.png";
 import I_linkWhite from "../../img/icon/I_linkWhite.svg";
-import I_timeWhite from "../../img/icon/I_timeWhite.svg";
-import I_upArw3Green from "../../img/icon/I_upArw3Green.svg";
-import I_dnArw3Red from "../../img/icon/I_dnArw3Red.svg";
 import I_ltArwWhite from "../../img/icon/I_ltArwWhite.svg";
 import I_rtArwWhite from "../../img/icon/I_rtArwWhite.svg";
 import moment from "moment";
+import {
+  D_historyListHeader,
+  D_historyCategoryList,
+  D_historyList,
+} from "../../data/D_bet";
 import renderCustomHeader from "../../util/DatePickerHeader";
 
-export default function TradingHistory() {
+export default function History() {
   const totalPage = 4;
+  registerLocale("ko", ko);
 
   const [category, setCategory] = useState(0);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-  const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
@@ -49,7 +47,7 @@ export default function TradingHistory() {
   }
 
   return (
-    <TradingHistoryBox>
+    <HistoryBox>
       <section className="innerBox">
         <ul className="categoryList">
           {D_historyCategoryList.map((v, i) => (
@@ -68,6 +66,7 @@ export default function TradingHistory() {
             <div className="filterBox">
               <span className="dateBox filterOpt">
                 <DatePicker
+                  locale="ko"
                   selected={startDate}
                   onChange={dateChange}
                   startDate={startDate}
@@ -75,14 +74,6 @@ export default function TradingHistory() {
                   selectsRange
                   renderCustomHeader={renderCustomHeader}
                   customInput={<ExampleCustomInput />}
-                />
-              </span>
-
-              <span className="searchBox filterOpt">
-                <input
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Order"
                 />
               </span>
 
@@ -98,7 +89,7 @@ export default function TradingHistory() {
 
           <div className="listBox">
             <ul className="listHeader">
-              {D_trandingListHeader.map((v, i) => (
+              {D_historyListHeader.map((v, i) => (
                 <li key={i}>
                   <p>{v}</p>
                 </li>
@@ -106,56 +97,28 @@ export default function TradingHistory() {
             </ul>
 
             <ul className="list">
-              {D_trandingList.map((v, i) => (
+              {D_historyList.map((v, i) => (
                 <li key={i}>
-                  <span>
-                    <img className="timeImg" src={I_timeWhite} alt="" />
-                    <img
-                      className="arwImg"
-                      src={
-                        (v.type === "high" && I_upArw3Green) ||
-                        (v.type === "low" && I_dnArw3Red)
-                      }
-                      alt=""
-                    />
-                  </span>
-
-                  <span>
-                    <p>{v.order}</p>
-                  </span>
-
-                  <span>
-                    <p>{v.expiration}</p>
-                  </span>
-
-                  <span>
-                    <p>#{v.asset}</p>
-                  </span>
+                  <span>{v.id}</span>
 
                   <span>
                     <p>{moment(v.openTime).format("YYYY-MM-DD HH:MM:SS")}</p>
                   </span>
 
                   <span>
-                    <p>{moment(v.closingTime).format("YYYY-MM-DD HH:MM:SS")}</p>
+                    <p>{`${v.amount.toLocaleString("eu", "US")} USDT`}</p>
                   </span>
 
                   <span>
-                    <p>{v.openPrice}</p>
+                    <p>{v.method}</p>
                   </span>
 
                   <span>
-                    <p>{v.closingPrice}</p>
+                    <p>{v.type}</p>
                   </span>
 
                   <span>
-                    <p>${v.tradeAmount.toLocaleString("eu", "US")}</p>
-                  </span>
-
-                  <span>
-                    <p className="price">$11.31</p>
-                    &nbsp;
-                    <p className="percent">{`(${62}%)`}</p>
+                    <p>{v.status}</p>
                   </span>
                 </li>
               ))}
@@ -194,11 +157,11 @@ export default function TradingHistory() {
           </div>
         </article>
       </section>
-    </TradingHistoryBox>
+    </HistoryBox>
   );
 }
 
-const TradingHistoryBox = styled.main`
+const HistoryBox = styled.main`
   flex: 1;
   padding: 70px 140px;
 
@@ -274,14 +237,6 @@ const TradingHistoryBox = styled.main`
                 }
               }
             }
-
-            &.searchBox {
-              input {
-                &::placeholder {
-                  color: rgba(255, 255, 255, 0.4);
-                }
-              }
-            }
           }
 
           .applyBtn {
@@ -336,20 +291,8 @@ const TradingHistoryBox = styled.main`
               height: 60px;
               border-top: 1px solid #3b3e45;
 
-              &:nth-of-type(1) {
-                gap: 14px;
-              }
-
-              .timeImg {
-                height: 16px;
-              }
-
-              .arwImg {
-                height: 14px;
-              }
-
-              .percent {
-                color: rgba(255, 255, 255, 0.6);
+              &:nth-of-type(6) {
+                color: #ff5353;
               }
             }
           }
@@ -358,7 +301,6 @@ const TradingHistoryBox = styled.main`
         .listHeader li,
         .list li span {
           display: flex;
-          justify-content: center;
           align-items: center;
           font-size: 14px;
 
@@ -377,53 +319,33 @@ const TradingHistoryBox = styled.main`
           }
 
           &:nth-of-type(1) {
-            width: 60px;
-            min-width: 60px;
+            width: 190px;
+            min-width: 190px;
           }
 
           &:nth-of-type(2) {
-            width: 312px;
-            min-width: 312px;
+            width: 170px;
+            min-width: 170px;
           }
 
           &:nth-of-type(3) {
-            width: 72px;
-            min-width: 72px;
+            width: 168px;
+            min-width: 168px;
           }
 
           &:nth-of-type(4) {
-            width: 98px;
-            min-width: 98px;
+            width: 238px;
+            min-width: 238px;
           }
 
           &:nth-of-type(5) {
-            width: 162px;
-            min-width: 162px;
+            width: 158px;
+            min-width: 158px;
           }
 
           &:nth-of-type(6) {
-            width: 162px;
-            min-width: 162px;
-          }
-
-          &:nth-of-type(7) {
-            width: 94px;
-            min-width: 94px;
-          }
-
-          &:nth-of-type(8) {
-            width: 94px;
-            min-width: 94px;
-          }
-
-          &:nth-of-type(9) {
-            width: 102px;
-            min-width: 102px;
-          }
-
-          &:nth-of-type(10) {
-            width: 124px;
-            min-width: 124px;
+            width: 196px;
+            min-width: 196px;
           }
         }
       }

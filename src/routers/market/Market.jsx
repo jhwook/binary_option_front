@@ -4,6 +4,8 @@ import DefaultHeader from "../../components/header/DefaultHeader";
 import LeftNav from "../../components/common/LeftNav";
 import Deposit from "./Deposit";
 import { D_marketLeftBarList } from "../../data/D_market";
+import WithDrawal from "./WithDrawal";
+import History from "./History";
 
 export default function Market() {
   return (
@@ -14,6 +16,8 @@ export default function Market() {
 
       <Routes>
         <Route path="/deposit" element={<Deposit />} />
+        <Route path="/withdrawal" element={<WithDrawal />} />
+        <Route path="/history" element={<History />} />
       </Routes>
     </MarketBox>
   );
