@@ -102,7 +102,7 @@ export default function History() {
                   <span>{v.id}</span>
 
                   <span>
-                    <p>{moment(v.openTime).format("YYYY-MM-DD HH:MM:SS")}</p>
+                    <p>{moment(v.openTime).format("YYYY-MM-DD HH:mm:ss")}</p>
                   </span>
 
                   <span>

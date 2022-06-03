@@ -10,6 +10,9 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import ProfPopup from "./ProfPopup";
 import { useSelector } from "react-redux";
+import MyBalancePopup from "./MyBalancePopup";
+import AddPopup from "./AddPopup";
+import MenuPopup from "./MenuPopup";
 
 export default function DefaultHeader({ white, border }) {
   const navigate = useNavigate();
@@ -20,6 +23,9 @@ export default function DefaultHeader({ white, border }) {
 
   const [lngPopup, setLngPopup] = useState(false);
   const [profPopup, setProfPopup] = useState(false);
+  const [myBalancePopup, setMyBalancePopup] = useState(false);
+  const [addPopup, setAddPopup] = useState(false);
+  const [menuPopup, setMenuPopup] = useState(false);
 
   const token = localStorage.getItem("token");
 
@@ -31,7 +37,7 @@ export default function DefaultHeader({ white, border }) {
         >
           <article className="leftArea">
             {token ? (
-              <span className="accountBox">{`Demo $1000`}</span>
+              <span className="accountBtn">{`Demo $1000`}</span>
             ) : (
               <button className="logoBtn" onClick={() => navigate("/")}>
                 <img src={L_yellow} alt="" />
@@ -40,11 +46,13 @@ export default function DefaultHeader({ white, border }) {
           </article>
 
           <article className="rightArea">
-            <button className="menuBtn" onClick={() => {}}>
+            <button className="menuBtn" onClick={() => setMenuPopup(true)}>
               <I_hamburger />
             </button>
           </article>
         </MdefaultHeaderBox>
+
+        {menuPopup && <MenuPopup off={setMenuPopup} />}
       </>
     );
   else
@@ -83,7 +91,10 @@ export default function DefaultHeader({ white, border }) {
           <article className="rightArea">
             {token ? (
               <>
-                <span className="accountBox">{`Demo $1000`}</span>
+                <button
+                  className="accountBtn"
+                  onClick={() => setMyBalancePopup(true)}
+                >{`Demo $1000`}</button>
 
                 <span className="profBox">
                   <button className="myBtn" onClick={() => setProfPopup(true)}>
@@ -274,7 +285,7 @@ const PdefaultHeaderBox = styled.header`
     gap: 8px;
     font-size: 14px;
 
-    & > .accountBox,
+    .accountBtn,
     .profBox .myBtn {
       display: flex;
       justify-content: center;
@@ -282,7 +293,7 @@ const PdefaultHeaderBox = styled.header`
       height: 34px;
       background: rgba(255, 255, 255, 0.1);
 
-      &.accountBox {
+      &.accountBtn {
         width: 124px;
         border-radius: 28px;
       }

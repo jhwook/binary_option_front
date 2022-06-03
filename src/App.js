@@ -1,4 +1,5 @@
 import { HashRouter, Route, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import styled from "styled-components";
 import EventListener from "./components/common/EventListener";
 import GlobalStyle from "./components/common/globalStyle";
@@ -9,6 +10,7 @@ import Lending from "./routers/lending/Lending";
 import Market from "./routers/market/Market";
 import Position from "./routers/position/Position";
 import Setting from "./routers/setting/Setting";
+import "./util/ReactToastify.css";
 
 export default function App() {
   return (
@@ -26,6 +28,17 @@ export default function App() {
       <link
         href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@800&display=swap"
         rel="stylesheet"
+      />
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
       />
 
       <HashRouter>

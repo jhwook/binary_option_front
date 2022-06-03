@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { gCliId } from "../configs/setting";
+import { toast } from "react-toastify";
+import I_highArwGreen from "../img/icon/I_highArwGreen.svg";
 
 export function strDot(str, startNum = 0, endNum = 0) {
   if (!str?.length) return;
@@ -152,4 +153,65 @@ export function GetExchange({ price, unit }) {
   }, []);
 
   return <>{exchange.toLocaleString("eu", "US")}</>;
+}
+
+export function setToast(type) {
+  switch (type) {
+    case "placed":
+      toast(
+        <div className="customBox">
+          <p className="title">Trade order placed</p>
+
+          <ul className="infoList">
+            <li>
+              <strong>Bitcoin</strong>
+              <img src={I_highArwGreen} alt="" />
+            </li>
+
+            <li>
+              <p className="key">Forecast</p>
+              <p className="value">Higher</p>
+            </li>
+
+            <li>
+              <p className="key">Amount</p>
+              <p className="value">$1</p>
+            </li>
+          </ul>
+        </div>,
+        {
+          toastId: "CustomToast",
+        }
+      );
+      break;
+    case "closed":
+      toast(
+        <div className="customBox">
+          <p className="title">Trade closed</p>
+
+          <ul className="infoList">
+            <li>
+              <strong>Bitcoin</strong>
+              <img src={I_highArwGreen} alt="" />
+            </li>
+
+            <li>
+              <p className="key">Payout</p>
+              <p className="value">$0.00</p>
+            </li>
+
+            <li>
+              <p className="key">Profit</p>
+              <p className="value">$0</p>
+            </li>
+          </ul>
+        </div>,
+        {
+          toastId: "CustomToast",
+        }
+      );
+      break;
+    default:
+      break;
+  }
 }

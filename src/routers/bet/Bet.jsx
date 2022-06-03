@@ -19,6 +19,7 @@ import I_xWhite from "../../img/icon/I_xWhite.svg";
 import I_upPolWhite from "../../img/icon/I_upPolWhite.svg";
 import I_candleChartWhite from "../../img/icon/I_candleChartWhite.svg";
 import I_3dotWhite from "../../img/icon/I_3dotWhite.svg";
+import I_barChartWhite from "../../img/icon/I_barChartWhite.svg";
 import { createChart } from "lightweight-charts";
 import { useEffect, useState } from "react";
 import { chartOpt } from "../../configs/setting";
@@ -29,7 +30,12 @@ import ChartPopup from "../../components/bet/ChartPopup";
 import TokenPopup from "../../components/bet/TokenPopup";
 import { useSelector } from "react-redux";
 import TimePopup from "../../components/bet/TimePopup";
-import {SetAlarmBar} from "../../util/SetAlarmBar";
+import { toast } from "react-toastify";
+import { setToast } from "../../util/Util";
+import DetBox from "../../components/bet/detBox/DetBox";
+import InsufficientPopup from "../../components/bet/InsufficientPopup";
+import MyBalancePopup from "../../components/header/MyBalancePopup";
+import AddPopup from "../../components/header/AddPopup";
 
 export default function Bet() {
   let a = 1;
@@ -45,6 +51,10 @@ export default function Bet() {
   const [screenPopup, setScreenPopup] = useState(false);
   const [tokenPopup, setTokenPopup] = useState(false);
   const [timePopup, setTimePopup] = useState(false);
+  const [detMode, setDetMode] = useState(false);
+  const [insufficientPopup, setInsufficientPopup] = useState(false);
+  const [myBalancePopup, setMyBalancePopup] = useState(false);
+  const [addPopup, setAddPopup] = useState(false);
 
   function markUpChart() {
     const chartBox = document.getElementById("ChartBox");
@@ -138,17 +148,15 @@ export default function Bet() {
   function onClickPayBtn(type) {
     switch (type) {
       case "high":
-        SetAlarmBar({
-          cont: <p className="title">Trade order placed</p>,
-          // <>
-          //   <p className="title">Trade order placed</p>
+        setToast("placed");
 
-          //   <img src={I_highArwGreen} alt="" />
-          // </>
+        toast.onChange((payload) => {
+          if (payload.status === "removed") setToast("closed");
         });
         break;
 
       case "low":
+        setInsufficientPopup(true);
         break;
 
       default:
@@ -219,6 +227,10 @@ export default function Bet() {
                       )}
                     </li>
                   </ul>
+
+                  <button className="detBtn" onClick={() => setDetMode(true)}>
+                    <img src={I_barChartWhite} alt="" />
+                  </button>
                 </span>
               </div>
 
@@ -260,12 +272,18 @@ export default function Bet() {
                 <p className="payout">Your payout : $3.40</p>
 
                 <div className="btnBox">
-                  <button className="highBtn" onClick={() => {}}>
+                  <button
+                    className="highBtn"
+                    onClick={() => onClickPayBtn("high")}
+                  >
                     <img src={I_highArwGreen} alt="" />
                     <p>HIGH</p>
                   </button>
 
-                  <button className="lowBtn" onClick={() => {}}>
+                  <button
+                    className="lowBtn"
+                    onClick={() => onClickPayBtn("low")}
+                  >
                     <img src={I_lowArwRed} alt="" />
                     <p>LOW</p>
                   </button>
@@ -275,10 +293,36 @@ export default function Bet() {
           </section>
         </MbetBox>
 
+        {detMode && <DetBox mode={detMode} off={setDetMode} />}
+
         {liveTradePopup && (
           <>
             <LiveTradePopup off={setLiveTradePopup} />
-            <PopupBg off={setLiveTradePopup} />
+            <PopupBg bg off={setLiveTradePopup} />
+          </>
+        )}
+
+        {insufficientPopup && (
+          <>
+            <InsufficientPopup
+              off={setInsufficientPopup}
+              nextProc={setMyBalancePopup}
+            />
+            <PopupBg bg off={setInsufficientPopup} />
+          </>
+        )}
+
+        {myBalancePopup && (
+          <>
+            <MyBalancePopup off={setMyBalancePopup} setAddPopup={setAddPopup} />
+            <PopupBg bg off={setMyBalancePopup} />
+          </>
+        )}
+
+        {addPopup && (
+          <>
+            <AddPopup off={setAddPopup} />
+            <PopupBg bg off={setAddPopup} />
           </>
         )}
       </>
@@ -497,7 +541,12 @@ export default function Bet() {
                 </button>
               </div>
 
-              <button className="plusBtn" onClick={() => {}}>
+              <DetBox mode={detMode} />
+
+              <button
+                className={`${detMode && "on"} plusBtn`}
+                onClick={() => setDetMode(!detMode)}
+              >
                 <img src={I_plusWhite} alt="" />
               </button>
             </article>
@@ -518,6 +567,30 @@ export default function Bet() {
           <>
             <LiveTradePopup off={setLiveTradePopup} />
             <PopupBg off={setLiveTradePopup} />
+          </>
+        )}
+
+        {insufficientPopup && (
+          <>
+            <InsufficientPopup
+              off={setInsufficientPopup}
+              nextProc={setMyBalancePopup}
+            />
+            <PopupBg off={setInsufficientPopup} />
+          </>
+        )}
+
+        {myBalancePopup && (
+          <>
+            <MyBalancePopup off={setMyBalancePopup} setAddPopup={setAddPopup} />
+            <PopupBg off={setMyBalancePopup} />
+          </>
+        )}
+
+        {addPopup && (
+          <>
+            <AddPopup off={setAddPopup} />
+            <PopupBg off={setAddPopup} />
           </>
         )}
       </>
@@ -551,6 +624,7 @@ const MbetBox = styled.main`
           align-items: center;
           top: 3.88vw;
           left: 4.44vw;
+          right: 4.44vw;
           position: absolute;
 
           .btnList {
@@ -590,6 +664,20 @@ const MbetBox = styled.main`
                   height: 3.88vw;
                 }
               }
+            }
+          }
+
+          .detBtn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 9.44vw;
+            aspect-ratio: 1;
+            border: 1px solid #fff;
+            border-radius: 50%;
+
+            img {
+              height: 3.88vw;
             }
           }
         }
@@ -783,6 +871,7 @@ const PbetBox = styled.main`
     .contArea {
       flex: 1;
       display: flex;
+      overflow: hidden;
 
       .chartBox {
         flex: 1;
@@ -1057,10 +1146,17 @@ const PbetBox = styled.main`
         display: flex;
         align-items: flex-start;
         padding: 10px;
-        opacity: 0.4;
+        opacity: 0.6;
 
         img {
           height: 20px;
+          transition: all 0.3s;
+        }
+
+        &.on {
+          img {
+            transform: rotate(45deg);
+          }
         }
       }
     }

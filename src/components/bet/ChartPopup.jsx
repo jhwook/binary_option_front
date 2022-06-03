@@ -57,21 +57,54 @@ export default function ChartPopup({ off }) {
 
           <ul className="value">
             {type === "Line" && (
-              <li>
-                <button
-                  className={`${toggleList[0] && "on"} toggleBtn`}
-                  onClick={() => onClickToggleBtn(0)}
-                >
-                  <p className="on">on</p>
-                  <span />
-                  <p className="off">off</p>
-                </button>
+              <>
+                <li>
+                  <button
+                    className={`${toggleList[0] && "on"} toggleBtn`}
+                    onClick={() => onClickToggleBtn(0)}
+                  >
+                    <p className="on">on</p>
+                    <span />
+                    <p className="off">off</p>
+                  </button>
 
-                <p className="setCont">Show area</p>
-              </li>
+                  <p className="setCont">Show area</p>
+                </li>
+
+                <li />
+              </>
             )}
 
             {type === "Candles" && (
+              <>
+                <li>
+                  <button
+                    className={`${toggleList[0] && "on"} toggleBtn`}
+                    onClick={() => onClickToggleBtn(0)}
+                  >
+                    <p className="on">on</p>
+                    <span />
+                    <p className="off">off</p>
+                  </button>
+
+                  <p className="setCont">Enable timer</p>
+                </li>
+                <li>
+                  <button
+                    className={`${toggleList[0] && "on"} toggleBtn`}
+                    onClick={() => onClickToggleBtn(0)}
+                  >
+                    <p className="on">on</p>
+                    <span />
+                    <p className="off">off</p>
+                  </button>
+
+                  <p className="setCont">Enable grid snap</p>
+                </li>
+              </>
+            )}
+
+            {type === "Heiken Ashi" && (
               <>
                 <li>
                   <button
@@ -158,6 +191,35 @@ export default function ChartPopup({ off }) {
             )}
 
             {type === "Candles" && (
+              <>
+                <li>
+                  <button
+                    className={`${toggleList[0] && "on"} toggleBtn`}
+                    onClick={() => onClickToggleBtn(0)}
+                  >
+                    <p className="on">on</p>
+                    <span />
+                    <p className="off">off</p>
+                  </button>
+
+                  <p className="setCont">Enable timer</p>
+                </li>
+                <li>
+                  <button
+                    className={`${toggleList[0] && "on"} toggleBtn`}
+                    onClick={() => onClickToggleBtn(0)}
+                  >
+                    <p className="on">on</p>
+                    <span />
+                    <p className="off">off</p>
+                  </button>
+
+                  <p className="setCont">Enable grid snap</p>
+                </li>
+              </>
+            )}
+
+            {type === "Heiken Ashi" && (
               <>
                 <li>
                   <button
@@ -290,6 +352,7 @@ const MchartPopupBox = styled.section`
           display: flex;
           align-items: center;
           gap: 2.77vw;
+          height: 6.66vw;
           color: #fff;
 
           .toggleBtn {

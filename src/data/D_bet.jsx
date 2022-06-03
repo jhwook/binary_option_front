@@ -1714,3 +1714,77 @@ export const D_timeBtnList = [
   { key: "1h", value: 3600 },
   { key: "4h", value: 14400 },
 ];
+
+export const D_detCategoryList = ["Opened", "Closed"];
+
+export const D_openedList = [
+  {
+    token: "Bitcoin",
+    percent: 5,
+    type: "Higher",
+    change: 70,
+    benefit: 1.05,
+    time: new Date(),
+    det: {
+      openTime: new Date(),
+      limit: "M5",
+      closingTime: new Date(),
+    },
+    forcast: {
+      type: "Higher",
+      payout: 0,
+      profit: 0,
+    },
+    price: {
+      openPrice: 29781,
+      currentPrice: 29746,
+      diff: -1,
+    },
+  },
+  {
+    token: "Bitcoin",
+    percent: 5,
+    type: "Lower",
+    change: 70,
+    benefit: 1.05,
+    time: new Date(),
+    det: {
+      openTime: new Date(),
+      limit: "M5",
+      closingTime: new Date(),
+    },
+    forcast: {
+      type: "Higher",
+      payout: 0,
+      profit: 0,
+    },
+    price: {
+      openPrice: 29781,
+      currentPrice: 29746,
+      diff: -1,
+    },
+  },
+  {
+    token: "Bitcoin",
+    percent: 5,
+    type: "Lower",
+    change: 70,
+    benefit: 1.05,
+    time: new Date(),
+    det: {
+      openTime: new Date(),
+      limit: "M5",
+      closingTime: new Date(),
+    },
+    forcast: {
+      type: "Higher",
+      payout: 0,
+      profit: 0,
+    },
+    price: {
+      openPrice: 29781,
+      currentPrice: 29746,
+      diff: -1,
+    },
+  },
+];

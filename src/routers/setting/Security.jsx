@@ -37,7 +37,7 @@ export default function Security() {
                 {D_securityList.map((v, i) => (
                   <li key={i}>
                     <span>
-                      <p>{moment(v.date).format("YYYY-MM-DD HH:MM:SS")}</p>
+                      <p>{moment(v.date).format("YYYY-MM-DD HH:mm:ss")}</p>
                     </span>
 
                     <span>

@@ -1,4 +1,3 @@
-import { findNonSerializableValue } from "@reduxjs/toolkit";
 import I_chkYellow from "../img/icon/I_chkYellow.svg";
 import I_xWhite from "../img/icon/I_xWhite.svg";
 
