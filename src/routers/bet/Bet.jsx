@@ -198,40 +198,6 @@ console.log('hi')
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // useEffect(() => {
-  //   const chartInterval = setInterval(() => {
-  //     getChartLive(candleChart);
-  //     // axios.get('https://marketdata.tradermade.com/api/v1/live?currency=EURUSD&api_key=3wjG4xYPlEnI8GNrUZW2')
-  //     // .then(response => {
-
-  //     //   console.log(response.data);
-
-  //     //   //console.log(response.data.quotes[1]);
-  //     // })
-  //     // .catch(error => {
-  //     //   console.log(error);
-  //     // });
-  //   }, 200);
-
-  //   return () => clearInterval(chartInterval);
-  // }, [candleChart]);
-
-
-  
-  // function mergeTickToBar(price) {
-  //   if (currentBar.open === null) {
-  //     currentBar.open = price;
-  //     currentBar.high = price;
-  //     currentBar.low = price;
-  //     currentBar.close = price;
-  //   } else {
-  //     currentBar.close = price;
-  //     currentBar.high = Math.max(currentBar.high, price);
-  //     currentBar.low = Math.min(currentBar.low, price);
-  //   }
-  //   candleSeries.update(currentBar);
-  // }
-
   function nextBusinessDay(time) {
     var d = new Date();
     d.setUTCFullYear(time.year);
@@ -255,7 +221,6 @@ console.log('hi')
       let price = getRandomPrice()//response.data.quotes[0].mid;
         dispatch(setChart(price))
         dispatch(addTicker())
-
     }, 500);
 
     return () => clearInterval(chartInterval);
