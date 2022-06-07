@@ -420,7 +420,8 @@ console.log('hi')
             <article className="contArea">
               <div className="chartBox" id="ChartBox">
                 {/* <div className="chartBox" id="ChartBox"> */}
-                <span className="utilBox">
+                <span className="utilBox" style={{zIndex:'2'}}>
+                  asdf
                   <ul className="btnList">
                     <li>
                       <button

@@ -24,15 +24,13 @@ export const candleChart = createSlice({
         state.candle = {...initialState.candle, ...action.payload};
     },
     setChart(state, action){
-        let time= {
-            year: new Date().getUTCFullYear(),
-            month: new Date().getUTCMonth() + 1,
-            day: new Date().getUTCDate() + Math.floor(state.ticker/5)
-        }
+        let date= new Date().setSeconds(0, 0);
+        console.log(date)
+        let time = date;
         if(!state.candle.open){
             state.candle = {...state.candle, time, open: action.payload, close: action.payload, high: action.payload, low: action.payload}
         }else{
-            if(state.ticker%5 ==0){
+            if(state.ticker%120 ==0){
                 state.candle = {...state.candle, time, open: state.candle.close, close: action.payload, high: action.payload, low: action.payload}
             }else{
                 state.candle = {...state.candle, time, close: action.payload, high: Math.max(state.candle.high, action.payload), low: Math.min(state.candle.low, action.payload)}
