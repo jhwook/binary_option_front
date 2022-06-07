@@ -21,14 +21,14 @@ import I_candleChartWhite from "../../img/icon/I_candleChartWhite.svg";
 import I_3dotWhite from "../../img/icon/I_3dotWhite.svg";
 import I_barChartWhite from "../../img/icon/I_barChartWhite.svg";
 import { createChart } from "lightweight-charts";
-import { useEffect, useState } from "react";
+import { useEffect,useLayoutEffect, useState, useMemo } from "react";
 import { chartOpt } from "../../configs/setting";
 import LiveTradePopup from "../../components/bet/LiveTradePopup";
 import PopupBg from "../../components/common/PopupBg";
 import SelectPopup from "../../components/common/SelectPopup";
 import ChartPopup from "../../components/bet/ChartPopup";
 import TokenPopup from "../../components/bet/TokenPopup";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import TimePopup from "../../components/bet/TimePopup";
 import { toast } from "react-toastify";
 import { setToast } from "../../util/Util";
@@ -36,10 +36,16 @@ import DetBox from "../../components/bet/detBox/DetBox";
 import InsufficientPopup from "../../components/bet/InsufficientPopup";
 import MyBalancePopup from "../../components/header/MyBalancePopup";
 import AddPopup from "../../components/header/AddPopup";
+import { resetChart, setChart, addTicker, resetTicker } from "../../reducers/candleChart";
+import io from 'socket.io-client'
+import WebSocket from "ws";
+import axios from "axios";
 
 export default function Bet() {
   let a = 1;
-
+  const dispatch = useDispatch();
+  const chart = useSelector((state)=>state.candleChart.candle)
+  const ticker = useSelector((state)=>state.candleChart.ticker)
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [candleChart, setCandleChart] = useState("");
@@ -55,10 +61,28 @@ export default function Bet() {
   const [insufficientPopup, setInsufficientPopup] = useState(false);
   const [myBalancePopup, setMyBalancePopup] = useState(false);
   const [addPopup, setAddPopup] = useState(false);
+  const [lastClose, setLastClose] = useState();
+  const [lastIndex, setLastIndex] = useState();
+  const [targetPrice, setTargetPrice] = useState();
+  const [targetIndex, setTargetIndex] = useState();
+  const [currentBusinessDay, setCurrentBusinessDay] = useState({ day: 29, month: 5, year: 2019 });
+  const [currentIndex, setCurrentIndex] = useState();
+  const [ticks, setTicks] = useState(0)
+  const [currentBar, setCurrentBar]= useState({
+    open: null,
+    high: null,
+    low: null,
+    close: null,
+    time: currentBusinessDay,
+  })
+
+
 
   function markUpChart() {
     const chartBox = document.getElementById("ChartBox");
-    if (!chartBox) return;
+    console.log(chartBox)
+    if (!chartBox) {console.log('nochartbox');return;}
+    console.log('yeschart')
 
     var chart = createChart(chartBox, {
       rightPriceScale: {
@@ -164,23 +188,84 @@ export default function Bet() {
     }
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     markUpChart();
 
     setLiveTradePopup(true);
 
     document.addEventListener("keydown", handleKeyDown);
-
+console.log('hi')
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  // useEffect(() => {
+  //   const chartInterval = setInterval(() => {
+  //     getChartLive(candleChart);
+  //     // axios.get('https://marketdata.tradermade.com/api/v1/live?currency=EURUSD&api_key=3wjG4xYPlEnI8GNrUZW2')
+  //     // .then(response => {
+
+  //     //   console.log(response.data);
+
+  //     //   //console.log(response.data.quotes[1]);
+  //     // })
+  //     // .catch(error => {
+  //     //   console.log(error);
+  //     // });
+  //   }, 200);
+
+  //   return () => clearInterval(chartInterval);
+  // }, [candleChart]);
+
+
+  
+  // function mergeTickToBar(price) {
+  //   if (currentBar.open === null) {
+  //     currentBar.open = price;
+  //     currentBar.high = price;
+  //     currentBar.low = price;
+  //     currentBar.close = price;
+  //   } else {
+  //     currentBar.close = price;
+  //     currentBar.high = Math.max(currentBar.high, price);
+  //     currentBar.low = Math.min(currentBar.low, price);
+  //   }
+  //   candleSeries.update(currentBar);
+  // }
+
+  function nextBusinessDay(time) {
+    var d = new Date();
+    d.setUTCFullYear(time.year);
+    d.setUTCMonth(time.month - 1);
+    d.setUTCDate(time.day + 1);
+    d.setUTCHours(0, 0, 0, 0);
+    return {
+      year: d.getUTCFullYear(),
+      month: d.getUTCMonth() + 1,
+      day: d.getUTCDate(),
+    };
+  }
+
+  function getRandomPrice() {
+    return 10 + Math.round(Math.random() * 10000) / 100;
+  }
+
   useEffect(() => {
+    if(!candleChart){return;}
     const chartInterval = setInterval(() => {
-      getChartLive(candleChart);
-    }, 200);
+      let price = getRandomPrice()//response.data.quotes[0].mid;
+        dispatch(setChart(price))
+        dispatch(addTicker())
+
+    }, 500);
 
     return () => clearInterval(chartInterval);
   }, [candleChart]);
+
+  useEffect(()=>{
+    if(!candleChart){return;}
+    console.log(chart)
+    candleChart.update(chart)
+  },[chart])
 
   if (isMobile)
     return (
@@ -368,7 +453,7 @@ export default function Bet() {
             </article>
 
             <article className="contArea">
-              <div className="chartBox">
+              <div className="chartBox" id="ChartBox">
                 {/* <div className="chartBox" id="ChartBox"> */}
                 <span className="utilBox">
                   <ul className="btnList">

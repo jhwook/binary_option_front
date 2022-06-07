@@ -1,7 +1,8 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import common from "./common";
+import candleChart from "./candleChart"
 
-const reducer = combineReducers({ common });
+const reducer = combineReducers({ common, candleChart });
 
 export default function createStore() {
   return configureStore({
