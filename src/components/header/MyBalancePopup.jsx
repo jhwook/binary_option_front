@@ -6,7 +6,7 @@ import I_chkOrange from "../../img/icon/I_chkOrange.svg";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-export default function InsufficientPopup({ off, setAddPopup }) {
+export default function MyBalancePopup({ off, setAddPopup }) {
   const navigate = useNavigate();
   const isMobile = useSelector((state) => state.common.isMobile);
 
@@ -19,7 +19,7 @@ export default function InsufficientPopup({ off, setAddPopup }) {
 
   if (isMobile)
     return (
-      <MinsufficientPopupBox className="defaultPopup">
+      <MmyBalancePopup className="defaultPopup">
         <article className="topArea">
           <span className="blank" />
 
@@ -72,11 +72,11 @@ export default function InsufficientPopup({ off, setAddPopup }) {
             ))}
           </ul>
         </article>
-      </MinsufficientPopupBox>
+      </MmyBalancePopup>
     );
   else
     return (
-      <PinsufficientPopupBox className="defaultPopup">
+      <PmyBalancePopup className="defaultPopup">
         <article className="topArea">
           <span className="blank" />
 
@@ -129,11 +129,11 @@ export default function InsufficientPopup({ off, setAddPopup }) {
             ))}
           </ul>
         </article>
-      </PinsufficientPopupBox>
+      </PmyBalancePopup>
     );
 }
 
-const MinsufficientPopupBox = styled.section`
+const MmyBalancePopup = styled.section`
   width: 91.11vw;
   color: #fff;
 
@@ -237,7 +237,7 @@ const MinsufficientPopupBox = styled.section`
   }
 `;
 
-const PinsufficientPopupBox = styled.section`
+const PmyBalancePopup = styled.section`
   width: 500px;
   color: #fff;
 

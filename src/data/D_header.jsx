@@ -37,7 +37,7 @@ export const D_moreList = [
 ];
 
 export const D_lngList = [
-  { key: "ENGLISH", value: "en" },
+  { key: "English", value: "en" },
   { key: "中國語", value: "ch" },
   { key: "한국어", value: "kr" },
 ];

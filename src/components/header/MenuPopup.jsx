@@ -7,7 +7,10 @@ import { useState } from "react";
 import { D_headerList, D_moreList } from "../../data/D_header";
 import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
+import I_langWhite from "../../img/icon/I_langWhite.svg";
+import I_quesCircleWhite from "../../img/icon/I_quesCircleWhite.svg";
 import { useNavigate } from "react-router-dom";
+import SelLngPopup from "./SelLngPopup";
 
 export default function MenuPopup({ off }) {
   const navigate = useNavigate();
@@ -35,58 +38,72 @@ export default function MenuPopup({ off }) {
             <button className="myBtn" onClick={() => setProfPopup(true)}>
               MY
             </button>
-
-            {profPopup && (
-              <>
-                <ProfPopup off={setProfPopup} />
-                <PopupBg off={setProfPopup} />
-              </>
-            )}
           </span>
         </article>
 
-        <ul className="navList">
-          {D_headerList.map((v, i) => {
-            if (v.det)
-              return (
-                <li key={i}>
-                  <details>
-                    <summary>
-                      <strong className="title">{v.key}</strong>
-                      <img src={I_dnPolWhite} alt="" />
-                    </summary>
+        <article className="contArea">
+          <ul className="navList">
+            {D_headerList.map((v, i) => {
+              if (v.det)
+                return (
+                  <li key={i}>
+                    <details>
+                      <summary>
+                        <strong className="title">{v.key}</strong>
+                        <img src={I_dnPolWhite} alt="" />
+                      </summary>
 
-                    <ul className="detNavList">
-                      {v.det.map((detV, i) => (
-                        <li key={i} onClick={() => onClickNav(detV.url)}>
-                          {detV.key}
-                        </li>
-                      ))}
-                    </ul>
-                  </details>
-                </li>
-              );
-            else
-              return (
-                <button className="navBtn" onClick={() => navigate(v.url)}>
-                  <strong className="title">{v.key}</strong>
-                </button>
-              );
-          })}
+                      <ul className="detNavList">
+                        {v.det.map((detV, i) => (
+                          <li key={i} onClick={() => onClickNav(detV.url)}>
+                            {detV.key}
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
+                  </li>
+                );
+              else
+                return (
+                  <button className="navBtn" onClick={() => navigate(v.url)}>
+                    <strong className="title">{v.key}</strong>
+                  </button>
+                );
+            })}
 
-          <details>
-            <summary>
-              <strong className="title">More</strong>
-              <img src={I_dnPolWhite} alt="" />
-            </summary>
+            <details>
+              <summary>
+                <strong className="title">More</strong>
+                <img src={I_dnPolWhite} alt="" />
+              </summary>
 
-            <ul className="detNavList">
-              {D_moreList.map((v, i) => (
-                <li key={i}>{v.key}</li>
-              ))}
-            </ul>
-          </details>
-        </ul>
+              <ul className="detNavList">
+                {D_moreList.map((v, i) => (
+                  <li key={i}>{v.key}</li>
+                ))}
+              </ul>
+            </details>
+          </ul>
+
+          <span className="btnBox">
+            <span className="posBox">
+              <button className="lngBtn" onClick={() => setLngPopup(true)}>
+                <img src={I_langWhite} alt="" />
+              </button>
+
+              {lngPopup && (
+                <>
+                  <SelLngPopup off={setLngPopup} />
+                  <PopupBg off={setLngPopup} />
+                </>
+              )}
+            </span>
+
+            <button className="quesBtn" onClick={() => {}}>
+              <img src={I_quesCircleWhite} alt="" />
+            </button>
+          </span>
+        </article>
 
         <footer>
           <button className="exitBtn" onClick={() => off()}>
@@ -101,6 +118,13 @@ export default function MenuPopup({ off }) {
         <>
           <MyBalancePopup off={setMyBalancePopup} setAddPopup={setAddPopup} />
           <PopupBg off={setMyBalancePopup} />
+        </>
+      )}
+
+      {profPopup && (
+        <>
+          <ProfPopup off={setProfPopup} offAll={off} />
+          <PopupBg off={setProfPopup} />
         </>
       )}
 
@@ -154,58 +178,86 @@ const MenuPopupBox = styled.section`
     }
   }
 
-  .navList {
+  .contArea {
     flex: 1;
     padding: 5.55vw;
     overflow-y: scroll;
+    position: relative;
 
-    details {
-      &[open] {
+    .navList {
+      details {
+        &[open] {
+          summary {
+            opacity: 1;
+
+            img {
+              transform: rotate(180deg);
+            }
+          }
+        }
+
         summary {
-          opacity: 1;
+          display: flex;
+          align-items: center;
+          gap: 2.77vw;
+          height: 13.88vw;
+          font-size: 6.11vw;
+          opacity: 0.4;
 
           img {
-            transform: rotate(180deg);
+            height: 1.66vw;
+          }
+        }
+
+        .detNavList {
+          padding: 2.77vw 0;
+
+          li {
+            height: 12.22vw;
+            padding: 0 5.55vw;
+            font-size: 5.55vw;
+            font-weight: 700;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.4;
           }
         }
       }
 
-      summary {
+      .navBtn {
         display: flex;
         align-items: center;
-        gap: 2.77vw;
         height: 13.88vw;
         font-size: 6.11vw;
         opacity: 0.4;
 
-        img {
-          height: 1.66vw;
-        }
-      }
-
-      .detNavList {
-        padding: 2.77vw 0;
-
-        li {
-          height: 12.22vw;
-          padding: 0 5.55vw;
-          font-size: 5.55vw;
-          font-weight: 700;
-          border-left: 1px solid rgba(255, 255, 255, 0.1);
-          opacity: 0.4;
+        &:focus {
+          opacity: 1;
         }
       }
     }
 
-    .navBtn {
+    .btnBox {
       display: flex;
-      align-items: center;
-      height: 13.88vw;
-      font-size: 6.11vw;
-      opacity: 0.4;
+      flex-direction: column;
+      gap: 3.33vw;
+      position: fixed;
+      right: 6.11vw;
+      bottom: 20vw;
 
-      &:focus {
-        opacity: 1;
+      button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 9.44vw;
+        aspect-ratio: 1;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+
+        img {
+          width: 5.55vw;
+          height: 5.55vw;
+          object-fit: contain;
+        }
       }
     }
   }

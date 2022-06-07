@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { D_joinData, D_loginCategoryList } from "../../data/D_auth";
 import Email from "./common/Email";
 import I_dnPol from "../../img/icon/I_dnPol.svg";
-import I_chkYellow from "../../img/icon/I_chkYellow.svg";
+import I_chkOrange from "../../img/icon/I_chkOrange.svg";
 import Phone from "./common/Phone";
 import QRCode from "react-qr-code";
 import { useNavigate } from "react-router";
@@ -84,7 +84,7 @@ export default function Signup() {
                       className={`${chkTerm && "on"} chkBtn`}
                       onClick={() => setChkTerm(!chkTerm)}
                     >
-                      <img src={I_chkYellow} alt="" />
+                      <img src={I_chkOrange} alt="" />
                     </button>
 
                     <span className="agreeBox">
@@ -171,7 +171,7 @@ export default function Signup() {
                       className={`${chkTerm && "on"} chkBtn`}
                       onClick={() => setChkTerm(!chkTerm)}
                     >
-                      <img src={I_chkYellow} alt="" />
+                      <img src={I_chkOrange} alt="" />
                     </button>
 
                     <span className="agreeBox">

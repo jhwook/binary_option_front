@@ -1,4 +1,4 @@
-import I_chkYellow from "../img/icon/I_chkYellow.svg";
+import I_chkOrange from "../img/icon/I_chkOrange.svg";
 import I_xWhite from "../img/icon/I_xWhite.svg";
 
 export default function SetErrorBar({ str = "copied", type = "pc" }) {
@@ -43,7 +43,7 @@ export default function SetErrorBar({ str = "copied", type = "pc" }) {
   checkIconBox.style.borderRadius = "50%";
 
   let checkIcon = document.createElement("img");
-  checkIcon.src = I_chkYellow;
+  checkIcon.src = I_chkOrange;
   checkIcon.style.height = "8px";
 
   let exitIcon = document.createElement("img");

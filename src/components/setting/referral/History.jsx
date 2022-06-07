@@ -5,9 +5,12 @@ import moment from "moment";
 import I_ltArwWhite from "../../../img/icon/I_ltArwWhite.svg";
 import I_rtArwWhite from "../../../img/icon/I_rtArwWhite.svg";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 export default function History() {
   const totalPage = 4;
+
+  const isMobile = useSelector((state) => state.common.isMobile);
 
   const [page, setPage] = useState(1);
 
@@ -19,85 +22,219 @@ export default function History() {
     if (page < totalPage) setPage(page + 1);
   }
 
-  return (
-    <HistoryBox>
-      <div className="listBox">
-        <ul className="listHeader">
-          {D_historyListHeader.map((v, i) => (
-            <li key={i}>{v}</li>
-          ))}
-        </ul>
-        <ul className="list">
-          {D_historyList.map((v, i) => (
-            <li key={i}>
-              <span>
-                <p>
-                  {String(i + 1 + (page - 1) * contentsPerPage).padStart(
-                    2,
-                    "0"
-                  )}
-                </p>
-              </span>
+  if (isMobile)
+    return (
+      <MhistoryBox>
+        <div className="listBox">
+          <ul className="list">
+            {D_historyList.map((v, i) => (
+              <li key={i}>
+                <div>
+                  <p className="key">{D_historyListHeader[0]}</p>
 
-              <span>
-                <p>{v.account}</p>
-              </span>
+                  <span className="value">
+                    <p>
+                      {String(i + 1 + (page - 1) * contentsPerPage).padStart(
+                        2,
+                        "0"
+                      )}
+                    </p>
+                  </span>
+                </div>
 
-              <span>
-                <p>{`$${v.amount}`}</p>
-              </span>
+                <div>
+                  <p className="key">{D_historyListHeader[1]}</p>
 
-              <span>
-                <p>{`${v.cashBack}%`}</p>
-              </span>
+                  <span className="value">
+                    <p>{v.account}</p>
+                  </span>
+                </div>
 
-              <span>
-                <p>{`$${v.balance}`}</p>
-              </span>
+                <div>
+                  <p className="key">{D_historyListHeader[2]}</p>
 
-              <span>
-                <p>{moment(v.subscriptionDate).format("YYYY-MM-DD")}</p>
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
+                  <span className="value">
+                    <p>{`$${v.amount}`}</p>
+                  </span>
+                </div>
 
-      <div className="pageBox">
-        <button
-          className="arwBtn"
-          disabled={page <= 1}
-          onClick={onClickPrePageBtn}
-        >
-          <img src={I_ltArwWhite} alt="" />
-        </button>
+                <div>
+                  <p className="key">{D_historyListHeader[3]}</p>
 
-        <ul className="pageList">
-          {new Array(totalPage).fill("").map((v, i) => (
-            <li
-              key={i}
-              className={`${i + 1 === page && "on"}`}
-              onClick={() => setPage(i + 1)}
-            >
-              <strong>{i + 1}</strong>
-              <span className="onBar" />
-            </li>
-          ))}
-        </ul>
+                  <span className="value">
+                    <p>{`${v.cashBack}%`}</p>
+                  </span>
+                </div>
 
-        <button
-          className="arwBtn"
-          disabled={page >= totalPage}
-          onClick={onClickNextPageBtn}
-        >
-          <img src={I_rtArwWhite} alt="" />
-        </button>
-      </div>
-    </HistoryBox>
-  );
+                <div>
+                  <p className="key">{D_historyListHeader[4]}</p>
+
+                  <span className="value">
+                    <p>{`$${v.balance}`}</p>
+                  </span>
+                </div>
+
+                <div>
+                  <p className="key">{D_historyListHeader[5]}</p>
+
+                  <span className="value">
+                    <p>{moment(v.subscriptionDate).format("YYYY-MM-DD")}</p>
+                  </span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </MhistoryBox>
+    );
+  else
+    return (
+      <PhistoryBox>
+        <div className="listBox">
+          <ul className="listHeader">
+            {D_historyListHeader.map((v, i) => (
+              <li key={i}>{v}</li>
+            ))}
+          </ul>
+          <ul className="list">
+            {D_historyList.map((v, i) => (
+              <li key={i}>
+                <span>
+                  <p>
+                    {String(i + 1 + (page - 1) * contentsPerPage).padStart(
+                      2,
+                      "0"
+                    )}
+                  </p>
+                </span>
+
+                <span>
+                  <p>{v.account}</p>
+                </span>
+
+                <span>
+                  <p>{`$${v.amount}`}</p>
+                </span>
+
+                <span>
+                  <p>{`${v.cashBack}%`}</p>
+                </span>
+
+                <span>
+                  <p>{`$${v.balance}`}</p>
+                </span>
+
+                <span>
+                  <p>{moment(v.subscriptionDate).format("YYYY-MM-DD")}</p>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="pageBox">
+          <button
+            className="arwBtn"
+            disabled={page <= 1}
+            onClick={onClickPrePageBtn}
+          >
+            <img src={I_ltArwWhite} alt="" />
+          </button>
+
+          <ul className="pageList">
+            {new Array(totalPage).fill("").map((v, i) => (
+              <li
+                key={i}
+                className={`${i + 1 === page && "on"}`}
+                onClick={() => setPage(i + 1)}
+              >
+                <strong>{i + 1}</strong>
+                <span className="onBar" />
+              </li>
+            ))}
+          </ul>
+
+          <button
+            className="arwBtn"
+            disabled={page >= totalPage}
+            onClick={onClickNextPageBtn}
+          >
+            <img src={I_rtArwWhite} alt="" />
+          </button>
+        </div>
+      </PhistoryBox>
+    );
 }
 
-const HistoryBox = styled.div`
+const MhistoryBox = styled.div`
+  .listBox {
+    .list {
+      display: flex;
+      flex-direction: column;
+
+      li {
+        display: flex;
+        flex-direction: column;
+        gap: 1.11vw;
+        padding: 6.66vw 0;
+
+        &:first-of-type {
+          padding: 0 0 6.66vw;
+        }
+
+        &:last-of-type {
+          padding: 6.66vw 0 0;
+        }
+
+        &:nth-of-type(n + 2) {
+          border-top: 1px solid rgba(255, 255, 255, 0.14);
+        }
+
+        div {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: 3.88vw;
+
+          &.order {
+            .value {
+              gap: 1.66vw;
+            }
+          }
+
+          .key {
+            flex: 1;
+            color: rgba(255, 255, 255, 0.6);
+          }
+
+          .value {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            overflow: hidden;
+
+            p {
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+            }
+
+            img {
+              width: 3.33vw;
+            }
+
+            .price {
+              color: #3fb68b;
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const PhistoryBox = styled.div`
   .listBox {
     border: 1px solid #3b3e45;
     border-radius: 14px;
@@ -166,7 +303,7 @@ const HistoryBox = styled.div`
         width: 162px;
         min-width: 162px;
       }
-      
+
       &:nth-of-type(6) {
         width: 140px;
         min-width: 140px;

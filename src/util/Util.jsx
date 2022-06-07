@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import I_highArwGreen from "../img/icon/I_highArwGreen.svg";
+import I_chkOrange from "../img/icon/I_chkOrange.svg";
 
 export function strDot(str, startNum = 0, endNum = 0) {
   if (!str?.length) return;
@@ -155,7 +156,7 @@ export function GetExchange({ price, unit }) {
   return <>{exchange.toLocaleString("eu", "US")}</>;
 }
 
-export function setToast(type) {
+export function setToast({ type, cont }) {
   switch (type) {
     case "placed":
       toast(
@@ -180,7 +181,7 @@ export function setToast(type) {
           </ul>
         </div>,
         {
-          toastId: "CustomToast",
+          toastId: "CustomToastBet",
         }
       );
       break;
@@ -207,7 +208,21 @@ export function setToast(type) {
           </ul>
         </div>,
         {
-          toastId: "CustomToast",
+          toastId: "CustomToastBet",
+        }
+      );
+      break;
+    case "alarm":
+      toast(
+        <div className="customBox">
+          <span className="iconBox">
+            <img src={I_chkOrange} alt="" />
+          </span>
+
+          <p className="cont">{cont}</p>
+        </div>,
+        {
+          toastId: "CustomToastAlarm",
         }
       );
       break;

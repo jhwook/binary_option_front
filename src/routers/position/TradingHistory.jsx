@@ -16,9 +16,13 @@ import I_ltArwWhite from "../../img/icon/I_ltArwWhite.svg";
 import I_rtArwWhite from "../../img/icon/I_rtArwWhite.svg";
 import moment from "moment";
 import renderCustomHeader from "../../util/DatePickerHeader";
+import { useSelector } from "react-redux";
+import DefaultHeader from "../../components/header/DefaultHeader";
 
 export default function TradingHistory() {
   const totalPage = 4;
+
+  const isMobile = useSelector((state) => state.common.isMobile);
 
   const [category, setCategory] = useState(0);
   const [startDate, setStartDate] = useState(new Date());
@@ -48,157 +52,505 @@ export default function TradingHistory() {
     if (page < totalPage) setPage(page + 1);
   }
 
-  return (
-    <TradingHistoryBox>
-      <section className="innerBox">
-        <ul className="categoryList">
-          {D_historyCategoryList.map((v, i) => (
-            <li
-              key={i}
-              className={`${category === i && "on"}`}
-              onClick={() => setCategory(i)}
-            >
-              {v}
-            </li>
-          ))}
-        </ul>
+  if (isMobile)
+    return (
+      <>
+        <DefaultHeader title="Trading history" />
 
-        <article className="contArea">
-          <div className="filterBar">
-            <div className="filterBox">
-              <span className="dateBox filterOpt">
-                <DatePicker
-                  selected={startDate}
-                  onChange={dateChange}
-                  startDate={startDate}
-                  endDate={endDate}
-                  selectsRange
-                  renderCustomHeader={renderCustomHeader}
-                  customInput={<ExampleCustomInput />}
-                />
-              </span>
-
-              <span className="searchBox filterOpt">
-                <input
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Order"
-                />
-              </span>
-
-              <button className="applyBtn" onClick={() => {}}>
-                Apply
-              </button>
-            </div>
-
-            <button className="exportBtn" onClick={() => {}}>
-              <img src={I_linkWhite} alt="" />
-            </button>
-          </div>
-
-          <div className="listBox">
-            <ul className="listHeader">
-              {D_trandingListHeader.map((v, i) => (
-                <li key={i}>
-                  <p>{v}</p>
+        <MtradingHistoryBox>
+          <section className="innerBox">
+            <ul className="categoryList">
+              {D_historyCategoryList.map((v, i) => (
+                <li
+                  key={i}
+                  className={`${category === i && "on"}`}
+                  onClick={() => setCategory(i)}
+                >
+                  {v}
                 </li>
               ))}
             </ul>
 
-            <ul className="list">
-              {D_trandingList.map((v, i) => (
-                <li key={i}>
-                  <span>
-                    <img className="timeImg" src={I_timeWhite} alt="" />
-                    <img
-                      className="arwImg"
-                      src={
-                        (v.type === "high" && I_upArw3Green) ||
-                        (v.type === "low" && I_dnArw3Red)
-                      }
-                      alt=""
+            <article className="contArea">
+              <div className="filterBar">
+                <div className="filterBox">
+                  <span className="dateBox filterOpt">
+                    <DatePicker
+                      calendarClassName="moDatePicker"
+                      locale="ko"
+                      selected={startDate}
+                      onChange={dateChange}
+                      startDate={startDate}
+                      endDate={endDate}
+                      selectsRange
+                      renderCustomHeader={renderCustomHeader}
+                      customInput={<ExampleCustomInput />}
                     />
                   </span>
 
-                  <span>
-                    <p>{v.order}</p>
-                  </span>
+                  {/* <span className="searchBox filterOpt">
+                    <input
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      placeholder="Order"
+                    />
+                  </span> */}
 
-                  <span>
-                    <p>{v.expiration}</p>
-                  </span>
+                  <button className="applyBtn" onClick={() => {}}>
+                    Apply
+                  </button>
+                </div>
+              </div>
 
-                  <span>
-                    <p>#{v.asset}</p>
-                  </span>
+              <div className="listBox">
+                <ul className="list">
+                  {D_trandingList.map((v, i) => (
+                    <li key={i}>
+                      <div>
+                        <p className="key">{D_trandingListHeader[0]}</p>
 
-                  <span>
-                    <p>{moment(v.openTime).format("YYYY-MM-DD HH:mm:ss")}</p>
-                  </span>
+                        <span className="value">
+                          <img className="timeImg" src={I_timeWhite} alt="" />
+                        </span>
+                      </div>
 
-                  <span>
-                    <p>{moment(v.closingTime).format("YYYY-MM-DD HH:mm:ss")}</p>
-                  </span>
+                      <div className="order">
+                        <p className="key">{D_trandingListHeader[1]}</p>
 
-                  <span>
-                    <p>{v.openPrice}</p>
-                  </span>
+                        <span className="value">
+                          <img
+                            className="arwImg"
+                            src={
+                              (v.type === "high" && I_upArw3Green) ||
+                              (v.type === "low" && I_dnArw3Red)
+                            }
+                            alt=""
+                          />
 
-                  <span>
-                    <p>{v.closingPrice}</p>
-                  </span>
+                          <p>{v.order}</p>
+                        </span>
+                      </div>
 
-                  <span>
-                    <p>${v.tradeAmount.toLocaleString("eu", "US")}</p>
-                  </span>
+                      <div>
+                        <p className="key">{D_trandingListHeader[2]}</p>
 
-                  <span>
-                    <p className="price">$11.31</p>
-                    &nbsp;
-                    <p className="percent">{`(${62}%)`}</p>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
+                        <span className="value">
+                          <p>{v.expiration}</p>
+                        </span>
+                      </div>
 
-          <div className="pageBox">
-            <button
-              className="arwBtn"
-              disabled={page <= 1}
-              onClick={onClickPrePageBtn}
-            >
-              <img src={I_ltArwWhite} alt="" />
-            </button>
+                      <div>
+                        <p className="key">{D_trandingListHeader[3]}</p>
 
-            <ul className="pageList">
-              {new Array(totalPage).fill("").map((v, i) => (
-                <li
-                  key={i}
-                  className={`${i + 1 === page && "on"}`}
-                  onClick={() => setPage(i + 1)}
+                        <span className="value">
+                          <p>#{v.asset}</p>
+                        </span>
+                      </div>
+
+                      <div>
+                        <p className="key">{D_trandingListHeader[4]}</p>
+
+                        <span className="value">
+                          <p>
+                            {moment(v.openTime).format("YYYY-MM-DD HH:mm:ss")}
+                          </p>
+                        </span>
+                      </div>
+
+                      <div>
+                        <p className="key">{D_trandingListHeader[5]}</p>
+
+                        <span className="value">
+                          <p>
+                            {moment(v.closingTime).format(
+                              "YYYY-MM-DD HH:mm:ss"
+                            )}
+                          </p>
+                        </span>
+                      </div>
+
+                      <div>
+                        <p className="key">{D_trandingListHeader[6]}</p>
+
+                        <span className="value">
+                          <p>{v.openPrice}</p>
+                        </span>
+                      </div>
+
+                      <div>
+                        <p className="key">{D_trandingListHeader[7]}</p>
+
+                        <span className="value">
+                          <p>{v.closingPrice}</p>
+                        </span>
+                      </div>
+
+                      <div>
+                        <p className="key">{D_trandingListHeader[8]}</p>
+
+                        <span className="value">
+                          <p>${v.tradeAmount.toLocaleString("eu", "US")}</p>
+                        </span>
+                      </div>
+
+                      <div>
+                        <p className="key">{D_trandingListHeader[9]}</p>
+
+                        <span className="value">
+                          <p className="price">$11.31</p>
+                          &nbsp;
+                          <p className="percent">{`(${62}%)`}</p>
+                        </span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="pageBox">
+                <button
+                  className="arwBtn"
+                  disabled={page <= 1}
+                  onClick={onClickPrePageBtn}
                 >
-                  <strong>{i + 1}</strong>
-                  <span className="onBar" />
-                </li>
-              ))}
-            </ul>
+                  <img src={I_ltArwWhite} alt="" />
+                </button>
 
-            <button
-              className="arwBtn"
-              disabled={page >= totalPage}
-              onClick={onClickNextPageBtn}
-            >
-              <img src={I_rtArwWhite} alt="" />
-            </button>
-          </div>
-        </article>
-      </section>
-    </TradingHistoryBox>
-  );
+                <ul className="pageList">
+                  {new Array(totalPage).fill("").map((v, i) => (
+                    <li
+                      key={i}
+                      className={`${i + 1 === page && "on"}`}
+                      onClick={() => setPage(i + 1)}
+                    >
+                      <strong>{i + 1}</strong>
+                      <span className="onBar" />
+                    </li>
+                  ))}
+                </ul>
+
+                <button
+                  className="arwBtn"
+                  disabled={page >= totalPage}
+                  onClick={onClickNextPageBtn}
+                >
+                  <img src={I_rtArwWhite} alt="" />
+                </button>
+              </div>
+            </article>
+          </section>
+        </MtradingHistoryBox>
+      </>
+    );
+  else
+    return (
+      <PtradingHistoryBox>
+        <section className="innerBox">
+          <ul className="categoryList">
+            {D_historyCategoryList.map((v, i) => (
+              <li
+                key={i}
+                className={`${category === i && "on"}`}
+                onClick={() => setCategory(i)}
+              >
+                {v}
+              </li>
+            ))}
+          </ul>
+
+          <article className="contArea">
+            <div className="filterBar">
+              <div className="filterBox">
+                <span className="dateBox filterOpt">
+                  <DatePicker
+                    selected={startDate}
+                    onChange={dateChange}
+                    startDate={startDate}
+                    endDate={endDate}
+                    selectsRange
+                    renderCustomHeader={renderCustomHeader}
+                    customInput={<ExampleCustomInput />}
+                  />
+                </span>
+
+                <span className="searchBox filterOpt">
+                  <input
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Order"
+                  />
+                </span>
+
+                <button className="applyBtn" onClick={() => {}}>
+                  Apply
+                </button>
+              </div>
+
+              <button className="exportBtn" onClick={() => {}}>
+                <img src={I_linkWhite} alt="" />
+              </button>
+            </div>
+
+            <div className="listBox">
+              <ul className="listHeader">
+                {D_trandingListHeader.map((v, i) => (
+                  <li key={i}>
+                    <p>{v}</p>
+                  </li>
+                ))}
+              </ul>
+
+              <ul className="list">
+                {D_trandingList.map((v, i) => (
+                  <li key={i}>
+                    <span>
+                      <img className="timeImg" src={I_timeWhite} alt="" />
+                      <img
+                        className="arwImg"
+                        src={
+                          (v.type === "high" && I_upArw3Green) ||
+                          (v.type === "low" && I_dnArw3Red)
+                        }
+                        alt=""
+                      />
+                    </span>
+
+                    <span>
+                      <p>{v.order}</p>
+                    </span>
+
+                    <span>
+                      <p>{v.expiration}</p>
+                    </span>
+
+                    <span>
+                      <p>#{v.asset}</p>
+                    </span>
+
+                    <span>
+                      <p>{moment(v.openTime).format("YYYY-MM-DD HH:mm:ss")}</p>
+                    </span>
+
+                    <span>
+                      <p>
+                        {moment(v.closingTime).format("YYYY-MM-DD HH:mm:ss")}
+                      </p>
+                    </span>
+
+                    <span>
+                      <p>{v.openPrice}</p>
+                    </span>
+
+                    <span>
+                      <p>{v.closingPrice}</p>
+                    </span>
+
+                    <span>
+                      <p>${v.tradeAmount.toLocaleString("eu", "US")}</p>
+                    </span>
+
+                    <span>
+                      <p className="price">$11.31</p>
+                      &nbsp;
+                      <p className="percent">{`(${62}%)`}</p>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="pageBox">
+              <button
+                className="arwBtn"
+                disabled={page <= 1}
+                onClick={onClickPrePageBtn}
+              >
+                <img src={I_ltArwWhite} alt="" />
+              </button>
+
+              <ul className="pageList">
+                {new Array(totalPage).fill("").map((v, i) => (
+                  <li
+                    key={i}
+                    className={`${i + 1 === page && "on"}`}
+                    onClick={() => setPage(i + 1)}
+                  >
+                    <strong>{i + 1}</strong>
+                    <span className="onBar" />
+                  </li>
+                ))}
+              </ul>
+
+              <button
+                className="arwBtn"
+                disabled={page >= totalPage}
+                onClick={onClickNextPageBtn}
+              >
+                <img src={I_rtArwWhite} alt="" />
+              </button>
+            </div>
+          </article>
+        </section>
+      </PtradingHistoryBox>
+    );
 }
 
-const TradingHistoryBox = styled.main`
+const MtradingHistoryBox = styled.main`
+  .innerBox {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: scroll;
+
+    .categoryList {
+      display: flex;
+
+      li {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 11.66vw;
+        font-size: 4.44vw;
+        font-weight: 700;
+        border-bottom: 4px solid transparent;
+        opacity: 0.4;
+        cursor: pointer;
+
+        &.on {
+          border-color: #fff;
+          opacity: 1;
+        }
+      }
+    }
+
+    .contArea {
+      display: flex;
+      flex-direction: column;
+      gap: 2.22vw;
+
+      .filterBar {
+        padding: 5.55vw;
+
+        .filterBox {
+          display: flex;
+          flex-direction: column;
+          gap: 2.22vw;
+
+          .filterOpt {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 11.11vw;
+            padding: 0 6.66vw;
+            color: rgba(255, 255, 255, 0.4);
+            border: 1px solid #3b3e45;
+            border-radius: 5.55vw;
+
+            &:focus-within {
+              border-color: #fff;
+              color: #fff;
+            }
+
+            &.dateBox {
+              position: relative;
+
+              .dateBtn {
+                display: flex;
+                align-items: center;
+                gap: 3.33vw;
+
+                img {
+                  width: 4.44vw;
+                }
+              }
+
+              .react-datepicker-popper {
+                top: 11.11vw !important;
+                left: 50% !important;
+                transform: translate(-50%, 0) !important;
+              }
+            }
+          }
+
+          .applyBtn {
+            width: 100%;
+            height: 11.11vw;
+            font-size: 3.88vw;
+            font-weight: 700;
+            border: 1px solid #3b3e45;
+            border-radius: 5.55vw;
+
+            &:focus-within {
+              border-color: #fff;
+            }
+          }
+        }
+      }
+
+      .listBox {
+        padding: 0 5.55vw;
+
+        li {
+          display: flex;
+          flex-direction: column;
+          gap: 1.11vw;
+          padding: 6.66vw 0;
+
+          &:first-of-type {
+            padding: 0 0 6.66vw;
+          }
+
+          &:last-of-type {
+            padding: 6.66vw 0 0;
+          }
+
+          &:nth-of-type(n + 2) {
+            border-top: 1px solid rgba(255, 255, 255, 0.14);
+          }
+
+          div {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 3.88vw;
+
+            &.order {
+              .value {
+                gap: 1.66vw;
+              }
+            }
+
+            .key {
+              flex: 1;
+              color: rgba(255, 255, 255, 0.6);
+            }
+
+            .value {
+              flex: 1;
+              display: flex;
+              justify-content: flex-end;
+              align-items: center;
+              overflow: hidden;
+
+              p {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+              }
+
+              img {
+                width: 3.33vw;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const PtradingHistoryBox = styled.main`
   flex: 1;
   padding: 70px 140px;
 

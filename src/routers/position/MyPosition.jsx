@@ -1,106 +1,347 @@
+import { useSelector } from "react-redux";
 import styled from "styled-components";
+import DefaultHeader from "../../components/header/DefaultHeader";
 import E_dia from "../../img/example/E_dia.png";
 import I_upPolGreen from "../../img/icon/I_upPolGreen.svg";
 
 export default function MyPosition() {
-  return (
-    <MyPositionBox>
-      <section className="innerBox">
-        <article className="posArea">
-          <span className="posBox">
-            <img src={E_dia} alt="" />
+  const isMobile = useSelector((state) => state.common.isMobile);
 
-            <div className="textBox">
-              <strong className="pos">Diamond</strong>
+  if (isMobile)
+    return (
+      <>
+        <DefaultHeader title="My Positions" />
 
-              <p className="cashBack">{`Cashback 0%`}</p>
-            </div>
-          </span>
+        <MmyPositionBox>
+          <section className="innerBox">
+            <article className="posArea">
+              <span className="posBox">
+                <img src={E_dia} alt="" />
 
-          <ul className="balanceList">
-            <li>
-              <p className="key">Total</p>
-              <strong className="price">60 USDT</strong>
-            </li>
-            <li>
-              <p className="key">safe balance</p>
-              <strong className="price">60 USDT</strong>
-            </li>
-          </ul>
-        </article>
+                <div className="textBox">
+                  <strong className="pos">Diamond</strong>
 
-        <article className="detArea">
-          <div className="detBox">
-            <div className="posBox">
-              <p className="key">Positions</p>
+                  <p className="cashBack">{`Cashback 0%`}</p>
+                </div>
+              </span>
 
-              <div className="value">
-                <strong className="price">${(0).toFixed(2)}</strong>
+              <ul className="balanceList">
+                <li>
+                  <p className="key">Total</p>
+                  <strong className="price">60 USDT</strong>
+                </li>
+                <li>
+                  <p className="key">safe balance</p>
+                  <strong className="price">60 USDT</strong>
+                </li>
+              </ul>
+            </article>
 
-                <div className="changeBox">
-                  <img src={I_upPolGreen} alt="" />
+            <article className="detArea">
+              <div className="detBox">
+                <div className="posBox">
+                  <p className="key">Positions</p>
 
-                  <span className="text">
-                    <p className="change">$0.00 (0.00%)</p>&nbsp;
-                    <p className="time">Today</p>
-                  </span>
+                  <div className="value">
+                    <strong className="price">${(0).toFixed(2)}</strong>
+
+                    <div className="changeBox">
+                      <img src={I_upPolGreen} alt="" />
+
+                      <span className="text">
+                        <p className="change">$0.00 (0.00%)</p>&nbsp;
+                        <p className="time">Today</p>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="detPriceList">
+                  <li>
+                    <p className="key">Deals:</p>
+                    <p className="value">0</p>
+                  </li>
+                  <li>
+                    <p className="key">Trading profit</p>
+                    <p className="value">$0</p>
+                  </li>
+                  <li>
+                    <p className="key">Profitable deals:</p>
+                    <p className="value">0%</p>
+                  </li>
+
+                  <li>
+                    <p className="key">Average profit:</p>
+                    <p className="value">$0</p>
+                  </li>
+                  <li>
+                    <p className="key">Net turnover:</p>
+                    <p className="value">$0</p>
+                  </li>
+                  <li>
+                    <p className="key">Hedged trades:</p>
+                    <p className="value">$0</p>
+                  </li>
+
+                  <li>
+                    <p className="key">Min trade amount:</p>
+                    <p className="value">$0</p>
+                  </li>
+                  <li>
+                    <p className="key">Max trade amount:</p>
+                    <p className="value">$0</p>
+                  </li>
+                  <li>
+                    <p className="key">Max trade profit:</p>
+                    <p className="value">$0</p>
+                  </li>
                 </div>
               </div>
-            </div>
+              <div className="chartBox"></div>
+            </article>
+          </section>
+        </MmyPositionBox>
+      </>
+    );
+  else
+    return (
+      <PmyPositionBox>
+        <section className="innerBox">
+          <article className="posArea">
+            <span className="posBox">
+              <img src={E_dia} alt="" />
 
-            <div className="detPriceList">
+              <div className="textBox">
+                <strong className="pos">Diamond</strong>
+
+                <p className="cashBack">{`Cashback 0%`}</p>
+              </div>
+            </span>
+
+            <ul className="balanceList">
               <li>
-                <div>
-                  <p className="key">Deals:</p>
-                  <p className="value">0</p>
-                </div>
-                <div>
-                  <p className="key">Trading profit</p>
-                  <p className="value">$0</p>
-                </div>
-                <div>
-                  <p className="key">Profitable deals:</p>
-                  <p className="value">0%</p>
-                </div>
+                <p className="key">Total</p>
+                <strong className="price">60 USDT</strong>
               </li>
               <li>
-                <div>
-                  <p className="key">Average profit:</p>
-                  <p className="value">$0</p>
-                </div>
-                <div>
-                  <p className="key">Net turnover:</p>
-                  <p className="value">$0</p>
-                </div>
-                <div>
-                  <p className="key">Hedged trades:</p>
-                  <p className="value">$0</p>
-                </div>
+                <p className="key">safe balance</p>
+                <strong className="price">60 USDT</strong>
               </li>
-              <li>
-                <div>
-                  <p className="key">Min trade amount:</p>
-                  <p className="value">$0</p>
+            </ul>
+          </article>
+
+          <article className="detArea">
+            <div className="detBox">
+              <div className="posBox">
+                <p className="key">Positions</p>
+
+                <div className="value">
+                  <strong className="price">${(0).toFixed(2)}</strong>
+
+                  <div className="changeBox">
+                    <img src={I_upPolGreen} alt="" />
+
+                    <span className="text">
+                      <p className="change">$0.00 (0.00%)</p>&nbsp;
+                      <p className="time">Today</p>
+                    </span>
+                  </div>
                 </div>
-                <div>
-                  <p className="key">Max trade amount:</p>
-                  <p className="value">$0</p>
-                </div>
-                <div>
-                  <p className="key">Max trade profit:</p>
-                  <p className="value">$0</p>
-                </div>
-              </li>
+              </div>
+
+              <div className="detPriceList">
+                <li>
+                  <div>
+                    <p className="key">Deals:</p>
+                    <p className="value">0</p>
+                  </div>
+                  <div>
+                    <p className="key">Trading profit</p>
+                    <p className="value">$0</p>
+                  </div>
+                  <div>
+                    <p className="key">Profitable deals:</p>
+                    <p className="value">0%</p>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <p className="key">Average profit:</p>
+                    <p className="value">$0</p>
+                  </div>
+                  <div>
+                    <p className="key">Net turnover:</p>
+                    <p className="value">$0</p>
+                  </div>
+                  <div>
+                    <p className="key">Hedged trades:</p>
+                    <p className="value">$0</p>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <p className="key">Min trade amount:</p>
+                    <p className="value">$0</p>
+                  </div>
+                  <div>
+                    <p className="key">Max trade amount:</p>
+                    <p className="value">$0</p>
+                  </div>
+                  <div>
+                    <p className="key">Max trade profit:</p>
+                    <p className="value">$0</p>
+                  </div>
+                </li>
+              </div>
             </div>
-          </div>
-          <div className="chartBox"></div>
-        </article>
-      </section>
-    </MyPositionBox>
-  );
+            <div className="chartBox"></div>
+          </article>
+        </section>
+      </PmyPositionBox>
+    );
 }
 
-const MyPositionBox = styled.main`
+const MmyPositionBox = styled.main`
+  .innerBox {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: scroll;
+
+    .posArea {
+      .posBox {
+        display: flex;
+        align-items: center;
+        gap: 3.33vw;
+        padding: 3.88vw 5.55vw;
+
+        img {
+          height: 74px;
+        }
+
+        .textBox {
+          display: flex;
+          flex-direction: column;
+          gap: 1.11vw;
+
+          .pos {
+            font-size: 5.55vw;
+          }
+
+          .cashBack {
+            font-size: 3.88vw;
+            opacity: 0.4;
+          }
+        }
+      }
+
+      .balanceList {
+        display: flex;
+        padding: 3.33vw 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+
+        li {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 1.66vw;
+          padding: 1.11vw 5.55vw;
+
+          &:nth-of-type(n + 2) {
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+          }
+
+          .key {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+          }
+
+          .value {
+            font-size: 16px;
+          }
+        }
+      }
+    }
+
+    .detArea {
+      .detBox {
+        .posBox {
+          display: flex;
+          flex-direction: column;
+          gap: 3.88vw;
+          padding: 4.44vw 5.55vw;
+          border-top: 1px solid rgba(255, 255, 255, 0.2);
+
+          .key {
+            font-size: 3.88vw;
+            opacity: 0.4;
+          }
+
+          .value {
+            display: flex;
+            flex-direction: column;
+            gap: 1.11vw;
+
+            .price {
+              font-size: 6.66vw;
+            }
+
+            .changeBox {
+              display: flex;
+              align-items: center;
+              gap: 1.11vw;
+
+              img {
+                width: 2.77vw;
+              }
+
+              .text {
+                display: flex;
+                font-size: 3.88vw;
+
+                .change {
+                  color: #3fb68b;
+                }
+
+                .time {
+                  opacity: 0.4;
+                }
+              }
+            }
+          }
+        }
+
+        .detPriceList {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 2.77vw;
+          padding: 4.44vw 5.55vw;
+          font-size: 3.88vw;
+          border-top: 1px solid rgba(255, 255, 255, 0.2);
+
+          li {
+            display: flex;
+            justify-content: space-between;
+
+            .key {
+              white-space: nowrap;
+              opacity: 0.4;
+            }
+          }
+        }
+      }
+
+      .chartBox {
+        min-width: 730px;
+        width: 730px;
+        border-left: 1px solid rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+`;
+
+const PmyPositionBox = styled.main`
   flex: 1;
   padding: 70px 140px;
 

@@ -8,9 +8,12 @@ import moment from "moment";
 import I_ltArwWhite from "../../../img/icon/I_ltArwWhite.svg";
 import I_rtArwWhite from "../../../img/icon/I_rtArwWhite.svg";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 export default function Recommender() {
   const totalPage = 4;
+
+  const isMobile = useSelector((state) => state.common.isMobile);
 
   const [page, setPage] = useState(1);
 
@@ -22,90 +25,233 @@ export default function Recommender() {
     if (page < totalPage) setPage(page + 1);
   }
 
-  return (
-    <RecommenderBox>
-      <div className="listBox">
-        <ul className="listHeader">
-          {D_recommenderListHeader.map((v, i) => (
-            <li key={i}>{v}</li>
-          ))}
-        </ul>
-        <ul className="list">
-          {D_recommenderList.map((v, i) => (
-            <li key={i}>
-              <span>
-                <p>
-                  {String(i + 1 + (page - 1) * contentsPerPage).padStart(
-                    2,
-                    "0"
-                  )}
-                </p>
-              </span>
+  if (isMobile)
+    return (
+      <MrecommenderBox>
+        <div className="listBox">
+          <ul className="list">
+            {D_recommenderList.map((v, i) => (
+              <li key={i}>
+                <div>
+                  <p className="key">{D_recommenderListHeader[0]}</p>
 
-              <span>
-                <p>{v.account}</p>
-              </span>
+                  <span className="value">
+                    <p>
+                      {String(i + 1 + (page - 1) * contentsPerPage).padStart(
+                        2,
+                        "0"
+                      )}
+                    </p>
+                  </span>
+                </div>
 
-              <span>
-                <p>{`${v.level} Level`}</p>
-              </span>
+                <div>
+                  <p className="key">{D_recommenderListHeader[1]}</p>
 
-              <span>
-                <p>{moment(v.subscriptionDate).format("YYYY-MM-DD")}</p>
-              </span>
+                  <span className="value">
+                    <p>{v.account}</p>
+                  </span>
+                </div>
 
-              <span>
-                <p>{`$${v.amount}`}</p>
-              </span>
+                <div>
+                  <p className="key">{D_recommenderListHeader[2]}</p>
 
-              <span>
-                <p className="price">{`$${v.profit}`}</p>&nbsp;
-                <p className="percent">{`(${92}%)`}</p>
-              </span>
+                  <span className="value">
+                    <p>{`${v.level} Level`}</p>
+                  </span>
+                </div>
 
-              <span>
-                <p>{`${v.received} USDT`}</p>
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
+                <div>
+                  <p className="key">{D_recommenderListHeader[3]}</p>
 
-      <div className="pageBox">
-        <button
-          className="arwBtn"
-          disabled={page <= 1}
-          onClick={onClickPrePageBtn}
-        >
-          <img src={I_ltArwWhite} alt="" />
-        </button>
+                  <span className="value">
+                    <p>{moment(v.subscriptionDate).format("YYYY-MM-DD")}</p>
+                  </span>
+                </div>
 
-        <ul className="pageList">
-          {new Array(totalPage).fill("").map((v, i) => (
-            <li
-              key={i}
-              className={`${i + 1 === page && "on"}`}
-              onClick={() => setPage(i + 1)}
-            >
-              <strong>{i + 1}</strong>
-              <span className="onBar" />
-            </li>
-          ))}
-        </ul>
+                <div>
+                  <p className="key">{D_recommenderListHeader[4]}</p>
 
-        <button
-          className="arwBtn"
-          disabled={page >= totalPage}
-          onClick={onClickNextPageBtn}
-        >
-          <img src={I_rtArwWhite} alt="" />
-        </button>
-      </div>
-    </RecommenderBox>
-  );
+                  <span className="value">
+                    <p>{`$${v.amount}`}</p>
+                  </span>
+                </div>
+
+                <div>
+                  <p className="key">{D_recommenderListHeader[5]}</p>
+
+                  <span className="value">
+                    <p className="price">{`$${v.profit}`}</p>&nbsp;
+                    <p className="percent">{`(${92}%)`}</p>
+                  </span>
+                </div>
+
+                <div>
+                  <p className="key">{D_recommenderListHeader[6]}</p>
+
+                  <span className="value">
+                    <p>{`${v.received} USDT`}</p>
+                  </span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </MrecommenderBox>
+    );
+  else
+    return (
+      <PrecommenderBox>
+        <div className="listBox">
+          <ul className="listHeader">
+            {D_recommenderListHeader.map((v, i) => (
+              <li key={i}>{v}</li>
+            ))}
+          </ul>
+          <ul className="list">
+            {D_recommenderList.map((v, i) => (
+              <li key={i}>
+                <span>
+                  <p>
+                    {String(i + 1 + (page - 1) * contentsPerPage).padStart(
+                      2,
+                      "0"
+                    )}
+                  </p>
+                </span>
+
+                <span>
+                  <p>{v.account}</p>
+                </span>
+
+                <span>
+                  <p>{`${v.level} Level`}</p>
+                </span>
+
+                <span>
+                  <p>{moment(v.subscriptionDate).format("YYYY-MM-DD")}</p>
+                </span>
+
+                <span>
+                  <p>{`$${v.amount}`}</p>
+                </span>
+
+                <span>
+                  <p className="price">{`$${v.profit}`}</p>&nbsp;
+                  <p className="percent">{`(${92}%)`}</p>
+                </span>
+
+                <span>
+                  <p>{`${v.received} USDT`}</p>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="pageBox">
+          <button
+            className="arwBtn"
+            disabled={page <= 1}
+            onClick={onClickPrePageBtn}
+          >
+            <img src={I_ltArwWhite} alt="" />
+          </button>
+
+          <ul className="pageList">
+            {new Array(totalPage).fill("").map((v, i) => (
+              <li
+                key={i}
+                className={`${i + 1 === page && "on"}`}
+                onClick={() => setPage(i + 1)}
+              >
+                <strong>{i + 1}</strong>
+                <span className="onBar" />
+              </li>
+            ))}
+          </ul>
+
+          <button
+            className="arwBtn"
+            disabled={page >= totalPage}
+            onClick={onClickNextPageBtn}
+          >
+            <img src={I_rtArwWhite} alt="" />
+          </button>
+        </div>
+      </PrecommenderBox>
+    );
 }
 
-const RecommenderBox = styled.div`
+const MrecommenderBox = styled.div`
+  .listBox {
+    .list {
+      display: flex;
+      flex-direction: column;
+
+      li {
+        display: flex;
+        flex-direction: column;
+        gap: 1.11vw;
+        padding: 6.66vw 0;
+
+        &:first-of-type {
+          padding: 0 0 6.66vw;
+        }
+
+        &:last-of-type {
+          padding: 6.66vw 0 0;
+        }
+
+        &:nth-of-type(n + 2) {
+          border-top: 1px solid rgba(255, 255, 255, 0.14);
+        }
+
+        div {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: 3.88vw;
+
+          &.order {
+            .value {
+              gap: 1.66vw;
+            }
+          }
+
+          .key {
+            flex: 1;
+            color: rgba(255, 255, 255, 0.6);
+          }
+
+          .value {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            overflow: hidden;
+
+            p {
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+            }
+
+            img {
+              width: 3.33vw;
+            }
+
+            .price {
+              color: #3fb68b;
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const PrecommenderBox = styled.div`
   .listBox {
     border: 1px solid #3b3e45;
     border-radius: 14px;

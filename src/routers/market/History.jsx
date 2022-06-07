@@ -12,12 +12,16 @@ import {
   D_historyListHeader,
   D_historyCategoryList,
   D_historyList,
-} from "../../data/D_bet";
+} from "../../data/D_market";
 import renderCustomHeader from "../../util/DatePickerHeader";
+import { useSelector } from "react-redux";
+import DefaultHeader from "../../components/header/DefaultHeader";
 
 export default function History() {
   const totalPage = 4;
   registerLocale("ko", ko);
+
+  const isMobile = useSelector((state) => state.common.isMobile);
 
   const [category, setCategory] = useState(0);
   const [startDate, setStartDate] = useState(new Date());
@@ -46,122 +50,351 @@ export default function History() {
     if (page < totalPage) setPage(page + 1);
   }
 
-  return (
-    <HistoryBox>
-      <section className="innerBox">
-        <ul className="categoryList">
-          {D_historyCategoryList.map((v, i) => (
-            <li
-              key={i}
-              className={`${category === i && "on"}`}
-              onClick={() => setCategory(i)}
-            >
-              {v}
-            </li>
-          ))}
-        </ul>
+  if (isMobile)
+    return (
+      <>
+        <DefaultHeader title="History" />
 
-        <article className="contArea">
-          <div className="filterBar">
-            <div className="filterBox">
-              <span className="dateBox filterOpt">
-                <DatePicker
-                  locale="ko"
-                  selected={startDate}
-                  onChange={dateChange}
-                  startDate={startDate}
-                  endDate={endDate}
-                  selectsRange
-                  renderCustomHeader={renderCustomHeader}
-                  customInput={<ExampleCustomInput />}
-                />
-              </span>
+        <MhistoryBox>
+          <section className="innerBox">
+            <ul className="categoryList">
+              {D_historyCategoryList.map((v, i) => (
+                <li
+                  key={i}
+                  className={`${category === i && "on"}`}
+                  onClick={() => setCategory(i)}
+                >
+                  {v}
+                </li>
+              ))}
+            </ul>
 
-              <button className="applyBtn" onClick={() => {}}>
-                Apply
+            <article className="contArea">
+              <div className="filterBar">
+                <div className="filterBox">
+                  <span className="dateBox filterOpt">
+                    <DatePicker
+                      calendarClassName="moDatePicker"
+                      locale="ko"
+                      selected={startDate}
+                      onChange={dateChange}
+                      startDate={startDate}
+                      endDate={endDate}
+                      selectsRange
+                      renderCustomHeader={renderCustomHeader}
+                      customInput={<ExampleCustomInput />}
+                    />
+                  </span>
+
+                  <button className="applyBtn" onClick={() => {}}>
+                    Apply
+                  </button>
+                </div>
+              </div>
+
+              <div className="listBox">
+                <ul className="list">
+                  {D_historyList.map((v, i) => (
+                    <li key={i}>
+                      <div>
+                        <p className="key">{D_historyListHeader[0]}</p>
+                        <div className="value">
+                          <p>{v.id}</p>
+                        </div>
+                      </div>
+
+                      <div>
+                        <p className="key">{D_historyListHeader[1]}</p>
+                        <div className="value">
+                          <p>
+                            {moment(v.openTime).format("YYYY-MM-DD HH:mm:ss")}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div>
+                        <p className="key">{D_historyListHeader[2]}</p>
+                        <div className="value">
+                          <p>{`${v.amount.toLocaleString("eu", "US")} USDT`}</p>
+                        </div>
+                      </div>
+
+                      <div>
+                        <p className="key">{D_historyListHeader[3]}</p>
+                        <div className="value">
+                          <p>{v.method}</p>
+                        </div>
+                      </div>
+
+                      <div>
+                        <p className="key">{D_historyListHeader[4]}</p>
+                        <div className="value">
+                          <p>{v.type}</p>
+                        </div>
+                      </div>
+
+                      <div>
+                        <p className="key">{D_historyListHeader[5]}</p>
+                        <div className="value">
+                          <p>{v.status}</p>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </article>
+          </section>
+        </MhistoryBox>
+      </>
+    );
+  else
+    return (
+      <PhistoryBox>
+        <section className="innerBox">
+          <ul className="categoryList">
+            {D_historyCategoryList.map((v, i) => (
+              <li
+                key={i}
+                className={`${category === i && "on"}`}
+                onClick={() => setCategory(i)}
+              >
+                {v}
+              </li>
+            ))}
+          </ul>
+
+          <article className="contArea">
+            <div className="filterBar">
+              <div className="filterBox">
+                <span className="dateBox filterOpt">
+                  <DatePicker
+                    locale="ko"
+                    selected={startDate}
+                    onChange={dateChange}
+                    startDate={startDate}
+                    endDate={endDate}
+                    selectsRange
+                    renderCustomHeader={renderCustomHeader}
+                    customInput={<ExampleCustomInput />}
+                  />
+                </span>
+
+                <button className="applyBtn" onClick={() => {}}>
+                  Apply
+                </button>
+              </div>
+
+              <button className="exportBtn" onClick={() => {}}>
+                <img src={I_linkWhite} alt="" />
               </button>
             </div>
 
-            <button className="exportBtn" onClick={() => {}}>
-              <img src={I_linkWhite} alt="" />
-            </button>
-          </div>
+            <div className="listBox">
+              <ul className="listHeader">
+                {D_historyListHeader.map((v, i) => (
+                  <li key={i}>
+                    <p>{v}</p>
+                  </li>
+                ))}
+              </ul>
 
-          <div className="listBox">
-            <ul className="listHeader">
-              {D_historyListHeader.map((v, i) => (
-                <li key={i}>
-                  <p>{v}</p>
-                </li>
-              ))}
-            </ul>
+              <ul className="list">
+                {D_historyList.map((v, i) => (
+                  <li key={i}>
+                    <span>{v.id}</span>
 
-            <ul className="list">
-              {D_historyList.map((v, i) => (
-                <li key={i}>
-                  <span>{v.id}</span>
+                    <span>
+                      <p>{moment(v.openTime).format("YYYY-MM-DD HH:mm:ss")}</p>
+                    </span>
 
-                  <span>
-                    <p>{moment(v.openTime).format("YYYY-MM-DD HH:mm:ss")}</p>
-                  </span>
+                    <span>
+                      <p>{`${v.amount.toLocaleString("eu", "US")} USDT`}</p>
+                    </span>
 
-                  <span>
-                    <p>{`${v.amount.toLocaleString("eu", "US")} USDT`}</p>
-                  </span>
+                    <span>
+                      <p>{v.method}</p>
+                    </span>
 
-                  <span>
-                    <p>{v.method}</p>
-                  </span>
+                    <span>
+                      <p>{v.type}</p>
+                    </span>
 
-                  <span>
-                    <p>{v.type}</p>
-                  </span>
+                    <span>
+                      <p>{v.status}</p>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-                  <span>
-                    <p>{v.status}</p>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
+            <div className="pageBox">
+              <button
+                className="arwBtn"
+                disabled={page <= 1}
+                onClick={onClickPrePageBtn}
+              >
+                <img src={I_ltArwWhite} alt="" />
+              </button>
 
-          <div className="pageBox">
-            <button
-              className="arwBtn"
-              disabled={page <= 1}
-              onClick={onClickPrePageBtn}
-            >
-              <img src={I_ltArwWhite} alt="" />
-            </button>
+              <ul className="pageList">
+                {new Array(totalPage).fill("").map((v, i) => (
+                  <li
+                    key={i}
+                    className={`${i + 1 === page && "on"}`}
+                    onClick={() => setPage(i + 1)}
+                  >
+                    <strong>{i + 1}</strong>
+                    <span className="onBar" />
+                  </li>
+                ))}
+              </ul>
 
-            <ul className="pageList">
-              {new Array(totalPage).fill("").map((v, i) => (
-                <li
-                  key={i}
-                  className={`${i + 1 === page && "on"}`}
-                  onClick={() => setPage(i + 1)}
-                >
-                  <strong>{i + 1}</strong>
-                  <span className="onBar" />
-                </li>
-              ))}
-            </ul>
-
-            <button
-              className="arwBtn"
-              disabled={page >= totalPage}
-              onClick={onClickNextPageBtn}
-            >
-              <img src={I_rtArwWhite} alt="" />
-            </button>
-          </div>
-        </article>
-      </section>
-    </HistoryBox>
-  );
+              <button
+                className="arwBtn"
+                disabled={page >= totalPage}
+                onClick={onClickNextPageBtn}
+              >
+                <img src={I_rtArwWhite} alt="" />
+              </button>
+            </div>
+          </article>
+        </section>
+      </PhistoryBox>
+    );
 }
 
-const HistoryBox = styled.main`
+const MhistoryBox = styled.main`
+  .innerBox {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: scroll;
+
+    .categoryList {
+      display: flex;
+
+      li {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 11.66vw;
+        font-size: 4.44vw;
+        font-weight: 700;
+        border-bottom: 4px solid transparent;
+        opacity: 0.4;
+        cursor: pointer;
+
+        &.on {
+          border-color: #fff;
+          opacity: 1;
+        }
+      }
+    }
+
+    .contArea {
+      display: flex;
+      flex-direction: column;
+      gap: 2.22vw;
+
+      .filterBar {
+        padding: 5.55vw;
+
+        .filterBox {
+          display: flex;
+          flex-direction: column;
+          gap: 2.22vw;
+
+          .filterOpt {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 11.11vw;
+            padding: 0 6.66vw;
+            color: rgba(255, 255, 255, 0.4);
+            border: 1px solid #3b3e45;
+            border-radius: 5.55vw;
+
+            &:focus-within {
+              border-color: #fff;
+              color: #fff;
+            }
+
+            &.dateBox {
+              position: relative;
+
+              .dateBtn {
+                display: flex;
+                align-items: center;
+                gap: 3.33vw;
+
+                img {
+                  width: 4.44vw;
+                }
+              }
+
+              .react-datepicker-popper {
+                top: 11.11vw !important;
+                left: 50% !important;
+                transform: translate(-50%, 0) !important;
+              }
+            }
+          }
+
+          .applyBtn {
+            width: 100%;
+            height: 11.11vw;
+            font-size: 3.88vw;
+            font-weight: 700;
+            border: 1px solid #3b3e45;
+            border-radius: 5.55vw;
+
+            &:focus-within {
+              border-color: #fff;
+            }
+          }
+        }
+      }
+
+      .listBox {
+        padding: 0 5.55vw;
+
+        li {
+          display: flex;
+          flex-direction: column;
+          gap: 1.11vw;
+          padding: 6.66vw 0;
+
+          &:first-of-type {
+            padding: 0 0 6.66vw;
+          }
+
+          &:last-of-type {
+            padding: 6.66vw 0 0;
+          }
+
+          &:nth-of-type(n + 2) {
+            border-top: 1px solid rgba(255, 255, 255, 0.14);
+          }
+
+          div {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 3.88vw;
+
+            .key {
+              color: rgba(255, 255, 255, 0.6);
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const PhistoryBox = styled.main`
   flex: 1;
   padding: 70px 140px;
 

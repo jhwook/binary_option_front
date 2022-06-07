@@ -10,11 +10,11 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import ProfPopup from "./ProfPopup";
 import { useSelector } from "react-redux";
-import MyBalancePopup from "./MyBalancePopup";
-import AddPopup from "./AddPopup";
 import MenuPopup from "./MenuPopup";
+import MyBalancePopup from "./MyBalancePopup";
+import AuthPopup from "./AuthPopup";
 
-export default function DefaultHeader({ white, border }) {
+export default function DefaultHeader({ white, border, title }) {
   const navigate = useNavigate();
   const location = useLocation();
   const { i18n } = useTranslation();
@@ -24,10 +24,15 @@ export default function DefaultHeader({ white, border }) {
   const [lngPopup, setLngPopup] = useState(false);
   const [profPopup, setProfPopup] = useState(false);
   const [myBalancePopup, setMyBalancePopup] = useState(false);
-  const [addPopup, setAddPopup] = useState(false);
   const [menuPopup, setMenuPopup] = useState(false);
+  const [authPopup, setAuthPopup] = useState(false);
 
   const token = localStorage.getItem("token");
+
+  function onClickMenuBtn() {
+    if (white) setAuthPopup(true);
+    else setMenuPopup(true);
+  }
 
   if (isMobile)
     return (
@@ -36,7 +41,9 @@ export default function DefaultHeader({ white, border }) {
           className={`${white && "white"} ${border && "border"}`}
         >
           <article className="leftArea">
-            {token ? (
+            {title ? (
+              <p className="title">{title}</p>
+            ) : token ? (
               <span className="accountBtn">{`Demo $1000`}</span>
             ) : (
               <button className="logoBtn" onClick={() => navigate("/")}>
@@ -46,13 +53,15 @@ export default function DefaultHeader({ white, border }) {
           </article>
 
           <article className="rightArea">
-            <button className="menuBtn" onClick={() => setMenuPopup(true)}>
+            <button className="menuBtn" onClick={onClickMenuBtn}>
               <I_hamburger />
             </button>
           </article>
         </MdefaultHeaderBox>
 
         {menuPopup && <MenuPopup off={setMenuPopup} />}
+
+        {authPopup && <AuthPopup off={setAuthPopup} />}
       </>
     );
   else
@@ -66,26 +75,28 @@ export default function DefaultHeader({ white, border }) {
               <img src={L_yellow} alt="" />
             </button>
 
-            <ul className="navList">
-              {D_headerList.map((v, i) => (
-                <li
-                  key={i}
-                  className={`${
-                    location.pathname.indexOf(
-                      String(v.key).toLocaleLowerCase()
-                    ) !== -1 && "on"
-                  }`}
-                  onClick={() => navigate(v.url)}
-                >
-                  {v.key}
-                </li>
-              ))}
+            {!white && (
+              <ul className="navList">
+                {D_headerList.map((v, i) => (
+                  <li
+                    key={i}
+                    className={`${
+                      location.pathname.indexOf(
+                        String(v.key).toLocaleLowerCase()
+                      ) !== -1 && "on"
+                    }`}
+                    onClick={() => navigate(v.url)}
+                  >
+                    {v.key}
+                  </li>
+                ))}
 
-              <button className="moreBtn" onClick={() => {}}>
-                <p>More</p>
-                <img src={I_dnPolWhite} alt="" />
-              </button>
-            </ul>
+                <button className="moreBtn" onClick={() => {}}>
+                  <p>More</p>
+                  <img src={I_dnPolWhite} alt="" />
+                </button>
+              </ul>
+            )}
           </article>
 
           <article className="rightArea">
@@ -134,6 +145,13 @@ export default function DefaultHeader({ white, border }) {
             )}
           </article>
         </PdefaultHeaderBox>
+
+        {myBalancePopup && (
+          <>
+            <MyBalancePopup off={setMyBalancePopup} />
+            <PopupBg off={setMyBalancePopup} />
+          </>
+        )}
       </>
     );
 }
@@ -178,6 +196,10 @@ const MdefaultHeaderBox = styled.header`
   }
 
   .leftArea {
+    .title {
+      font-size: 4.44vw;
+    }
+
     .logoBtn {
       display: flex;
       align-items: center;

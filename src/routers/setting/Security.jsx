@@ -4,9 +4,12 @@ import { D_securityList, D_securityListHeader } from "../../data/D_setting";
 import moment from "moment";
 import I_ltArwWhite from "../../img/icon/I_ltArwWhite.svg";
 import I_rtArwWhite from "../../img/icon/I_rtArwWhite.svg";
+import { useSelector } from "react-redux";
+import DefaultHeader from "../../components/header/DefaultHeader";
 
 export default function Security() {
   const totalPage = 4;
+  const isMobile = useSelector((state) => state.common.isMobile);
 
   const [page, setPage] = useState(1);
 
@@ -18,92 +21,323 @@ export default function Security() {
     if (page < totalPage) setPage(page + 1);
   }
 
-  return (
-    <>
-      <SecurityBox>
-        <section className="innerBox">
-          <article className="titleArea">
-            <strong className="title">Notification settings</strong>
-          </article>
+  if (isMobile)
+    return (
+      <>
+        <DefaultHeader title="Security" />
 
-          <article className="contArea">
-            <div className="listBox">
-              <ul className="listHeader">
-                {D_securityListHeader.map((v, i) => (
-                  <li key={i}>{v}</li>
-                ))}
-              </ul>
-              <ul className="list">
-                {D_securityList.map((v, i) => (
-                  <li key={i}>
-                    <span>
-                      <p>{moment(v.date).format("YYYY-MM-DD HH:mm:ss")}</p>
-                    </span>
+        <MsecurityBox>
+          <section className="innerBox">
+            <article className="contArea">
+              <div className="listBox">
+                <ul className="list">
+                  {D_securityList.map((v, i) => (
+                    <li key={i}>
+                      <div>
+                        <p className="key">{D_securityListHeader[0]}</p>
 
-                    <span>
-                      <p>{v.ip}</p>
-                    </span>
+                        <span className="value">
+                          <p>{moment(v.date).format("YYYY-MM-DD HH:mm:ss")}</p>
+                        </span>
+                      </div>
 
-                    <span>
-                      <p>{v.dev_os}</p>
-                    </span>
+                      <div>
+                        <p className="key">{D_securityListHeader[1]}</p>
 
-                    <span>
-                      <p>{v.browser}</p>
-                    </span>
+                        <span className="value">
+                          <p>{v.ip}</p>
+                        </span>
+                      </div>
 
-                    <span>
-                      <p>{v.country}</p>
-                    </span>
+                      <div>
+                        <p className="key">{D_securityListHeader[2]}</p>
 
-                    <span>
-                      <p>{v.status}</p>
-                    </span>
+                        <span className="value">
+                          <p>{v.dev_os}</p>
+                        </span>
+                      </div>
 
-                    <span></span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+                      <div>
+                        <p className="key">{D_securityListHeader[3]}</p>
 
-            <div className="pageBox">
-              <button
-                className="arwBtn"
-                disabled={page <= 1}
-                onClick={onClickPrePageBtn}
-              >
-                <img src={I_ltArwWhite} alt="" />
-              </button>
+                        <span className="value">
+                          <p>{v.browser}</p>
+                        </span>
+                      </div>
 
-              <ul className="pageList">
-                {new Array(totalPage).fill("").map((v, i) => (
-                  <li
-                    key={i}
-                    className={`${i + 1 === page && "on"}`}
-                    onClick={() => setPage(i + 1)}
-                  >
-                    <strong>{i + 1}</strong>
-                    <span className="onBar" />
-                  </li>
-                ))}
-              </ul>
+                      <div>
+                        <p className="key">{D_securityListHeader[4]}</p>
 
-              <button
-                className="arwBtn"
-                disabled={page >= totalPage}
-                onClick={onClickNextPageBtn}
-              >
-                <img src={I_rtArwWhite} alt="" />
-              </button>
-            </div>
-          </article>
-        </section>
-      </SecurityBox>
-    </>
-  );
+                        <span className="value">
+                          <p>{v.country}</p>
+                        </span>
+                      </div>
+
+                      <div>
+                        <p className="key">{D_securityListHeader[5]}</p>
+
+                        <span className="value">
+                          <p>{v.status}</p>
+                        </span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="pageBox">
+                <button
+                  className="arwBtn"
+                  disabled={page <= 1}
+                  onClick={onClickPrePageBtn}
+                >
+                  <img src={I_ltArwWhite} alt="" />
+                </button>
+
+                <ul className="pageList">
+                  {new Array(totalPage).fill("").map((v, i) => (
+                    <li
+                      key={i}
+                      className={`${i + 1 === page && "on"}`}
+                      onClick={() => setPage(i + 1)}
+                    >
+                      <strong>{i + 1}</strong>
+                      <span className="onBar" />
+                    </li>
+                  ))}
+                </ul>
+
+                <button
+                  className="arwBtn"
+                  disabled={page >= totalPage}
+                  onClick={onClickNextPageBtn}
+                >
+                  <img src={I_rtArwWhite} alt="" />
+                </button>
+              </div>
+            </article>
+          </section>
+        </MsecurityBox>
+      </>
+    );
+  else
+    return (
+      <>
+        <PsecurityBox>
+          <section className="innerBox">
+            <article className="titleArea">
+              <strong className="title">Notification settings</strong>
+            </article>
+
+            <article className="contArea">
+              <div className="listBox">
+                <ul className="listHeader">
+                  {D_securityListHeader.map((v, i) => (
+                    <li key={i}>{v}</li>
+                  ))}
+                </ul>
+                <ul className="list">
+                  {D_securityList.map((v, i) => (
+                    <li key={i}>
+                      <span>
+                        <p>{moment(v.date).format("YYYY-MM-DD HH:mm:ss")}</p>
+                      </span>
+
+                      <span>
+                        <p>{v.ip}</p>
+                      </span>
+
+                      <span>
+                        <p>{v.dev_os}</p>
+                      </span>
+
+                      <span>
+                        <p>{v.browser}</p>
+                      </span>
+
+                      <span>
+                        <p>{v.country}</p>
+                      </span>
+
+                      <span>
+                        <p>{v.status}</p>
+                      </span>
+
+                      <span></span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="pageBox">
+                <button
+                  className="arwBtn"
+                  disabled={page <= 1}
+                  onClick={onClickPrePageBtn}
+                >
+                  <img src={I_ltArwWhite} alt="" />
+                </button>
+
+                <ul className="pageList">
+                  {new Array(totalPage).fill("").map((v, i) => (
+                    <li
+                      key={i}
+                      className={`${i + 1 === page && "on"}`}
+                      onClick={() => setPage(i + 1)}
+                    >
+                      <strong>{i + 1}</strong>
+                      <span className="onBar" />
+                    </li>
+                  ))}
+                </ul>
+
+                <button
+                  className="arwBtn"
+                  disabled={page >= totalPage}
+                  onClick={onClickNextPageBtn}
+                >
+                  <img src={I_rtArwWhite} alt="" />
+                </button>
+              </div>
+            </article>
+          </section>
+        </PsecurityBox>
+      </>
+    );
 }
 
-const SecurityBox = styled.main`
+const MsecurityBox = styled.main`
+  .innerBox {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    height: 100%;
+    overflow-y: scroll;
+
+    .contArea {
+      .listBox {
+        padding: 0 5.55vw;
+        overflow-x: scroll;
+
+        .list {
+          display: flex;
+          flex-direction: column;
+
+          li {
+            display: flex;
+            flex-direction: column;
+            gap: 1.11vw;
+            padding: 6.66vw 0;
+
+            &:first-of-type {
+              padding: 0 0 6.66vw;
+            }
+
+            &:last-of-type {
+              padding: 6.66vw 0 0;
+            }
+
+            &:nth-of-type(n + 2) {
+              border-top: 1px solid rgba(255, 255, 255, 0.14);
+            }
+
+            div {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              font-size: 3.88vw;
+
+              &.order {
+                .value {
+                  gap: 1.66vw;
+                }
+              }
+
+              .key {
+                flex: 1;
+                color: rgba(255, 255, 255, 0.6);
+              }
+
+              .value {
+                flex: 1;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                overflow: hidden;
+
+                p {
+                  overflow: hidden;
+                  white-space: nowrap;
+                  text-overflow: ellipsis;
+                }
+
+                img {
+                  width: 3.33vw;
+                }
+
+                .price {
+                  color: #3fb68b;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .pageBox {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin: 30px 0 0 0;
+
+        .arwBtn {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 40px;
+          height: 40px;
+          border: 2px solid #fff;
+          border-radius: 50%;
+
+          &:disabled {
+            opacity: 0.4;
+          }
+        }
+
+        .pageList {
+          display: flex;
+          align-items: center;
+
+          li {
+            display: flex;
+            justify-content: center;
+            padding: 0 5px;
+            font-size: 18px;
+            position: relative;
+            cursor: pointer;
+
+            &.on {
+              .onBar {
+                background: #f7ab1f;
+              }
+            }
+
+            .onBar {
+              width: 100%;
+              height: 6px;
+              border-radius: 4px;
+              bottom: -6px;
+              position: absolute;
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const PsecurityBox = styled.main`
   flex: 1;
   padding: 70px 140px;
 

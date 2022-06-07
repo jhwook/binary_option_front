@@ -148,10 +148,10 @@ export default function Bet() {
   function onClickPayBtn(type) {
     switch (type) {
       case "high":
-        setToast("placed");
+        setToast({ type: "placed" });
 
         toast.onChange((payload) => {
-          if (payload.status === "removed") setToast("closed");
+          if (payload.status === "removed") setToast({ type: "closed" });
         });
         break;
 

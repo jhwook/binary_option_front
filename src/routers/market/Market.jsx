@@ -6,24 +6,47 @@ import Deposit from "./Deposit";
 import { D_marketLeftBarList } from "../../data/D_market";
 import WithDrawal from "./WithDrawal";
 import History from "./History";
+import { useSelector } from "react-redux";
 
 export default function Market() {
-  return (
-    <MarketBox>
-      <DefaultHeader border />
+  const isMobile = useSelector((state) => state.common.isMobile);
 
-      <LeftNav list={D_marketLeftBarList} baseUrl={"market"} />
+  if (isMobile)
+    return (
+      <MmarketBox>
+        <Routes>
+          <Route path="/deposit" element={<Deposit />} />
+          <Route path="/withdrawal" element={<WithDrawal />} />
+          <Route path="/history" element={<History />} />
+        </Routes>
+      </MmarketBox>
+    );
+  else
+    return (
+      <PmarketBox>
+        <DefaultHeader border />
 
-      <Routes>
-        <Route path="/deposit" element={<Deposit />} />
-        <Route path="/withdrawal" element={<WithDrawal />} />
-        <Route path="/history" element={<History />} />
-      </Routes>
-    </MarketBox>
-  );
+        <LeftNav list={D_marketLeftBarList} baseUrl={"market"} />
+
+        <Routes>
+          <Route path="/deposit" element={<Deposit />} />
+          <Route path="/withdrawal" element={<WithDrawal />} />
+          <Route path="/history" element={<History />} />
+        </Routes>
+      </PmarketBox>
+    );
 }
 
-const MarketBox = styled.main`
+const MmarketBox = styled.main`
+  width: 100vw;
+  height: 100vh;
+  padding: 15.55vw 0 0 0;
+  color: #fff;
+  background: #0a0e17;
+  overflow: hidden;
+`;
+
+const PmarketBox = styled.main`
   display: flex;
   width: 100vw;
   height: 100vh;

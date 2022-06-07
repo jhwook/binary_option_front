@@ -149,6 +149,8 @@ const GlobalStyle = createGlobalStyle`
   #CustomToast {
     padding: 0 22px;
   }
+
+  
 `;
 
 export default GlobalStyle;

@@ -4,22 +4,43 @@ import DefaultHeader from "../../components/header/DefaultHeader";
 import LeftNav from "../../components/common/LeftNav";
 import { D_financeNavList } from "../../data/D_setting";
 import Data from "./Data";
+import { useSelector } from "react-redux";
 
 export default function Finance() {
-  return (
-    <FinanceBox>
-      <DefaultHeader border/>
+  const isMobile = useSelector((state) => state.common.isMobile);
 
-      <LeftNav list={D_financeNavList} baseUrl={"finance"} />
+  if (isMobile)
+    return (
+      <MfinanceBox>
+        <Routes>
+          <Route path="/data" element={<Data />} />
+        </Routes>
+      </MfinanceBox>
+    );
+  else
+    return (
+      <PfinanceBox>
+        <DefaultHeader border />
 
-      <Routes>
-        <Route path="/data" element={<Data />} />
-      </Routes>
-    </FinanceBox>
-  );
+        <LeftNav list={D_financeNavList} baseUrl={"finance"} />
+
+        <Routes>
+          <Route path="/data" element={<Data />} />
+        </Routes>
+      </PfinanceBox>
+    );
 }
 
-const FinanceBox = styled.main`
+const MfinanceBox = styled.main`
+  width: 100vw;
+  height: 100vh;
+  padding: 15.55vw 0 0 0;
+  color: #fff;
+  background: #0a0e17;
+  overflow: hidden;
+`;
+
+const PfinanceBox = styled.main`
   display: flex;
   width: 100vw;
   height: 100vh;

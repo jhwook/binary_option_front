@@ -4,8 +4,13 @@ import PopupBg from "../../components/common/PopupBg";
 import VerificationPopup from "../../components/setting/myProfile/VerificationPopup";
 import axios from "axios";
 import { API } from "../../configs/api";
+import { useSelector } from "react-redux";
+import DefaultHeader from "../../components/header/DefaultHeader";
+import { setToast } from "../../util/Util";
 
 export default function MyProfile() {
+  const isMobile = useSelector((state) => state.common.isMobile);
+
   const [profData, setProfData] = useState("");
   const [uid, setUid] = useState("");
   const [email, setEmail] = useState("");
@@ -54,15 +59,17 @@ export default function MyProfile() {
   }
 
   function onclickSaveBtn() {
-    axios.patch(
-      `${API.USER_PROFILE}`,
-      { email, password: pw, firstName, lastName, phone },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    );
+    // axios.patch(
+    //   `${API.USER_PROFILE}`,
+    //   { email, password: pw, firstName, lastName, phone },
+    //   {
+    //     headers: {
+    //       Authorization: `Bearer ${localStorage.getItem("token")}`,
+    //     },
+    //   }
+    // );
+
+    setToast({ type: "alarm", cont: "Your changes have been saved." });
   }
 
   useEffect(() => {
@@ -86,169 +93,429 @@ export default function MyProfile() {
     if (phone[0] === "0") setPhone(phone.slice(1));
   }
 
-  return (
-    <>
-      <MyProfileBox>
-        <section className="innerBox">
-          <article className="titleArea">
-            <strong className="title">My Profile</strong>
-            <p className="explain">
-              Please for your security, please fill out the following form
-            </p>
-          </article>
+  if (isMobile)
+    return (
+      <>
+        <DefaultHeader title="History" />
 
-          <article className="contArea">
-            <ul className="inputList">
-              <li>
-                <p className="key">UID</p>
-                <div className="value">
-                  <input disabled value={uid} />
-                </div>
-              </li>
-
-              <li>
-                <p className="key">Password*</p>
-                <div className={`${pwAlarm && "alarmBox"} value`}>
-                  <input
-                    type="password"
-                    value={pw}
-                    onChange={(e) => setPw(e.target.value)}
-                    placeholder=""
-                  />
-
-                  <button
-                    className="changeBtn"
-                    onClick={() => setChangePw(true)}
-                  >
-                    Change
-                  </button>
-                </div>
-              </li>
-              {changePw && (
+        <MmyProfileBox>
+          <section className="innerBox">
+            <article className="contArea">
+              <ul className="inputList">
                 <li>
-                  <p className="key">Confirm Password*</p>
+                  <p className="key">UID</p>
+                  <div className="value">
+                    <input disabled value={uid} />
+                  </div>
+                </li>
+
+                <li>
+                  <p className="key">Password*</p>
                   <div className={`${pwAlarm && "alarmBox"} value`}>
                     <input
                       type="password"
-                      value={pwChk}
-                      onChange={(e) => setPwChk(e.target.value)}
+                      value={pw}
+                      onChange={(e) => setPw(e.target.value)}
+                      placeholder=""
+                    />
+
+                    <button
+                      className="changeBtn"
+                      onClick={() => setChangePw(true)}
+                    >
+                      Change
+                    </button>
+                  </div>
+                </li>
+                {changePw && (
+                  <li>
+                    <p className="key">Confirm Password*</p>
+                    <div className={`${pwAlarm && "alarmBox"} value`}>
+                      <input
+                        type="password"
+                        value={pwChk}
+                        onChange={(e) => setPwChk(e.target.value)}
+                        placeholder=""
+                      />
+                    </div>
+
+                    {pwAlarm && <p className="alarm">{pwAlarm}</p>}
+                  </li>
+                )}
+
+                <li>
+                  <p className="key">First name*</p>
+                  <div className="value">
+                    <input
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
                       placeholder=""
                     />
                   </div>
-
-                  {pwAlarm && <p className="alarm">{pwAlarm}</p>}
                 </li>
-              )}
 
-              <li>
-                <p className="key">First name*</p>
-                <div className="value">
-                  <input
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    placeholder=""
-                  />
-                </div>
-              </li>
+                <li>
+                  <p className="key">Last name*</p>
+                  <div className="value">
+                    <input
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      placeholder=""
+                    />
+                  </div>
+                </li>
 
-              <li>
-                <p className="key">Last name*</p>
-                <div className="value">
-                  <input
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    placeholder=""
-                  />
-                </div>
-              </li>
+                <li>
+                  <p className="key">Email*</p>
+                  <div className="value">
+                    <input
+                      type="email"
+                      disabled={profData.email}
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder=""
+                    />
 
-              <li>
-                <p className="key">Email*</p>
-                <div className="value">
-                  <input
-                    type="email"
-                    disabled={profData.email}
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder=""
-                  />
+                    {profData.email_certification ? (
+                      <p className="verified">Verified</p>
+                    ) : (
+                      <button
+                        className={`${!emailSend && "init"} sendBtn`}
+                        onClick={onClickVeriEmailBtn}
+                      >
+                        {emailSend ? "Resend" : "Unverified"}
+                      </button>
+                    )}
+                  </div>
+                </li>
 
-                  {profData.email_certification ? (
-                    <p className="verified">Verified</p>
-                  ) : (
-                    <button
-                      className={`${!emailSend && "init"} sendBtn`}
-                      onClick={onClickVeriEmailBtn}
-                    >
-                      {emailSend ? "Resend" : "Unverified"}
-                    </button>
-                  )}
-                </div>
-              </li>
+                <li>
+                  <p className="key">Phone</p>
+                  <div className="value">
+                    <input
+                      type="number"
+                      value={phone}
+                      disabled={profData.phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder=""
+                      onBlur={onBlurPhone}
+                    />
 
-              <li>
-                <p className="key">Phone</p>
-                <div className="value">
-                  <input
-                    type="number"
-                    value={phone}
-                    disabled={profData.phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder=""
-                    onBlur={onBlurPhone}
-                  />
+                    {profData.phone_certification ? (
+                      <p className="verified">Verified</p>
+                    ) : (
+                      <button
+                        className={`${!emailSend && "init"} sendBtn`}
+                        onClick={onClickVeriPhoneBtn}
+                      >
+                        {emailSend ? "Resend" : "Unverified"}
+                      </button>
+                    )}
+                  </div>
+                </li>
+              </ul>
 
-                  {profData.phone_certification ? (
-                    <p className="verified">Verified</p>
-                  ) : (
-                    <button
-                      className={`${!emailSend && "init"} sendBtn`}
-                      onClick={onClickVeriPhoneBtn}
-                    >
-                      {emailSend ? "Resend" : "Unverified"}
-                    </button>
-                  )}
-                </div>
-              </li>
-            </ul>
+              <button
+                className="saveBtn"
+                disabled={!(firstName && lastName) || (changePw && !pwChk)}
+                onClick={onclickSaveBtn}
+              >
+                Save
+              </button>
+            </article>
+          </section>
+        </MmyProfileBox>
 
-            <button
-              className="saveBtn"
-              disabled={!(firstName && lastName) || (changePw && !pwChk)}
-              onClick={onclickSaveBtn}
-            >
-              Save
-            </button>
-          </article>
-        </section>
-      </MyProfileBox>
-
-      {verificationPopup === "email" && (
-        <>
-          <VerificationPopup
-            title="Email verification"
-            explain="Please complete your email address validation in order to secure
+        {verificationPopup === "email" && (
+          <>
+            <VerificationPopup
+              title="Email verification"
+              explain="Please complete your email address validation in order to secure
             your account and funds on it."
-            off={setVerificationPopup}
-          />
-          <PopupBg off={setVerificationPopup} />
-        </>
-      )}
+              off={setVerificationPopup}
+            />
+            <PopupBg off={setVerificationPopup} />
+          </>
+        )}
 
-      {verificationPopup === "phone" && (
-        <>
-          <VerificationPopup
-            title="Phone Number verification"
-            off={setVerificationPopup}
-          />
-          <PopupBg off={setVerificationPopup} />
-        </>
-      )}
-    </>
-  );
+        {verificationPopup === "phone" && (
+          <>
+            <VerificationPopup
+              title="Phone Number verification"
+              off={setVerificationPopup}
+            />
+            <PopupBg off={setVerificationPopup} />
+          </>
+        )}
+      </>
+    );
+  else
+    return (
+      <>
+        <PmyProfileBox>
+          <section className="innerBox">
+            <article className="titleArea">
+              <strong className="title">My Profile</strong>
+              <p className="explain">
+                Please for your security, please fill out the following form
+              </p>
+            </article>
+
+            <article className="contArea">
+              <ul className="inputList">
+                <li>
+                  <p className="key">UID</p>
+                  <div className="value">
+                    <input disabled value={uid} />
+                  </div>
+                </li>
+
+                <li>
+                  <p className="key">Password*</p>
+                  <div className={`${pwAlarm && "alarmBox"} value`}>
+                    <input
+                      type="password"
+                      value={pw}
+                      onChange={(e) => setPw(e.target.value)}
+                      placeholder=""
+                    />
+
+                    <button
+                      className="changeBtn"
+                      onClick={() => setChangePw(true)}
+                    >
+                      Change
+                    </button>
+                  </div>
+                </li>
+                {changePw && (
+                  <li>
+                    <p className="key">Confirm Password*</p>
+                    <div className={`${pwAlarm && "alarmBox"} value`}>
+                      <input
+                        type="password"
+                        value={pwChk}
+                        onChange={(e) => setPwChk(e.target.value)}
+                        placeholder=""
+                      />
+                    </div>
+
+                    {pwAlarm && <p className="alarm">{pwAlarm}</p>}
+                  </li>
+                )}
+
+                <li>
+                  <p className="key">First name*</p>
+                  <div className="value">
+                    <input
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      placeholder=""
+                    />
+                  </div>
+                </li>
+
+                <li>
+                  <p className="key">Last name*</p>
+                  <div className="value">
+                    <input
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      placeholder=""
+                    />
+                  </div>
+                </li>
+
+                <li>
+                  <p className="key">Email*</p>
+                  <div className="value">
+                    <input
+                      type="email"
+                      disabled={profData.email}
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder=""
+                    />
+
+                    {profData.email_certification ? (
+                      <p className="verified">Verified</p>
+                    ) : (
+                      <button
+                        className={`${!emailSend && "init"} sendBtn`}
+                        onClick={onClickVeriEmailBtn}
+                      >
+                        {emailSend ? "Resend" : "Unverified"}
+                      </button>
+                    )}
+                  </div>
+                </li>
+
+                <li>
+                  <p className="key">Phone</p>
+                  <div className="value">
+                    <input
+                      type="number"
+                      value={phone}
+                      disabled={profData.phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder=""
+                      onBlur={onBlurPhone}
+                    />
+
+                    {profData.phone_certification ? (
+                      <p className="verified">Verified</p>
+                    ) : (
+                      <button
+                        className={`${!emailSend && "init"} sendBtn`}
+                        onClick={onClickVeriPhoneBtn}
+                      >
+                        {emailSend ? "Resend" : "Unverified"}
+                      </button>
+                    )}
+                  </div>
+                </li>
+              </ul>
+
+              <button
+                className="saveBtn"
+                disabled={!(firstName && lastName) || (changePw && !pwChk)}
+                onClick={onclickSaveBtn}
+              >
+                Save
+              </button>
+            </article>
+          </section>
+        </PmyProfileBox>
+
+        {verificationPopup === "email" && (
+          <>
+            <VerificationPopup
+              title="Email verification"
+              explain="Please complete your email address validation in order to secure
+            your account and funds on it."
+              off={setVerificationPopup}
+            />
+            <PopupBg off={setVerificationPopup} />
+          </>
+        )}
+
+        {verificationPopup === "phone" && (
+          <>
+            <VerificationPopup
+              title="Phone Number verification"
+              off={setVerificationPopup}
+            />
+            <PopupBg off={setVerificationPopup} />
+          </>
+        )}
+      </>
+    );
 }
 
-const MyProfileBox = styled.main`
+const MmyProfileBox = styled.main`
+  height: 100%;
+  overflow: hidden;
+
+  .innerBox {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 5.55vw;
+    overflow-y: scroll;
+
+    .contArea {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16.66vw;
+      padding: 6.66vw 5.55vw;
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 5.55vw;
+
+      .inputList {
+        display: flex;
+        flex-direction: column;
+        gap: 5.55vw;
+        font-size: 16px;
+
+        li {
+          display: flex;
+          flex-direction: column;
+          gap: 2.22vw;
+
+          .key {
+          }
+
+          .value {
+            display: flex;
+            align-items: center;
+            height: 12.22vw;
+            padding: 0 5vw;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid transparent;
+            border-radius: 2.77vw;
+
+            &:focus-within {
+              border-color: #fff;
+
+              button {
+                color: #fff;
+              }
+            }
+
+            &.alarmBox {
+              border-color: #ff5353;
+            }
+
+            input {
+              flex: 1;
+              height: 100%;
+            }
+
+            .verified {
+              color: #f7ab1f;
+            }
+
+            .sendBtn {
+              color: rgba(255, 255, 255, 0.4);
+
+              &.init {
+                color: #ff5353;
+              }
+            }
+          }
+
+          .alarm {
+            margin: 2.77vw 0 0 0;
+            font-size: 3.88vw;
+            color: #ff5353;
+          }
+        }
+      }
+
+      .saveBtn {
+        width: 100%;
+        height: 13.88vw;
+        font-size: 5vw;
+        font-weight: 700;
+        color: #f7ab1f;
+        background: rgba(247, 171, 31, 0.1);
+        border: 1px solid #f7ab1f;
+        border-radius: 3.33vw;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
+
+        &:disabled {
+          color: #fff;
+          background: rgba(255, 255, 255, 0.1);
+          border-color: #fff;
+        }
+      }
+    }
+  }
+`;
+
+const PmyProfileBox = styled.main`
   flex: 1;
   padding: 70px 140px;
 
