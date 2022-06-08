@@ -86,9 +86,7 @@ export default function Email({ userData, setUserData }) {
                 />
               </div>
 
-              {userData.pwAlarm && (
-                <p className="alarm">{userData.pwAlarm}</p>
-              )}
+              {userData.pwAlarm && <p className="alarm">{userData.pwAlarm}</p>}
             </div>
           </li>
         </MemailBox>
@@ -133,7 +131,7 @@ export default function Email({ userData, setUserData }) {
           <li>
             <p className="key">Password</p>
             <div className="value">
-              <div className="inputBox">
+              <div className={`${userData.pwAlarm && "alarm"} inputBox`}>
                 <input
                   type="password"
                   value={userData.pw}
@@ -143,6 +141,8 @@ export default function Email({ userData, setUserData }) {
                   placeholder=""
                 />
               </div>
+
+              {userData.pwAlarm && <p className="alarm">{userData.pwAlarm}</p>}
             </div>
           </li>
         </PemailBox>
