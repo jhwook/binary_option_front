@@ -230,6 +230,9 @@ const PdefaultHeaderBox = styled.header`
   height: 60px;
   padding: 0 30px;
   color: #fff;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   top: 0;
   right: 0;
   left: 0;
@@ -284,7 +287,6 @@ const PdefaultHeaderBox = styled.header`
         display: flex;
         align-items: center;
         height: 30px;
-        padding: 0 12px;
         border-radius: 6px;
         cursor: pointer;
 

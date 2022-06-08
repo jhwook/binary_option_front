@@ -21,7 +21,7 @@ import I_candleChartWhite from "../../img/icon/I_candleChartWhite.svg";
 import I_3dotWhite from "../../img/icon/I_3dotWhite.svg";
 import I_barChartWhite from "../../img/icon/I_barChartWhite.svg";
 import { createChart } from "lightweight-charts";
-import { useEffect,useLayoutEffect, useState, useMemo } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { chartOpt } from "../../configs/setting";
 import LiveTradePopup from "../../components/bet/LiveTradePopup";
 import PopupBg from "../../components/common/PopupBg";
@@ -36,16 +36,13 @@ import DetBox from "../../components/bet/detBox/DetBox";
 import InsufficientPopup from "../../components/bet/InsufficientPopup";
 import MyBalancePopup from "../../components/header/MyBalancePopup";
 import AddPopup from "../../components/header/AddPopup";
-import { resetChart, setChart, addTicker, resetTicker } from "../../reducers/candleChart";
-import io from 'socket.io-client'
-import WebSocket from "ws";
-import axios from "axios";
+import { setChart, addTicker } from "../../reducers/candleChart";
 
 export default function Bet() {
   let a = 1;
   const dispatch = useDispatch();
-  const chart = useSelector((state)=>state.candleChart.candle)
-  const ticker = useSelector((state)=>state.candleChart.ticker)
+  const chart = useSelector((state) => state.candleChart.candle);
+  const ticker = useSelector((state) => state.candleChart.ticker);
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [candleChart, setCandleChart] = useState("");
@@ -65,24 +62,29 @@ export default function Bet() {
   const [lastIndex, setLastIndex] = useState();
   const [targetPrice, setTargetPrice] = useState();
   const [targetIndex, setTargetIndex] = useState();
-  const [currentBusinessDay, setCurrentBusinessDay] = useState({ day: 29, month: 5, year: 2019 });
+  const [currentBusinessDay, setCurrentBusinessDay] = useState({
+    day: 29,
+    month: 5,
+    year: 2019,
+  });
   const [currentIndex, setCurrentIndex] = useState();
-  const [ticks, setTicks] = useState(0)
-  const [currentBar, setCurrentBar]= useState({
+  const [ticks, setTicks] = useState(0);
+  const [currentBar, setCurrentBar] = useState({
     open: null,
     high: null,
     low: null,
     close: null,
     time: currentBusinessDay,
-  })
-
-
+  });
 
   function markUpChart() {
     const chartBox = document.getElementById("ChartBox");
-    console.log(chartBox)
-    if (!chartBox) {console.log('nochartbox');return;}
-    console.log('yeschart')
+    console.log(chartBox);
+    if (!chartBox) {
+      console.log("nochartbox");
+      return;
+    }
+    console.log("yeschart");
 
     var chart = createChart(chartBox, {
       rightPriceScale: {
@@ -194,7 +196,7 @@ export default function Bet() {
     setLiveTradePopup(true);
 
     document.addEventListener("keydown", handleKeyDown);
-console.log('hi')
+    console.log("hi");
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
@@ -216,21 +218,25 @@ console.log('hi')
   }
 
   useEffect(() => {
-    if(!candleChart){return;}
+    if (!candleChart) {
+      return;
+    }
     const chartInterval = setInterval(() => {
-      let price = getRandomPrice()//response.data.quotes[0].mid;
-        dispatch(setChart(price))
-        dispatch(addTicker())
+      let price = getRandomPrice(); //response.data.quotes[0].mid;
+      dispatch(setChart(price));
+      dispatch(addTicker());
     }, 500);
 
     return () => clearInterval(chartInterval);
   }, [candleChart]);
 
-  useEffect(()=>{
-    if(!candleChart){return;}
-    console.log(chart)
-    candleChart.update(chart)
-  },[chart])
+  useEffect(() => {
+    if (!candleChart) {
+      return;
+    }
+    console.log(chart);
+    candleChart.update(chart);
+  }, [chart]);
 
   if (isMobile)
     return (
@@ -240,8 +246,7 @@ console.log('hi')
         <MbetBox onKeyDown={handleKeyDown}>
           <section className="innerBox">
             <article className="contArea">
-              <div className="chartBox">
-                {/* <div className="chartBox" id="ChartBox"> */}
+              <div className="chartBox" id="ChartBox">
                 <span className="utilBox">
                   <ul className="btnList">
                     <li>
@@ -419,9 +424,7 @@ console.log('hi')
 
             <article className="contArea">
               <div className="chartBox" id="ChartBox">
-                {/* <div className="chartBox" id="ChartBox"> */}
-                <span className="utilBox" style={{zIndex:'2'}}>
-                  asdf
+                <span className="utilBox" style={{ zIndex: "2" }}>
                   <ul className="btnList">
                     <li>
                       <button
@@ -445,7 +448,6 @@ console.log('hi')
                       </button>
                     </li>
                   </ul>
-
                   <span className="typeBox">{`Chart type : Candle`}</span>
                 </span>
 
@@ -601,17 +603,17 @@ console.log('hi')
                 <img src={I_plusWhite} alt="" />
               </button>
             </article>
-
-            <footer>
-              <button className="qnaBtn" onClick={() => {}}>
-                <img src={I_qnaWhite} alt="" />
-              </button>
-
-              <button className="langBtn" onClick={() => {}}>
-                <img src={I_langWhite} alt="" />
-              </button>
-            </footer>
           </section>
+
+          <footer>
+            <button className="qnaBtn" onClick={() => {}}>
+              <img src={I_qnaWhite} alt="" />
+            </button>
+
+            <button className="langBtn" onClick={() => {}}>
+              <img src={I_langWhite} alt="" />
+            </button>
+          </footer>
         </PbetBox>
 
         {liveTradePopup && (
@@ -835,15 +837,15 @@ const MbetBox = styled.main`
 
 const PbetBox = styled.main`
   height: 100vh;
-  padding: 60px 0 0 0;
+  padding: 60px 30px 0;
   color: #fff;
   background: #0a0e17;
+  overflow-y: scroll;
 
   .innerBox {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    padding: 0 30px;
+    height: 100vh;
 
     .tokenArea {
       display: flex;
@@ -1081,6 +1083,7 @@ const PbetBox = styled.main`
         display: flex;
         flex-direction: column;
         gap: 14px;
+        min-width: 180px;
         width: 180px;
         padding: 20px;
         margin: 0 0 0 10px;
@@ -1196,6 +1199,8 @@ const PbetBox = styled.main`
       & > .plusBtn {
         display: flex;
         align-items: flex-start;
+        min-width: 40px;
+        width: 40px;
         padding: 10px;
         opacity: 0.6;
 
@@ -1211,18 +1216,18 @@ const PbetBox = styled.main`
         }
       }
     }
+  }
 
-    footer {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 14px;
-      height: 70px;
+  footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 14px;
+    height: 70px;
 
-      button {
-        img {
-          height: 22px;
-        }
+    button {
+      img {
+        height: 22px;
       }
     }
   }

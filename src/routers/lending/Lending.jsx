@@ -340,11 +340,11 @@ const MlendingBox = styled.main`
 
       .window {
         width: 59.44vw;
-        
+
         .imgBox {
           display: flex;
           justify-content: center;
-          
+
           img {
           }
         }
@@ -599,7 +599,7 @@ const PlendingBox = styled.main`
     gap: 40px;
     height: 1080px;
     padding: 0 0 210px 0;
-    background: url(${B_lending1});
+    background: center no-repeat url(${B_lending1});
     position: relative;
 
     .banner {
@@ -894,7 +894,7 @@ const PlendingBox = styled.main`
     align-items: center;
     gap: 42px;
     padding: 306px 0 240px 0;
-    background: center / contain no-repeat url(${B_lending3});
+    background: center no-repeat url(${B_lending3});
 
     .titleBox {
       display: flex;
