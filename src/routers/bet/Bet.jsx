@@ -1,11 +1,6 @@
 import styled from "styled-components";
 import DefaultHeader from "../../components/header/DefaultHeader";
-import {
-  D_candleChartList,
-  D_screenList,
-  D_tokenList,
-  D_volumeChartList,
-} from "../../data/D_bet";
+import { D_tokenList } from "../../data/D_bet";
 import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
 import I_starYellowO from "../../img/icon/I_starYellowO.svg";
 import I_qnaWhite from "../../img/icon/I_qnaWhite.svg";
@@ -16,17 +11,10 @@ import I_highArwGreen from "../../img/icon/I_highArwGreen.svg";
 import I_lowArwRed from "../../img/icon/I_lowArwRed.svg";
 import I_plusWhite from "../../img/icon/I_plusWhite.svg";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
-import I_upPolWhite from "../../img/icon/I_upPolWhite.svg";
-import I_candleChartWhite from "../../img/icon/I_candleChartWhite.svg";
-import I_3dotWhite from "../../img/icon/I_3dotWhite.svg";
 import I_barChartWhite from "../../img/icon/I_barChartWhite.svg";
-import { createChart } from "lightweight-charts";
-import { useEffect, useLayoutEffect, useState } from "react";
-import { chartOpt } from "../../configs/setting";
+import { useLayoutEffect, useState } from "react";
 import LiveTradePopup from "../../components/bet/LiveTradePopup";
 import PopupBg from "../../components/common/PopupBg";
-import SelectPopup from "../../components/common/SelectPopup";
-import ChartPopup from "../../components/bet/ChartPopup";
 import TokenPopup from "../../components/bet/TokenPopup";
 import { useDispatch, useSelector } from "react-redux";
 import TimePopup from "../../components/bet/TimePopup";
@@ -36,134 +24,22 @@ import DetBox from "../../components/bet/detBox/DetBox";
 import InsufficientPopup from "../../components/bet/InsufficientPopup";
 import MyBalancePopup from "../../components/header/MyBalancePopup";
 import AddPopup from "../../components/header/AddPopup";
-import { setChart, addTicker } from "../../reducers/candleChart";
+import ReactTradingviewWidget, { Themes } from "react-tradingview-widget";
 
 export default function Bet() {
-  let a = 1;
   const dispatch = useDispatch();
-  const chart = useSelector((state) => state.candleChart.candle);
-  const ticker = useSelector((state) => state.candleChart.ticker);
   const isMobile = useSelector((state) => state.common.isMobile);
 
-  const [candleChart, setCandleChart] = useState("");
-  const [volumeChart, setVolumeChart] = useState("");
   const [liveTradePopup, setLiveTradePopup] = useState(false);
   const [chartPopup, setChartPopup] = useState(false);
   const [hotKeyPopup, setHotKeyPopup] = useState(true);
-  const [screen, setScreen] = useState(D_screenList[0]);
-  const [screenPopup, setScreenPopup] = useState(false);
   const [tokenPopup, setTokenPopup] = useState(false);
   const [timePopup, setTimePopup] = useState(false);
   const [detMode, setDetMode] = useState(false);
   const [insufficientPopup, setInsufficientPopup] = useState(false);
   const [myBalancePopup, setMyBalancePopup] = useState(false);
   const [addPopup, setAddPopup] = useState(false);
-  const [lastClose, setLastClose] = useState();
-  const [lastIndex, setLastIndex] = useState();
-  const [targetPrice, setTargetPrice] = useState();
-  const [targetIndex, setTargetIndex] = useState();
-  const [currentBusinessDay, setCurrentBusinessDay] = useState({
-    day: 29,
-    month: 5,
-    year: 2019,
-  });
-  const [currentIndex, setCurrentIndex] = useState();
-  const [ticks, setTicks] = useState(0);
-  const [currentBar, setCurrentBar] = useState({
-    open: null,
-    high: null,
-    low: null,
-    close: null,
-    time: currentBusinessDay,
-  });
-
-  function markUpChart() {
-    const chartBox = document.getElementById("ChartBox");
-    console.log(chartBox);
-    if (!chartBox) {
-      console.log("nochartbox");
-      return;
-    }
-    console.log("yeschart");
-
-    var chart = createChart(chartBox, {
-      rightPriceScale: {
-        scaleMargins: {
-          top: 0.3,
-          bottom: 0.25,
-        },
-        borderVisible: false,
-      },
-      layout: {
-        backgroundColor: "#181c25",
-        textColor: "#d1d4dc",
-      },
-      grid: {
-        vertLines: {
-          color: "rgba(42, 46, 57, 0)",
-        },
-        horzLines: {
-          color: "rgba(42, 46, 57, 0.6)",
-        },
-      },
-    });
-
-    let candleChart = chart.addCandlestickSeries({
-      upColor: chartOpt.color.upColor,
-      downColor: chartOpt.color.dnColor,
-      borderUpColor: chartOpt.color.upColor,
-      borderDownColor: chartOpt.color.dnColor,
-      wickUpColor: chartOpt.color.upColor,
-      wickDownColor: chartOpt.color.dnColor,
-    });
-
-    setCandleChart(candleChart);
-
-    var volumeChart = chart.addHistogramSeries({
-      priceFormat: {
-        type: "volume",
-      },
-      priceScaleId: "",
-      scaleMargins: {
-        top: 0.8,
-        bottom: 0,
-      },
-    });
-
-    setVolumeChart(volumeChart);
-
-    candleChart.setData(D_candleChartList);
-
-    volumeChart.setData(D_volumeChartList);
-  }
-
-  function getChartLive(candleChart) {
-    const d = new Date();
-
-    candleChart.update({
-      open: 59.21,
-      high: 59.66,
-      low: a,
-      close: a,
-      time: {
-        year: d.getUTCFullYear(),
-        month: d.getUTCMonth() + 1,
-        day: d.getUTCDate() + a,
-      },
-    });
-
-    volumeChart.update({
-      time: {
-        year: d.getUTCFullYear(),
-        month: d.getUTCMonth() + 1,
-        day: d.getUTCDate() + a,
-      },
-      value: 21737523.0 + a * 1000000,
-      color: "rgba(0, 150, 136, 0.8)",
-    });
-
-    a++;
-  }
+  const [chartSymbol, setChartSymbol] = useState("NASDAQ:AAPL");
 
   function handleKeyDown(e) {
     if (e.key === "W" && e.shiftKey) {
@@ -191,52 +67,11 @@ export default function Bet() {
   }
 
   useLayoutEffect(() => {
-    markUpChart();
-
     setLiveTradePopup(true);
 
     document.addEventListener("keydown", handleKeyDown);
-    console.log("hi");
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
-
-  function nextBusinessDay(time) {
-    var d = new Date();
-    d.setUTCFullYear(time.year);
-    d.setUTCMonth(time.month - 1);
-    d.setUTCDate(time.day + 1);
-    d.setUTCHours(0, 0, 0, 0);
-    return {
-      year: d.getUTCFullYear(),
-      month: d.getUTCMonth() + 1,
-      day: d.getUTCDate(),
-    };
-  }
-
-  function getRandomPrice() {
-    return 10 + Math.round(Math.random() * 10000) / 100;
-  }
-
-  useEffect(() => {
-    if (!candleChart) {
-      return;
-    }
-    const chartInterval = setInterval(() => {
-      let price = getRandomPrice(); //response.data.quotes[0].mid;
-      dispatch(setChart(price));
-      dispatch(addTicker());
-    }, 500);
-
-    return () => clearInterval(chartInterval);
-  }, [candleChart]);
-
-  useEffect(() => {
-    if (!candleChart) {
-      return;
-    }
-    console.log(chart);
-    candleChart.update(chart);
-  }, [chart]);
 
   if (isMobile)
     return (
@@ -246,7 +81,16 @@ export default function Bet() {
         <MbetBox onKeyDown={handleKeyDown}>
           <section className="innerBox">
             <article className="contArea">
-              <div className="chartBox" id="ChartBox">
+              <div className="chartBox">
+                <ReactTradingviewWidget
+                  symbol={chartSymbol}
+                  theme={Themes.DARK}
+                  locale="kr"
+                  autosize
+                  timezone="Asia/Seoul"
+                  allow_symbol_change={false}
+                />
+
                 <span className="utilBox">
                   <ul className="btnList">
                     <li>
@@ -262,22 +106,6 @@ export default function Bet() {
                         <>
                           <TokenPopup off={setTokenPopup} />
                           <PopupBg off={setTokenPopup} />
-                        </>
-                      )}
-                    </li>
-
-                    <li>
-                      <button
-                        className="chartBtn"
-                        onClick={() => setChartPopup(true)}
-                      >
-                        <img src={I_candleChartWhite} alt="" />
-                      </button>
-
-                      {chartPopup && (
-                        <>
-                          <ChartPopup off={setChartPopup} />
-                          <PopupBg bg off={setChartPopup} />
                         </>
                       )}
                     </li>
@@ -409,7 +237,7 @@ export default function Bet() {
 
               <ul className="tokenList">
                 {D_tokenList.map((v, i) => (
-                  <li key={i}>
+                  <li key={i} onClick={() => setChartSymbol("BITSTAMP:BTCUSD")}>
                     <img src={I_starYellowO} alt="" />
                     <span className="textBox">
                       <p className="key">{v.key}</p>
@@ -423,33 +251,18 @@ export default function Bet() {
             </article>
 
             <article className="contArea">
-              <div className="chartBox" id="ChartBox">
-                <span className="utilBox" style={{ zIndex: "2" }}>
-                  <ul className="btnList">
-                    <li>
-                      <button
-                        className="chartBtn"
-                        onClick={() => setChartPopup(true)}
-                      >
-                        <img src={I_candleChartWhite} alt="" />
-                      </button>
-
-                      {chartPopup && (
-                        <>
-                          <ChartPopup />
-                          <PopupBg off={setChartPopup} />
-                        </>
-                      )}
-                    </li>
-
-                    <li>
-                      <button className="moreBtn" onClick={() => {}}>
-                        <img src={I_3dotWhite} alt="" />
-                      </button>
-                    </li>
-                  </ul>
-                  <span className="typeBox">{`Chart type : Candle`}</span>
-                </span>
+              <div className="chartBox">
+                <div className="chart">
+                  <ReactTradingviewWidget
+                    container_id={"technical-analysis-chart-demo"}
+                    symbol={chartSymbol}
+                    theme={Themes.DARK}
+                    locale="kr"
+                    autosize
+                    timezone="Asia/Seoul"
+                    allow_symbol_change={false}
+                  />
+                </div>
 
                 {hotKeyPopup && (
                   <div className="hotKeyPopup">
@@ -489,32 +302,6 @@ export default function Bet() {
                     </ul>
                   </div>
                 )}
-
-                <span className="screenCont">
-                  <p className="key">Screen size</p>
-
-                  <span className="screenBox">
-                    <button
-                      className="screenBtn"
-                      onClick={() => setScreenPopup(true)}
-                    >
-                      <p>{screen}</p>
-
-                      <img src={I_upPolWhite} alt="" />
-                    </button>
-
-                    {screenPopup && (
-                      <>
-                        <SelectPopup
-                          off={setScreenPopup}
-                          list={D_screenList}
-                          setCont={setScreen}
-                        />
-                        <PopupBg off={setScreenPopup} />
-                      </>
-                    )}
-                  </span>
-                </span>
               </div>
 
               <div className="actionBox">
@@ -670,6 +457,7 @@ const MbetBox = styled.main`
         flex: 1;
         background: #181c25;
         position: relative;
+        padding: 17.2vw 0 0;
 
         .utilBox {
           display: flex;
@@ -837,7 +625,7 @@ const MbetBox = styled.main`
 
 const PbetBox = styled.main`
   height: 100vh;
-  padding: 60px 30px 0;
+  padding: 0 30px 0;
   color: #fff;
   background: #0a0e17;
   overflow-y: scroll;
@@ -846,6 +634,7 @@ const PbetBox = styled.main`
     display: flex;
     flex-direction: column;
     height: 100vh;
+    padding: 60px 0 30px 0;
 
     .tokenArea {
       display: flex;
@@ -930,44 +719,15 @@ const PbetBox = styled.main`
         flex: 1;
         background: #181c25;
         border-radius: 12px;
+        overflow: hidden;
         position: relative;
 
-        .utilBox {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-          top: 24px;
-          left: 24px;
+        .chart {
           position: absolute;
-
-          .btnList {
-            display: flex;
-            gap: 8px;
-
-            & > li {
-              position: relative;
-
-              & > button {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                width: 38px;
-                height: 38px;
-                background: rgba(246, 246, 246, 0.1);
-                border-radius: 6px;
-              }
-            }
-          }
-
-          .typeBox {
-            display: flex;
-            align-items: center;
-            height: 34px;
-            padding: 0 12px;
-            font-size: 12px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-          }
+          width: calc(100% + 2px);
+          height: calc(100% + 2px);
+          top: -1px;
+          left: -1px;
         }
 
         .hotKeyPopup {
@@ -1024,54 +784,6 @@ const PbetBox = styled.main`
                 &.value {
                   color: rgba(255, 255, 255, 0.4);
                   width: 130px;
-                }
-              }
-            }
-          }
-        }
-
-        .screenCont {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          height: 36px;
-          padding: 0 6px;
-          font-size: 12px;
-          background: rgba(246, 246, 246, 0.1);
-          border-radius: 6px;
-          bottom: 30px;
-          left: 30px;
-          position: absolute;
-          z-index: 3;
-
-          .screenBox {
-            width: 62px;
-            height: 26px;
-            border-radius: 4px;
-            position: relative;
-
-            .screenBtn {
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-              width: 100%;
-              height: 100%;
-              padding: 0 10px;
-              background: rgba(0, 0, 0, 0.4);
-            }
-
-            .selectPopup {
-              padding: 4px;
-              top: unset;
-              bottom: 38px;
-
-              li {
-                color: rgba(255, 255, 255, 0.6);
-                border-radius: inherit;
-
-                &:hover {
-                  color: #fff;
-                  background: rgba(255, 255, 255, 0.1);
                 }
               }
             }
@@ -1223,7 +935,7 @@ const PbetBox = styled.main`
     justify-content: flex-end;
     align-items: center;
     gap: 14px;
-    height: 70px;
+    padding: 0 0 30px;
 
     button {
       img {

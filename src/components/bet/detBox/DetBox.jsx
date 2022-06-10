@@ -156,7 +156,7 @@ const PdetBoxCont = styled.div`
 
       &.on {
         color: #fff;
-        background: #111722;
+        background: #181c25;
       }
     }
   }
@@ -164,6 +164,7 @@ const PdetBoxCont = styled.div`
   .detContList {
     flex: 1;
     padding: 14px 20px;
-    background: #111722;
+    background: #181c25;
+    border-radius: 0 0 12px 12px;
   }
 `;
