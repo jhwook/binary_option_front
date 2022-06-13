@@ -25,7 +25,8 @@ export default function Login() {
 
     if (category)
       signDataForm = {
-        phone: `${userData.phoneLoc} ${userData.phone}`,
+        phone: userData.phone,
+        countryNum: userData.phoneLoc,
         password: userData.pw,
       };
     else signDataForm = { email: userData.email, password: userData.pw };

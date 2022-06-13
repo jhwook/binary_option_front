@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { D_currencyList, D_tokenCategoryList } from "../../data/D_bet";
 import I_searchWhite from "../../img/icon/I_searchWhite.svg";
@@ -6,23 +6,32 @@ import I_xWhite from "../../img/icon/I_xWhite.svg";
 import I_starYellow from "../../img/icon/I_starYellow.svg";
 import I_starYellowO from "../../img/icon/I_starYellowO.svg";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import { URL } from "../../configs/api";
 
 export default function TokenPopup({ off }) {
   const isMobile = useSelector((state) => state.common.isMobile);
 
-  const [category, setCategory] = useState(D_tokenCategoryList[0]);
+  const [category, setCategory] = useState(D_tokenCategoryList[0].value);
   const [searchMode, setSearchMode] = useState(false);
   const [search, setSearch] = useState("");
-  const [currencyData, setCurrencyList] = useState(D_currencyList);
+  const [listData, setListData] = useState([]);
 
   function onClickFavBtn(e, i) {
     e.stopPropagation();
 
-    let data = currencyData;
+    let data = listData;
     data[i].fav = !data[i].fav;
 
-    setCurrencyList([...data]);
+    setListData([...data]);
   }
+
+  useEffect(() => {
+    axios
+      .get(`${URL}/${category}`)
+      .then((res) => console.log(res))
+      .catch((err) => console.error(err));
+  }, []);
 
   if (isMobile)
     return (
@@ -49,10 +58,10 @@ export default function TokenPopup({ off }) {
                 {D_tokenCategoryList.map((v, i) => (
                   <li
                     key={i}
-                    className={`${category === v && "on"}`}
-                    onClick={() => setCategory(v)}
+                    className={`${category === v.value && "on"}`}
+                    onClick={() => setCategory(v.value)}
                   >
-                    {v}
+                    {v.key}
                   </li>
                 ))}
               </ul>
@@ -66,7 +75,7 @@ export default function TokenPopup({ off }) {
 
         <article className="listArea">
           <ul className="tokenList">
-            {currencyData
+            {listData
               .filter((e) => e.fav)
               .map((v, i) => (
                 <li key={i}>
@@ -99,7 +108,7 @@ export default function TokenPopup({ off }) {
                 </li>
               ))}
 
-            {currencyData
+            {listData
               .filter((e) => !e.fav)
               .map((v, i) => (
                 <li key={i}>
@@ -168,10 +177,10 @@ export default function TokenPopup({ off }) {
                 {D_tokenCategoryList.map((v, i) => (
                   <li
                     key={i}
-                    className={`${category === v && "on"}`}
-                    onClick={() => setCategory(v)}
+                    className={`${category === v.value && "on"}`}
+                    onClick={() => setCategory(v.value)}
                   >
-                    {v}
+                    {v.key}
                   </li>
                 ))}
               </ul>
@@ -185,7 +194,7 @@ export default function TokenPopup({ off }) {
 
         <article className="listArea">
           <ul className="tokenList">
-            {currencyData
+            {listData
               .filter((e) => e.fav)
               .map((v, i) => (
                 <li key={i}>
@@ -218,7 +227,7 @@ export default function TokenPopup({ off }) {
                 </li>
               ))}
 
-            {currencyData
+            {listData
               .filter((e) => !e.fav)
               .map((v, i) => (
                 <li key={i}>

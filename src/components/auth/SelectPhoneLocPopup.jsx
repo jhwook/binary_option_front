@@ -1,11 +1,26 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { API } from "../../configs/api";
 
-export default function SelectPhoneLocPopup({ off, list, setCont }) {
+export default function SelectPhoneLocPopup({ off, setCont }) {
   const isMobile = useSelector((state) => state.common.isMobile);
 
+  const [list, setList] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`${API.PHONE_COUNTRY_CODE}`)
+      .then(({ data }) => {
+        console.log(data);
+        setList(data);
+      })
+      .catch((err) => console.error(err));
+  }, []);
+
   function onClickCont(v) {
-    if (setCont) setCont(v);
+    if (setCont) setCont(v.dialcode);
     if (off) off();
   }
 
@@ -13,11 +28,15 @@ export default function SelectPhoneLocPopup({ off, list, setCont }) {
     return (
       <MselectPhoneLocPopup className="selectPopup">
         <ul className="contList">
-          {list.map((v, i) => (
-            <li key={i} onClick={() => onClickCont(v)}>
-              <p>{v}</p>
-            </li>
-          ))}
+          {list
+            .sort((a, b) => {
+              return a.dialcode - b.dialcode;
+            })
+            .map((v, i) => (
+              <li key={i} onClick={() => onClickCont(v)}>
+                <p>{v.dialcode}</p>
+              </li>
+            ))}
         </ul>
       </MselectPhoneLocPopup>
     );
@@ -25,11 +44,15 @@ export default function SelectPhoneLocPopup({ off, list, setCont }) {
     return (
       <PselectPhoneLocPopup className="selectPopup">
         <ul className="contList">
-          {list.map((v, i) => (
-            <li key={i} onClick={() => onClickCont(v)}>
-              <p>{v}</p>
-            </li>
-          ))}
+          {list
+            .sort((a, b) => {
+              return a.dialcode - b.dialcode;
+            })
+            .map((v, i) => (
+              <li key={i} onClick={() => onClickCont(v)}>
+                <p>{v.dialcode}</p>
+              </li>
+            ))}
         </ul>
       </PselectPhoneLocPopup>
     );

@@ -15,6 +15,8 @@ import SelLngPopup from "./SelLngPopup";
 export default function MenuPopup({ off }) {
   const navigate = useNavigate();
 
+  const token = localStorage.getItem("token");
+
   const [lngPopup, setLngPopup] = useState(false);
   const [profPopup, setProfPopup] = useState(false);
   const [myBalancePopup, setMyBalancePopup] = useState(false);
@@ -29,16 +31,31 @@ export default function MenuPopup({ off }) {
     <>
       <MenuPopupBox>
         <article className="topArea">
-          <button
-            className="accountBtn"
-            onClick={() => setMyBalancePopup(true)}
-          >{`Demo $1000`}</button>
+          {token ? (
+            <>
+              <button
+                className="accountBtn"
+                onClick={() => setMyBalancePopup(true)}
+              >{`Demo $1000`}</button>
 
-          <span className="profBox">
-            <button className="myBtn" onClick={() => setProfPopup(true)}>
-              MY
-            </button>
-          </span>
+              <span className="profBox">
+                <button className="myBtn" onClick={() => setProfPopup(true)}>
+                  MY
+                </button>
+              </span>
+            </>
+          ) : (
+            <>
+              <span />
+
+              <button
+                className="loginBtn"
+                onClick={() => navigate("/auth/login")}
+              >
+                LOGIN
+              </button>
+            </>
+          )}
         </article>
 
         <article className="contArea">
@@ -175,6 +192,14 @@ const MenuPopupBox = styled.section`
         aspect-ratio: 1;
         border-radius: 50%;
       }
+    }
+
+    .loginBtn {
+      width: 36.66vw;
+      height: 9.44vw;
+      font-weight: 700;
+      border: 1px solid #fff;
+      border-radius: 7.77vw;
     }
   }
 

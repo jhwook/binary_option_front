@@ -115,7 +115,6 @@ export default function ResetPw() {
                             {selLocPopup && (
                               <>
                                 <SelectPhoneLocPopup
-                                  list={D_locNumList}
                                   setCont={setPhoneLoc}
                                   off={setSelLocPopup}
                                 />
@@ -259,7 +258,6 @@ export default function ResetPw() {
                             {selLocPopup && (
                               <>
                                 <SelectPhoneLocPopup
-                                  list={D_locNumList}
                                   setCont={setPhoneLoc}
                                   off={setSelLocPopup}
                                 />

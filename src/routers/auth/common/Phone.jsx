@@ -6,11 +6,14 @@ import I_dnPol from "../../../img/icon/I_dnPol.svg";
 import { D_locNumList } from "../../../data/D_auth";
 import { useSelector } from "react-redux";
 import SelectPhoneLocPopup from "../../../components/auth/SelectPhoneLocPopup";
+import axios from "axios";
+import { API } from "../../../configs/api";
 
 export default function Phone({ userData, setUserData }) {
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [selLocPopup, setSelLocPopup] = useState(false);
+  const [locList, setLocList] = useState([]);
 
   function onBlurPhone() {
     if (userData.phone[0] === "0")
@@ -21,6 +24,16 @@ export default function Phone({ userData, setUserData }) {
     const regex = /(?=.*\d)(?=.*[A-Z]).{8,}/;
     return regex.test(str);
   }
+
+  useEffect(() => {
+    axios
+      .get(`${API.PHONE_COUNTRY_CODE}`)
+      .then(({ data }) => {
+        console.log(data);
+        setLocList(data);
+      })
+      .catch((err) => console.error(err));
+  }, []);
 
   useEffect(() => {
     if (userData.pw && !validatePw(userData.pw))
@@ -44,7 +57,7 @@ export default function Phone({ userData, setUserData }) {
                   className="selectBtn"
                   onClick={() => setSelLocPopup(true)}
                 >
-                  <p>+{userData?.phoneLoc}</p>
+                  <p>{userData?.phoneLoc}</p>
 
                   <img src={I_dnPol} alt="" />
                 </button>
@@ -52,7 +65,6 @@ export default function Phone({ userData, setUserData }) {
                 {selLocPopup && (
                   <>
                     <SelectPhoneLocPopup
-                      list={D_locNumList}
                       setCont={(v) =>
                         setUserData({
                           ...userData,
@@ -111,7 +123,7 @@ export default function Phone({ userData, setUserData }) {
                   className="selectBtn"
                   onClick={() => setSelLocPopup(true)}
                 >
-                  <p>+{userData?.phoneLoc}</p>
+                  <p>{userData?.phoneLoc}</p>
 
                   <img src={I_dnPol} alt="" />
                 </button>
@@ -119,7 +131,6 @@ export default function Phone({ userData, setUserData }) {
                 {selLocPopup && (
                   <>
                     <SelectPhoneLocPopup
-                      list={D_locNumList}
                       setCont={(v) =>
                         setUserData({
                           ...userData,

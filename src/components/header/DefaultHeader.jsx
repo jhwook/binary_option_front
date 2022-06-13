@@ -111,13 +111,6 @@ export default function DefaultHeader({ white, border, title }) {
                   <button className="myBtn" onClick={() => setProfPopup(true)}>
                     MY
                   </button>
-
-                  {profPopup && (
-                    <>
-                      <ProfPopup off={setProfPopup} />
-                      <PopupBg off={setProfPopup} />
-                    </>
-                  )}
                 </span>
               </>
             ) : (
@@ -150,6 +143,13 @@ export default function DefaultHeader({ white, border, title }) {
           <>
             <MyBalancePopup off={setMyBalancePopup} />
             <PopupBg off={setMyBalancePopup} />
+          </>
+        )}
+
+        {profPopup && (
+          <>
+            <ProfPopup off={setProfPopup} />
+            <PopupBg off={setProfPopup} />
           </>
         )}
       </>

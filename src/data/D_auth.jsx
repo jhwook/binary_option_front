@@ -4,7 +4,7 @@ export const D_joinData = {
   email: "",
   pw: "",
   phone: "",
-  phoneLoc: "82",
+  phoneLoc: "",
   emailAlarm: "",
   pwAlarm: "",
 };

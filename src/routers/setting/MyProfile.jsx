@@ -7,6 +7,8 @@ import { API } from "../../configs/api";
 import { useSelector } from "react-redux";
 import DefaultHeader from "../../components/header/DefaultHeader";
 import { setToast } from "../../util/Util";
+import SelectPhoneLocPopup from "../../components/auth/SelectPhoneLocPopup";
+import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
 
 export default function MyProfile() {
   const isMobile = useSelector((state) => state.common.isMobile);
@@ -21,8 +23,15 @@ export default function MyProfile() {
   const [pwAlarm, setPwAlarm] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [countryNum, setCountryNum] = useState("");
+  const [selLocPopup, setSelLocPopup] = useState(false);
   const [phone, setPhone] = useState("");
   const [verificationPopup, setVerificationPopup] = useState(false);
+
+  function validatePw(str) {
+    const regex = /(?=.*\d)(?=.*[A-Z]).{8,}/;
+    return regex.test(str);
+  }
 
   function getProfData() {
     axios
@@ -38,6 +47,7 @@ export default function MyProfile() {
         data.phone && setPhone(data.phone);
         data.firstName && setFirstName(data.firstName);
         data.lastName && setLastName(data.lastName);
+        data.countryNum && setCountryNum(data.countryNum);
 
         setProfData(data);
       });
@@ -45,13 +55,14 @@ export default function MyProfile() {
 
   function onClickVeriEmailBtn() {
     setVerificationPopup("email");
-    // axios
-    //   .post(API.USER_CERTIFICATION_EMAIL, { email })
-    //   .then((res) => {
-    //     console.log(res);
-    //     setVerificationPopup("email");
-    //   })
-    //   .then((err) => console.error(err));
+
+    axios
+      .post(API.USER_CERTIFICATION_EMAIL, { email })
+      .then((res) => {
+        console.log(res);
+        setVerificationPopup("email");
+      })
+      .then((err) => console.error(err));
   }
 
   function onClickVeriPhoneBtn() {
@@ -59,15 +70,29 @@ export default function MyProfile() {
   }
 
   function onclickSaveBtn() {
-    // axios.patch(
-    //   `${API.USER_PROFILE}`,
-    //   { email, password: pw, firstName, lastName, phone },
-    //   {
-    //     headers: {
-    //       Authorization: `Bearer ${localStorage.getItem("token")}`,
-    //     },
-    //   }
-    // );
+    let patchData = {
+      email,
+      firstName,
+      lastName,
+    };
+
+    if (pw) patchData.password = pw;
+    if (pw) patchData.phone = phone;
+
+    console.log(patchData);
+
+    axios
+      .patch(`${API.USER_PROFILE}`, patchData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then(({ data }) => {
+        console.log(data);
+
+        if (data.message === "successfully updated") window.location.reload();
+        else setToast({ type: "alarm", cont: data.message });
+      });
 
     setToast({ type: "alarm", cont: "Your changes have been saved." });
   }
@@ -85,8 +110,19 @@ export default function MyProfile() {
   useEffect(() => {
     if (!(pw && pwChk)) return;
 
-    if (pw === pwChk) setPwAlarm("");
-    else setPwAlarm("The password you have entered does not coincide");
+    if (!validatePw(pw)) {
+      setPwAlarm(
+        "Password must be at least 8 characters with 1 upper case letter and 1 number."
+      );
+      return;
+    }
+
+    if (pw !== pwChk) {
+      setPwAlarm("The password you have entered does not coincide");
+      return;
+    }
+
+    setPwAlarm("");
   }, [pw, pwChk]);
 
   function onBlurPhone() {
@@ -115,6 +151,7 @@ export default function MyProfile() {
                     <input
                       type="password"
                       value={pw}
+                      disabled={!changePw}
                       onChange={(e) => setPw(e.target.value)}
                       placeholder=""
                     />
@@ -191,6 +228,28 @@ export default function MyProfile() {
 
                 <li>
                   <p className="key">Phone</p>
+
+                  <div className="selectBox local">
+                    <button
+                      className="selectBtn"
+                      onClick={() => setSelLocPopup(true)}
+                    >
+                      <p>{countryNum || 82} </p>
+
+                      <img src={I_dnPolWhite} alt="" />
+                    </button>
+
+                    {selLocPopup && (
+                      <>
+                        <SelectPhoneLocPopup
+                          setCont={(v) => setCountryNum(v)}
+                          off={setSelLocPopup}
+                        />
+                        <PopupBg off={setSelLocPopup} />
+                      </>
+                    )}
+                  </div>
+
                   <div className="value">
                     <input
                       type="number"
@@ -266,38 +325,45 @@ export default function MyProfile() {
                 <li>
                   <p className="key">UID</p>
                   <div className="value">
-                    <input disabled value={uid} />
+                    <div className="inputBox">
+                      <input disabled value={uid} />
+                    </div>
                   </div>
                 </li>
 
                 <li>
                   <p className="key">Password*</p>
-                  <div className={`${pwAlarm && "alarmBox"} value`}>
-                    <input
-                      type="password"
-                      value={pw}
-                      onChange={(e) => setPw(e.target.value)}
-                      placeholder=""
-                    />
+                  <div className="value">
+                    <div className={`${pwAlarm && "alarmBox"} inputBox`}>
+                      <input
+                        type="password"
+                        value={pw}
+                        disabled={!changePw}
+                        onChange={(e) => setPw(e.target.value)}
+                        placeholder=""
+                      />
 
-                    <button
-                      className="changeBtn"
-                      onClick={() => setChangePw(true)}
-                    >
-                      Change
-                    </button>
+                      <button
+                        className="changeBtn"
+                        onClick={() => setChangePw(true)}
+                      >
+                        Change
+                      </button>
+                    </div>
                   </div>
                 </li>
                 {changePw && (
                   <li>
                     <p className="key">Confirm Password*</p>
-                    <div className={`${pwAlarm && "alarmBox"} value`}>
-                      <input
-                        type="password"
-                        value={pwChk}
-                        onChange={(e) => setPwChk(e.target.value)}
-                        placeholder=""
-                      />
+                    <div className="value">
+                      <div className={`${pwAlarm && "alarmBox"} inputBox`}>
+                        <input
+                          type="password"
+                          value={pwChk}
+                          onChange={(e) => setPwChk(e.target.value)}
+                          placeholder=""
+                        />
+                      </div>
                     </div>
 
                     {pwAlarm && <p className="alarm">{pwAlarm}</p>}
@@ -307,71 +373,100 @@ export default function MyProfile() {
                 <li>
                   <p className="key">First name*</p>
                   <div className="value">
-                    <input
-                      value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
-                      placeholder=""
-                    />
+                    <div className="inputBox">
+                      <input
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        placeholder=""
+                      />
+                    </div>
                   </div>
                 </li>
 
                 <li>
                   <p className="key">Last name*</p>
                   <div className="value">
-                    <input
-                      value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
-                      placeholder=""
-                    />
+                    <div className="inputBox">
+                      <input
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        placeholder=""
+                      />
+                    </div>
                   </div>
                 </li>
 
                 <li>
                   <p className="key">Email*</p>
                   <div className="value">
-                    <input
-                      type="email"
-                      disabled={profData.email}
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder=""
-                    />
+                    <div className="inputBox">
+                      <input
+                        type="email"
+                        disabled={profData.email}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder=""
+                      />
 
-                    {profData.email_certification ? (
-                      <p className="verified">Verified</p>
-                    ) : (
-                      <button
-                        className={`${!emailSend && "init"} sendBtn`}
-                        onClick={onClickVeriEmailBtn}
-                      >
-                        {emailSend ? "Resend" : "Unverified"}
-                      </button>
-                    )}
+                      {profData.email_certification ? (
+                        <p className="verified">Verified</p>
+                      ) : (
+                        <button
+                          className={`${!emailSend && "init"} sendBtn`}
+                          onClick={onClickVeriEmailBtn}
+                        >
+                          {emailSend ? "Resend" : "Unverified"}
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </li>
 
                 <li>
                   <p className="key">Phone</p>
                   <div className="value">
-                    <input
-                      type="number"
-                      value={phone}
-                      disabled={profData.phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      placeholder=""
-                      onBlur={onBlurPhone}
-                    />
-
-                    {profData.phone_certification ? (
-                      <p className="verified">Verified</p>
-                    ) : (
+                    <div className="selectBox local">
                       <button
-                        className={`${!emailSend && "init"} sendBtn`}
-                        onClick={onClickVeriPhoneBtn}
+                        className="selectBtn"
+                        onClick={() => setSelLocPopup(true)}
                       >
-                        {emailSend ? "Resend" : "Unverified"}
+                        <p>{countryNum}</p>
+
+                        <img src={I_dnPolWhite} alt="" />
                       </button>
-                    )}
+
+                      {selLocPopup && (
+                        <>
+                          <SelectPhoneLocPopup
+                            setCont={(v) => setCountryNum(v)}
+                            off={setSelLocPopup}
+                          />
+                          <PopupBg off={setSelLocPopup} />
+                        </>
+                      )}
+                    </div>
+
+                    <div className="inputBox">
+                      <input
+                        type="number"
+                        value={phone}
+                        disabled={profData.phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        placeholder=""
+                        onBlur={onBlurPhone}
+                      />
+
+                      {profData.phone_certification ? (
+                        <p className="verified">Verified</p>
+                      ) : (
+                        <button
+                          className={`${!emailSend && "init"} sendBtn`}
+                          onClick={onClickVeriPhoneBtn}
+                        >
+                          {emailSend ? "Resend" : "Unverified"}
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </li>
               </ul>
@@ -437,7 +532,7 @@ const MmyProfileBox = styled.main`
         display: flex;
         flex-direction: column;
         gap: 5.55vw;
-        font-size: 16px;
+        font-size: 4.44vw;
 
         li {
           display: flex;
@@ -445,6 +540,39 @@ const MmyProfileBox = styled.main`
           gap: 2.22vw;
 
           .key {
+          }
+
+          .selectBox {
+            display: flex;
+            align-items: center;
+            height: 12.22vw;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid transparent;
+            border-radius: 2.77vw;
+            position: relative;
+
+            .selectBtn {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              width: 100%;
+              height: 100%;
+              padding: 0 5vw;
+
+              img {
+                width: 4vw;
+              }
+            }
+
+            .selectPopup {
+              background: rgba(0, 0, 0, 0.4);
+              backdrop-filter: blur(40px);
+              -webkit-backdrop-filter: blur(40px);
+              left: 0;
+              top: unset;
+              bottom: 14.44vw;
+              border: 2px solid rgba(255, 255, 255, 0.1);
+            }
           }
 
           .value {
@@ -572,39 +700,74 @@ const PmyProfileBox = styled.main`
 
           .value {
             display: flex;
-            align-items: center;
-            height: 48px;
-            padding: 0 22px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid transparent;
-            border-radius: 10px;
+            gap: 8px;
 
-            &:focus-within {
-              border-color: #fff;
+            .selectBox {
+              display: flex;
+              align-items: center;
+              width: 90px;
+              height: 48px;
+              border: 1px solid transparent;
+              background: rgba(0, 0, 0, 0.4);
+              border-radius: 10px;
+              position: relative;
 
-              button {
-                color: #fff;
+              .selectBtn {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+                height: 100%;
+                padding: 0 16px;
+                font-size: 14px;
+              }
+
+              .selectPopup {
+                background: rgba(0, 0, 0, 0.4);
+                backdrop-filter: blur(40px);
+                -webkit-backdrop-filter: blur(40px);
+                left: 0;
+                border: 2px solid rgba(255, 255, 255, 0.1);
               }
             }
 
-            &.alarmBox {
-              border-color: #ff5353;
-            }
-
-            input {
+            .inputBox {
               flex: 1;
-              height: 100%;
-            }
+              display: flex;
+              align-items: center;
+              height: 48px;
+              padding: 0 22px;
+              background: rgba(0, 0, 0, 0.4);
+              border: 1px solid transparent;
+              border-radius: 10px;
 
-            .verified {
-              color: #f7ab1f;
-            }
+              &:focus-within {
+                border-color: #fff;
 
-            .sendBtn {
-              color: rgba(255, 255, 255, 0.4);
+                button {
+                  color: #fff;
+                }
+              }
 
-              &.init {
-                color: #ff5353;
+              &.alarmBox {
+                border-color: #ff5353;
+              }
+
+              input {
+                flex: 1;
+                height: 100%;
+              }
+
+              .verified {
+                color: #f7ab1f;
+              }
+
+              .sendBtn {
+                color: rgba(255, 255, 255, 0.4);
+
+                &.init {
+                  color: #ff5353;
+                }
               }
             }
           }

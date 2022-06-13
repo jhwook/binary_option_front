@@ -1565,7 +1565,13 @@ export const D_timeList = [
   "1d",
 ];
 
-export const D_tokenCategoryList = ["Currencies", "Crypto", "Stocks"];
+export const D_tokenCategoryList = [
+  {key:"Currencies",value:"forex"}
+  ,
+  {key:"Crypto",value:"crypto"}
+  ,
+  {key:"Stocks",value:"stock"}
+];
 
 export const D_currencyList = [
   { fav: false, img: [E_eur, E_usd], name: ["EUR", "USD"], percent: 92 },

@@ -1,10 +1,19 @@
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 export default function LiveTradePopup({ off }) {
+  const navigate = useNavigate();
+
   const isMobile = useSelector((state) => state.common.isMobile);
 
   function onClickDepositBtn() {
+    navigate("/market/deposit");
+    off();
+  }
+
+  function onClickDemoBtn() {
+    navigate("/bet/demo");
     off();
   }
 
@@ -20,7 +29,7 @@ export default function LiveTradePopup({ off }) {
             Deposit now
           </button>
 
-          <button className="demoBtn" onClick={() => off()}>
+          <button className="demoBtn" onClick={onClickDemoBtn}>
             Demo trading
           </button>
         </div>
@@ -39,7 +48,7 @@ export default function LiveTradePopup({ off }) {
             Deposit now
           </button>
 
-          <button className="demoBtn" onClick={() => off()}>
+          <button className="demoBtn" onClick={onClickDemoBtn}>
             Demo trading
           </button>
         </div>
