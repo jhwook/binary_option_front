@@ -29,9 +29,12 @@ export default function TokenPopup({ off }) {
   useEffect(() => {
     axios
       .get(`${URL}/${category}`)
-      .then((res) => console.log(res))
+      .then(({ data }) => {
+        console.log(data);
+        setListData(data);
+      })
       .catch((err) => console.error(err));
-  }, []);
+  }, [category]);
 
   if (isMobile)
     return (
@@ -209,13 +212,7 @@ export default function TokenPopup({ off }) {
                     )}
                   </button>
 
-                  <ul className="imgList">
-                    {v.img.map((detV, i) => (
-                      <li key={i}>
-                        <img src={detV} alt="" />
-                      </li>
-                    ))}
-                  </ul>
+                  <img src={v.imgurl} alt="" />
 
                   <p className="name">
                     {v.name.map((detV, i) => (
@@ -242,21 +239,11 @@ export default function TokenPopup({ off }) {
                     )}
                   </button>
 
-                  <ul className="imgList">
-                    {v.img.map((detV, i) => (
-                      <li key={i}>
-                        <img src={detV} alt="" />
-                      </li>
-                    ))}
-                  </ul>
+                  <img className="tknImg" src={v.imgurl} alt="" />
 
-                  <p className="name">
-                    {v.name.map((detV, i) => (
-                      <>{`${i !== 0 ? "/" : ""}${detV}`}</>
-                    ))}
-                  </p>
+                  <p className="name">{v.name}</p>
 
-                  <p className="percent">{`${v.percent}%`}</p>
+                  <p className="percent">{`${(v.payout * 100).toFixed(2)}%`}</p>
                 </li>
               ))}
           </ul>
@@ -546,19 +533,8 @@ const PtokenPopupBox = styled.section`
           width: 14px;
         }
 
-        .imgList {
-          display: flex;
-          align-items: center;
-          padding: 0 8px 0 0;
-
-          li {
-            width: 26px;
-
-            img {
-              height: 34px;
-              border-radius: 50%;
-            }
-          }
+        .tknImg {
+          height: 34px;
         }
 
         .name {
