@@ -9,13 +9,18 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { URL } from "../../configs/api";
 
-export default function TokenPopup({ off }) {
+export default function TokenPopup({ off, setChartSymbol }) {
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [category, setCategory] = useState(D_tokenCategoryList[0].value);
   const [searchMode, setSearchMode] = useState(false);
   const [search, setSearch] = useState("");
   const [listData, setListData] = useState([]);
+
+  function onClickStock(symbol) {
+    setChartSymbol(symbol);
+    off();
+  }
 
   function onClickFavBtn(e, i) {
     e.stopPropagation();
@@ -227,7 +232,7 @@ export default function TokenPopup({ off }) {
             {listData
               .filter((e) => !e.fav)
               .map((v, i) => (
-                <li key={i}>
+                <li key={i} onClick={() => onClickStock(v.displaysymbol)}>
                   <button
                     className="favBtn"
                     onClick={(e) => onClickFavBtn(e, i)}

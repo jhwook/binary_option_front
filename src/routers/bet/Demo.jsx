@@ -31,6 +31,7 @@ import { API } from "../../configs/api";
 export default function Demo() {
   const dispatch = useDispatch();
   const isMobile = useSelector((state) => state.common.isMobile);
+  const token = localStorage.getItem("token");
 
   const [liveTradePopup, setLiveTradePopup] = useState(false);
   const [hotKeyPopup, setHotKeyPopup] = useState(true);
@@ -40,7 +41,7 @@ export default function Demo() {
   const [insufficientPopup, setInsufficientPopup] = useState(false);
   const [myBalancePopup, setMyBalancePopup] = useState(false);
   const [addPopup, setAddPopup] = useState(false);
-  const [chartSymbol, setChartSymbol] = useState("NASDAQ:AAPL");
+  const [chartSymbol, setChartSymbol] = useState("BTCUSDT");
 
   function handleKeyDown(e) {
     if (e.key === "W" && e.shiftKey) {
@@ -83,7 +84,9 @@ export default function Demo() {
 
   useEffect(() => {
     axios
-      .get(`${API.TRANS_BALANCE}/100000004`)
+      .get(`${API.TRANS_BALANCE}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((res) => console.log(res))
       .catch((err) => console.error(err));
   }, []);
@@ -252,7 +255,10 @@ export default function Demo() {
 
                 {tokenPopup && (
                   <>
-                    <TokenPopup off={setTokenPopup} />
+                    <TokenPopup
+                      off={setTokenPopup}
+                      setChartSymbol={setChartSymbol}
+                    />
                     <PopupBg off={setTokenPopup} />
                   </>
                 )}

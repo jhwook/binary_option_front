@@ -40,7 +40,7 @@ export default function Live() {
   const [insufficientPopup, setInsufficientPopup] = useState(false);
   const [myBalancePopup, setMyBalancePopup] = useState(false);
   const [addPopup, setAddPopup] = useState(false);
-  const [chartSymbol, setChartSymbol] = useState("NASDAQ:AAPL");
+  const [chartSymbol, setChartSymbol] = useState("BTCUSDT");
 
   function handleKeyDown(e) {
     if (e.key === "W" && e.shiftKey) {
@@ -252,7 +252,10 @@ export default function Live() {
 
                 {tokenPopup && (
                   <>
-                    <TokenPopup off={setTokenPopup} />
+                    <TokenPopup
+                      off={setTokenPopup}
+                      setChartSymbol={setChartSymbol}
+                    />
                     <PopupBg off={setTokenPopup} />
                   </>
                 )}
