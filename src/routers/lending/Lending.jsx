@@ -8,6 +8,10 @@ import B_lending2 from "../../img/bg/lending/B_lending2.png";
 import B_lending3 from "../../img/bg/lending/B_lending3.svg";
 import B_lending4 from "../../img/bg/lending/B_lending4.svg";
 import B_lending5 from "../../img/bg/lending/B_lending5.png";
+import B_float1 from "../../img/bg/lending/B_float1.png";
+import B_float2 from "../../img/bg/lending/B_float2.png";
+import B_float3 from "../../img/bg/lending/B_float3.png";
+import B_float4 from "../../img/bg/lending/B_float4.png";
 import I_thunderGrad from "../../img/icon/I_thunderGrad.svg";
 import I_rtArw3White from "../../img/icon/I_rtArw3White.svg";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
@@ -59,6 +63,13 @@ export default function Lending() {
           <section className="featureSec">
             <article className="windowArea">
               <div className="window">
+                <span className="floatBox">
+                  <img className="float" src={B_float1} alt="" />
+                  <img className="float" src={B_float2} alt="" />
+                  <img className="float" src={B_float3} alt="" />
+                  <img className="float" src={B_float4} alt="" />
+                </span>
+
                 <div className="imgBox">
                   <img src={B_lending4} alt="" />
                 </div>
@@ -157,6 +168,13 @@ export default function Lending() {
           <section className="featureSec">
             <article className="windowArea">
               <div className="window">
+                <span className="floatBox">
+                  <img className="float" src={B_float1} alt="" />
+                  <img className="float" src={B_float2} alt="" />
+                  <img className="float" src={B_float3} alt="" />
+                  <img className="float" src={B_float4} alt="" />
+                </span>
+
                 <div className="imgBox">
                   <img src={B_lending2} alt="" />
                 </div>
@@ -227,6 +245,24 @@ const tranlate2 = keyframes`
   }
   100%{
     transform: translate(-200%)
+  }
+`;
+
+const pFloat = keyframes`
+  0%{
+    transform: translate(0)
+  }
+  100%{
+    transform: translate(-8px, -20px)
+  }
+`;
+
+const mFloat = keyframes`
+  0%{
+    transform: translate(0) scale(0.54)
+  }
+  100%{
+    transform: translate(-4px, -10px) scale(0.54)
   }
 `;
 
@@ -340,6 +376,35 @@ const MlendingBox = styled.main`
 
       .window {
         width: 59.44vw;
+        position: relative;
+
+        .floatBox {
+          .float {
+            position: absolute;
+            animation: ${mFloat} 2s infinite alternate
+              cubic-bezier(0.6, 0.03, 0.6, 0.91);
+
+            &:nth-of-type(1) {
+              top: 210px;
+              left: -70px;
+            }
+
+            &:nth-of-type(2) {
+              top: -48px;
+              left: 14px;
+            }
+
+            &:nth-of-type(3) {
+              top: 4px;
+              right: -44px;
+            }
+
+            &:nth-of-type(4) {
+              top: 124px;
+              right: -60px;
+            }
+          }
+        }
 
         .imgBox {
           display: flex;
@@ -704,6 +769,35 @@ const PlendingBox = styled.main`
         border-radius: 20px;
         background-origin: border-box;
         background-clip: content-box, border-box;
+        position: relative;
+
+        .floatBox {
+          .float {
+            position: absolute;
+            animation: ${pFloat} 2s infinite alternate
+              cubic-bezier(0.6, 0.03, 0.6, 0.91);
+
+            &:nth-of-type(1) {
+              top: 474px;
+              left: -152px;
+            }
+
+            &:nth-of-type(2) {
+              top: -66px;
+              left: 232px;
+            }
+
+            &:nth-of-type(3) {
+              top: 54px;
+              right: -86px;
+            }
+
+            &:nth-of-type(4) {
+              top: 256px;
+              right: -188px;
+            }
+          }
+        }
 
         .imgBox {
           margin: 10px;
