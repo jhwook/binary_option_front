@@ -6,13 +6,16 @@ import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
 import { ReactComponent as I_hamburger } from "../../img/icon/I_hamburger.svg";
 import PopupBg from "../common/PopupBg";
 import SelLngPopup from "./SelLngPopup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import ProfPopup from "./ProfPopup";
 import { useSelector } from "react-redux";
 import MenuPopup from "./MenuPopup";
 import MyBalancePopup from "./MyBalancePopup";
 import AuthPopup from "./AuthPopup";
+import axios from "axios";
+import { API } from "../../configs/api";
+import MorePopup from "./MorePopup";
 
 export default function DefaultHeader({ white, border, title }) {
   const navigate = useNavigate();
@@ -26,6 +29,8 @@ export default function DefaultHeader({ white, border, title }) {
   const [myBalancePopup, setMyBalancePopup] = useState(false);
   const [menuPopup, setMenuPopup] = useState(false);
   const [authPopup, setAuthPopup] = useState(false);
+  const [morePopup, setMorePopup] = useState(false);
+  const [balanceData, setBalanceData] = useState("");
 
   const token = localStorage.getItem("token");
 
@@ -33,6 +38,18 @@ export default function DefaultHeader({ white, border, title }) {
     if (white) setAuthPopup(true);
     else setMenuPopup(true);
   }
+
+  useEffect(() => {
+    axios
+      .get(`${API.TRANS_BALANCE}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then(({ data }) => {
+        console.log(data);
+        setBalanceData(data);
+      })
+      .catch((err) => console.error(err));
+  }, []);
 
   if (isMobile)
     return (
@@ -44,7 +61,9 @@ export default function DefaultHeader({ white, border, title }) {
             {title ? (
               <p className="title">{title}</p>
             ) : token ? (
-              <span className="accountBtn">{`Demo $1000`}</span>
+              <span className="accountBtn">
+                <p>{`${balanceData.units} $${balanceData.amount}`}</p>
+              </span>
             ) : (
               <button className="logoBtn" onClick={() => navigate("/")}>
                 <img src={L_yellow} alt="" />
@@ -91,10 +110,22 @@ export default function DefaultHeader({ white, border, title }) {
                   </li>
                 ))}
 
-                <button className="moreBtn" onClick={() => {}}>
-                  <p>More</p>
-                  <img src={I_dnPolWhite} alt="" />
-                </button>
+                <li className={`${morePopup && "on"} moreBox`}>
+                  <button
+                    className="moreBtn"
+                    onClick={() => setMorePopup(true)}
+                  >
+                    <p>More</p>
+                    <img src={I_dnPolWhite} alt="" />
+                  </button>
+
+                  {morePopup && (
+                    <>
+                      <MorePopup off={setMorePopup} />
+                      <PopupBg off={setMorePopup} />
+                    </>
+                  )}
+                </li>
               </ul>
             )}
           </article>
@@ -105,7 +136,9 @@ export default function DefaultHeader({ white, border, title }) {
                 <button
                   className="accountBtn"
                   onClick={() => setMyBalancePopup(true)}
-                >{`Demo $1000`}</button>
+                >
+                  <p>{`${balanceData.units} $${balanceData.amount}`}</p>
+                </button>
 
                 <span className="profBox">
                   <button className="myBtn" onClick={() => setProfPopup(true)}>
@@ -287,18 +320,31 @@ const PdefaultHeaderBox = styled.header`
         display: flex;
         align-items: center;
         height: 30px;
+        padding: 0 12px;
         border-radius: 6px;
         cursor: pointer;
 
         &.on {
           background: rgba(255, 255, 255, 0.1);
-        }
-      }
 
-      .moreBtn {
-        display: flex;
-        align-items: center;
-        gap: 6px;
+          &.moreBox {
+            .moreBtn {
+              img {
+                transform: rotate(180deg);
+              }
+            }
+          }
+        }
+
+        &.moreBox {
+          position: relative;
+
+          .moreBtn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+          }
+        }
       }
     }
   }
@@ -319,7 +365,14 @@ const PdefaultHeaderBox = styled.header`
 
       &.accountBtn {
         width: 124px;
+        padding: 0 10px;
         border-radius: 28px;
+
+        p {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
       }
 
       &.myBtn {

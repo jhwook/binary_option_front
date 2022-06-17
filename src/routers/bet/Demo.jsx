@@ -41,7 +41,7 @@ export default function Demo() {
   const [insufficientPopup, setInsufficientPopup] = useState(false);
   const [myBalancePopup, setMyBalancePopup] = useState(false);
   const [addPopup, setAddPopup] = useState(false);
-  const [chartSymbol, setChartSymbol] = useState("BTCUSDT");
+  const [chartSymbol, setChartSymbol] = useState("9988");
 
   function handleKeyDown(e) {
     if (e.key === "W" && e.shiftKey) {
@@ -75,22 +75,6 @@ export default function Demo() {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // useEffect(() => {
-  //   axios
-  //     .get(API.BET_ROUND)
-  //     .then((res) => console.log(res))
-  //     .catch((err) => console.error(err));
-  // }, []);
-
-  useEffect(() => {
-    axios
-      .get(`${API.TRANS_BALANCE}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => console.log(res))
-      .catch((err) => console.error(err));
-  }, []);
-
   if (isMobile)
     return (
       <>
@@ -122,7 +106,10 @@ export default function Demo() {
 
                       {tokenPopup && (
                         <>
-                          <TokenPopup off={setTokenPopup} />
+                          <TokenPopup
+                            off={setTokenPopup}
+                            setChartSymbol={setChartSymbol}
+                          />
                           <PopupBg off={setTokenPopup} />
                         </>
                       )}

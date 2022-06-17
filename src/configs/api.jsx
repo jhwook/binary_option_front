@@ -14,5 +14,5 @@ export const API = {
 
   BET_ROUND: URL + "/bet/rounds",
 
-  TRANS_BALANCE: URL + "/users/balance", //:username
+  TRANS_BALANCE: URL + "/users/balance",
 };

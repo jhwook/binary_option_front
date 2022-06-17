@@ -9,6 +9,7 @@ import Finance from "./routers/finance/Finance";
 import Lending from "./routers/lending/Lending";
 import Market from "./routers/market/Market";
 import Position from "./routers/position/Position";
+import Qna from "./routers/qna/Qna";
 import Setting from "./routers/setting/Setting";
 import "./util/ReactToastify.css";
 
@@ -52,8 +53,9 @@ export default function App() {
           <Route path="/bet/*" element={<Bet />} />
           <Route path="/position/*" element={<Position />} />
           <Route path="/finance/*" element={<Finance />} />
-
           <Route path="/setting/*" element={<Setting />} />
+          
+          <Route path="/qna" element={<Qna />} />
         </Routes>
       </HashRouter>
     </AppBox>

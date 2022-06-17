@@ -119,7 +119,10 @@ export default function Live() {
 
                       {tokenPopup && (
                         <>
-                          <TokenPopup off={setTokenPopup} />
+                          <TokenPopup
+                            off={setTokenPopup}
+                            setChartSymbol={setChartSymbol}
+                          />
                           <PopupBg off={setTokenPopup} />
                         </>
                       )}

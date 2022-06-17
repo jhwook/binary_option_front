@@ -5,9 +5,8 @@ import Live from "./Live";
 export default function Bet() {
   return (
     <Routes>
-      <Route path="/" element={<Demo />} />
+      <Route path="/" element={<Live />} />
       <Route path="/demo" element={<Demo />} />
-      <Route path="/live" element={<Live />} />
     </Routes>
   );
 }

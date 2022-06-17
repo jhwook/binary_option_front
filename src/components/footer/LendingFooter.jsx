@@ -3,7 +3,7 @@ import styled from "styled-components";
 import L_yellow from "../../img/logo/L_yellow.svg";
 import I_twitter from "../../img/icon/I_twitter.png";
 import I_discord from "../../img/icon/I_discord.png";
-import I_unknownNav from "../../img/icon/I_unknownNav.svg";
+import I_medium from "../../img/icon/I_medium.svg";
 import { useSelector } from "react-redux";
 
 export default function LendingFooter() {
@@ -50,7 +50,7 @@ export default function LendingFooter() {
 
               <li>
                 <button className="" onClick={() => {}}>
-                  <img src={I_unknownNav} alt="" />
+                  <img src={I_medium} alt="" />
                 </button>
               </li>
             </ul>
@@ -86,7 +86,7 @@ export default function LendingFooter() {
 
               <li>
                 <button className="" onClick={() => {}}>
-                  <img src={I_unknownNav} alt="" />
+                  <img src={I_medium} alt="" />
                 </button>
               </li>
             </ul>

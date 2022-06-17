@@ -86,7 +86,7 @@ export default function TokenPopup({ off, setChartSymbol }) {
             {listData
               .filter((e) => e.fav)
               .map((v, i) => (
-                <li key={i}>
+                <li key={i} onClick={() => onClickStock(v.displaysymbol)}>
                   <button
                     className="favBtn"
                     onClick={(e) => onClickFavBtn(e, i)}
@@ -98,28 +98,18 @@ export default function TokenPopup({ off, setChartSymbol }) {
                     )}
                   </button>
 
-                  <ul className="imgList">
-                    {v.img.map((detV, i) => (
-                      <li key={i}>
-                        <img src={detV} alt="" />
-                      </li>
-                    ))}
-                  </ul>
+                  <img className="tknImg" src={v.imgurl} alt="" />
 
-                  <p className="name">
-                    {v.name.map((detV, i) => (
-                      <>{`${i !== 0 ? "/" : ""}${detV}`}</>
-                    ))}
-                  </p>
+                  <p className="name">{v.name}</p>
 
-                  <p className="percent">{`${v.percent}%`}</p>
+                  <p className="percent">{`${(v.payout * 100).toFixed(2)}%`}</p>
                 </li>
               ))}
 
             {listData
               .filter((e) => !e.fav)
               .map((v, i) => (
-                <li key={i}>
+                <li key={i} onClick={() => onClickStock(v.displaysymbol)}>
                   <button
                     className="favBtn"
                     onClick={(e) => onClickFavBtn(e, i)}
@@ -131,21 +121,11 @@ export default function TokenPopup({ off, setChartSymbol }) {
                     )}
                   </button>
 
-                  <ul className="imgList">
-                    {v.img.map((detV, i) => (
-                      <li key={i}>
-                        <img src={detV} alt="" />
-                      </li>
-                    ))}
-                  </ul>
+                  <img className="tknImg" src={v.imgurl} alt="" />
 
-                  <p className="name">
-                    {v.name.map((detV, i) => (
-                      <>{`${i !== 0 ? "/" : ""}${detV}`}</>
-                    ))}
-                  </p>
+                  <p className="name">{v.name}</p>
 
-                  <p className="percent">{`${v.percent}%`}</p>
+                  <p className="percent">{`${(v.payout * 100).toFixed(2)}%`}</p>
                 </li>
               ))}
           </ul>
@@ -205,7 +185,7 @@ export default function TokenPopup({ off, setChartSymbol }) {
             {listData
               .filter((e) => e.fav)
               .map((v, i) => (
-                <li key={i}>
+                <li key={i} onClick={() => onClickStock(v.displaysymbol)}>
                   <button
                     className="favBtn"
                     onClick={(e) => onClickFavBtn(e, i)}
@@ -217,15 +197,11 @@ export default function TokenPopup({ off, setChartSymbol }) {
                     )}
                   </button>
 
-                  <img src={v.imgurl} alt="" />
+                  <img className="tknImg" src={v.imgurl} alt="" />
 
-                  <p className="name">
-                    {v.name.map((detV, i) => (
-                      <>{`${i !== 0 ? "/" : ""}${detV}`}</>
-                    ))}
-                  </p>
+                  <p className="name">{v.name}</p>
 
-                  <p className="percent">{`${v.percent}%`}</p>
+                  <p className="percent">{`${(v.payout * 100).toFixed(2)}%`}</p>
                 </li>
               ))}
 
@@ -366,19 +342,8 @@ const MtokenPopupBox = styled.section`
           width: 3.88vw;
         }
 
-        .imgList {
-          display: flex;
-          align-items: center;
-          padding: 0 2.77vw 0 0;
-
-          li {
-            width: 6.66vw;
-
-            img {
-              height: 9.44vw;
-              border-radius: 50%;
-            }
-          }
+        .tknImg {
+          height: 9.44vw;
         }
 
         .name {

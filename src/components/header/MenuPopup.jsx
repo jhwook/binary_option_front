@@ -116,7 +116,7 @@ export default function MenuPopup({ off }) {
               )}
             </span>
 
-            <button className="quesBtn" onClick={() => {}}>
+            <button className="quesBtn" onClick={() => navigate("/qna")}>
               <img src={I_quesCircleWhite} alt="" />
             </button>
           </span>
