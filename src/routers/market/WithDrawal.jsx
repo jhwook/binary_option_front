@@ -12,14 +12,29 @@ export default function WithDrawal() {
   const [amount, setAmount] = useState("");
   const [address, setAddress] = useState("");
 
-  function onClickDrawalBtn() {
+  async function onClickDrawalBtn() {
     let addrChk = web3.utils.isAddress(address);
     if(!addrChk){SetErrorBar({ str: "Wrong address type" });return;}
-  axios
-  .post(`${API.WITHDRAW}`,{userid, amount, rxaddr: address})
-  .then(_=>{
-    SetErrorBar({ str: "Withdraw requested Successfully" });
-  })
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      axios
+        .get(`${API.LOGIN_CHECK}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(async ({ data }) => {
+          axios
+          .post(`${API.WITHDRAW}`,{userid: data.userid, amount, rxaddr: address, }, )
+          .then(_=>{
+            SetErrorBar({ str: "Withdraw requested Successfully" });
+          })
+        })
+        .catch((err) => localStorage.removeItem("token"));
+    }
+    
+  
     
   }
 
