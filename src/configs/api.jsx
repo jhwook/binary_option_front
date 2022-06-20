@@ -1,4 +1,5 @@
 export const URL = "http://3.34.76.233:30559";
+export const EXPURL = "http://3.34.76.233:31273";
 
 export const API = {
   SIGNUP: URL + "/users/signup",
@@ -15,4 +16,5 @@ export const API = {
   BET_ROUND: URL + "/bet/rounds",
 
   TRANS_BALANCE: URL + "/users/balance",
+  WITHDRAW: URL + "/transactions/withdraw"
 };

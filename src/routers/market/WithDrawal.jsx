@@ -1,15 +1,26 @@
+import axios from "axios";
 import { useState } from "react";
 import styled from "styled-components";
+import { API } from "../../configs/api";
 import B_withDrawal from "../../img/bg/market/withDrawal/B_withDrawal.svg";
 import B_withDrawal2 from "../../img/bg/market/withDrawal/B_withDrawal2.svg";
 import SetErrorBar from "../../util/SetErrorBar";
+import web3 from "web3";
+
 
 export default function WithDrawal() {
   const [amount, setAmount] = useState("");
   const [address, setAddress] = useState("");
 
   function onClickDrawalBtn() {
-    SetErrorBar({ str: "Copied Successfully" });
+    let addrChk = web3.utils.isAddress(address);
+    if(!addrChk){SetErrorBar({ str: "Wrong address type" });return;}
+  axios
+  .post(`${API.WITHDRAW}`,{userid, amount, rxaddr: address})
+  .then(_=>{
+    SetErrorBar({ str: "Withdraw requested Successfully" });
+  })
+    
   }
 
   return (
@@ -31,7 +42,7 @@ export default function WithDrawal() {
             </li>
             <li>
               <p className="key">Max amount per transaction</p>
-              <p className="value">0no limits</p>
+              <p className="value">0 no limits</p>
             </li>
           </ul>
 
@@ -55,7 +66,7 @@ export default function WithDrawal() {
 
               <div className="valueBox">
                 <input
-                  type="number"
+                  
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   placeholder=""
