@@ -5,7 +5,6 @@ import { API } from "../../configs/api";
 import B_withDrawal from "../../img/bg/market/withDrawal/B_withDrawal.svg";
 import B_withDrawal2 from "../../img/bg/market/withDrawal/B_withDrawal2.svg";
 import SetErrorBar from "../../util/SetErrorBar";
-import web3 from "web3";
 
 
 export default function WithDrawal() {
@@ -13,8 +12,6 @@ export default function WithDrawal() {
   const [address, setAddress] = useState("");
 
   async function onClickDrawalBtn() {
-    let addrChk = web3.utils.isAddress(address);
-    if(!addrChk){SetErrorBar({ str: "Wrong address type" });return;}
     const token = localStorage.getItem("token");
 
     if (token) {
