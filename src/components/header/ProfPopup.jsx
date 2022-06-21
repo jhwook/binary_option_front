@@ -13,6 +13,7 @@ export default function ProfPopup({ off, offAll }) {
     navigate("/");
 
     if (offAll) offAll();
+    off();
   }
 
   function onClickNav(url) {

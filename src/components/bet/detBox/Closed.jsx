@@ -6,14 +6,14 @@ import I_lowArwRed from "../../../img/icon/I_lowArwRed.svg";
 import E_Closedchart from "../../../img/example/bet/E_Closedchart.svg";
 import { useSelector } from "react-redux";
 
-export default function Closed() {
+export default function Closed({ data }) {
   const isMobile = useSelector((state) => state.common.isMobile);
 
   function getIcon(type) {
     switch (type) {
-      case "Higher":
+      case 2:
         return I_highArwGreen;
-      case "Lower":
+      case 1:
         return I_lowArwRed;
       default:
         break;
@@ -28,122 +28,143 @@ export default function Closed() {
         </button>
 
         <ul className="dataList">
-          {[new Date()].map((v, i) => (
-            <li key={i}>
-              <p className="date">{moment(v).format("YYYY-MM-DD")}</p>
+          {data &&
+            data.map((v, i) => (
+              <li key={i}>
+                <p className="date">
+                  {moment(new Date()).format("YYYY-MM-DD")}
+                </p>
 
-              <ul className="detListByDate">
-                {D_openedList.map((detV, i) => (
-                  <li key={i}>
-                    <details>
-                      <summary>
-                        <div className="contBox">
-                          <p className="token">{detV.token}</p>
+                <ul className="detListByDate">
+                  {D_openedList.map((detV, i) => (
+                    <li key={i}>
+                      <details>
+                        <summary>
+                          <div className="contBox">
+                            <p className="token">Bitcoin</p>
+                            {/* <p className="token">{v.token}</p> */}
 
-                          <p className="percent">{`${detV.percent}%`}</p>
-                        </div>
+                            <p className="percent">{`5%`}</p>
+                            {/* <p className="percent">{`${v.percent}%`}</p> */}
+                          </div>
 
-                        <div className="contBox">
-                          <span className="forecast">
-                            <img src={getIcon(detV.type)} alt="" />
-                            <p>{`$${detV.change}`}</p>
-                          </span>
+                          <div className="contBox">
+                            <span className="forecast">
+                              <img src={getIcon(v.side)} alt="" />
+                              <p>{`$${v.amount}`}</p>
+                            </span>
 
-                          <p
-                            className={`${detV.benefit > 0 && "plus"} ${
-                              detV.benefit < 0 && "minus"
-                            } benefit`}
-                          >{`$${detV.benefit.toFixed(2)}`}</p>
+                            <p
+                              className={`${1.05 > 0 && "plus"} ${
+                                1.05 < 0 && "minus"
+                              } benefit`}
+                            >{`$${(1.05).toFixed(2)}`}</p>
+                            {/* <p
+                      className={`${v.benefit > 0 && "plus"} ${
+                        v.benefit < 0 && "minus"
+                      } benefit`}
+                       >{`$${v.benefit?.toFixed(2)}`}</p> */}
 
-                          <p className="time">
-                            {moment(detV.time).format("mm:ss")}
-                          </p>
-                        </div>
-                      </summary>
+                            <p className="time">
+                              {moment(v.createdat).format("mm:ss")}
+                            </p>
+                            {/* <p className="time">{moment(v.time).format("mm:ss")}</p> */}
+                          </div>
+                        </summary>
 
-                      <div className="openBox">
-                        <div className="timeBox">
-                          <ul className="timeList">
-                            <li>
-                              <p className="key">Open time</p>
-                              <p className="value">
-                                {moment(detV.det.openTime).format("hh:mm:ss")}
-                              </p>
-                            </li>
-
-                            <li>
-                              <p>{detV.det.limit}</p>
-                            </li>
-
-                            <li>
-                              <p className="key">ClosingTime</p>
-                              <p className="value">
-                                {moment(detV.det.closingTime).format(
-                                  "hh:mm:ss"
-                                )}
-                              </p>
-                            </li>
-                          </ul>
-                        </div>
-
-                        <div className="chartBox">
-                          <img src={E_Closedchart} alt="" />
-                        </div>
-
-                        <div className="resBox">
-                          <div className="detResBox">
-                            <ul className="forcastList">
+                        <div className="openBox">
+                          <div className="timeBox">
+                            <ul className="timeList">
                               <li>
-                                <p className="key">Your forecast</p>
-                                <p className="value">{detV.forcast.type}</p>
-                              </li>
-                              <li>
-                                <p className="key">Payout</p>
-                                <p className="value">{`$${detV.forcast.payout.toFixed(
-                                  2
-                                )}`}</p>
-                              </li>
-                              <li>
-                                <p className="key">Profit</p>
-                                <p className="value">{`$${detV.forcast.profit.toFixed(
-                                  2
-                                )}`}</p>
-                              </li>
-                            </ul>
-
-                            <ul className="priceList">
-                              <li>
-                                <p className="key">Open price</p>
-
-                                <p className="value">{detV.price.openPrice}</p>
-                              </li>
-                              <li>
-                                <p className="key">Current price</p>
-
+                                <p className="key">Open time</p>
                                 <p className="value">
-                                  {detV.price.currentPrice}
+                                  {moment(v.createdat).format("hh:mm:ss")}
+                                  {/* {moment(v.det?.openTime).format("hh:mm:ss")} */}
                                 </p>
                               </li>
-                              <li>
-                                <p className="key">Difference</p>
 
-                                <p className="value point">{`${detV.price.diff} points`}</p>
+                              <li>
+                                <p>{"M5"}</p>
+                                {/* <p>{v.det?.limit}</p> */}
+                              </li>
+
+                              <li>
+                                <p className="key">ClosingTime</p>
+                                <p className="value">
+                                  {moment(v.createdat).format("hh:mm:ss")}
+                                  {/* {moment(v.det?.closingTime).format("hh:mm:ss")} */}
+                                </p>
                               </li>
                             </ul>
                           </div>
 
-                          <button
-                            className="getBtn"
-                            onClick={() => {}}
-                          >{`Get $${(30).toFixed(2)}`}</button>
+                          <div className="chartBox">
+                            <img src={E_Closedchart} alt="" />
+                          </div>
+
+                          <div className="resBox">
+                            <div className="detResBox">
+                              <ul className="forcastList">
+                                <li>
+                                  <p className="key">Your forecast</p>
+                                  <p className="value">{"Higher"}</p>
+                                  {/* <p className="value">{v.forcast?.type}</p> */}
+                                </li>
+                                <li>
+                                  <p className="key">Payout</p>
+                                  <p className="value">{`$${(0).toFixed(
+                                    2
+                                  )}`}</p>
+                                  {/* <p className="value">{`$${v.forcast?.payout?.toFixed(
+                            2
+                          )}`}</p> */}
+                                </li>
+                                <li>
+                                  <p className="key">Profit</p>
+                                  <p className="value">{`$${(0).toFixed(
+                                    2
+                                  )}`}</p>
+                                  {/* <p className="value">{`$${v.forcast?.profit?.toFixed(
+                            2
+                          )}`}</p> */}
+                                </li>
+                              </ul>
+
+                              <ul className="priceList">
+                                <li>
+                                  <p className="key">Open price</p>
+
+                                  <p className="value">{29781}</p>
+                                  {/* <p className="value">{v.starttickerprice}</p> */}
+                                </li>
+                                <li>
+                                  <p className="key">Current price</p>
+
+                                  <p className="value">{29746}</p>
+                                  {/* <p className="value">{v.endtickerprice}</p> */}
+                                </li>
+                                <li>
+                                  <p className="key">Difference</p>
+
+                                  <p className="value point">{`${-1} points`}</p>
+                                  {/* <p className="value point">{`${v.price?.diff} points`}</p> */}
+                                </li>
+                              </ul>
+                            </div>
+
+                            <button
+                              className="getBtn"
+                              onClick={() => {}}
+                            >{`Get $${(30).toFixed(2)}`}</button>
+                            {/* >{`Get $${(30).toFixed(2)}`}</button> */}
+                          </div>
                         </div>
-                      </div>
-                    </details>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))}
+                      </details>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
         </ul>
       </MclosedBox>
     );
@@ -155,122 +176,143 @@ export default function Closed() {
         </button>
 
         <ul className="dataList">
-          {[new Date()].map((v, i) => (
-            <li key={i}>
-              <p className="date">{moment(v).format("YYYY-MM-DD")}</p>
+          {data &&
+            data.map((v, i) => (
+              <li key={i}>
+                <p className="date">
+                  {moment(new Date()).format("YYYY-MM-DD")}
+                </p>
 
-              <ul className="detListByDate">
-                {D_openedList.map((detV, i) => (
-                  <li key={i}>
-                    <details>
-                      <summary>
-                        <div className="contBox">
-                          <p className="token">{detV.token}</p>
+                <ul className="detListByDate">
+                  {D_openedList.map((detV, i) => (
+                    <li key={i}>
+                      <details>
+                        <summary>
+                          <div className="contBox">
+                            <p className="token">Bitcoin</p>
+                            {/* <p className="token">{v.token}</p> */}
 
-                          <p className="percent">{`${detV.percent}%`}</p>
-                        </div>
+                            <p className="percent">{`5%`}</p>
+                            {/* <p className="percent">{`${v.percent}%`}</p> */}
+                          </div>
 
-                        <div className="contBox">
-                          <span className="forecast">
-                            <img src={getIcon(detV.type)} alt="" />
-                            <p>{`$${detV.change}`}</p>
-                          </span>
+                          <div className="contBox">
+                            <span className="forecast">
+                              <img src={getIcon(v.side)} alt="" />
+                              <p>{`$${v.amount}`}</p>
+                            </span>
 
-                          <p
-                            className={`${detV.benefit > 0 && "plus"} ${
-                              detV.benefit < 0 && "minus"
-                            } benefit`}
-                          >{`$${detV.benefit.toFixed(2)}`}</p>
+                            <p
+                              className={`${1.05 > 0 && "plus"} ${
+                                1.05 < 0 && "minus"
+                              } benefit`}
+                            >{`$${(1.05).toFixed(2)}`}</p>
+                            {/* <p
+                      className={`${v.benefit > 0 && "plus"} ${
+                        v.benefit < 0 && "minus"
+                      } benefit`}
+                       >{`$${v.benefit?.toFixed(2)}`}</p> */}
 
-                          <p className="time">
-                            {moment(detV.time).format("mm:ss")}
-                          </p>
-                        </div>
-                      </summary>
+                            <p className="time">
+                              {moment(v.createdat).format("mm:ss")}
+                            </p>
+                            {/* <p className="time">{moment(v.time).format("mm:ss")}</p> */}
+                          </div>
+                        </summary>
 
-                      <div className="openBox">
-                        <div className="timeBox">
-                          <ul className="timeList">
-                            <li>
-                              <p className="key">Open time</p>
-                              <p className="value">
-                                {moment(detV.det.openTime).format("hh:mm:ss")}
-                              </p>
-                            </li>
-
-                            <li>
-                              <p>{detV.det.limit}</p>
-                            </li>
-
-                            <li>
-                              <p className="key">ClosingTime</p>
-                              <p className="value">
-                                {moment(detV.det.closingTime).format(
-                                  "hh:mm:ss"
-                                )}
-                              </p>
-                            </li>
-                          </ul>
-                        </div>
-
-                        <div className="chartBox">
-                          <img src={E_Closedchart} alt="" />
-                        </div>
-
-                        <div className="resBox">
-                          <div className="detResBox">
-                            <ul className="forcastList">
+                        <div className="openBox">
+                          <div className="timeBox">
+                            <ul className="timeList">
                               <li>
-                                <p className="key">Your forecast</p>
-                                <p className="value">{detV.forcast.type}</p>
-                              </li>
-                              <li>
-                                <p className="key">Payout</p>
-                                <p className="value">{`$${detV.forcast.payout.toFixed(
-                                  2
-                                )}`}</p>
-                              </li>
-                              <li>
-                                <p className="key">Profit</p>
-                                <p className="value">{`$${detV.forcast.profit.toFixed(
-                                  2
-                                )}`}</p>
-                              </li>
-                            </ul>
-
-                            <ul className="priceList">
-                              <li>
-                                <p className="key">Open price</p>
-
-                                <p className="value">{detV.price.openPrice}</p>
-                              </li>
-                              <li>
-                                <p className="key">Current price</p>
-
+                                <p className="key">Open time</p>
                                 <p className="value">
-                                  {detV.price.currentPrice}
+                                  {moment(v.createdat).format("hh:mm:ss")}
+                                  {/* {moment(v.det?.openTime).format("hh:mm:ss")} */}
                                 </p>
                               </li>
-                              <li>
-                                <p className="key">Difference</p>
 
-                                <p className="value point">{`${detV.price.diff} points`}</p>
+                              <li>
+                                <p>{"M5"}</p>
+                                {/* <p>{v.det?.limit}</p> */}
+                              </li>
+
+                              <li>
+                                <p className="key">ClosingTime</p>
+                                <p className="value">
+                                  {moment(v.createdat).format("hh:mm:ss")}
+                                  {/* {moment(v.det?.closingTime).format("hh:mm:ss")} */}
+                                </p>
                               </li>
                             </ul>
                           </div>
 
-                          <button
-                            className="getBtn"
-                            onClick={() => {}}
-                          >{`Get $${(30).toFixed(2)}`}</button>
+                          <div className="chartBox">
+                            <img src={E_Closedchart} alt="" />
+                          </div>
+
+                          <div className="resBox">
+                            <div className="detResBox">
+                              <ul className="forcastList">
+                                <li>
+                                  <p className="key">Your forecast</p>
+                                  <p className="value">{"Higher"}</p>
+                                  {/* <p className="value">{v.forcast?.type}</p> */}
+                                </li>
+                                <li>
+                                  <p className="key">Payout</p>
+                                  <p className="value">{`$${(0).toFixed(
+                                    2
+                                  )}`}</p>
+                                  {/* <p className="value">{`$${v.forcast?.payout?.toFixed(
+                            2
+                          )}`}</p> */}
+                                </li>
+                                <li>
+                                  <p className="key">Profit</p>
+                                  <p className="value">{`$${(0).toFixed(
+                                    2
+                                  )}`}</p>
+                                  {/* <p className="value">{`$${v.forcast?.profit?.toFixed(
+                            2
+                          )}`}</p> */}
+                                </li>
+                              </ul>
+
+                              <ul className="priceList">
+                                <li>
+                                  <p className="key">Open price</p>
+
+                                  <p className="value">{29781}</p>
+                                  {/* <p className="value">{v.starttickerprice}</p> */}
+                                </li>
+                                <li>
+                                  <p className="key">Current price</p>
+
+                                  <p className="value">{29746}</p>
+                                  {/* <p className="value">{v.endtickerprice}</p> */}
+                                </li>
+                                <li>
+                                  <p className="key">Difference</p>
+
+                                  <p className="value point">{`${-1} points`}</p>
+                                  {/* <p className="value point">{`${v.price?.diff} points`}</p> */}
+                                </li>
+                              </ul>
+                            </div>
+
+                            <button
+                              className="getBtn"
+                              onClick={() => {}}
+                            >{`Get $${(30).toFixed(2)}`}</button>
+                            {/* >{`Get $${(30).toFixed(2)}`}</button> */}
+                          </div>
                         </div>
-                      </div>
-                    </details>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))}
+                      </details>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
         </ul>
       </PclosedBox>
     );

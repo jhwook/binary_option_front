@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import I_highArwGreen from "../img/icon/I_highArwGreen.svg";
+import I_lowArwRed from "../img/icon/I_lowArwRed.svg";
 import I_chkOrange from "../img/icon/I_chkOrange.svg";
 
 export function strDot(str, startNum = 0, endNum = 0) {
@@ -156,9 +157,9 @@ export function GetExchange({ price, unit }) {
   return <>{exchange.toLocaleString("eu", "US")}</>;
 }
 
-export function setToast({ type, cont }) {
+export function setToast({ type, cont, amount }) {
   switch (type) {
-    case "placed":
+    case "high":
       toast(
         <div className="customBox">
           <p className="title">Trade order placed</p>
@@ -176,7 +177,34 @@ export function setToast({ type, cont }) {
 
             <li>
               <p className="key">Amount</p>
-              <p className="value">$1</p>
+              <p className="value">{`$${amount}`}</p>
+            </li>
+          </ul>
+        </div>,
+        {
+          toastId: "CustomToastBet",
+        }
+      );
+      break;
+    case "low":
+      toast(
+        <div className="customBox">
+          <p className="title">Trade order placed</p>
+
+          <ul className="infoList">
+            <li>
+              <strong>Bitcoin</strong>
+              <img src={I_lowArwRed} alt="" />
+            </li>
+
+            <li>
+              <p className="key">Forecast</p>
+              <p className="value">Lower</p>
+            </li>
+
+            <li>
+              <p className="key">Amount</p>
+              <p className="value">{`$${amount}`}</p>
             </li>
           </ul>
         </div>,

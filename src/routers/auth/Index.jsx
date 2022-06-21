@@ -21,6 +21,7 @@ export default function Index() {
       .then(({ data }) => {
         console.log(data);
         localStorage.setItem("token", data.accessToken);
+        localStorage.setItem("userid", data.userInfo.id);
         navigate("/");
       })
       .catch((err) => console.error(err));

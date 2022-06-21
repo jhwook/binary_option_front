@@ -5,11 +5,33 @@ import { D_detCategoryList } from "../../../data/D_bet";
 import Closed from "./Closed";
 import Opened from "./Opened";
 import I_xWhite from "../../../img/icon/I_xWhite.svg";
+import axios from "axios";
+import { API } from "../../../configs/api";
+import { useEffect } from "react";
 
 export default function DetBox({ off, mode }) {
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [detCategory, setDetCategory] = useState(D_detCategoryList[0]);
+  const [logData, setLogData] = useState("");
+
+  const userid = localStorage.getItem("userid");
+
+  function getBetLog() {
+    axios
+      .get(`${API.BET_LOG}/${userid}`)
+      .then(({ data }) => {
+        console.log(data);
+        setLogData(data);
+      })
+      .catch((err) => console.error(err));
+  }
+
+  console.log(logData.bettingLogs);
+
+  useEffect(() => {
+    getBetLog();
+  }, [detCategory]);
 
   if (isMobile)
     return (
@@ -26,8 +48,8 @@ export default function DetBox({ off, mode }) {
           ))}
         </ul>
 
-        {detCategory === "Opened" && <Opened />}
-        {detCategory === "Closed" && <Closed />}
+        {detCategory === "Opened" && <Opened data={logData.bettingLogs} />}
+        {detCategory === "Closed" && <Closed data={logData.betEndLogs} />}
 
         <footer>
           <button className="exitBtn" onClick={() => off()}>
@@ -53,8 +75,8 @@ export default function DetBox({ off, mode }) {
           ))}
         </ul>
 
-        {detCategory === "Opened" && <Opened />}
-        {detCategory === "Closed" && <Closed />}
+        {detCategory === "Opened" && <Opened data={logData.bettingLogs} />}
+        {detCategory === "Closed" && <Closed data={logData.betEndLogs} />}
       </PdetBoxCont>
     );
 }

@@ -32,6 +32,7 @@ export default function Demo() {
   const dispatch = useDispatch();
   const isMobile = useSelector((state) => state.common.isMobile);
   const token = localStorage.getItem("token");
+  const userid = localStorage.getItem("userid");
 
   const [liveTradePopup, setLiveTradePopup] = useState(false);
   const [hotKeyPopup, setHotKeyPopup] = useState(true);
@@ -42,6 +43,8 @@ export default function Demo() {
   const [myBalancePopup, setMyBalancePopup] = useState(false);
   const [addPopup, setAddPopup] = useState(false);
   const [chartSymbol, setChartSymbol] = useState("9988");
+  const [amount, setAmount] = useState("");
+  const [bookMark, setBookMark] = useState([]);
 
   function handleKeyDown(e) {
     if (e.key === "W" && e.shiftKey) {
@@ -52,15 +55,35 @@ export default function Demo() {
   function onClickPayBtn(type) {
     switch (type) {
       case "high":
-        setToast({ type: "placed" });
+        axios
+          .post(
+            API.BET,
+            { betamount: amount, side: 2 },
+            { headers: { Authorization: `Bearer ${token}` } }
+          )
+          .then((res) => {
+            console.log(res);
+            setToast({ type: "hgih", amount });
+          })
+          .catch((err) => console.error(err));
 
-        toast.onChange((payload) => {
-          if (payload.status === "removed") setToast({ type: "closed" });
-        });
+        // setToast({ type: "closed" });
         break;
 
       case "low":
-        setInsufficientPopup(true);
+        axios
+          .post(
+            API.BET,
+            { betamount: amount, side: 1 },
+            { headers: { Authorization: `Bearer ${token}` } }
+          )
+          .then((res) => {
+            console.log(res);
+            setToast({ type: "low", amount });
+          })
+          .catch((err) => console.error(err));
+
+        // setInsufficientPopup(true);
         break;
 
       default:
@@ -68,9 +91,34 @@ export default function Demo() {
     }
   }
 
-  useLayoutEffect(() => {
-    setLiveTradePopup(true);
+  function getBookMark() {
+    axios
+      .get(API.BOOKMARK_LIST, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(({ data }) => {
+        console.log(data);
+        setBookMark(data);
+      })
+      .catch((err) => console.error(err));
+  }
 
+  // function getBetLog() {
+  //   axios
+  //     .get(`${API.BET_LOG}/${userid}`)
+  //     .then((res) => console.log(res))
+  //     .catch((err) => console.error(err));
+  // }
+
+  useEffect(() => {
+    getBookMark();
+
+    // getBetLog();
+  }, []);
+
+  useLayoutEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
@@ -109,6 +157,7 @@ export default function Demo() {
                           <TokenPopup
                             off={setTokenPopup}
                             setChartSymbol={setChartSymbol}
+                            getBookMark={getBookMark}
                           />
                           <PopupBg off={setTokenPopup} />
                         </>
@@ -150,7 +199,12 @@ export default function Demo() {
                     <p className="key">Amount</p>
 
                     <div className="value">
-                      <p>$ 100</p>
+                      <p className="unit">$</p>
+                      <input
+                        value={amount}
+                        onChange={(e) => setAmount(e.target.value)}
+                        placeholder="0"
+                      />
 
                       <img src={I_dollarWhite} alt="" />
                     </div>
@@ -163,6 +217,7 @@ export default function Demo() {
                   <span className="btnBox high">
                     <button
                       className="highBtn"
+                      disabled={!amount}
                       onClick={() => onClickPayBtn("high")}
                     >
                       <img src={I_highArwGreen} alt="" />
@@ -175,6 +230,7 @@ export default function Demo() {
                   <span className="btnBox low">
                     <button
                       className="lowBtn"
+                      disabled={!amount}
                       onClick={() => onClickPayBtn("low")}
                     >
                       <img src={I_lowArwRed} alt="" />
@@ -245,6 +301,7 @@ export default function Demo() {
                     <TokenPopup
                       off={setTokenPopup}
                       setChartSymbol={setChartSymbol}
+                      getBookMark={getBookMark}
                     />
                     <PopupBg off={setTokenPopup} />
                   </>
@@ -252,12 +309,12 @@ export default function Demo() {
               </div>
 
               <ul className="tokenList">
-                {D_tokenList.map((v, i) => (
-                  <li key={i} onClick={() => setChartSymbol("BITSTAMP:BTCUSD")}>
+                {bookMark.map((v, i) => (
+                  <li key={i} onClick={() => setChartSymbol(v.displaysymbol)}>
                     <img src={I_starYellowO} alt="" />
                     <span className="textBox">
-                      <p className="key">{v.key}</p>
-                      <p className="value">{v.value}</p>
+                      <p className="key">{v.name}</p>
+                      <p className="value">{v.payout}%</p>
                     </span>
                   </li>
                 ))}
@@ -375,7 +432,13 @@ export default function Demo() {
                   </div>
 
                   <div className="value">
-                    <p>$ 100</p>
+                    <p className="unit">$</p>
+
+                    <input
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                      placeholder="0"
+                    />
 
                     <img src={I_dollarWhite} alt="" />
                   </div>
@@ -385,6 +448,7 @@ export default function Demo() {
 
                 <button
                   className="highBtn"
+                  disabled={!amount}
                   onClick={() => onClickPayBtn("high")}
                 >
                   <span className="defaultBox">
@@ -402,7 +466,11 @@ export default function Demo() {
                   </span>
                 </button>
 
-                <button className="lowBtn" onClick={() => onClickPayBtn("low")}>
+                <button
+                  className="lowBtn"
+                  disabled={!amount}
+                  onClick={() => onClickPayBtn("low")}
+                >
                   <span className="defaultBox">
                     <img src={I_lowArwRed} alt="" />
                     <strong>LOW</strong>
@@ -599,16 +667,20 @@ const MbetBox = styled.main`
               border-radius: 2.22vw;
               position: relative;
 
+              input {
+                width: 100%;
+              }
+
               .contBtn {
                 display: flex;
                 align-items: center;
                 width: 100%;
                 height: 100%;
-              }
 
-              p {
-                flex: 1;
-                text-align: start;
+                p {
+                  flex: 1;
+                  text-align: start;
+                }
               }
 
               img {
@@ -906,6 +978,7 @@ const PbetBox = styled.main`
           .value {
             display: flex;
             align-items: center;
+            gap: 4px;
             height: 48px;
             padding: 0 18px;
             font-size: 16px;
@@ -913,16 +986,20 @@ const PbetBox = styled.main`
             border-radius: 8px;
             position: relative;
 
+            input {
+              flex: 1;
+            }
+
             .contBtn {
               display: flex;
               align-items: center;
               width: 100%;
               height: 100%;
-            }
 
-            p {
-              flex: 1;
-              text-align: start;
+              p {
+                flex: 1;
+                text-align: start;
+              }
             }
 
             img {

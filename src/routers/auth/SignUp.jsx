@@ -16,30 +16,43 @@ export default function Signup() {
 
   const isMobile = useSelector((state) => state.common.isMobile);
 
-  const [category, setCategory] = useState(0);
+  const [category, setCategory] = useState(D_loginCategoryList[0]);
   const [chkTerm, setChkTerm] = useState(false);
   const [userData, setUserData] = useState(D_joinData);
 
   function onClickSignup() {
     let signDataForm;
 
-    if (category)
+    if (category.key === "Email")
+      signDataForm = {
+        email: userData.email,
+        password: userData.pw,
+        refcode: userData.referral,
+      };
+    else if (category.key === "Phone Number")
       signDataForm = {
         phone: userData.phone,
         countryNum: userData.phoneLoc,
         password: userData.pw,
+        refcode: userData.referral,
       };
-    else signDataForm = { email: userData.email, password: userData.pw };
 
     console.log(signDataForm);
 
     axios
-      .post(`${API.SIGNUP}`, signDataForm)
-      .then((res) => {
-        console.log(res);
+      .post(`${API.SIGNUP}/${category.value}`, signDataForm)
+      .then(({ data }) => {
+        console.log(data);
 
-        if (res.status === 201) navigate("/auth");
-        else alert("error");
+        if (data.message === "TOKEN_CREATED") {
+          localStorage.setItem("token", data.result.tokenId);
+          navigate("/");
+        }
+
+        else if(data.message ==="INVALID-CODE")
+        {
+          setUserData({...userData, referralAlarm:""})
+        }
       })
       .catch((err) => console.error(err));
   }
@@ -58,16 +71,20 @@ export default function Signup() {
                 <div className="contBox">
                   <ul className="categoryList">
                     {D_loginCategoryList.map((v, i) => (
-                      <li key={i} className={`${category === i && "on"}`}>
-                        <button onClick={() => setCategory(i)}>{v}</button>
+                      <li
+                        key={i}
+                        className={`${category.key === v.key && "The referral code you have entered does not coincide"}`}
+                      >
+                        <button onClick={() => setCategory(v)}>{v.key}</button>
                       </li>
                     ))}
                   </ul>
 
-                  {category === 0 && (
+                  {category.key === "Email" && (
                     <Email userData={userData} setUserData={setUserData} />
                   )}
-                  {category === 1 && (
+
+                  {category.key === "Phone Number" && (
                     <Phone userData={userData} setUserData={setUserData} />
                   )}
 
@@ -76,6 +93,29 @@ export default function Signup() {
                       <p>Referral ID (Optional)</p>
                       <img src={I_dnPol} alt="" />
                     </summary>
+
+                    <div className="inputCont">
+                      <div
+                        className={`${
+                          userData.referralAlarm && "alarm"
+                        } inputBox`}
+                      >
+                        <input
+                          value={userData.referral}
+                          onChange={(e) =>
+                            setUserData({
+                              ...userData,
+                              referral: e.target.value,
+                            })
+                          }
+                          placeholder=""
+                        />
+                      </div>
+
+                      {userData.referralAlarm && (
+                        <p className="alarm">{userData.referralAlarm}</p>
+                      )}
+                    </div>
                   </details>
                 </div>
 
@@ -145,16 +185,20 @@ export default function Signup() {
                 <div className="contBox">
                   <ul className="categoryList">
                     {D_loginCategoryList.map((v, i) => (
-                      <li key={i} className={`${category === i && "on"}`}>
-                        <button onClick={() => setCategory(i)}>{v}</button>
+                      <li
+                        key={i}
+                        className={`${category.key === v.key && "on"}`}
+                      >
+                        <button onClick={() => setCategory(v)}>{v.key}</button>
                       </li>
                     ))}
                   </ul>
 
-                  {category === 0 && (
+                  {category.key === "Email" && (
                     <Email userData={userData} setUserData={setUserData} />
                   )}
-                  {category === 1 && (
+
+                  {category.key === "Phone Number" && (
                     <Phone userData={userData} setUserData={setUserData} />
                   )}
 
@@ -163,6 +207,29 @@ export default function Signup() {
                       <p>Referral ID (Optional)</p>
                       <img src={I_dnPol} alt="" />
                     </summary>
+
+                    <div className="inputCont">
+                      <div
+                        className={`${
+                          userData.referralAlarm && "alarm"
+                        } inputBox`}
+                      >
+                        <input
+                          value={userData.referral}
+                          onChange={(e) =>
+                            setUserData({
+                              ...userData,
+                              referral: e.target.value,
+                            })
+                          }
+                          placeholder=""
+                        />
+                      </div>
+
+                      {userData.referralAlarm && (
+                        <p className="alarm">{userData.referralAlarm}</p>
+                      )}
+                    </div>
                   </details>
                 </div>
 
@@ -314,6 +381,39 @@ const MsignupBox = styled.main`
 
               img {
                 width: 2.22vw;
+              }
+            }
+
+            .inputCont {
+              display: flex;
+              flex-direction: column;
+              gap: 2.22vw;
+              margin: 2.22vw 0 0 0;
+
+              .inputBox {
+                display: flex;
+                align-items: center;
+                height: 12.22vw;
+                padding: 0 4.44vw;
+                border-radius: 2.22vw;
+                border: 1px solid #ddd;
+
+                &:focus-within {
+                  border-color: #f7ab1f;
+                }
+
+                &.alarm {
+                  border-color: #f00;
+                }
+
+                input {
+                  flex: 1;
+                }
+              }
+
+              p.alarm {
+                font-size: 3.33vw;
+                color: #ff5353;
               }
             }
           }
@@ -485,6 +585,39 @@ const PsignupBox = styled.main`
 
               img {
                 width: 8px;
+              }
+            }
+
+            .inputCont {
+              display: flex;
+              flex-direction: column;
+              gap: 10px;
+              margin: 8px 0 0 0;
+
+              .inputBox {
+                display: flex;
+                align-items: center;
+                height: 44px;
+                padding: 0 16px;
+                border-radius: 8px;
+                border: 1px solid #ddd;
+
+                &:focus-within {
+                  border-color: #f7ab1f;
+                }
+
+                &.alarm {
+                  border-color: #f00;
+                }
+
+                input {
+                  flex: 1;
+                }
+              }
+
+              p.alarm {
+                font-size: 12px;
+                color: #ff5353;
               }
             }
           }

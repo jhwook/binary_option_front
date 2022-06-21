@@ -1,4 +1,7 @@
-export const D_loginCategoryList = ["Email", "Phone Number"];
+export const D_loginCategoryList = [
+  { key: "Email", value: "email" },
+  { key: "Phone Number", value: "phone" },
+];
 
 export const D_joinData = {
   email: "",
@@ -7,6 +10,8 @@ export const D_joinData = {
   phoneLoc: "",
   emailAlarm: "",
   pwAlarm: "",
+  referral: "",
+  referralAlarm: "",
 };
 
 export const D_locNumList = [

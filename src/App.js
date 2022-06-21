@@ -23,7 +23,7 @@ export default function App() {
         crossOrigin="true"
       />
       <link
-        href="https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;600;700&display=swap"
         rel="stylesheet"
       />
       <link
@@ -54,7 +54,7 @@ export default function App() {
           <Route path="/position/*" element={<Position />} />
           <Route path="/finance/*" element={<Finance />} />
           <Route path="/setting/*" element={<Setting />} />
-          
+
           <Route path="/qna" element={<Qna />} />
         </Routes>
       </HashRouter>

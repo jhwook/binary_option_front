@@ -11,43 +11,55 @@ import axios from "axios";
 import { API } from "../../configs/api";
 import { gCliId } from "../../configs/setting";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const navigate = useNavigate();
 
   const isMobile = useSelector((state) => state.common.isMobile);
 
-  const [category, setCategory] = useState(0);
+  const [category, setCategory] = useState(D_loginCategoryList[0]);
   const [userData, setUserData] = useState(D_joinData);
 
   function onClickLoginBtn() {
-    let signDataForm;
+    let loginDataForm;
 
-    if (category)
-      signDataForm = {
+    if (category.key === "Email")
+      loginDataForm = { email: userData.email, password: userData.pw };
+    else if (category.key === "Phone Number")
+      loginDataForm = {
         phone: userData.phone,
         countryNum: userData.phoneLoc,
         password: userData.pw,
       };
-    else signDataForm = { email: userData.email, password: userData.pw };
 
-    console.log(signDataForm);
+    console.log(loginDataForm);
 
     axios
-      .post(`${API.LOGIN}`, signDataForm)
+      .post(`${API.LOGIN}/${category.value}`, loginDataForm)
       .then(({ data }) => {
         console.log(data);
-        localStorage.setItem("token", data.accessToken);
-        navigate("/");
+
+        if (data.message === "TOKEN_CREATED") {
+          localStorage.setItem("token", data.result.tokenId);
+          navigate("/");
+        } else {
+          setUserData({
+            ...userData,
+            pwAlarm: "The password you have entered does not coincide",
+          });
+        }
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+      });
   }
 
-  function resGLogin({ profileObj }) {
-    console.log(profileObj);
+  function resGLogin(data) {
+    console.log(data);
 
     axios
-      .post(API.LOGIN_GOOGLE, { user: profileObj })
+      .post(`${API.LOGIN}/google`, { user: data.accessToken })
       .then(({ data }) => {
         console.log(data);
         localStorage.setItem("token", data.accessToken);
@@ -70,16 +82,20 @@ export default function Login() {
                 <div className="contBox">
                   <ul className="categoryList">
                     {D_loginCategoryList.map((v, i) => (
-                      <li key={i} className={`${category === i && "on"}`}>
-                        <button onClick={() => setCategory(i)}>{v}</button>
+                      <li
+                        key={i}
+                        className={`${category.key === v.key && "on"}`}
+                      >
+                        <button onClick={() => setCategory(v)}>{v.key}</button>
                       </li>
                     ))}
                   </ul>
 
-                  {category === 0 && (
+                  {category.key === "Email" && (
                     <Email userData={userData} setUserData={setUserData} />
                   )}
-                  {category === 1 && (
+
+                  {category.key === "Phone Number" && (
                     <Phone userData={userData} setUserData={setUserData} />
                   )}
                 </div>
@@ -145,26 +161,32 @@ export default function Login() {
                 <div className="contBox">
                   <ul className="categoryList">
                     {D_loginCategoryList.map((v, i) => (
-                      <li key={i} className={`${category === i && "on"}`}>
-                        <button onClick={() => setCategory(i)}>{v}</button>
+                      <li
+                        key={i}
+                        className={`${category.key === v.key && "on"}`}
+                      >
+                        <button onClick={() => setCategory(v)}>{v.key}</button>
                       </li>
                     ))}
                   </ul>
 
-                  {category === 0 && (
+                  {category.key === "Email" && (
                     <Email userData={userData} setUserData={setUserData} />
                   )}
-                  {category === 1 && (
+
+                  {category.key === "Phone Number" && (
                     <Phone userData={userData} setUserData={setUserData} />
                   )}
                 </div>
 
-                <div className="btnBox">
+                <div className="btnCont">
                   <button className="loginBtn" onClick={onClickLoginBtn}>
                     Login
                   </button>
 
                   <p className="or">or</p>
+
+                  <button className="AppleBtn" onClick={() => {}}></button>
 
                   <GoogleLogin
                     clientId={gCliId}
@@ -410,11 +432,11 @@ const PloginBox = styled.main`
           }
         }
 
-        .btnBox {
+        .btnCont {
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 20px;
+          gap: 24px;
           margin: 40px 0 0 0;
 
           button {
@@ -436,6 +458,12 @@ const PloginBox = styled.main`
               gap: 14px;
               border: 1px solid #e6e6e6;
             }
+          }
+
+          .btnBox {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
           }
 
           .or {

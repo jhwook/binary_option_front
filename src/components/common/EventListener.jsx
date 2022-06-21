@@ -27,6 +27,8 @@ export default function EventListener() {
         })
         .then(async ({ data }) => {
           console.log(data);
+
+          localStorage.setItem("userid", data.id);
         })
         .catch((err) => localStorage.removeItem("token"));
     }
