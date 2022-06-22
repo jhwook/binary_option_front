@@ -1,15 +1,38 @@
+import axios from "axios";
 import { useState } from "react";
 import styled from "styled-components";
+import { API } from "../../configs/api";
 import B_withDrawal from "../../img/bg/market/withDrawal/B_withDrawal.svg";
 import B_withDrawal2 from "../../img/bg/market/withDrawal/B_withDrawal2.svg";
 import SetErrorBar from "../../util/SetErrorBar";
+
 
 export default function WithDrawal() {
   const [amount, setAmount] = useState("");
   const [address, setAddress] = useState("");
 
-  function onClickDrawalBtn() {
-    SetErrorBar({ str: "Copied Successfully" });
+  async function onClickDrawalBtn() {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      axios
+        .get(`${API.LOGIN_CHECK}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(async ({ data }) => {
+          axios
+          .post(`${API.WITHDRAW}`,{userid: data.userid, amount, rxaddr: address, }, )
+          .then(_=>{
+            SetErrorBar({ str: "Withdraw requested Successfully" });
+          })
+        })
+        .catch((err) => localStorage.removeItem("token"));
+    }
+    
+  
+    
   }
 
   return (
@@ -31,7 +54,7 @@ export default function WithDrawal() {
             </li>
             <li>
               <p className="key">Max amount per transaction</p>
-              <p className="value">0no limits</p>
+              <p className="value">0 no limits</p>
             </li>
           </ul>
 
@@ -55,7 +78,7 @@ export default function WithDrawal() {
 
               <div className="valueBox">
                 <input
-                  type="number"
+                  
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   placeholder=""

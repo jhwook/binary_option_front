@@ -19,6 +19,7 @@ export const API = {
   BET_LOG: URL + "/bet/log", // userid
 
   USER_BALANCE: URL + "/users/balance", //:type
+  WITHDRAW: URL + "/transactions/withdraw",
 
   SET_BOOKMARK: URL + "/users/bookmark",
   BOOKMARK_LIST: URL + "/users/bookmark/list",
