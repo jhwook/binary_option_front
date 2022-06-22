@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { API, URL } from "../../configs/api";
 
-export default function TokenPopup({ off, setChartSymbol, getBookMark }) {
+export default function TokenPopup({ off, setAsset, getBookMark }) {
   const isMobile = useSelector((state) => state.common.isMobile);
   const token = localStorage.getItem("token");
 
@@ -18,8 +18,9 @@ export default function TokenPopup({ off, setChartSymbol, getBookMark }) {
   const [search, setSearch] = useState("");
   const [listData, setListData] = useState([]);
 
-  function onClickStock(symbol) {
-    setChartSymbol(symbol);
+  function onClickStock(asset) {
+    console.log(asset);
+    setAsset(asset);
     off();
   }
 
@@ -27,18 +28,9 @@ export default function TokenPopup({ off, setChartSymbol, getBookMark }) {
     e.stopPropagation();
 
     console.log(v);
-    console.log(v.status);
 
     axios
-      .post(
-        API.SET_BOOKMARK,
-        { assetsymbol: v.symbol, status: v.status ? 0 : 1 },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      .post(`${API.BOOKMARK}/assets/${v.id}`)
       .then((res) => {
         console.log(res);
 
@@ -51,18 +43,20 @@ export default function TokenPopup({ off, setChartSymbol, getBookMark }) {
       .catch((err) => console.error(err));
   }
 
-  useEffect(() => {
+  function getAssetList() {
     axios
-      .get(`${URL}/${category}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .get(`${API.GET_ASSETS}`, { params: { group: category } })
       .then(({ data }) => {
-        console.log(data);
-        setListData(data);
+        console.log(data.respdata);
+        setListData(data.respdata);
       })
       .catch((err) => console.error(err));
+  }
+
+  useEffect(() => {
+    axios.defaults.headers.common["Authorization"] = `${token}`;
+
+    getAssetList();
   }, [category]);
 
   if (isMobile)
@@ -110,7 +104,7 @@ export default function TokenPopup({ off, setChartSymbol, getBookMark }) {
             {listData
               .filter((e) => !e.fav)
               .map((v, i) => (
-                <li key={i} onClick={() => onClickStock(v.displaysymbol)}>
+                <li key={i} onClick={() => onClickStock(v)}>
                   <button
                     className="favBtn"
                     onClick={(e) => onClickFavBtn(e, i, v)}
@@ -126,7 +120,7 @@ export default function TokenPopup({ off, setChartSymbol, getBookMark }) {
 
                   <p className="name">{v.name}</p>
 
-                  <p className="percent">{`${v.payout.toFixed(2)}%`}</p>
+                  {/* <p className="percent">{`${v.payout.toFixed(2)}%`}</p> */}
                 </li>
               ))}
           </ul>
@@ -183,26 +177,51 @@ export default function TokenPopup({ off, setChartSymbol, getBookMark }) {
 
         <article className="listArea">
           <ul className="tokenList">
-            {listData.map((v, i) => (
-              <li key={i} onClick={() => onClickStock(v.displaysymbol)}>
-                <button
-                  className="favBtn"
-                  onClick={(e) => onClickFavBtn(e, i, v)}
-                >
-                  {v.status ? (
-                    <img src={I_starYellowO} alt="" />
-                  ) : (
-                    <img src={I_starYellow} alt="" />
-                  )}
-                </button>
+            {listData
+              .filter((v) => v.bookmark)
+              .map((v, i) => (
+                <li key={i} onClick={() => onClickStock(v)}>
+                  <button
+                    className="favBtn"
+                    onClick={(e) => onClickFavBtn(e, i, v)}
+                  >
+                    {v.status ? (
+                      <img src={I_starYellowO} alt="" />
+                    ) : (
+                      <img src={I_starYellow} alt="" />
+                    )}
+                  </button>
 
-                <img className="tknImg" src={v.imgurl} alt="" />
+                  <img className="tknImg" src={v.imgurl} alt="" />
 
-                <p className="name">{v.name}</p>
+                  <p className="name">{v.name}</p>
 
-                <p className="percent">{`${v.payout.toFixed(2)}%`}</p>
-              </li>
-            ))}
+                  {/* <p className="percent">{`${v.payout.toFixed(2)}%`}</p> */}
+                </li>
+              ))}
+
+            {listData
+              .filter((v) => !v.bookmark)
+              .map((v, i) => (
+                <li key={i} onClick={() => onClickStock(v)}>
+                  <button
+                    className="favBtn"
+                    onClick={(e) => onClickFavBtn(e, i, v)}
+                  >
+                    {v.status ? (
+                      <img src={I_starYellowO} alt="" />
+                    ) : (
+                      <img src={I_starYellow} alt="" />
+                    )}
+                  </button>
+
+                  <img className="tknImg" src={v.imgurl} alt="" />
+
+                  <p className="name">{v.name}</p>
+
+                  {/* <p className="percent">{`${v.payout.toFixed(2)}%`}</p> */}
+                </li>
+              ))}
           </ul>
         </article>
       </PtokenPopupBox>

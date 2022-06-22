@@ -25,8 +25,6 @@ export default function EventListener() {
       .get(`${API.LOGIN_CHECK}`)
       .then(async ({ data }) => {
         console.log(data);
-
-        localStorage.setItem("userid", data.id);
       })
       .catch((err) => localStorage.removeItem("token"));
   }

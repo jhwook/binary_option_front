@@ -157,7 +157,7 @@ export default function Live() {
                         <>
                           <TokenPopup
                             off={setTokenPopup}
-                            setChartSymbol={setChartSymbol}
+                            setAsset={setChartSymbol}
                             getBookMark={getBookMark}
                           />
                           <PopupBg off={setTokenPopup} />
@@ -299,7 +299,7 @@ export default function Live() {
                   <>
                     <TokenPopup
                       off={setTokenPopup}
-                      setChartSymbol={setChartSymbol}
+                      setAsset={setChartSymbol}
                       getBookMark={getBookMark}
                     />
                     <PopupBg off={setTokenPopup} />

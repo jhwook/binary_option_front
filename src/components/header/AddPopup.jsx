@@ -1,12 +1,27 @@
+import axios from "axios";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { API } from "../../configs/api";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
 
 export default function AddPopup({ off }) {
   const isMobile = useSelector((state) => state.common.isMobile);
+  const token = localStorage.getItem("token");
 
   const [amount, setAmount] = useState("");
+
+  function onClickAddBtn() {
+    axios.defaults.headers.common["Authorization"] = `${token}`;
+
+    axios
+      .patch(`${API.TRANS_DEMO_FUND}/${amount}`)
+      .then((res) => {
+        console.log(res);
+        window.location.reload();
+      })
+      .catch((err) => console.error(err));
+  }
 
   if (isMobile)
     return (
@@ -35,7 +50,7 @@ export default function AddPopup({ off }) {
             </div>
           </div>
 
-          <button className="addBtn" onClick={() => off()}>
+          <button className="addBtn" onClick={onClickAddBtn}>
             Add funds
           </button>
         </article>
@@ -68,7 +83,7 @@ export default function AddPopup({ off }) {
             </div>
           </div>
 
-          <button className="addBtn" onClick={() => off()}>
+          <button className="addBtn" onClick={onClickAddBtn}>
             Add funds
           </button>
         </article>

@@ -12,10 +12,11 @@ import I_quesCircleWhite from "../../img/icon/I_quesCircleWhite.svg";
 import { useNavigate } from "react-router-dom";
 import SelLngPopup from "./SelLngPopup";
 
-export default function MenuPopup({ off }) {
+export default function MenuPopup({ off, balanceData }) {
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
+  const balanceType = localStorage.getItem("balanceType");
 
   const [lngPopup, setLngPopup] = useState(false);
   const [profPopup, setProfPopup] = useState(false);
@@ -36,7 +37,13 @@ export default function MenuPopup({ off }) {
               <button
                 className="accountBtn"
                 onClick={() => setMyBalancePopup(true)}
-              >{`Demo $1000`}</button>
+              >
+                {balanceType === "Demo" ? (
+                  <p>{`Demo $${balanceData?.DEMO?.avail}`}</p>
+                ) : (
+                  <p>{`Live $${balanceData?.LIVE?.avail}`}</p>
+                )}
+              </button>
 
               <span className="profBox">
                 <button className="myBtn" onClick={() => setProfPopup(true)}>
@@ -134,7 +141,7 @@ export default function MenuPopup({ off }) {
       {myBalancePopup && (
         <>
           <MyBalancePopup off={setMyBalancePopup} setAddPopup={setAddPopup} />
-          <PopupBg off={setMyBalancePopup} />
+          <PopupBg off={setMyBalancePopup} index={6} />
         </>
       )}
 

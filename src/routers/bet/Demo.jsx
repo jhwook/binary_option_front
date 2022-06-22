@@ -42,7 +42,10 @@ export default function Demo() {
   const [insufficientPopup, setInsufficientPopup] = useState(false);
   const [myBalancePopup, setMyBalancePopup] = useState(false);
   const [addPopup, setAddPopup] = useState(false);
-  const [chartSymbol, setChartSymbol] = useState("9988");
+  const [asset, setAsset] = useState({
+    name: "Ethereum",
+    dispSymbol: "ETHUSDT",
+  });
   const [amount, setAmount] = useState("");
   const [bookMark, setBookMark] = useState([]);
 
@@ -105,17 +108,14 @@ export default function Demo() {
       .catch((err) => console.error(err));
   }
 
-  function getBetLog() {
-    axios
-      .get(`${API.GET_ASSETS}`)
-      .then((res) => console.log(res))
-      .catch((err) => console.error(err));
-  }
+  function getBetLog() {}
 
   useEffect(() => {
-    getBookMark();
+    axios.defaults.headers.common["Authorization"] = `${token}`;
 
-    getBetLog();
+    // getBookMark();
+
+    // getBetLog();
   }, []);
 
   useLayoutEffect(() => {
@@ -133,7 +133,7 @@ export default function Demo() {
             <article className="contArea">
               <div className="chartBox">
                 <ReactTradingviewWidget
-                  symbol={chartSymbol}
+                  symbol={asset.dispSymbol}
                   theme={Themes.DARK}
                   locale="kr"
                   autosize
@@ -148,7 +148,7 @@ export default function Demo() {
                         className="tokenBtn"
                         onClick={() => setTokenPopup(true)}
                       >
-                        <p>Ethereum</p>
+                        <p>{asset.name}</p>
                         <img src={I_dnPolWhite} alt="" />
                       </button>
 
@@ -156,7 +156,7 @@ export default function Demo() {
                         <>
                           <TokenPopup
                             off={setTokenPopup}
-                            setChartSymbol={setChartSymbol}
+                            setAsset={setAsset}
                             getBookMark={getBookMark}
                           />
                           <PopupBg off={setTokenPopup} />
@@ -292,7 +292,7 @@ export default function Demo() {
                   className="selectBtn"
                   onClick={() => setTokenPopup(true)}
                 >
-                  <p>Ethereum</p>
+                  <p>{asset.name}</p>
                   <img src={I_dnPolWhite} alt="" />
                 </button>
 
@@ -300,7 +300,7 @@ export default function Demo() {
                   <>
                     <TokenPopup
                       off={setTokenPopup}
-                      setChartSymbol={setChartSymbol}
+                      setAsset={setAsset}
                       getBookMark={getBookMark}
                     />
                     <PopupBg off={setTokenPopup} />
@@ -310,7 +310,7 @@ export default function Demo() {
 
               <ul className="tokenList">
                 {bookMark.map((v, i) => (
-                  <li key={i} onClick={() => setChartSymbol(v.displaysymbol)}>
+                  <li key={i} onClick={() => setAsset(v)}>
                     <img src={I_starYellowO} alt="" />
                     <span className="textBox">
                       <p className="key">{v.name}</p>
@@ -328,7 +328,7 @@ export default function Demo() {
                 <div className="chart">
                   <ReactTradingviewWidget
                     container_id={"technical-analysis-chart-demo"}
-                    symbol={chartSymbol}
+                    symbol={asset.dispSymbol}
                     theme={Themes.DARK}
                     locale="kr"
                     autosize

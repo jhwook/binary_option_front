@@ -21,6 +21,8 @@ export const API = {
   USER_BALANCE: URL + "/users/balance", //:type
   WITHDRAW: URL + "/transactions/withdraw",
 
-  SET_BOOKMARK: URL + "/users/bookmark",
+  BOOKMARK: URL + "/bookmarks", //:type/:targetId
   BOOKMARK_LIST: URL + "/users/bookmark/list",
+
+  TRANS_DEMO_FUND: URL + "/transactions/demo/fund", //:amount
 };

@@ -1,21 +1,51 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { D_balanceList } from "../../data/D_header";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
 import I_chkOrange from "../../img/icon/I_chkOrange.svg";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import { API } from "../../configs/api";
 
 export default function MyBalancePopup({ off, setAddPopup }) {
   const navigate = useNavigate();
   const isMobile = useSelector((state) => state.common.isMobile);
+  const token = localStorage.getItem("token");
+  const balanceType = localStorage.getItem("balanceType");
 
-  const [balanceType, setBalanceType] = useState(D_balanceList[0]);
+  const [stateBalanceType, setStateBalanceType] = useState(
+    balanceType || "Demo"
+  );
+  const [balanceData, setBalanceData] = useState("");
 
   function onClickConfirmBtn(nextProc) {
     off();
     nextProc(true);
   }
+
+  function getBalance() {
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `${token}`;
+
+      axios
+        .get(`${API.USER_BALANCE}`)
+        .then(({ data }) => {
+          console.log(data.respdata);
+          setBalanceData(data.respdata);
+        })
+        .catch((err) => console.error(err));
+    }
+  }
+
+  function onClickBalanceType(type) {
+    setStateBalanceType(type);
+
+    localStorage.setItem("balanceType", type);
+  }
+
+  useEffect(() => {
+    getBalance();
+  }, []);
 
   if (isMobile)
     return (
@@ -33,12 +63,15 @@ export default function MyBalancePopup({ off, setAddPopup }) {
         <article className="contArea">
           <div className="targetBox">
             <div className="leftBox">
-              <p className="type">{`${balanceType} balance`}</p>
-              <p className="balance">1033 USDT</p>
+              <p className="type">{`${stateBalanceType} balance`}</p>
+              <p className="balance">
+                {stateBalanceType === "Live" && balanceData?.LIVE?.avail}
+                {stateBalanceType === "Demo" && balanceData?.DEMO?.avail} USDT
+              </p>
               <p className="type"></p>
             </div>
 
-            {balanceType === "Live" && (
+            {stateBalanceType === "Live" && (
               <button
                 className="actionBtn"
                 onClick={() => onClickConfirmBtn(navigate("/market/deposit"))}
@@ -47,7 +80,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
               </button>
             )}
 
-            {balanceType === "Demo" && (
+            {stateBalanceType === "Demo" && (
               <button
                 className="actionBtn"
                 onClick={() => onClickConfirmBtn(setAddPopup)}
@@ -58,18 +91,25 @@ export default function MyBalancePopup({ off, setAddPopup }) {
           </div>
 
           <ul className="typeList">
-            {D_balanceList.map((v, i) => (
-              <li
-                key={i}
-                className={`${balanceType === v && "on"}`}
-                onClick={() => setBalanceType(v)}
-              >
-                <img src={I_chkOrange} alt="" />
-                <p className="key">{v} balance</p>
+            <li
+              className={`${stateBalanceType === "Live" && "on"}`}
+              onClick={() => onClickBalanceType("Live")}
+            >
+              <img src={I_chkOrange} alt="" />
+              <p className="key">Live balance</p>
 
-                <strong className="value">{`100 USDT`}</strong>
-              </li>
-            ))}
+              <strong className="value">{`${balanceData?.LIVE?.avail} USDT`}</strong>
+            </li>
+
+            <li
+              className={`${stateBalanceType === "Demo" && "on"}`}
+              onClick={() => onClickBalanceType("Demo")}
+            >
+              <img src={I_chkOrange} alt="" />
+              <p className="key">Demo balance</p>
+
+              <strong className="value">{`${balanceData?.DEMO?.avail} USDT`}</strong>
+            </li>
           </ul>
         </article>
       </MmyBalancePopup>
@@ -90,12 +130,15 @@ export default function MyBalancePopup({ off, setAddPopup }) {
         <article className="contArea">
           <div className="targetBox">
             <div className="leftBox">
-              <p className="type">{`${balanceType} balance`}</p>
-              <p className="balance">1033 USDT</p>
+              <p className="type">{`${stateBalanceType} balance`}</p>
+              <p className="balance">
+                {stateBalanceType === "Live" && balanceData?.LIVE?.avail}
+                {stateBalanceType === "Demo" && balanceData?.DEMO?.avail} USDT
+              </p>
               <p className="type"></p>
             </div>
 
-            {balanceType === "Live" && (
+            {stateBalanceType === "Live" && (
               <button
                 className="actionBtn"
                 onClick={() => onClickConfirmBtn(navigate("/market/deposit"))}
@@ -104,7 +147,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
               </button>
             )}
 
-            {balanceType === "Demo" && (
+            {stateBalanceType === "Demo" && (
               <button
                 className="actionBtn"
                 onClick={() => onClickConfirmBtn(setAddPopup)}
@@ -115,18 +158,25 @@ export default function MyBalancePopup({ off, setAddPopup }) {
           </div>
 
           <ul className="typeList">
-            {D_balanceList.map((v, i) => (
-              <li
-                key={i}
-                className={`${balanceType === v && "on"}`}
-                onClick={() => setBalanceType(v)}
-              >
-                <img src={I_chkOrange} alt="" />
-                <p className="key">{v} balance</p>
+            <li
+              className={`${stateBalanceType === "Live" && "on"}`}
+              onClick={() => onClickBalanceType("Live")}
+            >
+              <img src={I_chkOrange} alt="" />
+              <p className="key">Live balance</p>
 
-                <strong className="value">{`100 USDT`}</strong>
-              </li>
-            ))}
+              <strong className="value">{`${balanceData?.LIVE?.avail} USDT`}</strong>
+            </li>
+
+            <li
+              className={`${stateBalanceType === "Demo" && "on"}`}
+              onClick={() => onClickBalanceType("Demo")}
+            >
+              <img src={I_chkOrange} alt="" />
+              <p className="key">Demo balance</p>
+
+              <strong className="value">{`${balanceData?.DEMO?.avail} USDT`}</strong>
+            </li>
           </ul>
         </article>
       </PmyBalancePopup>
@@ -136,6 +186,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
 const MmyBalancePopup = styled.section`
   width: 91.11vw;
   color: #fff;
+  z-index: 7;
 
   .topArea {
     display: flex;

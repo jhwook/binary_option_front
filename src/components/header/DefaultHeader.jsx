@@ -16,6 +16,7 @@ import AuthPopup from "./AuthPopup";
 import axios from "axios";
 import { API } from "../../configs/api";
 import MorePopup from "./MorePopup";
+import AddPopup from "./AddPopup";
 
 export default function DefaultHeader({ white, border, title }) {
   const navigate = useNavigate();
@@ -24,6 +25,9 @@ export default function DefaultHeader({ white, border, title }) {
 
   const isMobile = useSelector((state) => state.common.isMobile);
 
+  const token = localStorage.getItem("token");
+  const balanceType = localStorage.getItem("balanceType");
+
   const [lngPopup, setLngPopup] = useState(false);
   const [profPopup, setProfPopup] = useState(false);
   const [myBalancePopup, setMyBalancePopup] = useState(false);
@@ -31,16 +35,14 @@ export default function DefaultHeader({ white, border, title }) {
   const [authPopup, setAuthPopup] = useState(false);
   const [morePopup, setMorePopup] = useState(false);
   const [balanceData, setBalanceData] = useState("");
-
-  const token = localStorage.getItem("token");
-  const balanceType = localStorage.getItem("balanceType");
+  const [addPopup, setAddPopup] = useState(false);
 
   function onClickMenuBtn() {
     if (white) setAuthPopup(true);
     else setMenuPopup(true);
   }
 
-  useEffect(() => {
+  function getBalance() {
     if (token) {
       axios.defaults.headers.common["Authorization"] = `${token}`;
 
@@ -52,6 +54,10 @@ export default function DefaultHeader({ white, border, title }) {
         })
         .catch((err) => console.error(err));
     }
+  }
+
+  useEffect(() => {
+    getBalance();
   }, []);
 
   if (isMobile)
@@ -64,13 +70,16 @@ export default function DefaultHeader({ white, border, title }) {
             {title ? (
               <p className="title">{title}</p>
             ) : token ? (
-              <span className="accountBtn">
+              <button
+                className="accountBtn"
+                onClick={() => setMyBalancePopup(true)}
+              >
                 {balanceType === "Demo" ? (
                   <p>{`Demo $${balanceData?.DEMO?.avail}`}</p>
                 ) : (
                   <p>{`Live $${balanceData?.LIVE?.avail}`}</p>
                 )}
-              </span>
+              </button>
             ) : (
               <button className="logoBtn" onClick={() => navigate("/")}>
                 <img src={L_yellow} alt="" />
@@ -85,9 +94,25 @@ export default function DefaultHeader({ white, border, title }) {
           </article>
         </MdefaultHeaderBox>
 
-        {menuPopup && <MenuPopup off={setMenuPopup} />}
+        {menuPopup && (
+          <MenuPopup off={setMenuPopup} balanceData={balanceData} />
+        )}
 
         {authPopup && <AuthPopup off={setAuthPopup} />}
+
+        {myBalancePopup && (
+          <>
+            <MyBalancePopup off={setMyBalancePopup} setAddPopup={setAddPopup} />
+            <PopupBg off={setMyBalancePopup} index={6} />
+          </>
+        )}
+
+        {addPopup && (
+          <>
+            <AddPopup off={setAddPopup} />
+            <PopupBg off={setAddPopup} />
+          </>
+        )}
       </>
     );
   else
@@ -185,8 +210,15 @@ export default function DefaultHeader({ white, border, title }) {
 
         {myBalancePopup && (
           <>
-            <MyBalancePopup off={setMyBalancePopup} />
+            <MyBalancePopup off={setMyBalancePopup} setAddPopup={setAddPopup} />
             <PopupBg off={setMyBalancePopup} />
+          </>
+        )}
+
+        {addPopup && (
+          <>
+            <AddPopup off={setAddPopup} />
+            <PopupBg off={setAddPopup} />
           </>
         )}
 
@@ -251,6 +283,16 @@ const MdefaultHeaderBox = styled.header`
       img {
         height: 5vw;
       }
+    }
+
+    .accountBtn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 32.22vw;
+      height: 9.44vw;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 7.77vw;
     }
   }
 
