@@ -105,17 +105,17 @@ export default function Demo() {
       .catch((err) => console.error(err));
   }
 
-  // function getBetLog() {
-  //   axios
-  //     .get(`${API.BET_LOG}/${userid}`)
-  //     .then((res) => console.log(res))
-  //     .catch((err) => console.error(err));
-  // }
+  function getBetLog() {
+    axios
+      .get(`${API.GET_ASSETS}`)
+      .then((res) => console.log(res))
+      .catch((err) => console.error(err));
+  }
 
   useEffect(() => {
     getBookMark();
 
-    // getBetLog();
+    getBetLog();
   }, []);
 
   useLayoutEffect(() => {

@@ -7,6 +7,8 @@ export const API = {
   LOGIN: URL + "/users/login",
   LOGIN_CHECK: URL + "/users/auth",
 
+  GET_ASSETS: URL + "/assets/list",
+
   PHONE_COUNTRY_CODE: URL + "/phone/country/codes", //:offset/:limit
 
   USER_PROFILE: URL + "/users/profile",

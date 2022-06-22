@@ -186,7 +186,6 @@ export default function Login() {
 
                   <p className="or">or</p>
 
-                  <button className="AppleBtn" onClick={() => {}}></button>
 
                   <GoogleLogin
                     clientId={gCliId}

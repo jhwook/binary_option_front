@@ -19,12 +19,10 @@ export default function EventListener() {
     const token = localStorage.getItem("token");
 
     if (token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
       axios
-        .get(`${API.LOGIN_CHECK}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
+        .get(`${API.LOGIN_CHECK}`)
         .then(async ({ data }) => {
           console.log(data);
 
