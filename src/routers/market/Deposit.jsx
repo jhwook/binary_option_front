@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
-import QRCode from "react-qr-code";
 import styled from "styled-components";
 import T_usdt from "../../img/token/T_usdt.png";
-import I_cpWhite from "../../img/icon/I_cpWhite.svg";
-import { onClickCopy } from "../../util/Util";
-import SetErrorBar from "../../util/SetErrorBar";
 import { useSelector } from "react-redux";
 import DefaultHeader from "../../components/header/DefaultHeader";
 import PopupBg from "../../components/common/PopupBg";
@@ -12,17 +8,26 @@ import DetailPopup from "./deposit/DetailPopup";
 import { API } from "../../configs/api";
 import axios from "axios";
 import AddressPopup from "./deposit/AddressPopup";
+import SecurityVerifiPopup from "../../components/market/deposit/SecurityVerifiPopup";
+import BalancePopup from "../../components/market/deposit/BalancePopup";
+import ConfirmUsdt from "../../components/market/deposit/ConfirmUsdt";
+import ConfirmCny from "../../components/market/deposit/ConfirmCny";
+import ConfirmationPopup from "../../components/market/deposit/ConfirmationPopup";
 
 export default function Deposit() {
+  const isBranch = true;
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [amount, setAmount] = useState("");
   const [confirm, setConfirm] = useState(false);
   const [detailPopup, setDetailPopup] = useState(true);
+  const [securityVerifiPopup, setSecurityVerifiPopup] = useState(false);
+  const [confirmationPopup, setConfirmationPopup] = useState(true);
+  const [balancePopup, setBalancePopup] = useState(false);
 
-  function onClickCopyBtn(str) {
-    onClickCopy(str);
-    SetErrorBar({ str: "Copied Successfully" });
+  function onClickDepositBtn() {
+    if (isBranch) setSecurityVerifiPopup(true);
+    else setConfirm(true);
   }
 
   useEffect(() => {
@@ -70,7 +75,7 @@ export default function Deposit() {
                     onChange={(e) => setAmount(e.target.value)}
                     placeholder=""
                   />
-                  <strong className="unit">USDT</strong>
+                  <strong className="unit">{isBranch ? "CNY" : "USDT"}</strong>
                 </div>
 
                 <ul className="optList">
@@ -78,25 +83,25 @@ export default function Deposit() {
                     className={`${amount === 100 && "on"} optBtn`}
                     onClick={() => setAmount(100)}
                   >
-                    $100
+                    {isBranch ? "¥" : "$"}100
                   </button>
                   <button
                     className={`${amount === 200 && "on"} optBtn`}
                     onClick={() => setAmount(200)}
                   >
-                    $200
+                    {isBranch ? "¥" : "$"}200
                   </button>
                   <button
                     className={`${amount === 300 && "on"} optBtn`}
                     onClick={() => setAmount(300)}
                   >
-                    $300
+                    {isBranch ? "¥" : "$"}300
                   </button>
                   <button
                     className={`${amount === 400 && "on"} optBtn`}
                     onClick={() => setAmount(400)}
                   >
-                    $400
+                    {isBranch ? "¥" : "$"}400
                   </button>
                 </ul>
               </div>
@@ -121,152 +126,162 @@ export default function Deposit() {
 
         {confirm && (
           <>
-            <AddressPopup off={setConfirm}/>
-          <PopupBg bg off={setConfirm} />
+            <AddressPopup off={setConfirm} />
+            <PopupBg bg off={setConfirm} />
           </>
         )}
       </>
     );
   else
     return (
-      <PdepositBox>
-        <article className="deposit">
-          <div className="key">
-            <span className="count">1</span>
+      <>
+        <PdepositBox>
+          <article className="deposit">
+            <div className="key">
+              <span className="count">1</span>
 
-            <strong className="title">Deposit</strong>
-          </div>
-
-          <div className="value">
-            <div className="tokenBox">
-              <img src={T_usdt} alt="" />
-              <strong>USDT</strong>
+              <strong className="title">Deposit</strong>
             </div>
 
-            <ul className="infoList">
-              <li>
-                <p className="key">Commission</p>
-                <p className="value">0%</p>
-              </li>
-              <li>
-                <p className="key">Minimum deposit amount</p>
-                <p className="value">5 USDT</p>
-              </li>
-              <li>
-                <p className="key">Max amount per transaction</p>
-                <p className="value">0no limits</p>
-              </li>
-            </ul>
-
-            <div className="amountBox">
-              <p className="key">Amount</p>
-
-              <div className="valueBox">
-                <input
-                  type="number"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  placeholder=""
-                />
-                <strong className="unit">USDT</strong>
+            <div className="value">
+              <div className="tokenBox">
+                <img src={T_usdt} alt="" />
+                <strong>USDT</strong>
               </div>
 
-              <ul className="optList">
-                <button
-                  className={`${amount === 100 && "on"} optBtn`}
-                  onClick={() => setAmount(100)}
-                >
-                  $100
-                </button>
-                <button
-                  className={`${amount === 200 && "on"} optBtn`}
-                  onClick={() => setAmount(200)}
-                >
-                  $200
-                </button>
-                <button
-                  className={`${amount === 300 && "on"} optBtn`}
-                  onClick={() => setAmount(300)}
-                >
-                  $300
-                </button>
-                <button
-                  className={`${amount === 400 && "on"} optBtn`}
-                  onClick={() => setAmount(400)}
-                >
-                  $400
-                </button>
-              </ul>
-
-              <button
-                className="depositBtn"
-                disabled={!amount}
-                onClick={() => setConfirm(true)}
-              >
-                Deposit
-              </button>
-            </div>
-          </div>
-        </article>
-
-        <article className="detailArea">
-          <div className="key">
-            <span className="count">2</span>
-
-            <strong className="title">Confirm deposit details</strong>
-          </div>
-
-          {confirm ? (
-            <div className="value on">
-              <strong className="head">Deposit address</strong>
-
-              <span className="qrBox">
-                <QRCode
-                  size={220}
-                  style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-                  value={"http://google.com"}
-                  viewBox={`0 0 220 220`}
-                />
-              </span>
-
-              <button
-                className="copyBtn"
-                onClick={() =>
-                  onClickCopyBtn("0xd913c9778ca029087789d0da74091bc3b917e34e")
-                }
-              >
-                <p className="address">
-                  0xd913c9778ca029087789d0da74091bc3b917e34e
-                </p>
-
-                <img src={I_cpWhite} alt="" />
-              </button>
-            </div>
-          ) : (
-            <div className="value">
-              <p className="head">Important :</p>
-
-              <ul className="bodyList">
+              <ul className="infoList">
                 <li>
-                  Please make sure that only ETH deposit is made via this
-                  address. Otherwise, your deposited funds will not be added to
-                  your available balance — nor will it be refunded.
+                  <p className="key">Commission</p>
+                  <p className="value">0%</p>
                 </li>
                 <li>
-                  Please make sure that your Betbit deposit address is correct.
-                  Otherwise, your deposited funds will not be added to your
-                  available balance — nor will it be refunded.
+                  <p className="key">Minimum deposit amount</p>
+                  <p className="value">5 USDT</p>
                 </li>
                 <li>
-                  Please note that the current asset does not support deposit
-                  via the smart contract. If used, your deposited funds will not
-                  be added to your available balance — nor will it be refunded.
+                  <p className="key">Max amount per transaction</p>
+                  <p className="value">0no limits</p>
                 </li>
               </ul>
+
+              <div className="amountBox">
+                <p className="key">Amount</p>
+
+                <div className="valueBox">
+                  <input
+                    type="number"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    placeholder=""
+                  />
+                  <strong className="unit">{isBranch ? "CNY" : "USDT"}</strong>
+                </div>
+
+                <ul className="optList">
+                  <button
+                    className={`${amount === 100 && "on"} optBtn`}
+                    onClick={() => setAmount(100)}
+                  >
+                    {isBranch ? "¥" : "$"}100
+                  </button>
+                  <button
+                    className={`${amount === 200 && "on"} optBtn`}
+                    onClick={() => setAmount(200)}
+                  >
+                    {isBranch ? "¥" : "$"}200
+                  </button>
+                  <button
+                    className={`${amount === 300 && "on"} optBtn`}
+                    onClick={() => setAmount(300)}
+                  >
+                    {isBranch ? "¥" : "$"}300
+                  </button>
+                  <button
+                    className={`${amount === 400 && "on"} optBtn`}
+                    onClick={() => setAmount(400)}
+                  >
+                    {isBranch ? "¥" : "$"}400
+                  </button>
+                </ul>
+
+                <button
+                  className="depositBtn"
+                  disabled={!amount}
+                  onClick={onClickDepositBtn}
+                >
+                  Deposit
+                </button>
+              </div>
             </div>
-          )}
-        </article>
-      </PdepositBox>
+          </article>
+
+          <article className="detailArea">
+            <div className="key">
+              <span className="count">2</span>
+
+              <strong className="title">Confirm deposit details</strong>
+            </div>
+
+            {confirm ? (
+              isBranch ? (
+                <ConfirmCny setConfirm={setConfirm} />
+              ) : (
+                <ConfirmUsdt />
+              )
+            ) : (
+              <div className="value">
+                <p className="head">Important :</p>
+
+                <ul className="bodyList">
+                  <li>
+                    Please make sure that only ETH deposit is made via this
+                    address. Otherwise, your deposited funds will not be added
+                    to your available balance — nor will it be refunded.
+                  </li>
+                  <li>
+                    Please make sure that your Betbit deposit address is
+                    correct. Otherwise, your deposited funds will not be added
+                    to your available balance — nor will it be refunded.
+                  </li>
+                  <li>
+                    Please note that the current asset does not support deposit
+                    via the smart contract. If used, your deposited funds will
+                    not be added to your available balance — nor will it be
+                    refunded.
+                  </li>
+                </ul>
+              </div>
+            )}
+          </article>
+        </PdepositBox>
+
+        {securityVerifiPopup && (
+          <>
+            <SecurityVerifiPopup
+              off={setSecurityVerifiPopup}
+              confirmationPopup={confirmationPopup}
+            />
+            <PopupBg off={setSecurityVerifiPopup} />
+          </>
+        )}
+
+        {confirmationPopup && (
+          <>
+            <ConfirmationPopup
+              off={setConfirmationPopup}
+              setBalancePopup={setBalancePopup}
+            />
+            <PopupBg off={setConfirmationPopup} />
+          </>
+        )}
+
+        {balancePopup && (
+          <>
+            <BalancePopup off={setBalancePopup} setConfirm={setConfirm} />
+            <PopupBg off={setBalancePopup} />
+          </>
+        )}
+      </>
     );
 }
 
@@ -547,7 +562,7 @@ const PdepositBox = styled.main`
     &.detailArea {
       width: 472px;
 
-      .value {
+      & > .value {
         height: 478px;
         padding: 40px 28px;
         background: rgba(255, 255, 255, 0.2);
@@ -555,37 +570,6 @@ const PdepositBox = styled.main`
         border-radius: 20px;
         box-shadow: inset 0px 3px 3px rgba(255, 255, 255, 0.4),
           0px 10px 40px rgba(255, 255, 255, 0.2);
-
-        &.on {
-          background: rgba(255, 255, 255, 0.4);
-
-          .qrBox {
-            display: block;
-            width: 240px;
-            height: 240px;
-            padding: 10px;
-            margin: 40px auto 0 auto;
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 14px;
-          }
-
-          .copyBtn {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            margin: 30px 0 0 0;
-
-            p {
-              font-size: 16px;
-              overflow: hidden;
-              white-space: nowrap;
-              text-overflow: ellipsis;
-              opacity: 0.6;
-            }
-          }
-        }
 
         .head {
           font-size: 16px;

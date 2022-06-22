@@ -1,20 +1,26 @@
-export const URL = "http://3.34.76.233:30559";
-export const EXPURL = "http://3.34.76.233:31273";
+// export const URL = "http://3.34.76.233:30559";
+export const URL = "http://litriggy.com:30708";
 
 export const API = {
-  SIGNUP: URL + "/users/signup",
+  SIGNUP: URL + "/users/signup", //type
 
   LOGIN: URL + "/users/login",
-  LOGIN_GOOGLE: URL + "/users/login/google",
   LOGIN_CHECK: URL + "/users/auth",
+
+  GET_ASSETS: URL + "/assets/list",
 
   PHONE_COUNTRY_CODE: URL + "/phone/country/codes", //:offset/:limit
 
   USER_PROFILE: URL + "/users/profile",
   USER_CERTIFICATION_EMAIL: URL + "/users/certification/email",
 
+  BET: URL + "/bet",
   BET_ROUND: URL + "/bet/rounds",
+  BET_LOG: URL + "/bet/log", // userid
 
   TRANS_BALANCE: URL + "/users/balance",
-  WITHDRAW: URL + "/transactions/withdraw"
+  WITHDRAW: URL + "/transactions/withdraw",
+
+  SET_BOOKMARK: URL + "/users/bookmark",
+  BOOKMARK_LIST: URL + "/users/bookmark/list",
 };
