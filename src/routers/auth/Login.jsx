@@ -59,11 +59,11 @@ export default function Login() {
     console.log(data);
 
     axios
-      .post(`${API.LOGIN}/google`, { user: data.accessToken })
+      .post(`${API.LOGIN}/google`, { token: data.tokenId })
       .then(({ data }) => {
         console.log(data);
-        localStorage.setItem("token", data.accessToken);
-        navigate("/");
+        // localStorage.setItem("token", data.accessToken);
+        // navigate("/");
       })
       .catch((err) => console.error(err));
   }

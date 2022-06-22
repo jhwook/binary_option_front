@@ -17,19 +17,18 @@ export default function EventListener() {
 
   function getLoginChk() {
     const token = localStorage.getItem("token");
+    if (!token) return;
 
-    if (token) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    axios.defaults.headers.common["Authorization"] = `${token}`;
 
-      axios
-        .get(`${API.LOGIN_CHECK}`)
-        .then(async ({ data }) => {
-          console.log(data);
+    axios
+      .get(`${API.LOGIN_CHECK}`)
+      .then(async ({ data }) => {
+        console.log(data);
 
-          localStorage.setItem("userid", data.id);
-        })
-        .catch((err) => localStorage.removeItem("token"));
-    }
+        localStorage.setItem("userid", data.id);
+      })
+      .catch((err) => localStorage.removeItem("token"));
   }
 
   function initGApi() {

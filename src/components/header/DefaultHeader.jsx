@@ -33,6 +33,7 @@ export default function DefaultHeader({ white, border, title }) {
   const [balanceData, setBalanceData] = useState("");
 
   const token = localStorage.getItem("token");
+  const balanceType = localStorage.getItem("balanceType");
 
   function onClickMenuBtn() {
     if (white) setAuthPopup(true);
@@ -40,15 +41,17 @@ export default function DefaultHeader({ white, border, title }) {
   }
 
   useEffect(() => {
-    axios
-      .get(`${API.TRANS_BALANCE}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then(({ data }) => {
-        console.log(data);
-        setBalanceData(data);
-      })
-      .catch((err) => console.error(err));
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `${token}`;
+
+      axios
+        .get(`${API.USER_BALANCE}`)
+        .then(({ data }) => {
+          console.log(data.respdata);
+          setBalanceData(data.respdata);
+        })
+        .catch((err) => console.error(err));
+    }
   }, []);
 
   if (isMobile)
@@ -62,7 +65,11 @@ export default function DefaultHeader({ white, border, title }) {
               <p className="title">{title}</p>
             ) : token ? (
               <span className="accountBtn">
-                <p>{`${balanceData.units} $${balanceData.amount}`}</p>
+                {balanceType === "Demo" ? (
+                  <p>{`Demo $${balanceData?.DEMO?.avail}`}</p>
+                ) : (
+                  <p>{`Live $${balanceData?.LIVE?.avail}`}</p>
+                )}
               </span>
             ) : (
               <button className="logoBtn" onClick={() => navigate("/")}>
@@ -137,7 +144,11 @@ export default function DefaultHeader({ white, border, title }) {
                   className="accountBtn"
                   onClick={() => setMyBalancePopup(true)}
                 >
-                  <p>{`${balanceData.units} $${balanceData.amount}`}</p>
+                  {balanceType === "Demo" ? (
+                    <p>{`Demo $${balanceData?.DEMO?.avail}`}</p>
+                  ) : (
+                    <p>{`Live $${balanceData?.LIVE?.avail}`}</p>
+                  )}
                 </button>
 
                 <span className="profBox">
