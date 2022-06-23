@@ -20,9 +20,9 @@ export default function Deposit() {
 
   const [amount, setAmount] = useState("");
   const [confirm, setConfirm] = useState(false);
-  const [detailPopup, setDetailPopup] = useState(true);
+  const [detailPopup, setDetailPopup] = useState(false);
   const [securityVerifiPopup, setSecurityVerifiPopup] = useState(false);
-  const [confirmationPopup, setConfirmationPopup] = useState(true);
+  const [confirmationPopup, setConfirmationPopup] = useState(false);
   const [balancePopup, setBalancePopup] = useState(false);
 
   function onClickDepositBtn() {
@@ -259,19 +259,9 @@ export default function Deposit() {
           <>
             <SecurityVerifiPopup
               off={setSecurityVerifiPopup}
-              confirmationPopup={confirmationPopup}
-            />
-            <PopupBg off={setSecurityVerifiPopup} />
-          </>
-        )}
-
-        {confirmationPopup && (
-          <>
-            <ConfirmationPopup
-              off={setConfirmationPopup}
               setBalancePopup={setBalancePopup}
             />
-            <PopupBg off={setConfirmationPopup} />
+            <PopupBg off={setSecurityVerifiPopup} />
           </>
         )}
 
@@ -418,7 +408,7 @@ const PdepositBox = styled.main`
     padding: 70px 40px 70px 80px;
   }
 
-  article {
+  & > article {
     display: flex;
     flex-direction: column;
     gap: 40px;

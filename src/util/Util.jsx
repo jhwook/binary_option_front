@@ -4,9 +4,9 @@ import I_highArwGreen from "../img/icon/I_highArwGreen.svg";
 import I_lowArwRed from "../img/icon/I_lowArwRed.svg";
 import I_chkOrange from "../img/icon/I_chkOrange.svg";
 import T_bronze from "../img/tier/T_bronze.svg";
-import T_silver from "../img/tier/T_Silver.svg";
-import T_gold from "../img/tier/T_Gold.svg";
-import T_dia from "../img/tier/T_Dia.svg";
+import T_silver from "../img/tier/T_silver.svg";
+import T_gold from "../img/tier/T_gold.svg";
+import T_dia from "../img/tier/T_dia.svg";
 
 export function strDot(str, startNum = 0, endNum = 0) {
   if (!str?.length) return;

@@ -1,9 +1,8 @@
 import styled from "styled-components";
-import I_xWhite from "../../../img/icon/I_xWhite.svg";
+import I_x from "../../../img/icon/I_x.svg";
 
-export default function ConfirmationPopup({ off, setBalancePopup }) {
+export default function ConfirmationPopup({ off }) {
   function onClickConfirmBtn() {
-    setBalancePopup(true);
     off();
   }
 
@@ -15,7 +14,7 @@ export default function ConfirmationPopup({ off, setBalancePopup }) {
         <p className="title">Confirmation</p>
 
         <button className="exitBtn" onClick={() => off()}>
-          <img src={I_xWhite} alt="" />
+          <img src={I_x} alt="" />
         </button>
       </article>
 
@@ -57,6 +56,7 @@ const PconfirmationPopupBox = styled.section`
     .exitBtn {
       img {
         width: 16px;
+        opacity: 0.4;
       }
     }
   }

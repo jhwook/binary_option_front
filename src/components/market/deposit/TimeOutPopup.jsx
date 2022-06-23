@@ -1,18 +1,17 @@
 import styled from "styled-components";
 import I_x from "../../../img/icon/I_x.svg";
 
-export default function SecurityVerifiPopup({ off, setBalancePopup }) {
-  function onClickConfirmBtn() {
-    setBalancePopup(true);
+export default function TimeOutPopup({ off }) {
+  function onClickGotBtn() {
     off();
   }
 
   return (
-    <PSecurityVerifiPopupBox className="defaultPopup">
+    <PtimeOutPopupBox className="defaultPopup">
       <article className="topArea">
         <span className="blank" />
 
-        <p className="title">Security Verification</p>
+        <p className="title">Notice</p>
 
         <button className="exitBtn" onClick={() => off()}>
           <img src={I_x} alt="" />
@@ -21,20 +20,21 @@ export default function SecurityVerifiPopup({ off, setBalancePopup }) {
 
       <article className="contArea">
         <p className="explain">
-          Please enter the following conditions for this action to verify your
-          account.
+          Request timed out! Your order has been automatically canceled. Please
+          note that up to 3 cancelations can be made per day. For more
+          information, please contact customer support.
         </p>
 
-        <button className="confirmBtn" onClick={onClickConfirmBtn}>
-          Confirm
+        <button className="confirmBtn" onClick={onClickGotBtn}>
+          Got it
         </button>
       </article>
-    </PSecurityVerifiPopupBox>
+    </PtimeOutPopupBox>
   );
 }
 
-const PSecurityVerifiPopupBox = styled.section`
-  width: 380px;
+const PtimeOutPopupBox = styled.section`
+  width: 500px;
   color: #fff;
 
   .topArea {
@@ -60,7 +60,7 @@ const PSecurityVerifiPopupBox = styled.section`
     display: flex;
     flex-direction: column;
     gap: 30px;
-    padding: 18px 30px 40px;
+    padding: 10px 42px 44px;
 
     .explain {
       font-size: 14px;
