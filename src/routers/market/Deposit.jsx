@@ -13,9 +13,10 @@ import BalancePopup from "../../components/market/deposit/BalancePopup";
 import ConfirmUsdt from "../../components/market/deposit/ConfirmUsdt";
 import ConfirmCny from "../../components/market/deposit/ConfirmCny";
 import ConfirmationPopup from "../../components/market/deposit/ConfirmationPopup";
+import {reqTx, getabistr_forfunction} from "../../util/contractcall"
 
-export default function Deposit() {
-  const isBranch = true;
+export default function Deposit({userData}) {
+  const [isBranch, setIsBranch] = useState(false);
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [amount, setAmount] = useState("");
@@ -25,17 +26,55 @@ export default function Deposit() {
   const [confirmationPopup, setConfirmationPopup] = useState(false);
   const [balancePopup, setBalancePopup] = useState(false);
 
+  function directPayment(){
+    let {ethereum} = window;
+    let address = ethereum.enable()
+
+    if(!ethereum){alert("Install Metamask"); return;}
+    let abistr=getabistr_forfunction({
+      contractaddress: 'CONTRACTADDR',
+      abikind: 'ERC20',
+      methodname: 'transfer',
+      aargs: ['TO_ADDRESS', amount+""]
+    })
+    reqTx({
+      from: address[0],
+      to: 'CONTRACTADDR',
+      data: abistr,
+      gas: 3000000
+    }, (txHash)=>{
+      axios.post(`${API.TRANS_DEPOSIT}/${amount}`,{
+        tokentype: 'USDC',
+        
+        headers: {
+          Authorization: `${localStorage.getItem("token")}`,
+        }
+      })
+    })
+  }
+
   function onClickDepositBtn() {
     if (isBranch) setSecurityVerifiPopup(true);
     else setConfirm(true);
   }
 
-  useEffect(() => {
-    axios
-      .get(API.BET_ROUND)
-      .then((res) => console.log(res))
-      .catch((err) => console.error(err));
-  }, []);
+  useEffect(()=>{
+    if(!userData) return;
+    console.log(userData)
+    if(userData?.isbranch){
+      
+      setIsBranch(true)
+    }else{
+      setIsBranch(false)
+    }
+  },[userData])
+
+  // useEffect(() => {
+  //   axios
+  //     .get(API.BET_ROUND)
+  //     .then((res) => console.log(res))
+  //     .catch((err) => console.error(err));
+  // }, []);
 
   if (isMobile)
     return (
