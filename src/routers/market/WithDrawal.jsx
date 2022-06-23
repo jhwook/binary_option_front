@@ -10,25 +10,36 @@ import SetErrorBar from "../../util/SetErrorBar";
 export default function WithDrawal() {
   const [amount, setAmount] = useState("");
   const [address, setAddress] = useState("");
+  const [tokenType, setTokenType] = useState("USDC");
+  const [settings, setSettings] = useState({
+    commision: 0,
+    minWithdraw: 5,
+    maxTransactions: -1
+  })
 
   async function onClickDrawalBtn() {
     const token = localStorage.getItem("token");
 
     if (token) {
       axios
-        .get(`${API.AUTH}`, {
+        .patch(`${API.TRANS_WITHDRAW}/${amount}`, {
+          rxaddr: address,
+          tokentype: tokenType,
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `${token}`,
           },
         })
         .then(async ({ data }) => {
-          axios
-          .post(`${API.WITHDRAW}`,{userid: data.userid, amount, rxaddr: address, }, )
-          .then(_=>{
-            SetErrorBar({ str: "Withdraw requested Successfully" });
-          })
+          console.log(data)
+          if(data.payload.status == "OK"){
+            if(data.payload.resp.message){
+              //Transaction Success
+              window.location.reload()
+            }
+            
+          }
         })
-        .catch((err) => localStorage.removeItem("token"));
+        //.catch((err) => localStorage.removeItem("token"));
     }
     
   
@@ -46,15 +57,15 @@ export default function WithDrawal() {
           <ul className="infoList">
             <li>
               <p className="key">Commission</p>
-              <p className="value">0%</p>
+              <p className="value">{settings.commision}%</p>
             </li>
             <li>
-              <p className="key">Minimum deposit amount</p>
-              <p className="value">5 USDT</p>
+              <p className="key">Minimum withdraw amount</p>
+              <p className="value">{settings.minWithdraw} USDT</p>
             </li>
             <li>
               <p className="key">Max amount per transaction</p>
-              <p className="value">0 no limits</p>
+              <p className="value">{(settings.maxTransactions==-1)?'no limits':settings.maxTransactions}</p>
             </li>
           </ul>
 

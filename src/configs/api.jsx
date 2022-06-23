@@ -13,6 +13,7 @@ export const API = {
 
   USER_PROFILE: URL + "/users/profile",
   USER_CERTIFICATION_EMAIL: URL + "/users/certification/email",
+  USER_QUERY:URL + "/users/query", //tablename/offset/limit
 
   BET: URL + "/bet",
   BET_ROUND: URL + "/bet/rounds",
@@ -25,4 +26,6 @@ export const API = {
   BOOKMARK_LIST: URL + "/users/bookmark/list",
 
   TRANS_DEMO_FUND: URL + "/transactions/demo/fund", //:amount
+
+  TRANS_WITHDRAW: URL + "/transactions/live/WITHDRAW", //:amount
 };

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { D_securityList, D_securityListHeader } from "../../data/D_setting";
 import moment from "moment";
@@ -6,12 +6,25 @@ import I_ltArwWhite from "../../img/icon/I_ltArwWhite.svg";
 import I_rtArwWhite from "../../img/icon/I_rtArwWhite.svg";
 import { useSelector } from "react-redux";
 import DefaultHeader from "../../components/header/DefaultHeader";
+import axios from "axios";
+import { API } from "../../configs/api";
 
 export default function Security() {
   const totalPage = 4;
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [tblData, setTblData] = useState([])
+
+  useEffect(()=>{
+    axios.get(`${API.USER_QUERY}/loginhistories/0/100`)
+    .then(({data})=>{
+      console.log(data.respdata)
+      setTblData(data.respdata.rows);
+      setTotal(data.respdata.count)
+    })
+  },[])
 
   function onClickPrePageBtn() {
     if (page > 1) setPage(page - 1);
@@ -31,13 +44,13 @@ export default function Security() {
             <article className="contArea">
               <div className="listBox">
                 <ul className="list">
-                  {D_securityList.map((v, i) => (
+                  {tblData.map((v, i) => (
                     <li key={i}>
                       <div>
                         <p className="key">{D_securityListHeader[0]}</p>
 
                         <span className="value">
-                          <p>{moment(v.date).format("YYYY-MM-DD HH:mm:ss")}</p>
+                          <p>{moment(v.createdat).format("YYYY-MM-DD HH:mm:ss")}</p>
                         </span>
                       </div>
 
@@ -137,18 +150,18 @@ export default function Security() {
                   ))}
                 </ul>
                 <ul className="list">
-                  {D_securityList.map((v, i) => (
+                  {tblData.map((v, i) => (
                     <li key={i}>
                       <span>
                         <p>{moment(v.date).format("YYYY-MM-DD HH:mm:ss")}</p>
                       </span>
 
                       <span>
-                        <p>{v.ip}</p>
+                        <p>{v.ipaddress}</p>
                       </span>
 
                       <span>
-                        <p>{v.dev_os}</p>
+                        <p>{v.deviceos}</p>
                       </span>
 
                       <span>
