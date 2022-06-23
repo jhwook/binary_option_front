@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import DefaultHeader from "../../components/header/DefaultHeader";
-import T_dia from "../../img/tier/T_dia.svg";
+import T_dia from "../../img/tier/T_Dia.svg";
 import I_upPolGreen from "../../img/icon/I_upPolGreen.svg";
 
 export default function MyPosition() {

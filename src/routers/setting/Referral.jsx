@@ -8,7 +8,7 @@ import History from "../../components/setting/referral/History";
 import DefaultHeader from "../../components/header/DefaultHeader";
 import { useSelector } from "react-redux";
 
-export default function Referal() {
+export default function Referal({userData}) {
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [category, setCategory] = useState(0);
@@ -41,9 +41,9 @@ export default function Referal() {
                   <p className="key">Code</p>
                   <button
                     className="value"
-                    onClick={() => onClickCopyBtn("98Dd4DBE")}
+                    onClick={() => onClickCopyBtn(userData?.referercode)}
                   >
-                    <p className="code">98Dd4DBE</p>
+                    <p className="code">{userData?.referercode}</p>
                     <img src={I_cpWhite} alt="" />
                   </button>
                 </li>
@@ -93,7 +93,7 @@ export default function Referal() {
         <PreferralBox>
           <section className="innerBox">
             <article className="titleArea">
-              <strong className="title">Referals</strong>
+              <strong className="title">Referrals</strong>
               <p className="explain">
                 Share your referral link! When a new user who accesses this link
                 purchases a product, an additional 2% of the sales amount is
@@ -109,9 +109,9 @@ export default function Referal() {
                   <p className="key">Code</p>
                   <button
                     className="value"
-                    onClick={() => onClickCopyBtn("98Dd4DBE")}
+                    onClick={() => onClickCopyBtn(userData?.referercode)}
                   >
-                    <p className="code">98Dd4DBE</p>
+                    <p className="code">{userData?.referercode}</p>
                     <img src={I_cpWhite} alt="" />
                   </button>
                 </li>
@@ -122,12 +122,12 @@ export default function Referal() {
                     className="value"
                     onClick={() =>
                       onClickCopyBtn(
-                        "https://www.figma.com/file/XJZins1SMnu4X3fiBS8Vu6/betbit?node-id=0%3A1"
+                        "http://users.options1.net/#/auth/signup?refcode={userData?.referercode}"
                       )
                     }
                   >
                     <p className="url">
-                      https://www.figma.com/file/XJZins1SMnu4X3fiBS8Vu6/betbit?node-id=0%3A1
+                      http://users.options1.net/#/auth/signup?refcode={userData?.referercode}
                     </p>
                     <img src={I_cpWhite} alt="" />
                   </button>

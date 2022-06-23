@@ -34,7 +34,8 @@ export default function DefaultHeader({ white, border, title }) {
   const [menuPopup, setMenuPopup] = useState(false);
   const [authPopup, setAuthPopup] = useState(false);
   const [morePopup, setMorePopup] = useState(false);
-  const [userData, setUserData] = useState("");
+  const [userData, setUserData] = useState({});
+  const [balance, setBalance] = useState({});
   const [addPopup, setAddPopup] = useState(false);
 
   function onClickMenuBtn() {
@@ -42,19 +43,26 @@ export default function DefaultHeader({ white, border, title }) {
     else setMenuPopup(true);
   }
 
-  function getUserData() {
+  async function getUserData() {
     const token = localStorage.getItem("token");
     if (!token) return;
 
     axios.defaults.headers.common["Authorization"] = `${token}`;
 
-    axios
+    await axios
+      .get(`${API.USER_BALANCE}`)
+      .then(async ({ data }) => {
+        console.log(data.respdata.DEMO.avail);
+        setBalance({...data.respdata});
+      })
+      .catch((err) => localStorage.removeItem("token"));
+
+      await axios
       .get(`${API.AUTH}`)
       .then(async ({ data }) => {
         console.log(data.result);
-        setUserData(data.result);
+        setUserData({...data.result});
       })
-      .catch((err) => localStorage.removeItem("token"));
   }
 
   useEffect(() => {
@@ -76,9 +84,9 @@ export default function DefaultHeader({ white, border, title }) {
                 onClick={() => setMyBalancePopup(true)}
               >
                 {balanceType === "Demo" ? (
-                  <p>{`Demo $${userData?.demoAvail}`}</p>
+                  <p>{`Demo $${balance?.DEMO?.avail}`}</p>
                 ) : (
-                  <p>{`Live $${userData?.liveAvail}`}</p>
+                  <p>{`Live $${balance?.LIVE?.avail}`}</p>
                 )}
               </button>
             ) : (
@@ -169,9 +177,9 @@ export default function DefaultHeader({ white, border, title }) {
                   onClick={() => setMyBalancePopup(true)}
                 >
                   {balanceType === "Demo" ? (
-                    <p>{`Demo $${userData?.demoAvail}`}</p>
-                  ) : (
-                    <p>{`Live $${userData?.liveAvail}`}</p>
+                    <p>{`Demo $${balance?.DEMO?.avail}`}</p>
+                    ) : (
+                      <p>{`Live $${balance?.LIVE?.avail}`}</p>
                   )}
                 </button>
 

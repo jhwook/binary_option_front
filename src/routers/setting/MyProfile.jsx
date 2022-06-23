@@ -10,7 +10,7 @@ import { setToast } from "../../util/Util";
 import SelectPhoneLocPopup from "../../components/auth/SelectPhoneLocPopup";
 import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
 
-export default function MyProfile() {
+export default function MyProfile({userData}) {
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [profData, setProfData] = useState("");
@@ -33,25 +33,26 @@ export default function MyProfile() {
     return regex.test(str);
   }
 
-  function getProfData() {
-    axios
-      .get(`${API.AUTH}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
-      .then(async ({ data }) => {
-        console.log(data);
-        data.id && setUid(data.id);
-        data.email && setEmail(data.email);
-        data.phone && setPhone(data.phone);
-        data.firstName && setFirstName(data.firstName);
-        data.lastName && setLastName(data.lastName);
-        data.countryNum && setCountryNum(data.countryNum);
+  // function getProfData() {
+  //   axios
+  //     .get(`${API.AUTH}`, {
+  //       headers: {
+  //         //Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //         Authorization: `${localStorage.getItem("token")}`,
+  //       },
+  //     })
+  //     .then(async ({ data }) => {
+  //       console.log(data);
+  //       userData.id && setUid(userData.id);
+  //       userData.email && setEmail(userData.email);
+  //       userData.phone && setPhone(userData.phone);
+  //       userData.firstname && setFirstName(userData.firstname);
+  //       userData.lastname && setLastName(userData.lastname);
+  //       userData.countryNum && setCountryNum(userData.countryNum);
 
-        setProfData(data);
-      });
-  }
+  //       setProfData(data);
+  //     });
+  // }
 
   function onClickVeriEmailBtn() {
     setVerificationPopup("email");
@@ -97,15 +98,15 @@ export default function MyProfile() {
     setToast({ type: "alarm", cont: "Your changes have been saved." });
   }
 
-  useEffect(() => {
-    getProfData();
+  // useEffect(() => {
+  //   getProfData();
 
-    window.addEventListener("focus", getProfData);
+  //   window.addEventListener("focus", getProfData);
 
-    return () => {
-      window.removeEventListener("focus", getProfData);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener("focus", getProfData);
+  //   };
+  // }, []);
 
   useEffect(() => {
     if (!(pw && pwChk)) return;
@@ -128,6 +129,16 @@ export default function MyProfile() {
   function onBlurPhone() {
     if (phone[0] === "0") setPhone(phone.slice(1));
   }
+
+  useEffect(()=>{
+    console.log(userData)
+    userData.id && setUid(userData.id);
+        userData.email && setEmail(userData.email);
+        userData.phone && setPhone(userData.phone);
+        userData.firstname && setFirstName(userData.firstname);
+        userData.lastname && setLastName(userData.lastname);
+        userData.countryNum && setCountryNum(userData.countryNum);
+  },[userData])
 
   if (isMobile)
     return (

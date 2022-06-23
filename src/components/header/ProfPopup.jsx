@@ -38,7 +38,7 @@ export default function ProfPopup({ off, offAll, userData }) {
             <img className="tierImg" src={GetTier("gold")} alt="" />
 
             <div className="textBox">
-              <p className="id">{userData.email}</p>
+              <p className="id">{userData.firstname+", "+userData.lastname}</p>
               <p className="pos">GOLD</p>
             </div>
           </div>
@@ -130,6 +130,7 @@ export default function ProfPopup({ off, offAll, userData }) {
     );
   else
     return (
+      
       <PprofPopupBox className="profPopup">
         <button className="exitBtn" onClick={() => off()}>
           <img src={I_x} alt="" />
@@ -139,7 +140,8 @@ export default function ProfPopup({ off, offAll, userData }) {
           <img className="tierImg" src={GetTier("gold")} alt="" />
 
           <div className="textBox">
-            <p className="id">{userData.email}</p>
+          {console.log(userData)}
+            <p className="id">{userData.firstname+", "+userData.lastname}</p>
             <p className="pos">GOLD</p>
           </div>
         </div>

@@ -62,8 +62,8 @@ export default function Login() {
       .post(`${API.LOGIN}/google`, { token: data.tokenId })
       .then(({ data }) => {
         console.log(data);
-        // localStorage.setItem("token", data.accessToken);
-        // navigate("/");
+        localStorage.setItem("token", data.result.tokenId);
+        navigate("/");
       })
       .catch((err) => console.error(err));
   }

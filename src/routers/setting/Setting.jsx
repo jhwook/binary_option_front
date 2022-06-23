@@ -8,9 +8,28 @@ import Referral from "./Referral";
 import Notifications from "./Notifications";
 import Security from "./Security";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import { API } from "../../configs/api";
+import { useState, useEffect } from "react";
 
 export default function Setting() {
   const isMobile = useSelector((state) => state.common.isMobile);
+  const [userData, setUserData] = useState({})
+  
+  useEffect(()=>{
+    axios
+      .get(`${API.AUTH}`, {
+        headers: {
+          //Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `${localStorage.getItem("token")}`,
+        },
+      })
+      .then(async ({ data }) => {
+        console.log(data);
+
+        setUserData(data.result);
+      });
+  }, [])
 
   if (isMobile)
     return (
@@ -31,10 +50,10 @@ export default function Setting() {
         <LeftNav list={D_settingNavList} baseUrl={"setting"} />
 
         <Routes>
-          <Route path="/prof" element={<MyProfile />} />
-          <Route path="/referral" element={<Referral />} />
-          <Route path="/noti" element={<Notifications />} />
-          <Route path="/security" element={<Security />} />
+          <Route path="/prof" element={<MyProfile userData={userData}/>} />
+          <Route path="/referral" element={<Referral userData={userData}/>} />
+          <Route path="/noti" element={<Notifications userData={userData}/>} />
+          <Route path="/security" element={<Security userData={userData}/>} />
         </Routes>
       </PmarketBox>
     );
