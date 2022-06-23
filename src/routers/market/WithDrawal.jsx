@@ -16,7 +16,7 @@ export default function WithDrawal() {
 
     if (token) {
       axios
-        .get(`${API.LOGIN_CHECK}`, {
+        .get(`${API.AUTH}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

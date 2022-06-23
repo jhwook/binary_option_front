@@ -22,7 +22,7 @@ export default function EventListener() {
     axios.defaults.headers.common["Authorization"] = `${token}`;
 
     axios
-      .get(`${API.LOGIN_CHECK}`)
+      .get(`${API.AUTH}`)
       .then(async ({ data }) => {
         console.log(data);
       })

@@ -3,6 +3,10 @@ import { toast } from "react-toastify";
 import I_highArwGreen from "../img/icon/I_highArwGreen.svg";
 import I_lowArwRed from "../img/icon/I_lowArwRed.svg";
 import I_chkOrange from "../img/icon/I_chkOrange.svg";
+import T_bronze from "../img/tier/T_bronze.svg";
+import T_silver from "../img/tier/T_silver.svg";
+import T_gold from "../img/tier/T_gold.svg";
+import T_dia from "../img/tier/T_dia.svg";
 
 export function strDot(str, startNum = 0, endNum = 0) {
   if (!str?.length) return;
@@ -14,23 +18,6 @@ export function chkValidEmail(email) {
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   return re.test(String(email).toLowerCase());
-}
-
-export function putCommaAtPrice(data) {
-  let str;
-
-  if (data !== undefined) {
-    data = Number(data);
-
-    // if (data < 1000)
-    //   return data.toFixed(3);
-
-    str = data.toString().split(".");
-
-    str[0] = `${str[0]}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    return str.join(".");
-  }
-  return 0;
 }
 
 export function getStyle(ref, getStyle) {
@@ -132,31 +119,6 @@ export function onClickCopy(str) {
   document.body.removeChild(textArea);
 }
 
-export function GetExchange({ price, unit }) {
-  const [exchange, setExchange] = useState("");
-
-  useEffect(() => {
-    if (!(unit && price)) return;
-
-    fetch(`https://api.bithumb.com/public/ticker/${unit}`)
-      .then((res) => res.text())
-      .then((resT) => {
-        let resArray = resT.replace(/"/g, "").split(",");
-
-        let lastPrice =
-          resArray.filter((e) => e.indexOf("closing") !== -1)[0].split(":")[1] *
-          1;
-
-        setExchange(price * lastPrice);
-      })
-      .catch(() => {
-        console.error("exchagne get Err");
-      });
-  }, []);
-
-  return <>{exchange.toLocaleString("eu", "US")}</>;
-}
-
 export function setToast({ type, cont, amount }) {
   switch (type) {
     case "high":
@@ -256,5 +218,20 @@ export function setToast({ type, cont, amount }) {
       break;
     default:
       break;
+  }
+}
+
+export function GetTier(v) {
+  switch (v) {
+    case "bronze":
+      return T_bronze;
+    case "silver":
+      return T_silver;
+    case "gold":
+      return T_gold;
+    case "dia":
+      return T_dia;
+    default:
+      return null;
   }
 }

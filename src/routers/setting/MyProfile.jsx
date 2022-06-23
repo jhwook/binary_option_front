@@ -35,7 +35,7 @@ export default function MyProfile() {
 
   function getProfData() {
     axios
-      .get(`${API.LOGIN_CHECK}`, {
+      .get(`${API.AUTH}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

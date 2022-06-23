@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import DefaultHeader from "../../components/header/DefaultHeader";
-import T_Dia from "../../img/tier/T_Dia.svg";
+import T_dia from "../../img/tier/T_dia.svg";
 import I_upPolGreen from "../../img/icon/I_upPolGreen.svg";
 
 export default function MyPosition() {
@@ -16,7 +16,7 @@ export default function MyPosition() {
           <section className="innerBox">
             <article className="posArea">
               <span className="posBox">
-                <img src={T_Dia} alt="" />
+                <img src={T_dia} alt="" />
 
                 <div className="textBox">
                   <strong className="pos">Diamond</strong>
@@ -109,7 +109,7 @@ export default function MyPosition() {
         <section className="innerBox">
           <article className="posArea">
             <span className="posBox">
-              <img src={T_Dia} alt="" />
+              <img src={T_dia} alt="" />
 
               <div className="textBox">
                 <strong className="pos">Diamond</strong>

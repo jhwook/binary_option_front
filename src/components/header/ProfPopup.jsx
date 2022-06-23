@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import I_x from "../../img/icon/I_x.svg";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
+import { GetTier } from "../../util/Util";
 
-export default function ProfPopup({ off, offAll }) {
+export default function ProfPopup({ off, offAll, userData }) {
   const navigate = useNavigate();
   const isMobile = useSelector((state) => state.common.isMobile);
 
@@ -34,10 +35,10 @@ export default function ProfPopup({ off, offAll }) {
 
         <article className="contArea">
           <div className="profBox">
-            <span className="posBox"></span>
+            <img className="tierImg" src={GetTier("gold")} alt="" />
 
             <div className="textBox">
-              <p className="id">ioimmoj@gmail.com</p>
+              <p className="id">{userData.email}</p>
               <p className="pos">GOLD</p>
             </div>
           </div>
@@ -135,10 +136,10 @@ export default function ProfPopup({ off, offAll }) {
         </button>
 
         <div className="profBox">
-          <span className="posBox"></span>
+          <img className="tierImg" src={GetTier("gold")} alt="" />
 
           <div className="textBox">
-            <p className="id">ioimmoj@gmail.com</p>
+            <p className="id">{userData.email}</p>
             <p className="pos">GOLD</p>
           </div>
         </div>
@@ -262,7 +263,7 @@ const MprofPopupBox = styled.section`
     display: flex;
     flex-direction: column;
     width: 100%;
-    padding: 6.66vw 5.55vw 8.33vw;
+    padding: 3.88vw 5.55vw 8.33vw;
     background: rgba(255, 255, 255, 0.3);
     border-radius: 5.55vw 5.55vw 0 0;
     box-shadow: inset 0px 3px 3px rgba(255, 255, 255, 0.14);
@@ -274,11 +275,8 @@ const MprofPopupBox = styled.section`
       align-items: center;
       gap: 2.22vw;
 
-      .posBox {
-        width: 13.33vw;
-        height: 13.33vw;
-        border: 1px solid #fff;
-        border-radius: 50%;
+      .tierImg {
+        height: 18.88vw;
       }
 
       .textBox {
@@ -288,6 +286,7 @@ const MprofPopupBox = styled.section`
 
         .id {
           font-size: 5vw;
+          color: #fff;
         }
 
         .pos {
@@ -386,7 +385,7 @@ const PprofPopupBox = styled.section`
   display: flex;
   flex-direction: column;
   width: 380px;
-  padding: 34px 30px;
+  padding: 24px 30px 34px;
   background: rgba(255, 255, 255, 0.2);
   border: 2px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
@@ -415,11 +414,8 @@ const PprofPopupBox = styled.section`
     align-items: center;
     gap: 8px;
 
-    .posBox {
-      width: 48px;
-      height: 48px;
-      border: 1px solid #fff;
-      border-radius: 50%;
+    .tierImg {
+      height: 68px;
     }
 
     .textBox {
@@ -429,6 +425,7 @@ const PprofPopupBox = styled.section`
 
       .id {
         font-size: 18px;
+        color: #fff;
       }
 
       .pos {
@@ -449,6 +446,7 @@ const PprofPopupBox = styled.section`
       display: flex;
       align-items: center;
       gap: 6px;
+      color: #fff;
 
       .dot {
         width: 6px;
@@ -476,6 +474,7 @@ const PprofPopupBox = styled.section`
         }
 
         .value {
+          color: #fff;
         }
       }
     }
@@ -516,7 +515,13 @@ const PprofPopupBox = styled.section`
     width: 100%;
     height: 50px;
     font-size: 16px;
+    color: #fff;
     border: 1.2px solid rgba(255, 255, 255, 0.2);
     border-radius: 10px;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: #fff;
+    }
   }
 `;

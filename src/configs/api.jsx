@@ -5,7 +5,7 @@ export const API = {
   SIGNUP: URL + "/users/signup", //type
 
   LOGIN: URL + "/users/login",
-  LOGIN_CHECK: URL + "/users/auth",
+  AUTH: URL + "/users/auth",
 
   GET_ASSETS: URL + "/assets/list",
 

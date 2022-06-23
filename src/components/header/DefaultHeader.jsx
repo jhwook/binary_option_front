@@ -34,7 +34,7 @@ export default function DefaultHeader({ white, border, title }) {
   const [menuPopup, setMenuPopup] = useState(false);
   const [authPopup, setAuthPopup] = useState(false);
   const [morePopup, setMorePopup] = useState(false);
-  const [balanceData, setBalanceData] = useState("");
+  const [userData, setUserData] = useState("");
   const [addPopup, setAddPopup] = useState(false);
 
   function onClickMenuBtn() {
@@ -42,22 +42,23 @@ export default function DefaultHeader({ white, border, title }) {
     else setMenuPopup(true);
   }
 
-  function getBalance() {
-    if (token) {
-      axios.defaults.headers.common["Authorization"] = `${token}`;
+  function getUserData() {
+    const token = localStorage.getItem("token");
+    if (!token) return;
 
-      axios
-        .get(`${API.USER_BALANCE}`)
-        .then(({ data }) => {
-          console.log(data.respdata);
-          setBalanceData(data.respdata);
-        })
-        .catch((err) => console.error(err));
-    }
+    axios.defaults.headers.common["Authorization"] = `${token}`;
+
+    axios
+      .get(`${API.AUTH}`)
+      .then(async ({ data }) => {
+        console.log(data.result);
+        setUserData(data.result);
+      })
+      .catch((err) => localStorage.removeItem("token"));
   }
 
   useEffect(() => {
-    getBalance();
+    getUserData();
   }, []);
 
   if (isMobile)
@@ -75,9 +76,9 @@ export default function DefaultHeader({ white, border, title }) {
                 onClick={() => setMyBalancePopup(true)}
               >
                 {balanceType === "Demo" ? (
-                  <p>{`Demo $${balanceData?.DEMO?.avail}`}</p>
+                  <p>{`Demo $${userData?.demoAvail}`}</p>
                 ) : (
-                  <p>{`Live $${balanceData?.LIVE?.avail}`}</p>
+                  <p>{`Live $${userData?.liveAvail}`}</p>
                 )}
               </button>
             ) : (
@@ -94,9 +95,7 @@ export default function DefaultHeader({ white, border, title }) {
           </article>
         </MdefaultHeaderBox>
 
-        {menuPopup && (
-          <MenuPopup off={setMenuPopup} balanceData={balanceData} />
-        )}
+        {menuPopup && <MenuPopup off={setMenuPopup} userData={userData} />}
 
         {authPopup && <AuthPopup off={setAuthPopup} />}
 
@@ -170,9 +169,9 @@ export default function DefaultHeader({ white, border, title }) {
                   onClick={() => setMyBalancePopup(true)}
                 >
                   {balanceType === "Demo" ? (
-                    <p>{`Demo $${balanceData?.DEMO?.avail}`}</p>
+                    <p>{`Demo $${userData?.demoAvail}`}</p>
                   ) : (
-                    <p>{`Live $${balanceData?.LIVE?.avail}`}</p>
+                    <p>{`Live $${userData?.liveAvail}`}</p>
                   )}
                 </button>
 
@@ -224,7 +223,7 @@ export default function DefaultHeader({ white, border, title }) {
 
         {profPopup && (
           <>
-            <ProfPopup off={setProfPopup} />
+            <ProfPopup off={setProfPopup} userData={userData} />
             <PopupBg off={setProfPopup} />
           </>
         )}
