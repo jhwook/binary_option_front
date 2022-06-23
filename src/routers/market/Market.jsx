@@ -7,15 +7,31 @@ import { D_marketLeftBarList } from "../../data/D_market";
 import WithDrawal from "./WithDrawal";
 import History from "./History";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { API } from "../../configs/api";
 
 export default function Market() {
   const isMobile = useSelector((state) => state.common.isMobile);
+  const [userData, setUserData] = useState({})
+  useEffect(()=>{
+    axios.get(`${API.AUTH}`,{
+      headers: {
+        //Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `${localStorage.getItem("token")}`,
+      },
+    })
+    .then(({data})=>{
+      console.log(data.result)
+      setUserData(data.result)
+    })
+  },[])
 
   if (isMobile)
     return (
       <MmarketBox>
         <Routes>
-          <Route path="/deposit" element={<Deposit />} />
+          <Route path="/deposit" element={<Deposit userData={userData}/>} />
           <Route path="/withdrawal" element={<WithDrawal />} />
           <Route path="/history" element={<History />} />
         </Routes>
@@ -29,7 +45,7 @@ export default function Market() {
         <LeftNav list={D_marketLeftBarList} baseUrl={"market"} />
 
         <Routes>
-          <Route path="/deposit" element={<Deposit />} />
+          <Route path="/deposit" element={<Deposit userData={userData}/>} />
           <Route path="/withdrawal" element={<WithDrawal />} />
           <Route path="/history" element={<History />} />
         </Routes>

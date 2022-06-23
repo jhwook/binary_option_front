@@ -28,4 +28,5 @@ export const API = {
   TRANS_DEMO_FUND: URL + "/transactions/demo/fund", //:amount
 
   TRANS_WITHDRAW: URL + "/transactions/live/WITHDRAW", //:amount
+  TRANS_DEPOSIT: URL + "/transactions/live/DEPOSIT", //:amount
 };

@@ -1,4 +1,4 @@
-import { forwardRef, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import styled from "styled-components";
 import DatePicker, { registerLocale } from "react-datepicker";
 import ko from "date-fns/locale/ko";
@@ -16,6 +16,8 @@ import {
 import renderCustomHeader from "../../util/DatePickerHeader";
 import { useSelector } from "react-redux";
 import DefaultHeader from "../../components/header/DefaultHeader";
+import axios from "axios";
+import { API } from "../../configs/api";
 
 export default function History() {
   const totalPage = 4;
@@ -27,7 +29,14 @@ export default function History() {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [page, setPage] = useState(1);
+  const [tblData, setTblData] = useState([]);
+  const [total, setTotal] = useState(0);
 
+  const statusSTR={
+    0: 'Pending',
+    1: 'Confirmed',
+    2: 'Rejected'
+  }
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
     <button className="dateBtn" onClick={onClick} ref={ref}>
       <img src={I_calender} alt="" />
@@ -49,6 +58,26 @@ export default function History() {
   function onClickNextPageBtn() {
     if (page < totalPage) setPage(page + 1);
   }
+
+  useEffect(()=>{
+    const token = localStorage.getItem("token");
+
+    axios.get(`${API.USER_QUERY}/transactions/0/100`,{
+      params:{
+        key: 'typestr',
+        val: (category==0?'DEPOSIT':'WITHDRAW')
+      },
+      headers: {
+        Authorization: `${token}`,
+      },
+    })
+    .then(({data})=>{
+      let{respdata} = data;
+      console.log(respdata)
+      setTblData(respdata.rows)
+      setTotal(respdata.count)
+    })
+  },[category])
 
   if (isMobile)
     return (
@@ -200,9 +229,9 @@ export default function History() {
               </ul>
 
               <ul className="list">
-                {D_historyList.map((v, i) => (
+                {tblData.map((v, i) => (
                   <li key={i}>
-                    <span>{v.id}</span>
+                    <span>{v.uid}</span>
 
                     <span>
                       <p>{moment(v.openTime).format("YYYY-MM-DD HH:mm:ss")}</p>
@@ -213,15 +242,15 @@ export default function History() {
                     </span>
 
                     <span>
-                      <p>{v.method}</p>
+                      <p>{v.method || 'Tether'}</p>
                     </span>
 
                     <span>
-                      <p>{v.type}</p>
+                      <p>{v.typestr}</p>
                     </span>
 
                     <span>
-                      <p>{v.status}</p>
+                      <p>{statusSTR[v.status]}</p>
                     </span>
                   </li>
                 ))}

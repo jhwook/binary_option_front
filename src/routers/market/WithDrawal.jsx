@@ -31,7 +31,10 @@ export default function WithDrawal() {
         })
         .then(async ({ data }) => {
           console.log(data)
-          if(data.payload.status == "OK"){
+          console.log(data.payload)
+          console.log(data.payload.resp)
+          if(data.payload.resp.status == "OK"){
+            window.location.reload()
             if(data.payload.resp.message){
               //Transaction Success
               window.location.reload()
