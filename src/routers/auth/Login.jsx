@@ -108,6 +108,7 @@ export default function Login() {
                   <p className="or">or</p>
 
                   <GoogleLogin
+                  style={{border: '5px'}}
                     clientId={gCliId}
                     onSuccess={resGLogin}
                     onFailure={(err) => console.error(err)}
@@ -205,7 +206,7 @@ export default function Login() {
                 </div>
 
                 <div className="utilBox">
-                  <button className="forgetBtn" onClick={() => {}}>
+                  <button className="forgetBtn" onClick={() => {navigate("/auth/resetpw")}}>
                     Forgot password?
                   </button>
 

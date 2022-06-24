@@ -5,12 +5,18 @@ import { API } from "../../configs/api";
 import B_withDrawal from "../../img/bg/market/withDrawal/B_withDrawal.svg";
 import B_withDrawal2 from "../../img/bg/market/withDrawal/B_withDrawal2.svg";
 import SetErrorBar from "../../util/SetErrorBar";
+import I_Arw from "../../img/icon/I_XSArw.svg";
+import T_usdt from "../../img/token/T_usdt.png";
+import T_usdc from "../../img/token/T_usdc.png";
+import TokenSelectPopup from "../../components/common/TokenSelectPopup"
 
 
 export default function WithDrawal() {
   const [amount, setAmount] = useState("");
   const [address, setAddress] = useState("");
   const [tokenType, setTokenType] = useState("USDC");
+  const [tokenPopup, setTokenPopup] = useState(false)
+  const [token, setToken] = useState({icon: T_usdt, text: 'USDT'});
   const [settings, setSettings] = useState({
     commision: 0,
     minWithdraw: 5,
@@ -52,25 +58,33 @@ export default function WithDrawal() {
   return (
     <WithDrawalBox>
       <article className="contArea">
-        <div className="key">
-          <strong className="title">Withdrawal</strong>
-        </div>
+      <div className="key">
+              <span className="count">1</span>
+
+              <strong className="title">Withdraw</strong>
+            </div>
 
         <div className="value">
-          <ul className="infoList">
-            <li>
-              <p className="key">Commission</p>
-              <p className="value">{settings.commision}%</p>
-            </li>
-            <li>
-              <p className="key">Minimum withdraw amount</p>
-              <p className="value">{settings.minWithdraw} USDT</p>
-            </li>
-            <li>
-              <p className="key">Max amount per transaction</p>
-              <p className="value">{(settings.maxTransactions==-1)?'no limits':settings.maxTransactions}</p>
-            </li>
-          </ul>
+        <div className="tokenBoxre">
+                <p className="key">Asset</p>
+
+                <div className="valueBox" onClick={()=>setTokenPopup(!tokenPopup)}>
+                  <div className="selectedToken">
+                    <img className="token" src={token.icon} alt="" />
+                    <strong className="unit">{token.text}</strong>
+                  </div>
+                  <img className="Arw" src={I_Arw} />
+                  
+                </div>
+                {
+                  tokenPopup && (
+                    <TokenSelectPopup off={setTokenPopup} list={[{icon: T_usdt, text: 'USDT'}, {icon: T_usdc, text: 'USDC'}]} setCont={setToken}/>
+                  )
+                }
+                
+              </div>
+              
+          
 
           <ul className="inputList">
             <li>
@@ -98,6 +112,21 @@ export default function WithDrawal() {
                   placeholder=""
                 />
               </div>
+            </li>
+          </ul>
+
+          <ul className="infoList">
+            <li>
+              <p className="key">Commission</p>
+              <p className="value">{settings.commision}%</p>
+            </li>
+            <li>
+              <p className="key">Minimum withdraw amount</p>
+              <p className="value">{settings.minWithdraw} USDT</p>
+            </li>
+            <li>
+              <p className="key">Max amount per transaction</p>
+              <p className="value">{(settings.maxTransactions==-1)?'no limits':settings.maxTransactions}</p>
             </li>
           </ul>
 
@@ -136,12 +165,77 @@ const WithDrawalBox = styled.main`
     width: 454px;
 
     & > .key {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .count {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 20px;
+        height: 20px;
+        font-size: 14px;
+        color: #2a2a2a;
+        border-radius: 50%;
+        background: #f7ab1f;
+      }
       .title {
         font-size: 24px;
       }
     }
 
     & > .value {
+      .tokenBoxre{
+        margin: 44px 0 0 0;
+          .key {
+            font-size: 16px;
+          }
+
+          .valueBox {
+            display: flex;
+            align-items: center;
+            height: 56px;
+            padding: 0 24px;
+            margin: 10px 0 0 0;
+            font-size: 20px;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            border: 1.4px solid rgba(0, 0, 0, 0);
+            line-height: 56px;
+            justify-content: space-between;
+            cursor: pointer;
+            .selectedToken{
+              line-height: 56px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              .token{
+              width: 38px;
+              height: 38px;
+              margin-right: 10px;
+              }
+              .unit{
+                text-align: center;
+              }
+            }
+            .Arw{
+
+            }
+            
+
+            &:focus-within {
+              border-color: #f7ab1f;
+            }
+
+            input {
+              flex: 1;
+              height: 100%;
+              font-weight: inherit;
+            }
+          }
+        }
       .infoList {
         display: flex;
         flex-direction: column;
@@ -167,7 +261,7 @@ const WithDrawalBox = styled.main`
         display: flex;
         flex-direction: column;
         gap: 20px;
-        margin: 44px 0 0 0;
+        margin: 20px 0 0 0;
 
         .key {
           font-size: 16px;

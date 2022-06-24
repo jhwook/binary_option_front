@@ -44,7 +44,7 @@ export default function ResetPw() {
                   <ul className="categoryList">
                     {D_loginCategoryList.map((v, i) => (
                       <li key={i} className={`${category === i && "on"}`}>
-                        <button onClick={() => setCategory(i)}>{v}</button>
+                        <button onClick={() => setCategory(i)}>{v.key}</button>
                       </li>
                     ))}
                   </ul>
@@ -187,7 +187,7 @@ export default function ResetPw() {
                   <ul className="categoryList">
                     {D_loginCategoryList.map((v, i) => (
                       <li key={i} className={`${category === i && "on"}`}>
-                        <button onClick={() => setCategory(i)}>{v}</button>
+                        <button onClick={() => setCategory(i)}>{v.key}</button>
                       </li>
                     ))}
                   </ul>

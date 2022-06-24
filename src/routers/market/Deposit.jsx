@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import I_Arw from "../../img/icon/I_XSArw.svg";
 import T_usdt from "../../img/token/T_usdt.png";
+import T_usdc from "../../img/token/T_usdc.png";
 import { useSelector } from "react-redux";
 import DefaultHeader from "../../components/header/DefaultHeader";
 import PopupBg from "../../components/common/PopupBg";
@@ -14,6 +16,8 @@ import ConfirmUsdt from "../../components/market/deposit/ConfirmUsdt";
 import ConfirmCny from "../../components/market/deposit/ConfirmCny";
 import ConfirmationPopup from "../../components/market/deposit/ConfirmationPopup";
 import {reqTx, getabistr_forfunction} from "../../util/contractcall"
+import TokenSelectPopup from "../../components/common/TokenSelectPopup";
+import contractaddr from "../../configs/contractaddr"
 
 export default function Deposit({userData}) {
   const [isBranch, setIsBranch] = useState(false);
@@ -25,29 +29,50 @@ export default function Deposit({userData}) {
   const [securityVerifiPopup, setSecurityVerifiPopup] = useState(false);
   const [confirmationPopup, setConfirmationPopup] = useState(false);
   const [balancePopup, setBalancePopup] = useState(false);
+  const [tokenPopup, setTokenPopup] = useState(false)
+  const [token, setToken] = useState({icon: T_usdt, text: 'USDT'});
+  const [tokenList, setTokenList] = useState([{icon: T_usdt, text: 'USDT'}, {icon: T_usdc, text: 'USDC'}])
 
-  function directPayment(){
+  useEffect(()=>{
+    if(!userData){return;}
+    let {isbranch} = userData;
+    setIsBranch(isbranch)
+    if(isbranch){
+      setTokenList([{icon: T_usdc, text: 'CNY'}])
+    }else{
+      setTokenList([{icon: T_usdt, text: 'USDT'}, {icon: T_usdc, text: 'USDC'}])
+    }
+  }, [userData])
+
+  async function directPayment(){
     let {ethereum} = window;
-    let address = ethereum.enable()
-
+    let address = await ethereum.enable()
+    console.log(address[0])
     if(!ethereum){alert("Install Metamask"); return;}
     let abistr=getabistr_forfunction({
-      contractaddress: 'CONTRACTADDR',
+      contractaddress: contractaddr[token.text],
       abikind: 'ERC20',
       methodname: 'transfer',
-      aargs: ['TO_ADDRESS', amount+""]
+      aargs: [contractaddr['admin'], amount+""]
     })
     reqTx({
       from: address[0],
-      to: 'CONTRACTADDR',
+      to: contractaddr[token.text],
       data: abistr,
       gas: 3000000
     }, (txHash)=>{
-      axios.post(`${API.TRANS_DEPOSIT}/${amount}`,{
-        tokentype: 'USDC',
+      axios.patch(`${API.TRANS_DEPOSIT}/${amount}`,{
+        tokentype: token.text,
+        txhash: txHash,
         
         headers: {
           Authorization: `${localStorage.getItem("token")}`,
+        }
+      })
+      .then(resp=>{
+        if(resp){
+          //Success
+          window.location.reload()
         }
       })
     })
@@ -55,7 +80,10 @@ export default function Deposit({userData}) {
 
   function onClickDepositBtn() {
     if (isBranch) setSecurityVerifiPopup(true);
-    else setConfirm(true);
+    else {
+      directPayment()
+      setConfirm(true);
+    }
   }
 
   useEffect(()=>{
@@ -183,25 +211,28 @@ export default function Deposit({userData}) {
             </div>
 
             <div className="value">
-              <div className="tokenBox">
-                <img src={T_usdt} alt="" />
-                <strong>USDT</strong>
-              </div>
+              <div className="tokenBoxre">
+                <p className="key">Asset</p>
 
-              <ul className="infoList">
-                <li>
-                  <p className="key">Commission</p>
-                  <p className="value">0%</p>
-                </li>
-                <li>
-                  <p className="key">Minimum deposit amount</p>
-                  <p className="value">5 USDT</p>
-                </li>
-                <li>
-                  <p className="key">Max amount per transaction</p>
-                  <p className="value">0no limits</p>
-                </li>
-              </ul>
+                <div className="valueBox" onClick={()=>setTokenPopup(!tokenPopup)}>
+                  <div className="selectedToken">
+                    <img className="token" src={token.icon} alt="" />
+                    <strong className="unit">{token.text}</strong>
+                  </div>
+                  <img className="Arw" src={I_Arw} />
+                  
+                </div>
+                {
+                  tokenPopup && (
+                    <TokenSelectPopup off={setTokenPopup} list={tokenList} setCont={setToken}/>
+                  )
+                }
+                
+              </div>
+              
+              
+
+              
 
               <div className="amountBox">
                 <p className="key">Amount</p>
@@ -213,7 +244,7 @@ export default function Deposit({userData}) {
                     onChange={(e) => setAmount(e.target.value)}
                     placeholder=""
                   />
-                  <strong className="unit">{isBranch ? "CNY" : "USDT"}</strong>
+                  <strong className="unit">{token.text}</strong>
                 </div>
 
                 <ul className="optList">
@@ -242,6 +273,21 @@ export default function Deposit({userData}) {
                     {isBranch ? "¥" : "$"}400
                   </button>
                 </ul>
+
+                <ul className="infoList">
+                <li>
+                  <p className="key">Commission</p>
+                  <p className="value">0%</p>
+                </li>
+                <li>
+                  <p className="key">Minimum deposit amount</p>
+                  <p className="value">5 {token.text}</p>
+                </li>
+                <li>
+                  <p className="key">Max amount per transaction</p>
+                  <p className="value">0no limits</p>
+                </li>
+              </ul>
 
                 <button
                   className="depositBtn"
@@ -310,6 +356,7 @@ export default function Deposit({userData}) {
             <PopupBg off={setBalancePopup} />
           </>
         )}
+        
       </>
     );
 }
@@ -489,6 +536,55 @@ const PdepositBox = styled.main`
             height: 50px;
           }
         }
+        .tokenBoxre{
+          .key {
+            font-size: 16px;
+          }
+
+          .valueBox {
+            display: flex;
+            align-items: center;
+            height: 56px;
+            padding: 0 24px;
+            margin: 10px 0 0 0;
+            font-size: 20px;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            border: 1.4px solid rgba(0, 0, 0, 0);
+            line-height: 56px;
+            justify-content: space-between;
+            cursor: pointer;
+            .selectedToken{
+              line-height: 56px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              .token{
+              width: 38px;
+              height: 38px;
+              margin-right: 10px;
+              }
+              .unit{
+                text-align: center;
+              }
+            }
+            .Arw{
+
+            }
+            
+
+            &:focus-within {
+              border-color: #f7ab1f;
+            }
+
+            input {
+              flex: 1;
+              height: 100%;
+              font-weight: inherit;
+            }
+          }
+        }
 
         .infoList {
           display: flex;
@@ -512,7 +608,7 @@ const PdepositBox = styled.main`
         }
 
         .amountBox {
-          margin: 44px 0 0 0;
+          margin: 20px 0 0 0;
 
           .key {
             font-size: 16px;
@@ -551,7 +647,8 @@ const PdepositBox = styled.main`
             overflow-x: scroll;
 
             button {
-              height: 44px;
+              height: 42px;
+              width: 102px;
               padding: 0 22px;
               background: rgba(255, 255, 255, 0.1);
               border-radius: 8px;
