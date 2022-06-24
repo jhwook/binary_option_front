@@ -24,6 +24,7 @@ export default function Deposit({userData}) {
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [amount, setAmount] = useState("");
+  const [branchData, setBranchData] = useState("");
   const [confirm, setConfirm] = useState(false);
   const [detailPopup, setDetailPopup] = useState(false);
   const [securityVerifiPopup, setSecurityVerifiPopup] = useState(false);
@@ -75,6 +76,20 @@ export default function Deposit({userData}) {
           window.location.reload()
         }
       })
+    })
+  }
+  function postLocale(){
+    if(!branchData){return;}
+    axios.patch(`${API.TRANS_DEPOSIT}/${amount}`,{
+      tokentype: token.text,
+      ...branchData,
+      
+      headers: {
+        Authorization: `${localStorage.getItem("token")}`,
+      }
+    })
+    .then(_=>{
+      //Posted
     })
   }
 
@@ -309,7 +324,7 @@ export default function Deposit({userData}) {
 
             {confirm ? (
               isBranch ? (
-                <ConfirmCny setConfirm={setConfirm} />
+                <ConfirmCny setConfirm={setConfirm} setOk={(e)=>{(e)&&postLocale()}}/>
               ) : (
                 <ConfirmUsdt />
               )
@@ -352,7 +367,7 @@ export default function Deposit({userData}) {
 
         {balancePopup && (
           <>
-            <BalancePopup off={setBalancePopup} setConfirm={setConfirm} />
+            <BalancePopup off={setBalancePopup} setConfirm={setConfirm} setData={setBranchData} />
             <PopupBg off={setBalancePopup} />
           </>
         )}

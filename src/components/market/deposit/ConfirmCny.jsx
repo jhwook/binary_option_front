@@ -6,7 +6,7 @@ import PopupBg from "../../common/PopupBg";
 import ConfirmationPopup from "./ConfirmationPopup";
 import TimeOutPopup from "./TimeOutPopup";
 
-export default function ConfirmCny({ setConfirm }) {
+export default function ConfirmCny({ setConfirm, setOk }) {
   let time = 10;
 
   const [limit, setLimit] = useState(time);
@@ -121,7 +121,7 @@ export default function ConfirmCny({ setConfirm }) {
 
       {confirmationPopup && (
         <>
-          <ConfirmationPopup off={setConfirmationPopup} />
+          <ConfirmationPopup off={()=>{setConfirmationPopup();setOk(true)}} />
           <PopupBg off={setConfirmationPopup} />
         </>
       )}

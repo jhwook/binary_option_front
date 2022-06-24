@@ -2,13 +2,14 @@ import { useState } from "react";
 import styled from "styled-components";
 import I_xWhite from "../../../img/icon/I_xWhite.svg";
 
-export default function BalancePopup({ off, setConfirm }) {
+export default function BalancePopup({ off, setConfirm, setData }) {
   const [name, setName] = useState("");
   const [card, setCard] = useState("");
   const [bankCode, setBankCode] = useState("");
   const [bankName, setBankName] = useState("");
 
   function onClickConfirmBtn() {
+    setData({name, card, bankCode, bankName})
     setConfirm(true);
     off();
   }
