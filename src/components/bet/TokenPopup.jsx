@@ -139,40 +139,38 @@ export default function TokenPopup({ off, setAsset, getBookMark }) {
     return (
       <PtokenPopupBox>
         <article className="topArea">
-          {searchMode ? (
-            <div className="searchBox">
+          <ul className="categoryList">
+            {D_tokenCategoryList.map((v, i) => (
+              <li
+                key={i}
+                className={`${category === v.value && "on"}`}
+                onClick={() => setCategory(v.value)}
+              >
+                {v.key}
+              </li>
+            ))}
+          </ul>
+
+          <div className="searchBox">
+            {search ? (
               <button
                 className="cancelBtn"
                 onClick={() => setSearchMode(false)}
               >
                 <img src={I_xWhite} alt="" />
               </button>
-
-              <input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="e.g. “ETH” or “Ethereum”"
-              />
-            </div>
-          ) : (
-            <>
-              <ul className="categoryList">
-                {D_tokenCategoryList.map((v, i) => (
-                  <li
-                    key={i}
-                    className={`${category === v.value && "on"}`}
-                    onClick={() => setCategory(v.value)}
-                  >
-                    {v.key}
-                  </li>
-                ))}
-              </ul>
-
+            ) : (
               <button className="searchBtn" onClick={() => setSearchMode(true)}>
                 <img src={I_searchWhite} alt="" />
               </button>
-            </>
-          )}
+            )}
+
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="e.g. “ETH” or “Ethereum”"
+            />
+          </div>
         </article>
 
         <article className="listArea">
@@ -379,52 +377,27 @@ const MtokenPopupBox = styled.section`
 const PtokenPopupBox = styled.section`
   display: flex;
   flex-direction: column;
-  gap: 40px;
-  width: 500px;
-  height: 930px;
-  padding: 20px;
+  gap: 14px;
+  width: 380px;
+  padding: 30px 20px;
   background: rgba(255, 255, 255, 0.2);
   border: 2px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
+  box-shadow: inset 0px 3px 3px rgba(255, 255, 255, 0.4),
+    0px 10px 40px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
-  top: 50px;
-  position: absolute;
+  top: 120px;
+  bottom: 30px;
+  position: fixed;
   z-index: 6;
 
   .topArea {
     display: flex;
-    align-items: center;
-    gap: 40px;
-    height: 40px;
-
-    .searchBox {
-      flex: 1;
-      display: flex;
-      gap: 14px;
-      height: inherit;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-
-      .cancelBtn {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
-        aspect-ratio: 1;
-        background: rgba(255, 255, 255, 0.1);
-        border: 1.2px solid rgba(255, 255, 255, 0.4);
-        border-radius: 50%;
-
-        img {
-          width: 16px;
-          opacity: 0.4;
-        }
-      }
-    }
+    flex-direction: column;
+    gap: 30px;
 
     .categoryList {
-      flex: 1;
       display: flex;
       gap: 10px;
 
@@ -433,7 +406,7 @@ const PtokenPopupBox = styled.section`
         justify-content: center;
         align-items: center;
         height: 40px;
-        padding: 0 24px;
+        padding: 0 20px;
         font-size: 16px;
         font-weight: 700;
         background: rgba(255, 255, 255, 0.1);
@@ -447,35 +420,51 @@ const PtokenPopupBox = styled.section`
       }
     }
 
-    .searchBtn {
+    .searchBox {
+      flex: 1;
       display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 40px;
-      height: 40px;
+      gap: 14px;
+      height: inherit;
       background: rgba(255, 255, 255, 0.1);
-      border-radius: 50%;
+      border-radius: 20px;
 
-      img {
-        width: 18px;
+      button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        aspect-ratio: 1;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+
+        &.searchBtn {
+          img {
+            width: 18px;
+          }
+        }
+
+        &.cancelBtn {
+          border: 1.2px solid rgba(255, 255, 255, 0.4);
+
+          img {
+            width: 16px;
+            opacity: 0.4;
+          }
+        }
+      }
+
+      input {
+        &::placeholder {
+          color: #fff;
+          opacity: 0.2;
+        }
       }
     }
   }
 
   .listArea {
     flex: 1;
-    padding: 0 8px 0 0;
     overflow-y: scroll;
-
-    &::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      width: 6px;
-      background: rgba(255, 255, 255, 0.4);
-      border-radius: 10px;
-    }
 
     .tokenList {
       display: flex;
@@ -488,6 +477,7 @@ const PtokenPopupBox = styled.section`
         gap: 10px;
         height: 50px;
         padding: 0 14px;
+        border-radius: 6px;
         cursor: pointer;
 
         &:hover {

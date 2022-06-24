@@ -70,22 +70,6 @@ export default function TimePopup({ off }) {
               <img src={I_minusWhite} alt="" />
             </button>
           </li>
-          <span className="dot">:</span>
-
-          <li>
-            <button className="plusBtn setBtn" onClick={() => onClickSetBtn(1)}>
-              <img src={I_plusWhite} alt="" />
-            </button>
-
-            <p>{`${time % 60}`.padStart(2, "0")}</p>
-
-            <button
-              className="plusBtn setBtn"
-              onClick={() => onClickSetBtn(-1)}
-            >
-              <img src={I_minusWhite} alt="" />
-            </button>
-          </li>
         </ul>
 
         <ul className="btnList">
@@ -145,8 +129,8 @@ const MtimePopupBox = styled.section`
 `;
 
 const PtimePopupBox = styled.section`
-  width: 244px;
-  padding: 20px;
+  width: 202px;
+  padding: 20px 16px;
   background: rgba(255, 255, 255, 0.1);
   border: 1.4px solid rgba(255, 255, 255, 0.14);
   border-radius: 20px;
@@ -204,7 +188,7 @@ const PtimePopupBox = styled.section`
   .btnList {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
     padding: 18px 0 0 0;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
 
@@ -212,8 +196,8 @@ const PtimePopupBox = styled.section`
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 60px;
-      height: 40px;
+      width: 50px;
+      height: 34px;
       font-size: 16px;
       background: rgba(0, 0, 0, 0.2);
       border: 1px solid transparent;

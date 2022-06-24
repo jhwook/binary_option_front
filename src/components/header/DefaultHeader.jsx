@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { D_headerList, D_lngList } from "../../data/D_header";
 import L_yellow from "../../img/logo/L_yellow.svg";
 import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
+import I_defaultProfImg from "../../img/icon/I_defaultProfImg.svg";
+import I_wallet from "../../img/icon/I_wallet.svg";
 import { ReactComponent as I_hamburger } from "../../img/icon/I_hamburger.svg";
 import PopupBg from "../common/PopupBg";
 import SelLngPopup from "./SelLngPopup";
@@ -53,16 +55,14 @@ export default function DefaultHeader({ white, border, title }) {
       .get(`${API.USER_BALANCE}`)
       .then(async ({ data }) => {
         console.log(data.respdata.DEMO.avail);
-        setBalance({...data.respdata});
+        setBalance({ ...data.respdata });
       })
       .catch((err) => localStorage.removeItem("token"));
 
-      await axios
-      .get(`${API.AUTH}`)
-      .then(async ({ data }) => {
-        console.log(data.result);
-        setUserData({...data.result});
-      })
+    await axios.get(`${API.AUTH}`).then(async ({ data }) => {
+      console.log(data.result);
+      setUserData({ ...data.result });
+    });
   }
 
   useEffect(() => {
@@ -172,22 +172,41 @@ export default function DefaultHeader({ white, border, title }) {
           <article className="rightArea">
             {token ? (
               <>
-                <button
-                  className="accountBtn"
-                  onClick={() => setMyBalancePopup(true)}
-                >
-                  {balanceType === "Demo" ? (
-                    <p>{`Demo $${balance?.DEMO?.avail}`}</p>
+                <span className="accountBox">
+                  <button
+                    className="accountBtn"
+                    onClick={() => setMyBalancePopup(true)}
+                  >
+                    {balanceType === "Demo" ? (
+                      <>
+                        <strong className="key">Demo</strong>
+                        <strong className="value">{`$${Number(
+                          balance?.DEMO?.avail || 0
+                        ).toFixed(2)}`}</strong>
+                      </>
                     ) : (
-                      <p>{`Live $${balance?.LIVE?.avail}`}</p>
-                  )}
-                </button>
+                      <>
+                        <strong className="key">Live</strong>
+                        <strong className="value">{`$${Number(
+                          balance?.LIVE?.avail || 0
+                        ).toFixed(2)}`}</strong>
+                      </>
+                    )}
+                  </button>
 
-                <span className="profBox">
-                  <button className="myBtn" onClick={() => setProfPopup(true)}>
-                    MY
+                  <button
+                    className="depositBtn"
+                    onClick={() => navigate("/market/deposit")}
+                  >
+                    <img src={I_wallet} alt="" />
+
+                    <strong>Deposit</strong>
                   </button>
                 </span>
+
+                <button className="myBtn" onClick={() => setProfPopup(true)}>
+                  <img src={I_defaultProfImg} alt="" />
+                </button>
               </>
             ) : (
               <>
@@ -204,10 +223,7 @@ export default function DefaultHeader({ white, border, title }) {
                   )}
                 </div>
 
-                <button
-                  className="loginBtn"
-                  onClick={() => navigate("/auth/login")}
-                >
+                <button className="loginBtn" onClick={() => navigate("/auth")}>
                   LOGIN
                 </button>
               </>
@@ -415,33 +431,50 @@ const PdefaultHeaderBox = styled.header`
     gap: 8px;
     font-size: 14px;
 
-    .accountBtn,
-    .profBox .myBtn {
+    .accountBox {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 34px;
-      background: rgba(255, 255, 255, 0.1);
+      height: 38px;
+      font-size: 14px;
+      background: rgba(247, 171, 31, 0.2);
+      border-radius: 28px;
 
-      &.accountBtn {
-        width: 124px;
-        padding: 0 10px;
-        border-radius: 28px;
-
-        p {
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-        }
+      .accountBtn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 6px;
+        width: 138px;
       }
 
-      &.myBtn {
-        width: 34px;
-        border-radius: 50%;
+      .depositBtn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        width: 122px;
+        height: 100%;
+        color: #2a2a2a;
+        background: #f7ab1f;
+        border-radius: 28px;
+
+        img {
+          height: 18px;
+        }
       }
     }
 
-    .profBox {
+    .myBtn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 34px;
+      aspect-ratio: 1;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+
+      img {
+        width: 22px;
+      }
     }
 
     .lngBox {

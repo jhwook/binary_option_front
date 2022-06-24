@@ -153,13 +153,13 @@ const PdetBoxCont = styled.div`
   flex-direction: column;
   width: 0;
   height: 100%;
-  margin: 0 0 0 10px;
   color: #fff;
   transition: all 0.3s;
   overflow: hidden;
 
   &.on {
     width: 300px;
+    margin: 0 0 0 10px;
   }
 
   .detCategoryList {

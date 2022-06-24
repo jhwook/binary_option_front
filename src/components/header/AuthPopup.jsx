@@ -34,7 +34,7 @@ export default function AuthPopup({ off }) {
           <div className="btnBox">
             <button
               className="loginBtn"
-              onClick={() => onclickNavBtn("/auth/login")}
+              onClick={() => onclickNavBtn("/auth")}
             >
               Login
             </button>

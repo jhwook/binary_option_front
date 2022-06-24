@@ -7,8 +7,10 @@ import { useState } from "react";
 import { D_headerList, D_moreList } from "../../data/D_header";
 import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
+import I_wallet from "../../img/icon/I_wallet.svg";
 import I_langWhite from "../../img/icon/I_langWhite.svg";
 import I_quesCircleWhite from "../../img/icon/I_quesCircleWhite.svg";
+import I_defaultProfImg from "../../img/icon/I_defaultProfImg.svg";
 import { useNavigate } from "react-router-dom";
 import SelLngPopup from "./SelLngPopup";
 
@@ -28,37 +30,53 @@ export default function MenuPopup({ off, userData }) {
     off();
   }
 
+  function onClickDepositBtn() {
+    navigate("/market/deposit");
+    off();
+  }
+
   return (
     <>
       <MenuPopupBox>
         <article className="topArea">
           {token ? (
             <>
-              <button
-                className="accountBtn"
-                onClick={() => setMyBalancePopup(true)}
-              >
-                {balanceType === "Demo" ? (
-                  <p>{`Demo $${userData?.demoAvail}`}</p>
-                ) : (
-                  <p>{`Live $${userData?.liveAvail}`}</p>
-                )}
-              </button>
+              <span className="accountBox">
+                <button
+                  className="accountBtn"
+                  onClick={() => setMyBalancePopup(true)}
+                >
+                  {balanceType === "Demo" ? (
+                    <>
+                      <strong className="key">Demo</strong>
+                      <strong className="value">{`$${Number(
+                        userData?.demoAvail || 0
+                      ).toFixed(2)}`}</strong>
+                    </>
+                  ) : (
+                    <>
+                      <strong className="key">Live</strong>
+                      <strong className="value">{`$${Number(
+                        userData?.liveAvail || 0
+                      ).toFixed(2)}`}</strong>
+                    </>
+                  )}
+                </button>
 
-              <span className="profBox">
-                <button className="myBtn" onClick={() => setProfPopup(true)}>
-                  MY
+                <button className="depositBtn" onClick={onClickDepositBtn}>
+                  <img src={I_wallet} alt="" />
                 </button>
               </span>
+
+              <button className="myBtn" onClick={() => setProfPopup(true)}>
+                <img src={I_defaultProfImg} alt="" />
+              </button>
             </>
           ) : (
             <>
               <span />
 
-              <button
-                className="loginBtn"
-                onClick={() => navigate("/auth/login")}
-              >
+              <button className="loginBtn" onClick={() => navigate("/auth")}>
                 LOGIN
               </button>
             </>
@@ -89,7 +107,11 @@ export default function MenuPopup({ off, userData }) {
                 );
               else
                 return (
-                  <button className="navBtn" onClick={() => navigate(v.url)}>
+                  <button
+                    key={i}
+                    className="navBtn"
+                    onClick={() => navigate(v.url)}
+                  >
                     <strong className="title">{v.key}</strong>
                   </button>
                 );
@@ -182,22 +204,55 @@ const MenuPopupBox = styled.section`
     padding: 0 4.44vw;
     font-size: 3.88vw;
 
-    .accountBtn,
-    .profBox .myBtn {
+    .accountBox {
+      display: flex;
+      height: 9.44vw;
+      font-size: 3.88vw;
+      background: rgba(247, 171, 31, 0.2);
+      border-radius: 7.77vw;
+      overflow: hidden;
+
+      .accountBtn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1.11vw;
+        width: 35vw;
+        overflow: hidden;
+
+        .value {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+      }
+
+      .depositBtn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 9.44vw;
+        aspect-ratio: 1;
+        background: #f7ab1f;
+        border-radius: 50%;
+
+        img {
+          height: 3.88vw;
+        }
+      }
+    }
+
+    .myBtn {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 9.44vw;
+      width: 9.44vw;
+      aspect-ratio: 1;
       background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
 
-      &.accountBtn {
-        width: 32.22vw;
-        border-radius: 7.77vw;
-      }
-
-      &.myBtn {
-        aspect-ratio: 1;
-        border-radius: 50%;
+      img {
+        width: 6.11vw;
       }
     }
 

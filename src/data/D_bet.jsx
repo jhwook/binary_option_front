@@ -1566,11 +1566,9 @@ export const D_timeList = [
 ];
 
 export const D_tokenCategoryList = [
-  {key:"Currencies",value:"forex"}
-  ,
-  {key:"Crypto",value:"crypto"}
-  ,
-  {key:"Stocks",value:"stock"}
+  { key: "Currencies", value: "forex" },
+  { key: "Crypto", value: "crypto" },
+  { key: "Stocks", value: "stock" },
 ];
 
 export const D_currencyList = [
@@ -1616,15 +1614,12 @@ export const D_currencyList = [
 ];
 
 export const D_timeBtnList = [
-  { key: "5s", value: 5 },
-  { key: "15s", value: 15 },
-  { key: "30s", value: 30 },
   { key: "1m", value: 60 },
+  { key: "2m", value: 120 },
   { key: "3m", value: 180 },
   { key: "5m", value: 300 },
+  { key: "10m", value: 600 },
   { key: "30m", value: 1800 },
-  { key: "1h", value: 3600 },
-  { key: "4h", value: 14400 },
 ];
 
 export const D_detCategoryList = ["Opened", "Closed"];

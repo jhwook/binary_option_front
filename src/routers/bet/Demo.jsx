@@ -282,7 +282,7 @@ export default function Demo() {
   else
     return (
       <>
-        <DefaultHeader border />
+        <DefaultHeader />
 
         <PbetBox onKeyDown={handleKeyDown}>
           <section className="innerBox">
@@ -1091,9 +1091,10 @@ const PbetBox = styled.main`
 
       & > .plusBtn {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         min-width: 40px;
         width: 40px;
+        height: 50px;
         padding: 10px;
         opacity: 0.6;
 

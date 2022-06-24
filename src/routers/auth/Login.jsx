@@ -108,7 +108,7 @@ export default function Login() {
                   <p className="or">or</p>
 
                   <GoogleLogin
-                  style={{border: '5px'}}
+                    style={{ border: "5px" }}
                     clientId={gCliId}
                     onSuccess={resGLogin}
                     onFailure={(err) => console.error(err)}
@@ -187,7 +187,6 @@ export default function Login() {
 
                   <p className="or">or</p>
 
-
                   <GoogleLogin
                     clientId={gCliId}
                     onSuccess={resGLogin}
@@ -206,7 +205,12 @@ export default function Login() {
                 </div>
 
                 <div className="utilBox">
-                  <button className="forgetBtn" onClick={() => {navigate("/auth/resetpw")}}>
+                  <button
+                    className="forgetBtn"
+                    onClick={() => {
+                      navigate("/auth/resetpw");
+                    }}
+                  >
                     Forgot password?
                   </button>
 
@@ -327,6 +331,7 @@ const MloginBox = styled.main`
               justify-content: center;
               align-items: center;
               gap: 3.88vw;
+              font-weight: 700;
               border: 1px solid #e6e6e6;
             }
           }
@@ -456,6 +461,7 @@ const PloginBox = styled.main`
               justify-content: center;
               align-items: center;
               gap: 14px;
+              font-weight: 700;
               border: 1px solid #e6e6e6;
             }
           }
