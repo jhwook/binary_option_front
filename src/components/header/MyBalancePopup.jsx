@@ -18,9 +18,12 @@ export default function MyBalancePopup({ off, setAddPopup }) {
   );
   const [balanceData, setBalanceData] = useState("");
 
-  function onClickConfirmBtn(nextProc) {
+  function onClickConfirmBtn(nextProc, isNotNavigate) {
     off();
+    if(isNotNavigate)
     nextProc(true);
+    else
+    navigate("/market/deposit")
   }
 
   function getBalance() {
@@ -74,7 +77,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
             {stateBalanceType === "Live" && (
               <button
                 className="actionBtn"
-                onClick={() => onClickConfirmBtn(navigate("/market/deposit"))}
+                onClick={() => onClickConfirmBtn(navigate("/market/deposit"), false)}
               >
                 Deposit
               </button>
@@ -83,7 +86,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
             {stateBalanceType === "Demo" && (
               <button
                 className="actionBtn"
-                onClick={() => onClickConfirmBtn(setAddPopup)}
+                onClick={() => onClickConfirmBtn(setAddPopup, true)}
               >
                 Add
               </button>
@@ -141,7 +144,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
             {stateBalanceType === "Live" && (
               <button
                 className="actionBtn"
-                onClick={() => onClickConfirmBtn(navigate("/market/deposit"))}
+                onClick={() => onClickConfirmBtn(navigate("/market/deposit"), false)}
               >
                 Deposit
               </button>
@@ -150,7 +153,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
             {stateBalanceType === "Demo" && (
               <button
                 className="actionBtn"
-                onClick={() => onClickConfirmBtn(setAddPopup)}
+                onClick={() => onClickConfirmBtn(setAddPopup, true)}
               >
                 Add
               </button>

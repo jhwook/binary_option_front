@@ -90,6 +90,7 @@ export default function Deposit({userData}) {
     })
     .then(_=>{
       //Posted
+      window.location.reload()
     })
   }
 
