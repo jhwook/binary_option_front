@@ -37,7 +37,7 @@ export default function Security() {
   if (isMobile)
     return (
       <>
-        <DefaultHeader title="Security" />
+        <DefaultHeader title="Login History" />
 
         <MsecurityBox>
           <section className="innerBox">
@@ -139,7 +139,7 @@ export default function Security() {
         <PsecurityBox>
           <section className="innerBox">
             <article className="titleArea">
-              <strong className="title">Notification settings</strong>
+              <strong className="title">Login History</strong>
             </article>
 
             <article className="contArea">
@@ -153,7 +153,7 @@ export default function Security() {
                   {tblData.map((v, i) => (
                     <li key={i}>
                       <span>
-                        <p>{moment(v.date).format("YYYY-MM-DD HH:mm:ss")}</p>
+                        <p>{moment(v.createdat).format("YYYY-MM-DD HH:mm:ss")}</p>
                       </span>
 
                       <span>
@@ -169,14 +169,8 @@ export default function Security() {
                       </span>
 
                       <span>
-                        <p>{v.country}</p>
+                        <p>{v.country} / {v.status}</p>
                       </span>
-
-                      <span>
-                        <p>{v.status}</p>
-                      </span>
-
-                      <span></span>
                     </li>
                   ))}
                 </ul>
@@ -441,18 +435,19 @@ const PsecurityBox = styled.main`
           }
 
           &:nth-of-type(3) {
-            width: 226px;
+            width: 300px;
             min-width: 226px;
           }
 
           &:nth-of-type(4) {
-            width: 168px;
+            width: 210px;
             min-width: 168px;
           }
 
           &:nth-of-type(5) {
             width: 190px;
             min-width: 190px;
+            flex:1;
           }
 
           &:nth-of-type(6) {

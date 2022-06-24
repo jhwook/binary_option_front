@@ -145,8 +145,7 @@ export const D_securityListHeader = [
   "IP",
   "Device/OS",
   "Browser",
-  "Country",
-  "Status",
+  "Country/Region",
 ];
 
 export const D_securityList = [

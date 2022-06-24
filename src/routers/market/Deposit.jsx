@@ -65,7 +65,7 @@ export default function Deposit({userData}) {
       axios.patch(`${API.TRANS_DEPOSIT}/${amount}`,{
         tokentype: token.text,
         txhash: txHash,
-        
+        senderaddr: address[0],
         headers: {
           Authorization: `${localStorage.getItem("token")}`,
         }
