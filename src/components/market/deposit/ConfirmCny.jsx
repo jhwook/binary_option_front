@@ -7,7 +7,7 @@ import ConfirmationPopup from "./ConfirmationPopup";
 import TimeOutPopup from "./TimeOutPopup";
 
 export default function ConfirmCny({ setConfirm, setOk }) {
-  let time = 10;
+  let time = 900;
 
   const [limit, setLimit] = useState(time);
   const [confirmationPopup, setConfirmationPopup] = useState(false);
@@ -37,7 +37,7 @@ export default function ConfirmCny({ setConfirm, setOk }) {
           {limit > 0 && (
             <div className="timerBox">
               <span className="hour">{Math.floor(limit / 60)}</span>:
-              <span className="minute">{limit % 60}</span>
+              <span className="minute">{`${limit % 60}`.padStart(2, "0")}</span>
             </div>
           )}
         </div>
@@ -121,7 +121,12 @@ export default function ConfirmCny({ setConfirm, setOk }) {
 
       {confirmationPopup && (
         <>
-          <ConfirmationPopup off={()=>{setConfirmationPopup();setOk(true)}} />
+          <ConfirmationPopup
+            off={() => {
+              setConfirmationPopup();
+              setOk(true);
+            }}
+          />
           <PopupBg off={setConfirmationPopup} />
         </>
       )}
