@@ -8,6 +8,7 @@ export const API = {
   AUTH: URL + "/users/auth",
 
   GET_ASSETS: URL + "/assets/list",
+  EDIT_REF: URL + "/users/edit/ref",
 
   PHONE_COUNTRY_CODE: URL + "/phone/country/codes", //:offset/:limit
 

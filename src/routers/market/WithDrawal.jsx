@@ -9,11 +9,14 @@ import I_alarmYellow from "../../img/icon/I_alarmYellow.svg";
 import T_usdt from "../../img/token/T_usdt.png";
 import T_usdc from "../../img/token/T_usdc.png";
 import TokenSelectPopup from "../../components/common/TokenSelectPopup";
+
+import { setToast } from "../../util/Util";
 import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
 import PopupBg from "../../components/common/PopupBg";
 import { useSelector } from "react-redux";
 import DefaultHeader from "../../components/header/DefaultHeader";
 import { useNavigate } from "react-router-dom";
+
 
 export default function WithDrawal() {
   const navigate = useNavigate();
@@ -56,6 +59,7 @@ export default function WithDrawal() {
             window.location.reload();
             if (data.payload.resp.message) {
               //Transaction Success
+              setToast({ type: "alarm", cont: "Submission Successful" });
               setProcess(true);
             }
           }
