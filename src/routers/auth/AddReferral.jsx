@@ -12,6 +12,7 @@ import { API } from "../../configs/api";
 import { gCliId } from "../../configs/setting";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import L_coins from "../../img/logo/L_coins.svg";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -20,58 +21,23 @@ export default function Login() {
 
   const [category, setCategory] = useState(D_loginCategoryList[0]);
   const [userData, setUserData] = useState(D_joinData);
+  const [refCode, setRefCode] = useState("")
 
   function onClickLoginBtn() {
-    let loginDataForm;
-
-    if (category.key === "Email")
-      loginDataForm = { email: userData.email, password: userData.pw };
-    else if (category.key === "Phone Number")
-      loginDataForm = {
-        phone: userData.phone,
-        countryNum: userData.phoneLoc,
-        password: userData.pw,
-      };
-
-    console.log(loginDataForm);
-
-    axios
-      .post(`${API.LOGIN}/${category.value}`, loginDataForm)
-      .then(({ data }) => {
-        console.log(data);
-
-        if (data.message === "TOKEN_CREATED") {
-          localStorage.setItem("token", data.result.tokenId);
-          navigate("/");
-        } else {
-          setUserData({
-            ...userData,
-            pwAlarm: "The password you have entered does not coincide",
-          });
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }
-
-  function resGLogin(data) {
-    axios
-      .post(`${API.LOGIN}/google`, { token: data.tokenId })
-      .then(({ data }) => {
-        console.log(data);
-        let {isFirstSocial} = data;
-        
-        localStorage.setItem("token", data.result.tokenId);
-
-        if(isFirstSocial){
-          navigate("/auth/signup/referral")
-        }else{
-          navigate("/");
-        }
-        
-      })
-      .catch((err) => console.error(err));
+    console.log('asdf')
+    const token = localStorage.getItem("token");
+   axios.patch(API.EDIT_REF,{refcode: refCode, 
+    headers: {
+      Authorization: `${token}`,
+    },})
+    .then(({data})=>{
+      console.log(data)
+      let {tokenId} = data.result;
+      if(tokenId){
+        localStorage.setItem("token", tokenId);
+        navigate("/");
+      }
+    })
   }
 
   if (isMobile)
@@ -113,22 +79,6 @@ export default function Login() {
 
                   <p className="or">or</p>
 
-                  <GoogleLogin
-                    style={{ border: "5px" }}
-                    clientId={gCliId}
-                    onSuccess={resGLogin}
-                    onFailure={(err) => console.error(err)}
-                    cookiePolicy="single_host_origin"
-                    render={(renderProps) => (
-                      <button
-                        className="googleBtn"
-                        onClick={renderProps.onClick}
-                      >
-                        <img src={L_google} alt="" />
-                        <p>Continue with Google</p>
-                      </button>
-                    )}
-                  />
                 </div>
 
                 <div className="utilBox">
@@ -160,92 +110,33 @@ export default function Login() {
         <PloginBox>
           <section className="innerBox">
             <div className="titleBox">
-              <strong className="pgTitle">Betbit Account Login</strong>
+              <img className="titleLogo" src={L_coins}/>
+              <div className="pgTitle">
+                <strong className="main">Got a promo code?</strong>
+                <p className="sub">Enter your code to redeem it.</p>
+              </div>
             </div>
 
             <article className="contArea">
               <div className="loginArc">
-                <div className="contBox">
-                  <ul className="categoryList">
-                    {D_loginCategoryList.map((v, i) => (
-                      <li
-                        key={i}
-                        className={`${category.key === v.key && "on"}`}
-                      >
-                        <button onClick={() => setCategory(v)}>{v.key}</button>
-                      </li>
-                    ))}
-                  </ul>
-
-                  {category.key === "Email" && (
-                    <Email userData={userData} setUserData={setUserData} />
-                  )}
-
-                  {category.key === "Phone Number" && (
-                    <Phone userData={userData} setUserData={setUserData} />
-                  )}
+              <li>
+                <div className="value">
+                  <div className={`inputBox`}>
+                    <input
+                      value={refCode}
+                      onChange={(e) =>{setRefCode(e.target.value)}
+                      }
+                      placeholder="Enter the code."
+                    />
+                  </div>
                 </div>
-
+              </li>
                 <div className="btnCont">
                   <button className="loginBtn" onClick={onClickLoginBtn}>
-                    Login
-                  </button>
-
-                  <p className="or">or</p>
-
-                  <GoogleLogin
-                    clientId={gCliId}
-                    onSuccess={resGLogin}
-                    onFailure={(err) => console.error(err)}
-                    cookiePolicy="single_host_origin"
-                    render={(renderProps) => (
-                      <button
-                        className="googleBtn"
-                        onClick={renderProps.onClick}
-                      >
-                        <img src={L_google} alt="" />
-                        <p>Continue with Google</p>
-                      </button>
-                    )}
-                  />
-                </div>
-
-                <div className="utilBox">
-                  <button
-                    className="forgetBtn"
-                    onClick={() => {
-                      navigate("/auth/resetpw");
-                    }}
-                  >
-                    Forgot password?
-                  </button>
-
-                  <button
-                    className="signupBtn"
-                    onClick={() => navigate("/auth/signup")}
-                  >
-                    Register now
+                    Redeem
                   </button>
                 </div>
-              </div>
 
-              <div className="qrArea">
-                <div className="qrBox">
-                  <QRCode
-                    size={220}
-                    style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-                    value={"http://users.options1.net/#/auth/login"}
-                    viewBox={`0 0 220 220`}
-                  />
-                </div>
-
-                <div className="textBox">
-                  <strong className="title">Mobile with QR code</strong>
-
-                  <p className="explain">
-                    Scan this code and you will be taken to your mobile login.
-                  </p>
-                </div>
               </div>
             </article>
           </section>
@@ -393,11 +284,37 @@ const PloginBox = styled.main`
 
     .titleBox {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       gap: 10px;
 
       .pgTitle {
-        font-size: 28px;
+        flex-direction: column;
+        margin-left: 20px;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
+        .main{
+          margin-top: 30px;
+          font-family: 'Oxygen';
+          font-style: normal;
+          font-weight: 700;
+          font-size: 28px;
+          line-height: 35px;
+          display: flex;
+          align-items: center;
+        }
+        .sub{
+          font-family: 'Oxygen';
+          font-style: normal;
+          font-weight: 400;
+          font-size: 16px;
+          line-height: 20px;
+          display: flex;
+          align-items: center;
+        }
+      }
+      .titleLogo{
+        width: 70px;
       }
     }
 
@@ -406,6 +323,41 @@ const PloginBox = styled.main`
       gap: 125px;
       .loginArc {
         width: 400px;
+        li{
+          .value{
+            gap: 10px;
+            .inputBox {
+              display: flex;
+              align-items: center;
+              height: 48px;
+              padding: 0 16px;
+              border-radius: 8px;
+              border: 1px solid #ddd;
+
+              &:focus-within {
+                border-color: #f7ab1f;
+              }
+
+              input {
+                flex: 1;
+              }
+
+              .delBtn {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 16px;
+                height: 16px;
+                background: #ddd;
+                border-radius: 50%;
+
+                img {
+                  width: 8px;
+                }
+              }
+            }
+          }
+        }
 
         .contBox {
           .categoryList {
@@ -448,18 +400,19 @@ const PloginBox = styled.main`
           flex-direction: column;
           align-items: center;
           gap: 24px;
-          margin: 40px 0 0 0;
+          margin: 20px 0 0 0;
 
           button {
             width: 100%;
-            height: 56px;
+            height: 50px;
             font-size: 18px;
             border-radius: 8px;
 
             &.loginBtn {
               font-weight: 700;
-              color: #fff;
-              background: #2a2a2a;
+              color: #F7AB1F;
+              border: 2px solid #F7AB1F;
+              border-radius: 8px;
             }
 
             &.googleBtn {
@@ -493,41 +446,6 @@ const PloginBox = styled.main`
 
           button {
             color: #f7ab1f;
-          }
-        }
-      }
-
-      .qrArea {
-        display: flex;
-        flex-direction: column;
-        gap: 40px;
-        width: 240px;
-
-        .qrBox {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 240px;
-          height: 240px;
-          padding: 10px;
-          border: 1px solid #ddd;
-          border-radius: 14px;
-        }
-
-        .textBox {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 10px;
-
-          .title {
-            font-size: 16px;
-          }
-
-          .explain {
-            font-size: 14px;
-            color: #888;
-            text-align: center;
           }
         }
       }
