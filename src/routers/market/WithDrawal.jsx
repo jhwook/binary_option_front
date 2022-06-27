@@ -17,7 +17,6 @@ import { useSelector } from "react-redux";
 import DefaultHeader from "../../components/header/DefaultHeader";
 import { useNavigate } from "react-router-dom";
 
-
 export default function WithDrawal() {
   const navigate = useNavigate();
   const isMobile = useSelector((state) => state.common.isMobile);
@@ -40,15 +39,15 @@ export default function WithDrawal() {
 
   async function onClickDrawalBtn() {
     setProcess(true);
-    const token = localStorage.getItem("token");
+    const jtoken = localStorage.getItem("token");
 
-    if (token) {
+    if (jtoken) {
       axios
         .patch(`${API.TRANS_WITHDRAW}/${amount}`, {
           rxaddr: address,
-          tokentype: tokenType,
+          tokentype: token.text,
           headers: {
-            Authorization: `${token}`,
+            Authorization: `${jtoken}`,
           },
         })
         .then(async ({ data }) => {
@@ -56,11 +55,12 @@ export default function WithDrawal() {
           console.log(data.payload);
           console.log(data.payload.resp);
           if (data.payload.resp.status == "OK") {
-            window.location.reload();
+           
             if (data.payload.resp.message) {
               //Transaction Success
               setToast({ type: "alarm", cont: "Submission Successful" });
               setProcess(true);
+              setTimeout(()=>{window.location.reload(false);}, 3000)
             }
           }
         });
@@ -79,7 +79,7 @@ export default function WithDrawal() {
               <article className="onProcess">
                 <div className="titleBox">
                   <strong className="key">You will get</strong>
-                  <strong className="value">1033 USDT</strong>
+                  <strong className="value">{amount} {token.text}</strong>
                 </div>
 
                 <ul className="infoList">
@@ -90,12 +90,12 @@ export default function WithDrawal() {
 
                   <li>
                     <p className="key">Fee</p>
-                    <strong className="value">0 USDT</strong>
+                    <strong className="value">0 {token.text}</strong>
                   </li>
 
                   <li>
                     <p className="key">Withdrawal Amount</p>
-                    <strong className="value">1000 USDT</strong>
+                    <strong className="value">1000 {token.text}</strong>
                   </li>
 
                   <li>
@@ -317,7 +317,7 @@ export default function WithDrawal() {
             <div className={`onProcess value`}>
               <div className="titleBox">
                 <strong className="key">You will get</strong>
-                <strong className="value">1033 USDT</strong>
+                <strong className="value">{amount} {token.text}</strong>
               </div>
 
               <ul className="infoList">
@@ -328,12 +328,12 @@ export default function WithDrawal() {
 
                 <li>
                   <p className="key">Fee</p>
-                  <strong className="value">0 USDT</strong>
+                  <strong className="value">0 {token.text}</strong>
                 </li>
 
                 <li>
                   <p className="key">Withdrawal Amount</p>
-                  <strong className="value">1000 USDT</strong>
+                  <strong className="value">{amount} {token.text}</strong>
                 </li>
 
                 <li>
