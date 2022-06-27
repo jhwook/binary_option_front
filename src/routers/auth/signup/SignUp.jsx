@@ -1,14 +1,14 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { D_joinData, D_loginCategoryList } from "../../data/D_auth";
-import Email from "./common/Email";
-import I_dnPol from "../../img/icon/I_dnPol.svg";
-import I_chkOrange from "../../img/icon/I_chkOrange.svg";
-import Phone from "./common/Phone";
+import { D_joinData, D_loginCategoryList } from "../../../data/D_auth";
+import Email from "../common/Email";
+import I_dnPol from "../../../img/icon/I_dnPol.svg";
+import I_chkOrange from "../../../img/icon/I_chkOrange.svg";
+import Phone from "../common/Phone";
 import QRCode from "react-qr-code";
 import { useNavigate } from "react-router";
 import axios from "axios";
-import { API } from "../../configs/api";
+import { API } from "../../../configs/api";
 import { useSelector } from "react-redux";
 
 export default function Signup() {
@@ -47,11 +47,11 @@ export default function Signup() {
         if (data.message === "TOKEN_CREATED") {
           localStorage.setItem("token", data.result.tokenId);
           navigate("/");
-        }
-
-        else if(data.message ==="INVALID-CODE")
-        {
-          setUserData({...userData, referralAlarm:""})
+        } else if (data.message === "INVALID-CODE") {
+          setUserData({
+            ...userData,
+            referralAlarm: "The password you have entered does not coincide",
+          });
         }
       })
       .catch((err) => console.error(err));
@@ -73,7 +73,10 @@ export default function Signup() {
                     {D_loginCategoryList.map((v, i) => (
                       <li
                         key={i}
-                        className={`${category.key === v.key && "The referral code you have entered does not coincide"}`}
+                        className={`${
+                          category.key === v.key &&
+                          "The referral code you have entered does not coincide"
+                        }`}
                       >
                         <button onClick={() => setCategory(v)}>{v.key}</button>
                       </li>
@@ -546,7 +549,7 @@ const PsignupBox = styled.main`
               &.on {
                 color: inherit;
                 border: solid transparent;
-                border-width: 2px 2px 0 2px;
+                border-width: 3px 3px 0 3px;
                 background-image: linear-gradient(#fff, #fff),
                   linear-gradient(
                     180deg,
@@ -709,8 +712,8 @@ const PsignupBox = styled.main`
           width: 240px;
           height: 240px;
           padding: 10px;
-          border: 1px solid #ddd;
           border-radius: 14px;
+          box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.14);
         }
 
         .textBox {

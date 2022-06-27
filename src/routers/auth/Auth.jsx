@@ -5,8 +5,8 @@ import Index from "./Index";
 import Login from "./Login";
 import ResetPw from "./ResetPw";
 import SetPw from "./SetPw";
-import Signup from "./SignUp";
-import AddRef from "./AddReferral";
+import Signup from "./signup/SignUp";
+import Referral from "./signup/Referral";
 
 export default function Auth() {
   return (
@@ -21,7 +21,7 @@ export default function Auth() {
         <Route path="/resetpw" element={<ResetPw />} />
         <Route path="/setpw/:code" element={<SetPw />} />
         <Route path="/comppw" element={<CompPw />} />
-        <Route path="/signup/referral" element={<AddRef />} />
+        <Route path="/signup/referral" element={<Referral />} />
       </Routes>
     </>
   );

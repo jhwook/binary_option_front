@@ -6,6 +6,7 @@ export const API = {
 
   LOGIN: URL + "/users/login",
   AUTH: URL + "/users/auth",
+  REFRESH: URL + "/users/refresh",
 
   GET_ASSETS: URL + "/assets/list",
   EDIT_REF: URL + "/users/edit/ref",
@@ -14,7 +15,7 @@ export const API = {
 
   USER_PROFILE: URL + "/users/profile",
   USER_CERTIFICATION_EMAIL: URL + "/users/certification/email",
-  USER_QUERY:URL + "/users/query", //tablename/offset/limit
+  USER_QUERY: URL + "/users/query", //tablename/offset/limit
 
   BET: URL + "/bet",
   BET_ROUND: URL + "/bet/rounds",

@@ -60,16 +60,12 @@ export default function Login() {
       .post(`${API.LOGIN}/google`, { token: data.tokenId })
       .then(({ data }) => {
         console.log(data);
-        let {isFirstSocial} = data;
-        
+        let { isFirstSocial } = data;
+
         localStorage.setItem("token", data.result.tokenId);
 
-        if(isFirstSocial){
-          navigate("/auth/signup/referral")
-        }else{
-          navigate("/");
-        }
-        
+        if (isFirstSocial) navigate("/auth/signup/referral");
+        else navigate("/");
       })
       .catch((err) => console.error(err));
   }

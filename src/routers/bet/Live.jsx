@@ -11,7 +11,7 @@ import I_plusWhite from "../../img/icon/I_plusWhite.svg";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
 import I_flagWhite from "../../img/icon/I_flagWhite.svg";
 import I_barChartWhite from "../../img/icon/I_barChartWhite.svg";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import LiveTradePopup from "../../components/bet/LiveTradePopup";
 import PopupBg from "../../components/common/PopupBg";
 import TokenPopup from "../../components/bet/TokenPopup";
@@ -29,6 +29,8 @@ import { API } from "../../configs/api";
 import LoadingBar from "../../components/common/LoadingBar";
 
 export default function Live() {
+  const hoverRef1 = useRef();
+  const hoverRef2 = useRef();
   const dispatch = useDispatch();
   const isMobile = useSelector((state) => state.common.isMobile);
   const token = localStorage.getItem("token");
@@ -124,6 +126,19 @@ export default function Live() {
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
+
+  function onMouseOverBtn(e) {
+    // console.log(e.screenX);
+    // console.log(e.screenY);
+
+    hoverRef1.current.style.left = `${e.clientX}px`;
+    hoverRef1.current.style.top = `${e.clientY}px`;
+    hoverRef2.current.style.left = `${e.clientX}px`;
+    hoverRef2.current.style.top = `${e.clientY}px`;
+
+    console.log(hoverRef1.current.style.left);
+    console.log(hoverRef1.current.style.top);
+  }
 
   if (isMobile)
     return (
@@ -462,45 +477,49 @@ export default function Live() {
                       </div>
                     </div>
 
-                    <button
-                      className="highBtn"
-                      disabled={!amount}
-                      onClick={() => onClickPayBtn("high")}
-                    >
-                      <span className="defaultBox">
-                        <img src={I_highArwGreen} alt="" />
-                        <strong>HIGH</strong>
-                      </span>
+                    <span className="btnBox" onMouseMove={onMouseOverBtn}>
+                      <button
+                        className="highBtn"
+                        disabled={!amount}
+                        onClick={() => onClickPayBtn("high")}
+                      >
+                        <span className="defaultBox">
+                          <img src={I_highArwGreen} alt="" />
+                          <strong>HIGH</strong>
+                        </span>
 
-                      <span className="hoverBox">
-                        <strong className="percent">+80%</strong>
-                        <p className="amount">400536157.70</p>
+                        <span className="hoverBox">
+                          <strong className="percent">+80%</strong>
+                          <p className="amount">400536157.70</p>
 
-                        <p className="hoverPopup">
-                          Dividend rate : +80% 400536157.70 USDT
-                        </p>
-                      </span>
-                    </button>
+                          <p className="hoverPopup" ref={hoverRef1}>
+                            Dividend rate : +80% 400536157.70 USDT
+                          </p>
+                        </span>
+                      </button>
+                    </span>
 
-                    <button
-                      className="lowBtn"
-                      disabled={!amount}
-                      onClick={() => onClickPayBtn("low")}
-                    >
-                      <span className="defaultBox">
-                        <img src={I_lowArwRed} alt="" />
-                        <strong>LOW</strong>
-                      </span>
+                    <span className="btnBox" onMouseMove={onMouseOverBtn}>
+                      <button
+                        className="lowBtn"
+                        disabled={!amount}
+                        onClick={() => onClickPayBtn("low")}
+                      >
+                        <span className="defaultBox">
+                          <img src={I_lowArwRed} alt="" />
+                          <strong>LOW</strong>
+                        </span>
 
-                      <span className="hoverBox">
-                        <strong className="percent">+80%</strong>
-                        <p className="amount">400536157.70</p>
+                        <span className="hoverBox">
+                          <strong className="percent">+80%</strong>
+                          <p className="amount">400536157.70</p>
 
-                        <p className="hoverPopup">
-                          Dividend rate : +80% 400536157.70 USDT
-                        </p>
-                      </span>
-                    </button>
+                          <p className="hoverPopup" ref={hoverRef2}>
+                            Dividend rate : +80% 400536157.70 USDT
+                          </p>
+                        </span>
+                      </button>
+                    </span>
                   </div>
 
                   <DetBox mode={detMode} />
@@ -1019,72 +1038,76 @@ const PbetBox = styled.main`
           }
         }
 
-        .highBtn,
-        .lowBtn {
-          height: 48px;
-          font-size: 16px;
-          border: 1.2px solid;
-          border-radius: 8px;
-          position: relative;
+        .btnBox {
+          width: 100%;
 
-          .defaultBox {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-          }
+          button {
+            width: 100%;
+            height: 48px;
+            font-size: 16px;
+            border: 1.2px solid;
+            border-radius: 8px;
+            position: relative;
 
-          .hoverBox {
-            display: none;
-
-            .hoverPopup {
-              padding: 10px;
-              font-size: 12px;
-              color: #fff;
-              white-space: nowrap;
-              background: rgba(0, 0, 0, 0.4);
-              border-radius: 4px;
-              backdrop-filter: blur(10px);
-              -webkit-backdrop-filter: blur(10px);
-              right: 140px;
-              position: absolute;
-            }
-          }
-
-          &:hover {
             .defaultBox {
-              display: none;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 20px;
             }
 
             .hoverBox {
-              display: block;
+              display: none;
 
-              .percent {
-              }
-
-              .amount {
+              .hoverPopup {
+                padding: 10px;
                 font-size: 12px;
+                color: #fff;
+                white-space: nowrap;
+                background: rgba(0, 0, 0, 0.4);
+                border-radius: 4px;
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                position: fixed;
+                transform: translate(-100%, 0);
               }
             }
-          }
-
-          &.highBtn {
-            color: #3fb68b;
-            border-color: #3fb68b;
 
             &:hover {
-              background: rgba(63, 182, 139, 0.2);
-              box-shadow: 0px 0px 10px rgba(63, 182, 139, 0.6);
+              .defaultBox {
+                display: none;
+              }
+
+              .hoverBox {
+                display: block;
+
+                .percent {
+                }
+
+                .amount {
+                  font-size: 12px;
+                }
+              }
             }
-          }
 
-          &.lowBtn {
-            color: #ff5353;
-            border-color: #ff5353;
+            &.highBtn {
+              color: #3fb68b;
+              border-color: #3fb68b;
 
-            &:hover {
-              background: rgba(255, 83, 83, 0.2);
-              box-shadow: 0px 0px 10px rgba(255, 83, 83, 0.6);
+              &:hover {
+                background: rgba(63, 182, 139, 0.2);
+                box-shadow: 0px 0px 10px rgba(63, 182, 139, 0.6);
+              }
+            }
+
+            &.lowBtn {
+              color: #ff5353;
+              border-color: #ff5353;
+
+              &:hover {
+                background: rgba(255, 83, 83, 0.2);
+                box-shadow: 0px 0px 10px rgba(255, 83, 83, 0.6);
+              }
             }
           }
         }

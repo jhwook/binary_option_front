@@ -81,7 +81,7 @@ export default function DefaultHeader({ white, border, title }) {
           <article className="leftArea">
             {title ? (
               <p className="title">{title}</p>
-            ) : token ? (
+            ) : token && location.pathname.indexOf("auth") === -1 ? (
               <button
                 className="accountBtn"
                 onClick={() => setMyBalancePopup(true)}
@@ -172,66 +172,87 @@ export default function DefaultHeader({ white, border, title }) {
             )}
           </article>
 
-          <article className="rightArea">
-            {token ? (
-              <>
-                <span className="accountBox">
-                  <button
-                    className="accountBtn"
-                    onClick={() => setMyBalancePopup(true)}
-                  >
-                    {balanceType === "Demo" ? (
+          {location.pathname.indexOf("auth") === -1 ? (
+            <article className="rightArea">
+              {token ? (
+                <>
+                  <span className="accountBox">
+                    <button
+                      className="accountBtn"
+                      onClick={() => setMyBalancePopup(true)}
+                    >
+                      {balanceType === "Demo" ? (
+                        <>
+                          <strong className="key">Demo</strong>
+                          <strong className="value">{`$${Number(
+                            balance?.DEMO?.avail || 0
+                          ).toFixed(2)}`}</strong>
+                        </>
+                      ) : (
+                        <>
+                          <strong className="key">Live</strong>
+                          <strong className="value">{`$${Number(
+                            balance?.LIVE?.avail || 0
+                          ).toFixed(2)}`}</strong>
+                        </>
+                      )}
+                    </button>
+
+                    <button
+                      className="depositBtn"
+                      onClick={() => navigate("/market/deposit")}
+                    >
+                      <img src={I_wallet} alt="" />
+
+                      <strong>Deposit</strong>
+                    </button>
+                  </span>
+
+                  <button className="myBtn" onClick={() => setProfPopup(true)}>
+                    <img src={I_defaultProfImg} alt="" />
+                  </button>
+                </>
+              ) : (
+                <>
+                  <div className="lngBox">
+                    <button
+                      className="lngBtn"
+                      onClick={() => setLngPopup(true)}
+                    >
+                      {D_lngList.find((e) => e.value === i18n.language).key}
+                    </button>
+
+                    {lngPopup && (
                       <>
-                        <strong className="key">Demo</strong>
-                        <strong className="value">{`$${Number(
-                          balance?.DEMO?.avail || 0
-                        ).toFixed(2)}`}</strong>
-                      </>
-                    ) : (
-                      <>
-                        <strong className="key">Live</strong>
-                        <strong className="value">{`$${Number(
-                          balance?.LIVE?.avail || 0
-                        ).toFixed(2)}`}</strong>
+                        <SelLngPopup off={setLngPopup} />
+                        <PopupBg off={setLngPopup} />
                       </>
                     )}
-                  </button>
+                  </div>
 
                   <button
-                    className="depositBtn"
-                    onClick={() => navigate("/market/deposit")}
+                    className="loginBtn"
+                    onClick={() => navigate("/auth")}
                   >
-                    <img src={I_wallet} alt="" />
-
-                    <strong>Deposit</strong>
+                    LOGIN
                   </button>
-                </span>
+                </>
+              )}
+            </article>
+          ) : (
+            <div className="lngBox">
+              <button className="lngBtn" onClick={() => setLngPopup(true)}>
+                {D_lngList.find((e) => e.value === i18n.language).key}
+              </button>
 
-                <button className="myBtn" onClick={() => setProfPopup(true)}>
-                  <img src={I_defaultProfImg} alt="" />
-                </button>
-              </>
-            ) : (
-              <>
-                <div className="lngBox">
-                  <button className="lngBtn" onClick={() => setLngPopup(true)}>
-                    {D_lngList.find((e) => e.value === i18n.language).key}
-                  </button>
-
-                  {lngPopup && (
-                    <>
-                      <SelLngPopup off={setLngPopup} />
-                      <PopupBg off={setLngPopup} />
-                    </>
-                  )}
-                </div>
-
-                <button className="loginBtn" onClick={() => navigate("/auth")}>
-                  LOGIN
-                </button>
-              </>
-            )}
-          </article>
+              {lngPopup && (
+                <>
+                  <SelLngPopup off={setLngPopup} />
+                  <PopupBg off={setLngPopup} />
+                </>
+              )}
+            </div>
+          )}
         </PdefaultHeaderBox>
 
         {myBalancePopup && (
@@ -428,6 +449,33 @@ const PdefaultHeaderBox = styled.header`
     }
   }
 
+  .lngBox {
+    position: relative;
+
+    .lngBtn {
+      height: 30px;
+      padding: 0 12px;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 6px;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+
+    .selectPopup {
+      background: #fff;
+      box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.2);
+
+      li {
+        &.on {
+          color: #f7ab1f;
+        }
+      }
+    }
+  }
+
   .rightArea {
     display: flex;
     align-items: center;
@@ -477,32 +525,6 @@ const PdefaultHeaderBox = styled.header`
 
       img {
         width: 22px;
-      }
-    }
-
-    .lngBox {
-      position: relative;
-
-      .lngBtn {
-        height: 30px;
-        padding: 0 12px;
-        font-size: 14px;
-        font-weight: 700;
-        border-radius: 6px;
-
-        &:hover {
-          background: rgba(255, 255, 255, 0.1);
-        }
-      }
-
-      .selectPopup {
-        background: #22262e;
-
-        li {
-          &.on {
-            color: #fff;
-          }
-        }
       }
     }
 

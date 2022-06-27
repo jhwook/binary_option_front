@@ -18,18 +18,12 @@ export default function Index() {
       .post(`${API.LOGIN}/google`, { token: data.tokenId })
       .then(({ data }) => {
         console.log(data);
-        console.log(data.result.tokenId);
-        localStorage.setItem("token", data.result.tokenId);
-        console.log(data);
-        let {isFirstSocial} = data;
-        
+        let { isFirstSocial } = data;
+
         localStorage.setItem("token", data.result.tokenId);
 
-        if(isFirstSocial){
-          navigate("/auth/signup/referral")
-        }else{
-          navigate("/");
-        }
+        if (isFirstSocial) navigate("/auth/signup/referral");
+        else navigate("/");
       })
       .catch((err) => console.error(err));
   }
