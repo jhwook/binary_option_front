@@ -3,6 +3,7 @@ import styled from "styled-components";
 import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
 import T_usdt from "../../img/token/T_usdt.png";
 import T_usdc from "../../img/token/T_usdc.png";
+import T_CNY from "../../img/token/T_CNY.png";
 import { useSelector } from "react-redux";
 import DefaultHeader from "../../components/header/DefaultHeader";
 import PopupBg from "../../components/common/PopupBg";
@@ -44,7 +45,7 @@ export default function Deposit({ userData }) {
     let { isbranch } = userData;
     setIsBranch(isbranch);
     if (isbranch) {
-      setTokenList([{ icon: T_usdc, text: "CNY" }]);
+      setTokenList([{ icon: T_CNY, text: "CNY" }]);
     } else {
       setTokenList([
         { icon: T_usdt, text: "USDT" },
@@ -675,6 +676,7 @@ const PdepositBox = styled.main`
                   .token {
                     width: 38px;
                     aspect-ratio: 1;
+                    filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));
                   }
 
                   .name {
