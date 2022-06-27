@@ -493,7 +493,7 @@ export default function Live() {
                           <p className="amount">400536157.70</p>
 
                           <p className="hoverPopup" ref={hoverRef1}>
-                            Dividend rate : +80% 400536157.70 USDT
+                            Dividend rate : +80% 400536157.70 USD
                           </p>
                         </span>
                       </button>
@@ -515,7 +515,7 @@ export default function Live() {
                           <p className="amount">400536157.70</p>
 
                           <p className="hoverPopup" ref={hoverRef2}>
-                            Dividend rate : +80% 400536157.70 USDT
+                            Dividend rate : +80% 400536157.70 USD
                           </p>
                         </span>
                       </button>

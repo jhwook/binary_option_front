@@ -90,7 +90,7 @@ export default function Recommender() {
                   <p className="key">{D_recommenderListHeader[6]}</p>
 
                   <span className="value">
-                    <p>{`${v.received} USDT`}</p>
+                    <p>{`${v.received} USD`}</p>
                   </span>
                 </div>
               </li>
@@ -142,7 +142,7 @@ export default function Recommender() {
                 </span>
 
                 <span>
-                  <p>{`${v.received} USDT`}</p>
+                  <p>{`${v.received} USD`}</p>
                 </span>
               </li>
             ))}

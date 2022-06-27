@@ -69,7 +69,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
               <p className="type">{`${stateBalanceType} balance`}</p>
               <p className="balance">
                 {stateBalanceType === "Live" && balanceData?.LIVE?.avail}
-                {stateBalanceType === "Demo" && balanceData?.DEMO?.avail} USDT
+                {stateBalanceType === "Demo" && balanceData?.DEMO?.avail} USD
               </p>
               <p className="type"></p>
             </div>
@@ -101,7 +101,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
               <img src={I_chkOrange} alt="" />
               <p className="key">Live balance</p>
 
-              <strong className="value">{`${balanceData?.LIVE?.avail} USDT`}</strong>
+              <strong className="value">{`${balanceData?.LIVE?.avail} USD`}</strong>
             </li>
 
             <li
@@ -111,7 +111,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
               <img src={I_chkOrange} alt="" />
               <p className="key">Demo balance</p>
 
-              <strong className="value">{`${balanceData?.DEMO?.avail} USDT`}</strong>
+              <strong className="value">{`${balanceData?.DEMO?.avail} USD`}</strong>
             </li>
           </ul>
         </article>
@@ -136,7 +136,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
               <p className="type">{`${stateBalanceType} balance`}</p>
               <p className="balance">
                 {stateBalanceType === "Live" && balanceData?.LIVE?.avail}
-                {stateBalanceType === "Demo" && balanceData?.DEMO?.avail} USDT
+                {stateBalanceType === "Demo" && balanceData?.DEMO?.avail} USD
               </p>
               <p className="type"></p>
             </div>
@@ -168,7 +168,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
               <img src={I_chkOrange} alt="" />
               <p className="key">Live balance</p>
 
-              <strong className="value">{`${balanceData?.LIVE?.avail} USDT`}</strong>
+              <strong className="value">{`${balanceData?.LIVE?.avail} USD`}</strong>
             </li>
 
             <li
@@ -178,7 +178,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
               <img src={I_chkOrange} alt="" />
               <p className="key">Demo balance</p>
 
-              <strong className="value">{`${balanceData?.DEMO?.avail} USDT`}</strong>
+              <strong className="value">{`${balanceData?.DEMO?.avail} USD`}</strong>
             </li>
           </ul>
         </article>

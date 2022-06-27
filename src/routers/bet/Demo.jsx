@@ -482,7 +482,7 @@ export default function Demo() {
                         <p className="amount">400536157.70</p>
 
                         <p className="hoverPopup">
-                          Dividend rate : +80% 400536157.70 USDT
+                          Dividend rate : +80% 400536157.70 USD
                         </p>
                       </span>
                     </button>
@@ -502,7 +502,7 @@ export default function Demo() {
                         <p className="amount">400536157.70</p>
 
                         <p className="hoverPopup">
-                          Dividend rate : +80% 400536157.70 USDT
+                          Dividend rate : +80% 400536157.70 USD
                         </p>
                       </span>
                     </button>

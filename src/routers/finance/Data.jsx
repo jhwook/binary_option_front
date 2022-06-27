@@ -63,7 +63,7 @@ export default function Data() {
                   <p className="key">Rewards Paid</p>
 
                   <div className="value">
-                    <strong className="price">100 USDT</strong>
+                    <strong className="price">100 USD</strong>
                     <p className="time">in this epoch</p>
                   </div>
                 </li>
@@ -72,7 +72,7 @@ export default function Data() {
                   <p className="key">Open Interest</p>
 
                   <div className="value">
-                    <strong className="price">100 USDT</strong>
+                    <strong className="price">100 USD</strong>
                     <p className="time">in this epoch</p>
                   </div>
                 </li>
@@ -81,7 +81,7 @@ export default function Data() {
                   <p className="key">Estimated Rewards</p>
 
                   <div className="value">
-                    <strong className="price">100 USDT</strong>
+                    <strong className="price">100 USD</strong>
                     <p className="time">estimated for this epoch</p>
                   </div>
                 </li>
@@ -165,7 +165,7 @@ export default function Data() {
                         <p className="key">{D_dataListHeader[5]}</p>
 
                         <span className="value">
-                          <p>{v.received} USDT</p>
+                          <p>{v.received} USD</p>
                         </span>
                       </div>
 
@@ -200,7 +200,7 @@ export default function Data() {
                   <p className="key">Rewards Paid</p>
 
                   <div className="value">
-                    <strong className="price">100 USDT</strong>
+                    <strong className="price">100 USD</strong>
                     <p className="time">in this epoch</p>
                   </div>
                 </li>
@@ -209,7 +209,7 @@ export default function Data() {
                   <p className="key">Open Interest</p>
 
                   <div className="value">
-                    <strong className="price">100 USDT</strong>
+                    <strong className="price">100 USD</strong>
                     <p className="time">in this epoch</p>
                   </div>
                 </li>
@@ -218,7 +218,7 @@ export default function Data() {
                   <p className="key">Estimated Rewards</p>
 
                   <div className="value">
-                    <strong className="price">100 USDT</strong>
+                    <strong className="price">100 USD</strong>
                     <p className="time">estimated for this epoch</p>
                   </div>
                 </li>
@@ -291,7 +291,7 @@ export default function Data() {
                       </span>
 
                       <span>
-                        <p>{v.received} USDT</p>
+                        <p>{v.received} USD</p>
                       </span>
 
                       <span>
