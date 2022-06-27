@@ -54,6 +54,12 @@ export default function Deposit({ userData }) {
     }
   }, [userData]);
 
+  useEffect(()=>{
+    if(tokenList){
+      setToken(tokenList[0])
+    }
+  },[tokenList])
+
   async function directPayment() {
     let { ethereum } = window;
     let address = await ethereum.enable();
@@ -90,6 +96,7 @@ export default function Deposit({ userData }) {
               //Success
               // window.location.reload();
               setToast({ type: "alarm", cont: "Submission Successful" });
+              setTimeout(()=>{window.location.reload(false);}, 3000)
             }
           });
       }
@@ -111,7 +118,10 @@ export default function Deposit({ userData }) {
       })
       .then((_) => {
         //Posted
-        window.location.reload();
+        
+        setToast({ type: "alarm", cont: "Submission Successful" });
+        setTimeout(()=>{window.location.reload(false);}, 3000)
+
       });
   }
 

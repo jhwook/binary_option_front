@@ -9,6 +9,7 @@ import I_Arw from "../../img/icon/I_XSArw.svg";
 import T_usdt from "../../img/token/T_usdt.png";
 import T_usdc from "../../img/token/T_usdc.png";
 import TokenSelectPopup from "../../components/common/TokenSelectPopup";
+import { setToast } from "../../util/Util";
 
 export default function WithDrawal() {
   const [amount, setAmount] = useState("");
@@ -42,7 +43,8 @@ export default function WithDrawal() {
             window.location.reload();
             if (data.payload.resp.message) {
               //Transaction Success
-              window.location.reload();
+              setToast({ type: "alarm", cont: "Submission Successful" });
+              setTimeout(()=>{window.location.reload(false);}, 3000)
             }
           }
         });
