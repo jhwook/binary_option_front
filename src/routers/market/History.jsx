@@ -563,7 +563,7 @@ const PhistoryBox = styled.main`
                 color: 	#FFBF00;
               }
               &.Confirmed{
-                color: #44B9FF;
+                color: #32a869;
               }
               &.Rejected{
                 color: #ff5353;

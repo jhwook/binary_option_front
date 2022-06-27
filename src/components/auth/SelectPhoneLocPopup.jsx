@@ -14,7 +14,7 @@ export default function SelectPhoneLocPopup({ off, setCont }) {
       .get(`${API.PHONE_COUNTRY_CODE}`)
       .then(({ data }) => {
         console.log(data);
-        setList(data);
+        setList(data.respdata);
       })
       .catch((err) => console.error(err));
   }, []);

@@ -11,7 +11,7 @@ export const API = {
   GET_ASSETS: URL + "/assets/list",
   EDIT_REF: URL + "/users/edit/ref",
 
-  PHONE_COUNTRY_CODE: URL + "/phone/country/codes", //:offset/:limit
+  PHONE_COUNTRY_CODE: URL + "/queries/v1/rows/country_code", //:offset/:limit
 
   USER_PROFILE: URL + "/users/profile",
   USER_CERTIFICATION_EMAIL: URL + "/users/certification/email",
