@@ -235,22 +235,22 @@ export default function History() {
                     <span>{v.uid}</span>
 
                     <span>
-                      <p>{moment(v.openTime).format("YYYY-MM-DD HH:mm:ss")}</p>
+                      <p>{moment(v.createdat).format("YYYY-MM-DD HH:mm:ss")}</p>
                     </span>
 
                     <span>
-                      <p>{`${v.amount.toLocaleString("eu", "US")} USDT`}</p>
+                       <p>{`${v?.amount?.toLocaleString("eu", "US") || v?.localeAmount?.toLocaleString("cn", "CN")} ${v.localeUnit || v.unit}`}</p>
                     </span>
 
                     <span>
-                      <p>{v.method || "Tether"}</p>
+                      <p>{v.type == 2 ? "Bank Transfer" : "Blockchain"}</p>
                     </span>
 
                     <span>
                       <p>{v.typestr}</p>
                     </span>
 
-                    <span>
+                    <span className={statusSTR[v.status]}>
                       <p>{statusSTR[v.status]}</p>
                     </span>
                   </li>
@@ -556,7 +556,16 @@ const PhistoryBox = styled.main`
               height: 60px;
               border-top: 1px solid #3b3e45;
 
-              &:nth-of-type(6) {
+              /* &:nth-of-type(6) {
+                color: #ff5353;
+              } */
+              &.Pending{
+                color: 	#FFBF00;
+              }
+              &.Confirmed{
+                color: #44B9FF;
+              }
+              &.Rejected{
                 color: #ff5353;
               }
             }
