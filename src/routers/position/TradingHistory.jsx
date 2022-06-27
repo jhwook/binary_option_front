@@ -599,6 +599,7 @@ const PtradingHistoryBox = styled.main`
           display: flex;
           align-items: center;
           gap: 10px;
+          font-size: 14px;
 
           .filterOpt {
             display: flex;
@@ -622,7 +623,8 @@ const PtradingHistoryBox = styled.main`
                 gap: 8px;
 
                 img {
-                  width: 22px;
+                  width: 16px;
+                  height: 17px;
                 }
               }
             }
@@ -639,7 +641,6 @@ const PtradingHistoryBox = styled.main`
           .applyBtn {
             width: 120px;
             height: 40px;
-            font-size: 14px;
             font-weight: 700;
             border: 1px solid #3b3e45;
             border-radius: 20px;

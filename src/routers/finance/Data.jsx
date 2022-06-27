@@ -437,6 +437,7 @@ const MdataBox = styled.main`
 
             &.dateBox {
               width: 100%;
+
               .dateBtn {
                 display: flex;
                 align-items: center;
@@ -638,6 +639,7 @@ const PdataBox = styled.main`
           display: flex;
           align-items: center;
           gap: 10px;
+          font-size: 14px;
 
           .filterOpt {
             display: flex;
@@ -661,7 +663,8 @@ const PdataBox = styled.main`
                 gap: 8px;
 
                 img {
-                  width: 22px;
+                  width: 16px;
+                  height: 17px;
                 }
               }
             }
