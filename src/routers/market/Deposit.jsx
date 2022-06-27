@@ -382,6 +382,7 @@ export default function Deposit({ userData }) {
               isBranch ? (
                 <ConfirmCny
                   setConfirm={setConfirm}
+                  amount={amount}
                   setOk={(e) => {
                     e && postLocale();
                   }}

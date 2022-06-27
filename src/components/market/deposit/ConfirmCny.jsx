@@ -6,7 +6,7 @@ import PopupBg from "../../common/PopupBg";
 import ConfirmationPopup from "./ConfirmationPopup";
 import TimeOutPopup from "./TimeOutPopup";
 
-export default function ConfirmCny({ setConfirm, setOk }) {
+export default function ConfirmCny({ setConfirm,amount, setOk }) {
   let time = 900;
 
   const [limit, setLimit] = useState(time);
@@ -50,7 +50,7 @@ export default function ConfirmCny({ setConfirm, setOk }) {
               <ul>
                 <li>
                   <p className="key">Pay</p>
-                  <p className="value">10.00 CNY</p>
+                  <p className="value">{amount} CNY</p>
                 </li>
 
                 <li>
