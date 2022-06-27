@@ -27,13 +27,16 @@ import AddPopup from "../../components/header/AddPopup";
 import ReactTradingviewWidget, { Themes } from "react-tradingview-widget";
 import axios from "axios";
 import { API } from "../../configs/api";
+import LoadingBar from "../../components/common/LoadingBar";
 
 export default function Demo() {
   const dispatch = useDispatch();
   const isMobile = useSelector((state) => state.common.isMobile);
+
   const token = localStorage.getItem("token");
   const userid = localStorage.getItem("userid");
 
+  const [loading, setLoading] = useState(true);
   const [liveTradePopup, setLiveTradePopup] = useState(false);
   const [hotKeyPopup, setHotKeyPopup] = useState(true);
   const [tokenPopup, setTokenPopup] = useState(false);
@@ -108,14 +111,16 @@ export default function Demo() {
       .catch((err) => console.error(err));
   }
 
-  function getBetLog() {}
+  function turnLoader() {
+    setTimeout(() => {
+      setLoading(false);
+    }, 5000);
+  }
 
   useEffect(() => {
     axios.defaults.headers.common["Authorization"] = `${token}`;
 
-    // getBookMark();
-
-    // getBetLog();
+    turnLoader();
   }, []);
 
   useLayoutEffect(() => {
@@ -128,153 +133,165 @@ export default function Demo() {
       <>
         <DefaultHeader />
 
-        <MbetBox onKeyDown={handleKeyDown}>
-          <section className="innerBox">
-            <article className="contArea">
-              <div className="chartBox">
-                <ReactTradingviewWidget
-                  symbol={asset.dispSymbol}
-                  theme={Themes.DARK}
-                  locale="kr"
-                  autosize
-                  timezone="Asia/Seoul"
-                  allow_symbol_change={false}
-                />
+        {loading ? (
+          <LoadingBar />
+        ) : (
+          <>
+            <MbetBox onKeyDown={handleKeyDown}>
+              <section className="innerBox">
+                <article className="contArea">
+                  <div className="chartBox">
+                    <ReactTradingviewWidget
+                      symbol={asset.dispSymbol}
+                      theme={Themes.DARK}
+                      locale="kr"
+                      autosize
+                      timezone="Asia/Seoul"
+                      allow_symbol_change={false}
+                    />
 
-                <span className="utilBox">
-                  <ul className="btnList">
-                    <li>
+                    <span className="utilBox">
+                      <ul className="btnList">
+                        <li>
+                          <button
+                            className="tokenBtn"
+                            onClick={() => setTokenPopup(true)}
+                          >
+                            <p>{asset.name}</p>
+                            <img src={I_dnPolWhite} alt="" />
+                          </button>
+
+                          {tokenPopup && (
+                            <>
+                              <TokenPopup
+                                off={setTokenPopup}
+                                setAsset={setAsset}
+                                getBookMark={getBookMark}
+                              />
+                              <PopupBg off={setTokenPopup} />
+                            </>
+                          )}
+                        </li>
+                      </ul>
+
                       <button
-                        className="tokenBtn"
-                        onClick={() => setTokenPopup(true)}
+                        className="detBtn"
+                        onClick={() => setDetMode(true)}
                       >
-                        <p>{asset.name}</p>
-                        <img src={I_dnPolWhite} alt="" />
+                        <img src={I_barChartWhite} alt="" />
                       </button>
+                    </span>
+                  </div>
 
-                      {tokenPopup && (
-                        <>
-                          <TokenPopup
-                            off={setTokenPopup}
-                            setAsset={setAsset}
-                            getBookMark={getBookMark}
+                  <div className="actionBox">
+                    <div className="infoBox">
+                      <div className="timeBox contBox">
+                        <p className="key">Time</p>
+
+                        <div className="value">
+                          <button
+                            className="contBtn"
+                            onClick={() => setTimePopup(true)}
+                          >
+                            <p>00:01:00</p>
+
+                            <img src={I_timeWhite} alt="" />
+                          </button>
+
+                          {timePopup && (
+                            <>
+                              <TimePopup off={setTimePopup} />
+                              <PopupBg off={setTimePopup} />
+                            </>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="amountBox contBox">
+                        <p className="key">Amount</p>
+
+                        <div className="value">
+                          <p className="unit">$</p>
+                          <input
+                            value={amount}
+                            onChange={(e) => setAmount(e.target.value)}
+                            placeholder="0"
                           />
-                          <PopupBg off={setTokenPopup} />
-                        </>
-                      )}
-                    </li>
-                  </ul>
 
-                  <button className="detBtn" onClick={() => setDetMode(true)}>
-                    <img src={I_barChartWhite} alt="" />
-                  </button>
-                </span>
-              </div>
+                          <img src={I_dollarWhite} alt="" />
+                        </div>
+                      </div>
+                    </div>
 
-              <div className="actionBox">
-                <div className="infoBox">
-                  <div className="timeBox contBox">
-                    <p className="key">Time</p>
+                    <p className="payout">Your payout : $3.40</p>
 
-                    <div className="value">
-                      <button
-                        className="contBtn"
-                        onClick={() => setTimePopup(true)}
-                      >
-                        <p>00:01:00</p>
+                    <div className="btnCont">
+                      <span className="btnBox high">
+                        <button
+                          className="highBtn"
+                          disabled={!amount}
+                          onClick={() => onClickPayBtn("high")}
+                        >
+                          <img src={I_highArwGreen} alt="" />
+                          <p>HIGH</p>
+                        </button>
 
-                        <img src={I_timeWhite} alt="" />
-                      </button>
+                        <p className="rate">+80% 400536157.70</p>
+                      </span>
 
-                      {timePopup && (
-                        <>
-                          <TimePopup off={setTimePopup} />
-                          <PopupBg off={setTimePopup} />
-                        </>
-                      )}
+                      <span className="btnBox low">
+                        <button
+                          className="lowBtn"
+                          disabled={!amount}
+                          onClick={() => onClickPayBtn("low")}
+                        >
+                          <img src={I_lowArwRed} alt="" />
+                          <p>LOW</p>
+                        </button>
+
+                        <p className="rate">+80% 400536157.70</p>
+                      </span>
                     </div>
                   </div>
+                </article>
+              </section>
+            </MbetBox>
 
-                  <div className="amountBox contBox">
-                    <p className="key">Amount</p>
+            {detMode && <DetBox mode={detMode} off={setDetMode} />}
 
-                    <div className="value">
-                      <p className="unit">$</p>
-                      <input
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                        placeholder="0"
-                      />
+            {liveTradePopup && (
+              <>
+                <LiveTradePopup off={setLiveTradePopup} />
+                <PopupBg bg off={setLiveTradePopup} />
+              </>
+            )}
 
-                      <img src={I_dollarWhite} alt="" />
-                    </div>
-                  </div>
-                </div>
+            {insufficientPopup && (
+              <>
+                <InsufficientPopup
+                  off={setInsufficientPopup}
+                  nextProc={setMyBalancePopup}
+                />
+                <PopupBg bg off={setInsufficientPopup} />
+              </>
+            )}
 
-                <p className="payout">Your payout : $3.40</p>
+            {myBalancePopup && (
+              <>
+                <MyBalancePopup
+                  off={setMyBalancePopup}
+                  setAddPopup={setAddPopup}
+                />
+                <PopupBg bg off={setMyBalancePopup} />
+              </>
+            )}
 
-                <div className="btnCont">
-                  <span className="btnBox high">
-                    <button
-                      className="highBtn"
-                      disabled={!amount}
-                      onClick={() => onClickPayBtn("high")}
-                    >
-                      <img src={I_highArwGreen} alt="" />
-                      <p>HIGH</p>
-                    </button>
-
-                    <p className="rate">+80% 400536157.70</p>
-                  </span>
-
-                  <span className="btnBox low">
-                    <button
-                      className="lowBtn"
-                      disabled={!amount}
-                      onClick={() => onClickPayBtn("low")}
-                    >
-                      <img src={I_lowArwRed} alt="" />
-                      <p>LOW</p>
-                    </button>
-
-                    <p className="rate">+80% 400536157.70</p>
-                  </span>
-                </div>
-              </div>
-            </article>
-          </section>
-        </MbetBox>
-
-        {detMode && <DetBox mode={detMode} off={setDetMode} />}
-
-        {liveTradePopup && (
-          <>
-            <LiveTradePopup off={setLiveTradePopup} />
-            <PopupBg bg off={setLiveTradePopup} />
-          </>
-        )}
-
-        {insufficientPopup && (
-          <>
-            <InsufficientPopup
-              off={setInsufficientPopup}
-              nextProc={setMyBalancePopup}
-            />
-            <PopupBg bg off={setInsufficientPopup} />
-          </>
-        )}
-
-        {myBalancePopup && (
-          <>
-            <MyBalancePopup off={setMyBalancePopup} setAddPopup={setAddPopup} />
-            <PopupBg bg off={setMyBalancePopup} />
-          </>
-        )}
-
-        {addPopup && (
-          <>
-            <AddPopup off={setAddPopup} />
-            <PopupBg bg off={setAddPopup} />
+            {addPopup && (
+              <>
+                <AddPopup off={setAddPopup} />
+                <PopupBg bg off={setAddPopup} />
+              </>
+            )}
           </>
         )}
       </>
@@ -284,259 +301,268 @@ export default function Demo() {
       <>
         <DefaultHeader />
 
-        <PbetBox onKeyDown={handleKeyDown}>
-          <section className="innerBox">
-            <article className="tokenArea">
-              <div className="selectBox">
-                <button
-                  className="selectBtn"
-                  onClick={() => setTokenPopup(true)}
-                >
-                  <p>{asset.name}</p>
-                  <img src={I_dnPolWhite} alt="" />
-                </button>
-
-                {tokenPopup && (
-                  <>
-                    <TokenPopup
-                      off={setTokenPopup}
-                      setAsset={setAsset}
-                      getBookMark={getBookMark}
-                    />
-                    <PopupBg off={setTokenPopup} />
-                  </>
-                )}
-              </div>
-
-              <ul className="tokenList">
-                {bookMark.map((v, i) => (
-                  <li key={i} onClick={() => setAsset(v)}>
-                    <img src={I_starYellowO} alt="" />
-                    <span className="textBox">
-                      <p className="key">{v.name}</p>
-                      <p className="value">{v.payout}%</p>
-                    </span>
-                  </li>
-                ))}
-
-                <span className="filter" />
-              </ul>
-            </article>
-
-            <article className="contArea">
-              <div className="chartBox">
-                <div className="chart">
-                  <ReactTradingviewWidget
-                    container_id={"technical-analysis-chart-demo"}
-                    symbol={asset.dispSymbol}
-                    theme={Themes.DARK}
-                    locale="kr"
-                    autosize
-                    timezone="Asia/Seoul"
-                    allow_symbol_change={false}
-                  />
-                </div>
-
-                {hotKeyPopup && (
-                  <div className="hotKeyPopup">
-                    <div className="topBar">
-                      <span className="blank" />
-                      <p className="title">Hotkeys</p>
-
-                      <button
-                        className="closeBtn"
-                        onClick={() => setHotKeyPopup(false)}
-                      >
-                        <img src={I_xWhite} alt="" />
-                      </button>
-                    </div>
-
-                    <ul className="hotKeyList">
-                      <li>
-                        <p className="key">Shift + W</p>
-                        <p className="value">Higher(New trade)</p>
-                      </li>
-                      <li>
-                        <p className="key">Shift + S</p>
-                        <p className="value">Lower(New trade)</p>
-                      </li>
-                      <li>
-                        <p className="key">Shift + A</p>
-                        <p className="value">Decrease trade amount</p>
-                      </li>
-                      <li>
-                        <p className="key">Shift + D</p>
-                        <p className="value">Increase trade amount</p>
-                      </li>
-                      <li>
-                        <p className="key">Shift + TAB</p>
-                        <p className="value">Next favorite asset</p>
-                      </li>
-                    </ul>
-                  </div>
-                )}
-              </div>
-
-              <div className="actionBox">
-                <div className="timeBox contBox">
-                  <div className="key">
-                    <p>Time</p>
-
-                    <button className="infoBtn">
-                      <img src={I_qnaWhite} alt="" />
-
-                      <span className="hoverPopup">
-                        <p>
-                          Set the time (UTC+2) when your trading operation will
-                          be dosed. By placing a “Higher” or “Lower” forecast
-                          you will receve the result exactly at 17.05.2022
-                          11:45:16.
-                        </p>
-                      </span>
-                    </button>
-                  </div>
-
-                  <div className="value">
+        {loading ? (
+          <LoadingBar />
+        ) : (
+          <>
+            <PbetBox onKeyDown={handleKeyDown}>
+              <section className="innerBox">
+                <article className="tokenArea">
+                  <div className="selectBox">
                     <button
-                      className="contBtn"
-                      onClick={() => setTimePopup(true)}
+                      className="selectBtn"
+                      onClick={() => setTokenPopup(true)}
                     >
-                      <p>00:01:00</p>
-
-                      <img src={I_timeWhite} alt="" />
+                      <p>{asset.name}</p>
+                      <img src={I_dnPolWhite} alt="" />
                     </button>
 
-                    {timePopup && (
+                    {tokenPopup && (
                       <>
-                        <TimePopup off={setTimePopup} />
-                        <PopupBg off={setTimePopup} />
+                        <TokenPopup
+                          off={setTokenPopup}
+                          setAsset={setAsset}
+                          getBookMark={getBookMark}
+                        />
+                        <PopupBg off={setTokenPopup} />
                       </>
                     )}
                   </div>
-                </div>
 
-                <div className="amountBox contBox">
-                  <div className="key">
-                    <p>Amount</p>
+                  <ul className="tokenList">
+                    {bookMark.map((v, i) => (
+                      <li key={i} onClick={() => setAsset(v)}>
+                        <img src={I_starYellowO} alt="" />
+                        <span className="textBox">
+                          <p className="key">{v.name}</p>
+                          <p className="value">{v.payout}%</p>
+                        </span>
+                      </li>
+                    ))}
 
-                    <button className="infoBtn" onClick={() => {}}>
-                      <img src={I_qnaWhite} alt="" />
+                    <span className="filter" />
+                  </ul>
+                </article>
 
-                      <span className="hoverPopup">
-                        <p>
-                          Specify the percentage of the trading account balance
-                          used calculate your trade amount.
+                <article className="contArea">
+                  <div className="chartBox">
+                    <div className="chart">
+                      <ReactTradingviewWidget
+                        container_id={"technical-analysis-chart-demo"}
+                        symbol={asset.dispSymbol}
+                        theme={Themes.DARK}
+                        locale="kr"
+                        autosize
+                        timezone="Asia/Seoul"
+                        allow_symbol_change={false}
+                      />
+                    </div>
+
+                    {hotKeyPopup && (
+                      <div className="hotKeyPopup">
+                        <div className="topBar">
+                          <span className="blank" />
+                          <p className="title">Hotkeys</p>
+
+                          <button
+                            className="closeBtn"
+                            onClick={() => setHotKeyPopup(false)}
+                          >
+                            <img src={I_xWhite} alt="" />
+                          </button>
+                        </div>
+
+                        <ul className="hotKeyList">
+                          <li>
+                            <p className="key">Shift + W</p>
+                            <p className="value">Higher(New trade)</p>
+                          </li>
+                          <li>
+                            <p className="key">Shift + S</p>
+                            <p className="value">Lower(New trade)</p>
+                          </li>
+                          <li>
+                            <p className="key">Shift + A</p>
+                            <p className="value">Decrease trade amount</p>
+                          </li>
+                          <li>
+                            <p className="key">Shift + D</p>
+                            <p className="value">Increase trade amount</p>
+                          </li>
+                          <li>
+                            <p className="key">Shift + TAB</p>
+                            <p className="value">Next favorite asset</p>
+                          </li>
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="actionBox">
+                    <div className="timeBox contBox">
+                      <div className="key">
+                        <p>Time</p>
+
+                        <button className="infoBtn">
+                          <img src={I_qnaWhite} alt="" />
+
+                          <span className="hoverPopup">
+                            <p>
+                              Set the time (UTC+2) when your trading operation
+                              will be dosed. By placing a “Higher” or “Lower”
+                              forecast you will receve the result exactly at
+                              17.05.2022 11:45:16.
+                            </p>
+                          </span>
+                        </button>
+                      </div>
+
+                      <div className="value">
+                        <button
+                          className="contBtn"
+                          onClick={() => setTimePopup(true)}
+                        >
+                          <p>00:01:00</p>
+
+                          <img src={I_timeWhite} alt="" />
+                        </button>
+
+                        {timePopup && (
+                          <>
+                            <TimePopup off={setTimePopup} />
+                            <PopupBg off={setTimePopup} />
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="amountBox contBox">
+                      <div className="key">
+                        <p>Amount</p>
+
+                        <button className="infoBtn" onClick={() => {}}>
+                          <img src={I_qnaWhite} alt="" />
+
+                          <span className="hoverPopup">
+                            <p>
+                              Specify the percentage of the trading account
+                              balance used calculate your trade amount.
+                            </p>
+                          </span>
+                        </button>
+                      </div>
+
+                      <div className="value">
+                        <p className="unit">$</p>
+
+                        <input
+                          value={amount}
+                          onChange={(e) => setAmount(e.target.value)}
+                          placeholder="0"
+                        />
+
+                        <img src={I_dollarWhite} alt="" />
+                      </div>
+                    </div>
+
+                    <p className="payout">Your payout : $3.40</p>
+
+                    <button
+                      className="highBtn"
+                      disabled={!amount}
+                      onClick={() => onClickPayBtn("high")}
+                    >
+                      <span className="defaultBox">
+                        <img src={I_highArwGreen} alt="" />
+                        <strong>HIGH</strong>
+                      </span>
+
+                      <span className="hoverBox">
+                        <strong className="percent">+80%</strong>
+                        <p className="amount">400536157.70</p>
+
+                        <p className="hoverPopup">
+                          Dividend rate : +80% 400536157.70 USDT
+                        </p>
+                      </span>
+                    </button>
+
+                    <button
+                      className="lowBtn"
+                      disabled={!amount}
+                      onClick={() => onClickPayBtn("low")}
+                    >
+                      <span className="defaultBox">
+                        <img src={I_lowArwRed} alt="" />
+                        <strong>LOW</strong>
+                      </span>
+
+                      <span className="hoverBox">
+                        <strong className="percent">+80%</strong>
+                        <p className="amount">400536157.70</p>
+
+                        <p className="hoverPopup">
+                          Dividend rate : +80% 400536157.70 USDT
                         </p>
                       </span>
                     </button>
                   </div>
 
-                  <div className="value">
-                    <p className="unit">$</p>
+                  <DetBox mode={detMode} />
 
-                    <input
-                      value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
-                      placeholder="0"
-                    />
+                  <button
+                    className={`${detMode && "on"} plusBtn`}
+                    onClick={() => setDetMode(!detMode)}
+                  >
+                    <img src={I_plusWhite} alt="" />
+                  </button>
+                </article>
+              </section>
 
-                    <img src={I_dollarWhite} alt="" />
-                  </div>
-                </div>
-
-                <p className="payout">Your payout : $3.40</p>
-
-                <button
-                  className="highBtn"
-                  disabled={!amount}
-                  onClick={() => onClickPayBtn("high")}
-                >
-                  <span className="defaultBox">
-                    <img src={I_highArwGreen} alt="" />
-                    <strong>HIGH</strong>
-                  </span>
-
-                  <span className="hoverBox">
-                    <strong className="percent">+80%</strong>
-                    <p className="amount">400536157.70</p>
-
-                    <p className="hoverPopup">
-                      Dividend rate : +80% 400536157.70 USDT
-                    </p>
-                  </span>
+              <footer>
+                <button className="qnaBtn" onClick={() => {}}>
+                  <img src={I_qnaWhite} alt="" />
                 </button>
 
-                <button
-                  className="lowBtn"
-                  disabled={!amount}
-                  onClick={() => onClickPayBtn("low")}
-                >
-                  <span className="defaultBox">
-                    <img src={I_lowArwRed} alt="" />
-                    <strong>LOW</strong>
-                  </span>
-
-                  <span className="hoverBox">
-                    <strong className="percent">+80%</strong>
-                    <p className="amount">400536157.70</p>
-
-                    <p className="hoverPopup">
-                      Dividend rate : +80% 400536157.70 USDT
-                    </p>
-                  </span>
+                <button className="langBtn" onClick={() => {}}>
+                  <img src={I_langWhite} alt="" />
                 </button>
-              </div>
+              </footer>
+            </PbetBox>
 
-              <DetBox mode={detMode} />
+            {liveTradePopup && (
+              <>
+                <LiveTradePopup off={setLiveTradePopup} />
+                <PopupBg off={setLiveTradePopup} />
+              </>
+            )}
 
-              <button
-                className={`${detMode && "on"} plusBtn`}
-                onClick={() => setDetMode(!detMode)}
-              >
-                <img src={I_plusWhite} alt="" />
-              </button>
-            </article>
-          </section>
+            {insufficientPopup && (
+              <>
+                <InsufficientPopup
+                  off={setInsufficientPopup}
+                  nextProc={setMyBalancePopup}
+                />
+                <PopupBg off={setInsufficientPopup} />
+              </>
+            )}
 
-          <footer>
-            <button className="qnaBtn" onClick={() => {}}>
-              <img src={I_qnaWhite} alt="" />
-            </button>
+            {myBalancePopup && (
+              <>
+                <MyBalancePopup
+                  off={setMyBalancePopup}
+                  setAddPopup={setAddPopup}
+                />
+                <PopupBg off={setMyBalancePopup} />
+              </>
+            )}
 
-            <button className="langBtn" onClick={() => {}}>
-              <img src={I_langWhite} alt="" />
-            </button>
-          </footer>
-        </PbetBox>
-
-        {liveTradePopup && (
-          <>
-            <LiveTradePopup off={setLiveTradePopup} />
-            <PopupBg off={setLiveTradePopup} />
-          </>
-        )}
-
-        {insufficientPopup && (
-          <>
-            <InsufficientPopup
-              off={setInsufficientPopup}
-              nextProc={setMyBalancePopup}
-            />
-            <PopupBg off={setInsufficientPopup} />
-          </>
-        )}
-
-        {myBalancePopup && (
-          <>
-            <MyBalancePopup off={setMyBalancePopup} setAddPopup={setAddPopup} />
-            <PopupBg off={setMyBalancePopup} />
-          </>
-        )}
-
-        {addPopup && (
-          <>
-            <AddPopup off={setAddPopup} />
-            <PopupBg off={setAddPopup} />
+            {addPopup && (
+              <>
+                <AddPopup off={setAddPopup} />
+                <PopupBg off={setAddPopup} />
+              </>
+            )}
           </>
         )}
       </>

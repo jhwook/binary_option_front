@@ -56,8 +56,6 @@ export default function Login() {
   }
 
   function resGLogin(data) {
-    console.log(data);
-
     axios
       .post(`${API.LOGIN}/google`, { token: data.tokenId })
       .then(({ data }) => {

@@ -54,10 +54,13 @@ export default function DefaultHeader({ white, border, title }) {
     await axios
       .get(`${API.USER_BALANCE}`)
       .then(async ({ data }) => {
-        console.log(data.respdata.DEMO.avail);
+        console.log(data);
         setBalance({ ...data.respdata });
       })
-      .catch((err) => localStorage.removeItem("token"));
+      .catch((err) => {
+        console.error(err);
+        localStorage.removeItem("token");
+      });
 
     await axios.get(`${API.AUTH}`).then(async ({ data }) => {
       console.log(data.result);

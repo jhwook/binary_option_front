@@ -8,7 +8,7 @@ import {
 import DatePicker from "react-datepicker";
 import "../../util/react-datepicker.css";
 import I_calender from "../../img/icon/I_calender.png";
-import I_linkWhite from "../../img/icon/I_linkWhite.svg";
+import I_exportWhite from "../../img/icon/I_exportWhite.svg";
 import I_timeWhite from "../../img/icon/I_timeWhite.svg";
 import I_upArw3Green from "../../img/icon/I_upArw3Green.svg";
 import I_dnArw3Red from "../../img/icon/I_dnArw3Red.svg";
@@ -287,7 +287,7 @@ export default function TradingHistory() {
               </div>
 
               <button className="exportBtn" onClick={() => {}}>
-                <img src={I_linkWhite} alt="" />
+                <img src={I_exportWhite} alt="" />
               </button>
             </div>
 
@@ -653,14 +653,14 @@ const PtradingHistoryBox = styled.main`
         .exportBtn {
           display: flex;
           justify-content: center;
-          align-items: center;
           width: 40px;
           height: 40px;
+          padding: 10px 13px 13px;
           border: 1px solid #3b3e45;
           border-radius: 50%;
 
           img {
-            width: 20px;
+            width: 14px;
           }
         }
       }

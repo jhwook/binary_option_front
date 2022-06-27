@@ -34,7 +34,7 @@ export default function Live() {
   const token = localStorage.getItem("token");
   const userid = localStorage.getItem("userid");
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [liveTradePopup, setLiveTradePopup] = useState(false);
   const [hotKeyPopup, setHotKeyPopup] = useState(true);
   const [tokenPopup, setTokenPopup] = useState(false);
@@ -106,17 +106,16 @@ export default function Live() {
       .catch((err) => console.error(err));
   }
 
-  // function getBetLog() {
-  //   axios
-  //     .get(`${API.BET_LOG}/${userid}`)
-  //     .then((res) => console.log(res))
-  //     .catch((err) => console.error(err));
-  // }
+  function turnLoader() {
+    setTimeout(() => {
+      setLoading(false);
+    }, 5000);
+  }
 
   useEffect(() => {
     getBookMark();
 
-    // getBetLog();
+    turnLoader();
   }, []);
 
   useLayoutEffect(() => {
@@ -131,151 +130,163 @@ export default function Live() {
       <>
         <DefaultHeader />
 
-        <MbetBox onKeyDown={handleKeyDown}>
-          <section className="innerBox">
-            <article className="contArea">
-              <div className="chartBox">
-                <ReactTradingviewWidget
-                  symbol={chartSymbol}
-                  theme={Themes.DARK}
-                  locale="kr"
-                  autosize
-                  timezone="Asia/Seoul"
-                  allow_symbol_change={false}
-                />
+        {loading ? (
+          <LoadingBar />
+        ) : (
+          <>
+            <MbetBox onKeyDown={handleKeyDown}>
+              <section className="innerBox">
+                <article className="contArea">
+                  <div className="chartBox">
+                    <ReactTradingviewWidget
+                      symbol={chartSymbol}
+                      theme={Themes.DARK}
+                      locale="kr"
+                      autosize
+                      timezone="Asia/Seoul"
+                      allow_symbol_change={false}
+                    />
 
-                <span className="utilBox">
-                  <ul className="btnList">
-                    <li>
+                    <span className="utilBox">
+                      <ul className="btnList">
+                        <li>
+                          <button
+                            className="tokenBtn"
+                            onClick={() => setTokenPopup(true)}
+                          >
+                            <p>Ethereum</p>
+                            <img src={I_dnPolWhite} alt="" />
+                          </button>
+
+                          {tokenPopup && (
+                            <>
+                              <TokenPopup
+                                off={setTokenPopup}
+                                setAsset={setChartSymbol}
+                                getBookMark={getBookMark}
+                              />
+                              <PopupBg off={setTokenPopup} />
+                            </>
+                          )}
+                        </li>
+                      </ul>
+
                       <button
-                        className="tokenBtn"
-                        onClick={() => setTokenPopup(true)}
+                        className="detBtn"
+                        onClick={() => setDetMode(true)}
                       >
-                        <p>Ethereum</p>
-                        <img src={I_dnPolWhite} alt="" />
+                        <img src={I_barChartWhite} alt="" />
                       </button>
+                    </span>
+                  </div>
 
-                      {tokenPopup && (
-                        <>
-                          <TokenPopup
-                            off={setTokenPopup}
-                            setAsset={setChartSymbol}
-                            getBookMark={getBookMark}
+                  <div className="actionBox">
+                    <div className="infoBox">
+                      <div className="timeBox contBox">
+                        <p className="key">Time</p>
+
+                        <div className="value">
+                          <button
+                            className="contBtn"
+                            onClick={() => setTimePopup(true)}
+                          >
+                            <p>00:01:00</p>
+
+                            <img src={I_flagWhite} alt="" />
+                          </button>
+
+                          {timePopup && (
+                            <>
+                              <TimePopup off={setTimePopup} />
+                              <PopupBg off={setTimePopup} />
+                            </>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="amountBox contBox">
+                        <p className="key">Amount</p>
+
+                        <div className="value">
+                          <p className="unit">$</p>
+                          <input
+                            value={amount}
+                            onChange={(e) => setAmount(e.target.value)}
+                            placeholder="0"
                           />
-                          <PopupBg off={setTokenPopup} />
-                        </>
-                      )}
-                    </li>
-                  </ul>
 
-                  <button className="detBtn" onClick={() => setDetMode(true)}>
-                    <img src={I_barChartWhite} alt="" />
-                  </button>
-                </span>
-              </div>
+                          <img src={I_percentWhite} alt="" />
+                        </div>
+                      </div>
+                    </div>
 
-              <div className="actionBox">
-                <div className="infoBox">
-                  <div className="timeBox contBox">
-                    <p className="key">Time</p>
+                    <div className="btnCont">
+                      <span className="btnBox high">
+                        <button
+                          className="highBtn"
+                          disabled={!amount}
+                          onClick={() => onClickPayBtn("high")}
+                        >
+                          <img src={I_highArwGreen} alt="" />
+                          <p>HIGH</p>
+                        </button>
 
-                    <div className="value">
-                      <button
-                        className="contBtn"
-                        onClick={() => setTimePopup(true)}
-                      >
-                        <p>00:01:00</p>
+                        <p className="rate">+80% 400536157.70</p>
+                      </span>
 
-                        <img src={I_flagWhite} alt="" />
-                      </button>
+                      <span className="btnBox low">
+                        <button
+                          className="lowBtn"
+                          disabled={!amount}
+                          onClick={() => onClickPayBtn("low")}
+                        >
+                          <img src={I_lowArwRed} alt="" />
+                          <p>LOW</p>
+                        </button>
 
-                      {timePopup && (
-                        <>
-                          <TimePopup off={setTimePopup} />
-                          <PopupBg off={setTimePopup} />
-                        </>
-                      )}
+                        <p className="rate">+80% 400536157.70</p>
+                      </span>
                     </div>
                   </div>
+                </article>
+              </section>
+            </MbetBox>
 
-                  <div className="amountBox contBox">
-                    <p className="key">Amount</p>
+            {detMode && <DetBox mode={detMode} off={setDetMode} />}
 
-                    <div className="value">
-                      <p className="unit">$</p>
-                      <input
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                        placeholder="0"
-                      />
+            {liveTradePopup && (
+              <>
+                <LiveTradePopup off={setLiveTradePopup} />
+                <PopupBg bg off={setLiveTradePopup} />
+              </>
+            )}
 
-                      <img src={I_percentWhite} alt="" />
-                    </div>
-                  </div>
-                </div>
+            {insufficientPopup && (
+              <>
+                <InsufficientPopup
+                  off={setInsufficientPopup}
+                  nextProc={setMyBalancePopup}
+                />
+                <PopupBg bg off={setInsufficientPopup} />
+              </>
+            )}
 
-                <div className="btnCont">
-                  <span className="btnBox high">
-                    <button
-                      className="highBtn"
-                      disabled={!amount}
-                      onClick={() => onClickPayBtn("high")}
-                    >
-                      <img src={I_highArwGreen} alt="" />
-                      <p>HIGH</p>
-                    </button>
+            {myBalancePopup && (
+              <>
+                <MyBalancePopup
+                  off={setMyBalancePopup}
+                  setAddPopup={setAddPopup}
+                />
+                <PopupBg bg off={setMyBalancePopup} />
+              </>
+            )}
 
-                    <p className="rate">+80% 400536157.70</p>
-                  </span>
-
-                  <span className="btnBox low">
-                    <button
-                      className="lowBtn"
-                      disabled={!amount}
-                      onClick={() => onClickPayBtn("low")}
-                    >
-                      <img src={I_lowArwRed} alt="" />
-                      <p>LOW</p>
-                    </button>
-
-                    <p className="rate">+80% 400536157.70</p>
-                  </span>
-                </div>
-              </div>
-            </article>
-          </section>
-        </MbetBox>
-
-        {detMode && <DetBox mode={detMode} off={setDetMode} />}
-
-        {liveTradePopup && (
-          <>
-            <LiveTradePopup off={setLiveTradePopup} />
-            <PopupBg bg off={setLiveTradePopup} />
-          </>
-        )}
-
-        {insufficientPopup && (
-          <>
-            <InsufficientPopup
-              off={setInsufficientPopup}
-              nextProc={setMyBalancePopup}
-            />
-            <PopupBg bg off={setInsufficientPopup} />
-          </>
-        )}
-
-        {myBalancePopup && (
-          <>
-            <MyBalancePopup off={setMyBalancePopup} setAddPopup={setAddPopup} />
-            <PopupBg bg off={setMyBalancePopup} />
-          </>
-        )}
-
-        {addPopup && (
-          <>
-            <AddPopup off={setAddPopup} />
-            <PopupBg bg off={setAddPopup} />
+            {addPopup && (
+              <>
+                <AddPopup off={setAddPopup} />
+                <PopupBg bg off={setAddPopup} />
+              </>
+            )}
           </>
         )}
       </>

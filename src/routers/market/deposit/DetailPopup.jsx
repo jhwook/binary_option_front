@@ -7,7 +7,7 @@ export default function DetailPopup({ off }) {
       <article className="topArea">
         <span className="blank" />
 
-        <strong className="title">Confirm deposit details</strong>
+        <p className="title">Deposit details</p>
 
         <button className="exitBtn" onClick={() => off()}>
           <img src={I_xWhite} alt="" />
@@ -65,11 +65,12 @@ const MdetailPopupBox = styled.section`
     align-items: center;
     height: 16.66vw;
     padding: 0 6.66vw;
-    font-size: 4.44vw;
+    font-size: 5vw;
 
     .blank,
     .exitBtn img {
       width: 4.44vw;
+      opacity: 0.4;
     }
   }
 
@@ -77,7 +78,7 @@ const MdetailPopupBox = styled.section`
     display: flex;
     flex-direction: column;
     gap: 8.33vw;
-    padding: 2.77vw 5.55vw 8.33vw;
+    padding: 5vw 5.55vw 8.88vw;
 
     .detailBox {
       display: flex;
@@ -86,6 +87,7 @@ const MdetailPopupBox = styled.section`
       font-size: 3.88vw;
 
       .key {
+
       }
 
       .valueList {

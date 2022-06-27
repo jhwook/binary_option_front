@@ -20,13 +20,6 @@ export default function EventListener() {
     if (!token) return;
 
     axios.defaults.headers.common["Authorization"] = `${token}`;
-
-    axios
-      .get(`${API.AUTH}`)
-      .then(async ({ data }) => {
-        console.log(data);
-      })
-      .catch((err) => localStorage.removeItem("token"));
   }
 
   function initGApi() {

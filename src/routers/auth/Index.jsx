@@ -13,15 +13,13 @@ export default function Index() {
 
   const isMobile = useSelector((state) => state.common.isMobile);
 
-  function resGLogin({ profileObj }) {
-    console.log(profileObj);
-
+  function resGLogin(data) {
     axios
-      .post(API.LOGIN_GOOGLE, { user: profileObj })
+      .post(`${API.LOGIN}/google`, { token: data.tokenId })
       .then(({ data }) => {
         console.log(data);
-        localStorage.setItem("token", data.accessToken);
-        localStorage.setItem("userid", data.userInfo.id);
+        console.log(data.result.tokenId);
+        localStorage.setItem("token", data.result.tokenId);
         navigate("/");
       })
       .catch((err) => console.error(err));

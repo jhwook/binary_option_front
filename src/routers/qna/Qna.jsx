@@ -226,6 +226,8 @@ export default function Qna() {
   else
     return (
       <>
+        <DefaultHeader />
+        
         <PqnaBox>
           <header>
             <section className="innerBox">

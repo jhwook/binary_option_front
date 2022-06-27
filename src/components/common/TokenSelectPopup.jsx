@@ -9,41 +9,99 @@ export default function TokenSelectPopup({ off, list, setCont }) {
     if (off) off();
   }
 
-  return (
-    <PselectPopupBox className="selectPopup">
-      {list.map((v, i) => (
-        <li key={i} onClick={() => onClickCont(v)}>
-          <img className="icon" src={v.icon}/><p>{v.text}</p>
-        </li>
-      ))}
-    </PselectPopupBox>
-  );
+  if (isMobile)
+    return (
+      <MselectPopupBox className="selectPopup">
+        {list.map((v, i) => (
+          <li key={i} onClick={() => onClickCont(v)}>
+            <img className="icon" src={v.icon} />
+            <p>{v.text}</p>
+          </li>
+        ))}
+      </MselectPopupBox>
+    );
+  else
+    return (
+      <PselectPopupBox className="selectPopup">
+        {list.map((v, i) => (
+          <li key={i} onClick={() => onClickCont(v)}>
+            <img className="icon" src={v.icon} />
+            <p>{v.text}</p>
+          </li>
+        ))}
+      </PselectPopupBox>
+    );
 }
 
-const PselectPopupBox = styled.ul`
+const MselectPopupBox = styled.ul`
   display: flex;
   flex-direction: column;
-  background: rgba(0, 0, 0, 0.4);
+  width: 100%;
+  background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-radius: inherit;
   position: absolute;
   overflow-y: scroll;
   z-index: 6;
-  width: 454px;
 
   li {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    height: 56px;
-    padding: 0 24px;
-    font-size: 20px;
-            font-weight: 700;
+    gap: 2.77vw;
+    height: 13.88vw;
+    padding: 0 4.44vw;
+    font-size: 5vw;
+    font-weight: 700;
+    opacity: 0.4;
     cursor: pointer;
-    .icon{
-      width: 38px;
-      margin-right: 10px;
+
+    &:hover {
+      opacity: 1;
     }
 
+    .icon {
+      width: 8.33vw;
+      aspect-ratio: 1;
+      object-fit: contain;
+    }
+  }
+`;
+
+const PselectPopupBox = styled.ul`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: inherit;
+  overflow-y: scroll;
+  top: 56px;
+  position: absolute;
+  z-index: 6;
+
+  li {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    height: 56px;
+    padding: 0 18px;
+    font-size: 20px;
+    font-weight: 700;
+    opacity: 0.4;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    .icon {
+      width: 38px;
+      aspect-ratio: 1;
+      object-fit: contain;
+    }
   }
 `;

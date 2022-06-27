@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 import "../../util/react-datepicker.css";
 import { forwardRef, useState } from "react";
 import I_calender from "../../img/icon/I_calender.png";
-import I_linkWhite from "../../img/icon/I_linkWhite.svg";
+import I_exportWhite from "../../img/icon/I_exportWhite.svg";
 import I_ltArwWhite from "../../img/icon/I_ltArwWhite.svg";
 import I_rtArwWhite from "../../img/icon/I_rtArwWhite.svg";
 import { D_dataList, D_dataListHeader } from "../../data/D_finance";
@@ -253,7 +253,7 @@ export default function Data() {
                 </div>
 
                 <button className="exportBtn" onClick={() => {}}>
-                  <img src={I_linkWhite} alt="" />
+                  <img src={I_exportWhite} alt="" />
                 </button>
               </div>
 
