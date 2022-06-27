@@ -20,7 +20,7 @@ export default function DetailPopup({ off }) {
 
           <ul className="valueList">
             <li>
-              Please make sure that only ETH deposit is made via this address.
+              Please make sure that only USD deposit is made via this address.
               Otherwise, your deposited funds will not be added to your
               available balance — nor will it be refunded.
             </li>

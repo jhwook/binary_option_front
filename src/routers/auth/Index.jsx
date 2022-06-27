@@ -103,7 +103,7 @@ export default function Index() {
                   className="signUpBtn"
                   onClick={() => navigate("/auth/signup")}
                 >
-                  Sign up with phone or eamail
+                  Sign up with phone or email
                 </button>
 
                 <p className="or">or</p>
