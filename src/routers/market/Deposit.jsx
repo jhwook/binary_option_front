@@ -14,7 +14,6 @@ import SecurityVerifiPopup from "../../components/market/deposit/SecurityVerifiP
 import BalancePopup from "../../components/market/deposit/BalancePopup";
 import ConfirmUsdt from "../../components/market/deposit/ConfirmUsdt";
 import ConfirmCny from "../../components/market/deposit/ConfirmCny";
-import ConfirmationPopup from "../../components/market/deposit/ConfirmationPopup";
 import { reqTx, getabistr_forfunction } from "../../util/contractcall";
 import TokenSelectPopup from "../../components/common/TokenSelectPopup";
 import contractaddr from "../../configs/contractaddr";
@@ -89,7 +88,6 @@ export default function Deposit({ userData }) {
             if (resp) {
               //Success
               // window.location.reload();
-              setToast({ type: "alarm", cont: "Submission Successful" });
             }
           });
       }
@@ -589,7 +587,7 @@ const PdepositBox = styled.main`
 
   @media (max-width: 1440px) {
     max-width: 1020px;
-
+    min-width: 1020px;
     padding: 70px 40px 70px 80px;
   }
 
@@ -622,6 +620,7 @@ const PdepositBox = styled.main`
 
     &.deposit {
       width: 454px;
+      min-width: 392px;
 
       & > .value {
         display: flex;
