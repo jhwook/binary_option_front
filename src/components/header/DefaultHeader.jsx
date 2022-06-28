@@ -59,11 +59,13 @@ export default function DefaultHeader({ white, border, title }) {
       })
       .catch((err) => {
         console.error(err);
-        localStorage.removeItem("token");
+        localStorage.clear();
       });
 
     await axios.get(`${API.AUTH}`).then(async ({ data }) => {
       console.log(data.result);
+      if (data.result?.wallet?.walletaddress)
+        localStorage.setItem("walletAddress", data.result.wallet.walletaddress);
       setUserData({ ...data.result });
     });
   }
@@ -131,6 +133,8 @@ export default function DefaultHeader({ white, border, title }) {
         <PdefaultHeaderBox
           className={`${white && "white"} ${border && "border"}`}
         >
+          <div className="filterBox" />
+
           <article className="leftArea">
             <button className="logoBtn" onClick={() => navigate("/")}>
               <img src={L_yellow} alt="" />
@@ -364,13 +368,22 @@ const PdefaultHeaderBox = styled.header`
   padding: 0 30px;
   color: #fff;
   background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
   top: 0;
   right: 0;
   left: 0;
   position: fixed;
   z-index: 3;
+
+  .filterBox {
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    top: 0;
+    left: 0;
+    position: absolute;
+    z-index: -1;
+  }
 
   &.border {
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);

@@ -1,37 +1,114 @@
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import I_x from "../../../img/icon/I_x.svg";
+import I_xWhite from "../../../img/icon/I_xWhite.svg";
 
 export default function TimeOutPopup({ off }) {
+  const isMobile = useSelector((state) => state.common.isMobile);
+
   function onClickGotBtn() {
     off();
+    window.location.reload();
   }
 
-  return (
-    <PtimeOutPopupBox className="defaultPopup">
-      <article className="topArea">
-        <span className="blank" />
+  if (isMobile)
+    return (
+      <MtimeOutPopupBox className="defaultPopup">
+        <article className="topArea">
+          <span className="blank" />
 
-        <p className="title">Notice</p>
+          <p className="title">Notice</p>
 
-        <button className="exitBtn" onClick={() => off()}>
-          <img src={I_x} alt="" />
-        </button>
-      </article>
+          <button className="exitBtn" onClick={() => off()}>
+            <img src={I_xWhite} alt="" />
+          </button>
+        </article>
 
-      <article className="contArea">
-        <p className="explain">
-          Request timed out! Your order has been automatically canceled. Please
-          note that up to 3 cancelations can be made per day. For more
-          information, please contact customer support.
-        </p>
+        <article className="contArea">
+          <p className="explain">
+            Request timed out! Your order has been automatically canceled.
+            Please note that up to 3 cancelations can be made per day. For more
+            information, please contact customer support.
+          </p>
 
-        <button className="confirmBtn" onClick={onClickGotBtn}>
-          Got it
-        </button>
-      </article>
-    </PtimeOutPopupBox>
-  );
+          <button className="confirmBtn" onClick={onClickGotBtn}>
+            Got it
+          </button>
+        </article>
+      </MtimeOutPopupBox>
+    );
+  else
+    return (
+      <PtimeOutPopupBox className="defaultPopup">
+        <article className="topArea">
+          <span className="blank" />
+
+          <p className="title">Notice</p>
+
+          <button className="exitBtn" onClick={() => off()}>
+            <img src={I_x} alt="" />
+          </button>
+        </article>
+
+        <article className="contArea">
+          <p className="explain">
+            Request timed out! Your order has been automatically canceled.
+            Please note that up to 3 cancelations can be made per day. For more
+            information, please contact customer support.
+          </p>
+
+          <button className="confirmBtn" onClick={onClickGotBtn}>
+            Got it
+          </button>
+        </article>
+      </PtimeOutPopupBox>
+    );
 }
+
+const MtimeOutPopupBox = styled.section`
+  width: 91.11vw;
+  color: #fff;
+
+  .topArea {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 16.66vw;
+    padding: 0 8.33vw;
+
+    .title {
+      font-size: 4.44vw;
+    }
+
+    .exitBtn {
+      img {
+        width: 4.44vw;
+        opacity: 0.4;
+      }
+    }
+  }
+
+  .contArea {
+    display: flex;
+    flex-direction: column;
+    gap: 6.11vw;
+    padding: 3.33vw 6.66vw 8.33vw;
+
+    .explain {
+      font-size: 3.88vw;
+      text-align: center;
+    }
+
+    .confirmBtn {
+      height: 13.88vw;
+      font-size: 4.44vw;
+      font-weight: 700;
+      color: #4e3200;
+      background: linear-gradient(99.16deg, #604719 3.95%, #f7ab1f 52.09%);
+      border-radius: 2.22vw;
+    }
+  }
+`;
 
 const PtimeOutPopupBox = styled.section`
   width: 500px;

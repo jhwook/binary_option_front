@@ -12,25 +12,27 @@ import { API } from "../../configs/api";
 import axios from "axios";
 import AddressPopup from "./deposit/AddressPopup";
 import SecurityVerifiPopup from "../../components/market/deposit/SecurityVerifiPopup";
-import BalancePopup from "../../components/market/deposit/BalancePopup";
+import CashInPersonPopup from "../../components/market/deposit/CashInPersonPopup";
 import ConfirmUsdt from "../../components/market/deposit/ConfirmUsdt";
 import ConfirmCny from "../../components/market/deposit/ConfirmCny";
 import { reqTx, getabistr_forfunction } from "../../util/contractcall";
 import TokenSelectPopup from "../../components/common/TokenSelectPopup";
 import contractaddr from "../../configs/contractaddr";
 import { setToast } from "../../util/Util";
+import { metaMaskLink } from "../../configs/metaMask";
+import QRCode from "react-qr-code";
 
 export default function Deposit({ userData }) {
-  const [isBranch, setIsBranch] = useState(false);
+  const walletAddress = localStorage.getItem("walletAddress");
   const isMobile = useSelector((state) => state.common.isMobile);
 
+  const [isBranch, setIsBranch] = useState(false);
   const [amount, setAmount] = useState("");
   const [branchData, setBranchData] = useState("");
   const [confirm, setConfirm] = useState(false);
   const [detailPopup, setDetailPopup] = useState(true);
   const [securityVerifiPopup, setSecurityVerifiPopup] = useState(false);
-  const [confirmationPopup, setConfirmationPopup] = useState(false);
-  const [balancePopup, setBalancePopup] = useState(false);
+  const [cashInPersonPopup, setCashInPersonPopupPopup] = useState(false);
   const [tokenPopup, setTokenPopup] = useState(false);
   const [token, setToken] = useState({ icon: T_usdt, text: "USDT" });
   const [tokenList, setTokenList] = useState([
@@ -38,42 +40,23 @@ export default function Deposit({ userData }) {
     { icon: T_usdc, text: "USDC" },
   ]);
 
-  useEffect(() => {
-    if (!userData) {
-      return;
-    }
-    let { isbranch } = userData;
-    setIsBranch(isbranch);
-    if (isbranch) {
-      setTokenList([{ icon: T_CNY, text: "CNY" }]);
-    } else {
-      setTokenList([
-        { icon: T_usdt, text: "USDT" },
-        { icon: T_usdc, text: "USDC" },
-      ]);
-    }
-  }, [userData]);
-
-  useEffect(()=>{
-    if(tokenList){
-      setToken(tokenList[0])
-    }
-  },[tokenList])
-
   async function directPayment() {
     let { ethereum } = window;
     let address = await ethereum.enable();
     console.log(address[0]);
+
     if (!ethereum) {
       alert("Install Metamask");
       return;
     }
+
     let abistr = getabistr_forfunction({
       contractaddress: contractaddr[token.text],
       abikind: "ERC20",
       methodname: "transfer",
       aargs: [contractaddr["admin"], amount + ""],
     });
+    
     reqTx(
       {
         from: address[0],
@@ -97,8 +80,9 @@ export default function Deposit({ userData }) {
               // window.location.reload();
 
               setToast({ type: "alarm", cont: "Submission Successful" });
-              setTimeout(()=>{window.location.reload(false);}, 3000)
-
+              setTimeout(() => {
+                window.location.reload(false);
+              }, 3000);
             }
           });
       }
@@ -109,6 +93,7 @@ export default function Deposit({ userData }) {
     if (!branchData) {
       return;
     }
+
     axios
       .patch(`${API.TRANS_DEPOSIT}/${amount}`, {
         tokentype: token.text,
@@ -120,29 +105,51 @@ export default function Deposit({ userData }) {
       })
       .then((_) => {
         //Posted
-        
-        setToast({ type: "alarm", cont: "Submission Successful" });
-        setTimeout(()=>{window.location.reload(false);}, 3000)
 
+        setToast({ type: "alarm", cont: "Submission Successful" });
+        setTimeout(() => {
+          window.location.reload(false);
+        }, 3000);
       });
   }
 
   function onClickDepositBtn() {
-    if (isBranch) setSecurityVerifiPopup(true);
-    else {
-      directPayment();
+    if (isBranch) {
+      setSecurityVerifiPopup(true);
+    } else {
+      if (isMobile) directPayment();
+      else {
+        window.open(
+          `${metaMaskLink}/${
+            contractaddr[token.text]
+          }/transfer?address=${walletAddress}&uint256=${amount}e6`
+        );
+      }
     }
   }
 
   useEffect(() => {
     if (!userData) return;
-    console.log(userData);
-    if (userData?.isbranch) {
-      setIsBranch(true);
+
+    let { isbranch } = userData;
+
+    setIsBranch(isbranch);
+
+    if (isbranch) {
+      setTokenList([{ icon: T_CNY, text: "CNY" }]);
     } else {
-      setIsBranch(false);
+      setTokenList([
+        { icon: T_usdt, text: "USDT" },
+        { icon: T_usdc, text: "USDC" },
+      ]);
     }
   }, [userData]);
+
+  useEffect(() => {
+    if (tokenList) {
+      setToken(tokenList[0]);
+    }
+  }, [tokenList]);
 
   if (isMobile)
     return (
@@ -150,102 +157,116 @@ export default function Deposit({ userData }) {
         <DefaultHeader title="Deposit" />
 
         <MdepositBox>
-          <section className="innerBox">
-            <ul className="inputList">
-              <li className="tokenBox">
-                <p className="key">Asset</p>
+          {confirm ? (
+            isBranch ? (
+              <ConfirmCny
+                setConfirm={setConfirm}
+                amount={amount}
+                setOk={(e) => {
+                  e && postLocale();
+                }}
+              />
+            ) : (
+              <ConfirmUsdt />
+            )
+          ) : (
+            <section className="innerBox ">
+              <ul className="inputList">
+                <li className="tokenBox">
+                  <p className="key">Asset</p>
 
-                <div className="selectBox">
-                  <button
-                    className={`${tokenPopup && "on"} selBtn`}
-                    onClick={() => setTokenPopup(true)}
-                  >
-                    <img className="token" src={token.icon} alt="" />
-                    <strong className="name">{token.text}</strong>
+                  <div className="selectBox">
+                    <button
+                      className={`${tokenPopup && "on"} selBtn`}
+                      onClick={() => setTokenPopup(true)}
+                    >
+                      <img className="token" src={token.icon} alt="" />
+                      <strong className="name">{token.text}</strong>
 
-                    <img className="arw" src={I_dnPolWhite} />
-                  </button>
+                      <img className="arw" src={I_dnPolWhite} />
+                    </button>
 
-                  {tokenPopup && (
-                    <>
-                      <TokenSelectPopup
-                        off={setTokenPopup}
-                        list={tokenList}
-                        setCont={setToken}
-                      />
-                      <PopupBg off={setTokenPopup} />
-                    </>
-                  )}
-                </div>
-              </li>
-
-              <li className="amountBox">
-                <p className="key">Amount</p>
-
-                <div className="valueBox">
-                  <input
-                    type="number"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    placeholder=""
-                  />
-                  <strong className="unit">{token.text}</strong>
-                </div>
-
-                <ul className="optList">
-                  <button
-                    className={`${amount === 100 && "on"} optBtn`}
-                    onClick={() => setAmount(100)}
-                  >
-                    {isBranch ? "¥" : "$"}100
-                  </button>
-                  <button
-                    className={`${amount === 200 && "on"} optBtn`}
-                    onClick={() => setAmount(200)}
-                  >
-                    {isBranch ? "¥" : "$"}200
-                  </button>
-                  <button
-                    className={`${amount === 300 && "on"} optBtn`}
-                    onClick={() => setAmount(300)}
-                  >
-                    {isBranch ? "¥" : "$"}300
-                  </button>
-                  <button
-                    className={`${amount === 400 && "on"} optBtn`}
-                    onClick={() => setAmount(400)}
-                  >
-                    {isBranch ? "¥" : "$"}400
-                  </button>
-                </ul>
-              </li>
-            </ul>
-
-            <article className="depositArea">
-              <ul className="infoList">
-                <li>
-                  <p className="key">Commission</p>
-                  <p className="value">0%</p>
+                    {tokenPopup && (
+                      <>
+                        <TokenSelectPopup
+                          off={setTokenPopup}
+                          list={tokenList}
+                          setCont={setToken}
+                        />
+                        <PopupBg off={setTokenPopup} />
+                      </>
+                    )}
+                  </div>
                 </li>
-                <li>
-                  <p className="key">Minimum deposit amount</p>
-                  <p className="value">5 {token.text}</p>
-                </li>
-                <li>
-                  <p className="key">Max amount per transaction</p>
-                  <p className="value">0no limits</p>
+
+                <li className="amountBox">
+                  <p className="key">Amount</p>
+
+                  <div className="valueBox">
+                    <input
+                      type="number"
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                      placeholder=""
+                    />
+                    <strong className="unit">{token.text}</strong>
+                  </div>
+
+                  <ul className="optList">
+                    <button
+                      className={`${amount === 100 && "on"} optBtn`}
+                      onClick={() => setAmount(100)}
+                    >
+                      {isBranch ? "¥" : "$"}100
+                    </button>
+                    <button
+                      className={`${amount === 200 && "on"} optBtn`}
+                      onClick={() => setAmount(200)}
+                    >
+                      {isBranch ? "¥" : "$"}200
+                    </button>
+                    <button
+                      className={`${amount === 300 && "on"} optBtn`}
+                      onClick={() => setAmount(300)}
+                    >
+                      {isBranch ? "¥" : "$"}300
+                    </button>
+                    <button
+                      className={`${amount === 400 && "on"} optBtn`}
+                      onClick={() => setAmount(400)}
+                    >
+                      {isBranch ? "¥" : "$"}400
+                    </button>
+                  </ul>
                 </li>
               </ul>
 
-              <button
-                className="depositBtn"
-                disabled={!amount}
-                onClick={onClickDepositBtn}
-              >
-                Deposit
-              </button>
-            </article>
-          </section>
+              <article className="depositArea">
+                <ul className="infoList">
+                  <li>
+                    <p className="key">Commission</p>
+                    <p className="value">0%</p>
+                  </li>
+                  <li>
+                    <p className="key">Minimum deposit amount</p>
+                    <p className="value">5 {token.text}</p>
+                  </li>
+                  <li>
+                    <p className="key">Max amount per transaction</p>
+                    <p className="value">0no limits</p>
+                  </li>
+                </ul>
+
+                <button
+                  className="depositBtn"
+                  disabled={!amount}
+                  onClick={onClickDepositBtn}
+                >
+                  Deposit
+                </button>
+              </article>
+            </section>
+          )}
         </MdepositBox>
 
         {detailPopup && (
@@ -255,10 +276,24 @@ export default function Deposit({ userData }) {
           </>
         )}
 
-        {confirm && (
+        {securityVerifiPopup && (
           <>
-            <AddressPopup off={setConfirm} />
-            <PopupBg bg off={setConfirm} />
+            <SecurityVerifiPopup
+              off={setSecurityVerifiPopup}
+              setBalancePopup={setCashInPersonPopupPopup}
+            />
+            <PopupBg off={setSecurityVerifiPopup} />
+          </>
+        )}
+
+        {cashInPersonPopup && (
+          <>
+            <CashInPersonPopup
+              off={setCashInPersonPopupPopup}
+              setConfirm={setConfirm}
+              setData={setBranchData}
+            />
+            <PopupBg off={setCashInPersonPopupPopup} />
           </>
         )}
       </>
@@ -422,20 +457,20 @@ export default function Deposit({ userData }) {
           <>
             <SecurityVerifiPopup
               off={setSecurityVerifiPopup}
-              setBalancePopup={setBalancePopup}
+              setBalancePopup={setCashInPersonPopupPopup}
             />
             <PopupBg off={setSecurityVerifiPopup} />
           </>
         )}
 
-        {balancePopup && (
+        {cashInPersonPopup && (
           <>
-            <BalancePopup
-              off={setBalancePopup}
+            <CashInPersonPopup
+              off={setCashInPersonPopupPopup}
               setConfirm={setConfirm}
               setData={setBranchData}
             />
-            <PopupBg off={setBalancePopup} />
+            <PopupBg off={setCashInPersonPopupPopup} />
           </>
         )}
       </>

@@ -10,7 +10,7 @@ export default function ProfPopup({ off, offAll, userData }) {
   const isMobile = useSelector((state) => state.common.isMobile);
 
   function onClickLogOutBtn() {
-    localStorage.removeItem("token");
+    localStorage.clear();
     navigate("/");
 
     if (offAll) offAll();
@@ -38,7 +38,9 @@ export default function ProfPopup({ off, offAll, userData }) {
             <img className="tierImg" src={GetTier("gold")} alt="" />
 
             <div className="textBox">
-              <p className="id">{userData.firstname+", "+userData.lastname}</p>
+              <p className="id">
+                {userData.firstname + ", " + userData.lastname}
+              </p>
               <p className="pos">GOLD</p>
             </div>
           </div>
@@ -130,7 +132,6 @@ export default function ProfPopup({ off, offAll, userData }) {
     );
   else
     return (
-      
       <PprofPopupBox className="profPopup">
         <button className="exitBtn" onClick={() => off()}>
           <img src={I_x} alt="" />
@@ -140,8 +141,10 @@ export default function ProfPopup({ off, offAll, userData }) {
           <img className="tierImg" src={GetTier("gold")} alt="" />
 
           <div className="textBox">
-          {console.log(userData)}
-            <p className="id">{userData.firstname+", "+userData.lastname}</p>
+            {console.log(userData)}
+            <p className="id">
+              {userData.firstname + ", " + userData.lastname}
+            </p>
             <p className="pos">GOLD</p>
           </div>
         </div>

@@ -10,6 +10,7 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 import { API } from "../../../configs/api";
 import { useSelector } from "react-redux";
+import { setToast } from "../../../util/Util";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -44,14 +45,13 @@ export default function Signup() {
       .then(({ data }) => {
         console.log(data);
 
+        if (data.status === "ERR") {
+          setToast({ type: "alarm_black", cont: data.message });
+        }
+
         if (data.message === "TOKEN_CREATED") {
           localStorage.setItem("token", data.result.tokenId);
           navigate("/");
-        } else if (data.message === "INVALID-CODE") {
-          setUserData({
-            ...userData,
-            referralAlarm: "The password you have entered does not coincide",
-          });
         }
       })
       .catch((err) => console.error(err));
@@ -73,10 +73,7 @@ export default function Signup() {
                     {D_loginCategoryList.map((v, i) => (
                       <li
                         key={i}
-                        className={`${
-                          category.key === v.key &&
-                          "The referral code you have entered does not coincide"
-                        }`}
+                        className={`${category.key === v.key && "on"}`}
                       >
                         <button onClick={() => setCategory(v)}>{v.key}</button>
                       </li>
@@ -345,7 +342,7 @@ const MsignupBox = styled.main`
               &.on {
                 color: inherit;
                 border: solid transparent;
-                border-width: 2px 2px 0 2px;
+                border-width: 3px 3px 0 3px;
                 background-image: linear-gradient(#fff, #fff),
                   linear-gradient(
                     180deg,

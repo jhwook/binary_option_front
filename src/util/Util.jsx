@@ -216,6 +216,20 @@ export function setToast({ type, cont, amount }) {
         }
       );
       break;
+    case "alarm_black":
+      toast(
+        <div className="customBox">
+          <span className="iconBox">
+            <img src={I_chkOrange} alt="" />
+          </span>
+
+          <p className="cont">{cont}</p>
+        </div>,
+        {
+          toastId: "CustomToastAlarmBlack",
+        }
+      );
+      break;
     default:
       break;
   }
