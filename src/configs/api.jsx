@@ -31,4 +31,6 @@ export const API = {
 
   TRANS_WITHDRAW: URL + "/transactions/live/WITHDRAW", //:amount
   TRANS_DEPOSIT: URL + "/transactions/live/DEPOSIT", //:amount
+
+  LISTEN_TRANSACTION: URL + "/transactions/listen"
 };

@@ -40,6 +40,7 @@ export default function Deposit({ userData }) {
     { icon: T_usdc, text: "USDC" },
   ]);
 
+
   async function directPayment() {
     let { ethereum } = window;
     let address = await ethereum.enable();
@@ -117,13 +118,18 @@ export default function Deposit({ userData }) {
     if (isBranch) {
       setSecurityVerifiPopup(true);
     } else {
-      if (isMobile) directPayment();
+      if (!isMobile) directPayment();
       else {
-        window.open(
-          `${metaMaskLink}/${
-            contractaddr[token.text]
-          }/transfer?address=${walletAddress}&uint256=${amount}e6`
-        );
+        axios.post(`${API.LISTEN_TRANSACTION}/USDT`)
+        .then(({data})=>{
+          console.log(data);
+          window.open(
+            `${metaMaskLink}/${
+              contractaddr[token.text]
+            }/transfer?address=${walletAddress}&uint256=${amount}e6`
+          );
+        })
+        
       }
     }
   }
