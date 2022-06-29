@@ -10,7 +10,7 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 import { API } from "../../../configs/api";
 import { useSelector } from "react-redux";
-import { setToast } from "../../../util/Util";
+import { AxiosInterCept, setToast } from "../../../util/Util";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -51,6 +51,7 @@ export default function Signup() {
 
         if (data.message === "TOKEN_CREATED") {
           localStorage.setItem("token", data.result.tokenId);
+          AxiosInterCept();
           navigate("/");
         }
       })

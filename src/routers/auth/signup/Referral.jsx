@@ -55,10 +55,6 @@ export default function Referral() {
   }
 
   useEffect(() => {
-    axios.defaults.headers.common["Authorization"] = `${token}`;
-  }, []);
-
-  useEffect(() => {
     setAlarm("");
   }, [refCode]);
 

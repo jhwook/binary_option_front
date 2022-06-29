@@ -17,7 +17,7 @@ export const API = {
   USER_CERTIFICATION_EMAIL: URL + "/users/certification/email",
   USER_QUERY: URL + "/users/query", //tablename/offset/limit
 
-  BET: URL + "/bet",
+  BET: URL + "/bet/join", //:assetId/:amount/:dur/:type
   BET_ROUND: URL + "/bet/rounds",
   BET_LOG: URL + "/bet/log", // userid
 

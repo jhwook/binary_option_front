@@ -40,7 +40,6 @@ export default function Deposit({ userData }) {
     { icon: T_usdc, text: "USDC" },
   ]);
 
-
   async function directPayment() {
     let { ethereum } = window;
     let address = await ethereum.enable();
@@ -55,9 +54,9 @@ export default function Deposit({ userData }) {
       contractaddress: contractaddr[token.text],
       abikind: "ERC20",
       methodname: "transfer",
-      aargs: [contractaddr["admin"], amount + ""],
+      aargs: [contractaddr["admin"], amount * 10 ** 6 + ""],
     });
-    
+
     reqTx(
       {
         from: address[0],
@@ -118,18 +117,19 @@ export default function Deposit({ userData }) {
     if (isBranch) {
       setSecurityVerifiPopup(true);
     } else {
-      if (!isMobile) directPayment();
-      else {
-        axios.post(`${API.LISTEN_TRANSACTION}/${token.text}`)
-        .then(({data})=>{
-          console.log(data);
-          window.open(
-            `${metaMaskLink}/${
-              contractaddr[token.text]
-            }/transfer?address=${walletAddress}&uint256=${amount}e6`
-          );
-        })
-        
+      if (isMobile) {
+        axios
+          .post(`${API.LISTEN_TRANSACTION}/${token.text}`)
+          .then(({ data }) => {
+            console.log(data);
+            window.open(
+              `${metaMaskLink}/${
+                contractaddr[token.text]
+              }/transfer?address=${walletAddress}&uint256=${amount}e6`
+            );
+          });
+      } else {
+        directPayment();
       }
     }
   }

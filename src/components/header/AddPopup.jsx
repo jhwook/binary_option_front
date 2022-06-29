@@ -12,7 +12,6 @@ export default function AddPopup({ off }) {
   const [amount, setAmount] = useState("");
 
   function onClickAddBtn() {
-    axios.defaults.headers.common["Authorization"] = `${token}`;
 
     axios
       .patch(`${API.TRANS_DEMO_FUND}/${amount}`)

@@ -1,10 +1,9 @@
-import axios from "axios";
 import { useEffect, useLayoutEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { API } from "../../configs/api";
 import { gCliId } from "../../configs/setting";
 import { useDispatch } from "react-redux";
 import { setMobile } from "../../reducers/common";
+import { AxiosInterCept } from "../../util/Util";
 
 export default function EventListener() {
   const location = useLocation();
@@ -13,13 +12,6 @@ export default function EventListener() {
   function handleResize() {
     if (window.innerWidth >= 1200) dispatch(setMobile(false));
     else dispatch(setMobile(true));
-  }
-
-  function getLoginChk() {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    axios.defaults.headers.common["Authorization"] = `${token}`;
   }
 
   function initGApi() {
@@ -34,11 +26,14 @@ export default function EventListener() {
     window.gapi.load("client:auth2", start);
   }
 
+ 
+
   useLayoutEffect(() => {
-    getLoginChk();
     initGApi();
 
     handleResize();
+
+    AxiosInterCept();
 
     window.addEventListener("resize", handleResize);
 

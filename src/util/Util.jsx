@@ -7,6 +7,7 @@ import T_bronze from "../img/tier/T_bronze.svg";
 import T_silver from "../img/tier/T_silver.svg";
 import T_gold from "../img/tier/T_gold.svg";
 import T_dia from "../img/tier/T_dia.svg";
+import axios from "axios";
 
 export function strDot(str, startNum = 0, endNum = 0) {
   if (!str?.length) return;
@@ -248,4 +249,15 @@ export function GetTier(v) {
     default:
       return null;
   }
+}
+
+export function AxiosInterCept() {
+  const token = localStorage.getItem("token");
+  if (!token) return;
+
+  axios.interceptors.request.use(function (config) {
+    config.headers.Authorization = token;
+
+    return config;
+  });
 }

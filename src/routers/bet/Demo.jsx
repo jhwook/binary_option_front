@@ -12,7 +12,7 @@ import I_lowArwRed from "../../img/icon/I_lowArwRed.svg";
 import I_plusWhite from "../../img/icon/I_plusWhite.svg";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
 import I_barChartWhite from "../../img/icon/I_barChartWhite.svg";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import LiveTradePopup from "../../components/bet/LiveTradePopup";
 import PopupBg from "../../components/common/PopupBg";
 import TokenPopup from "../../components/bet/TokenPopup";
@@ -30,6 +30,8 @@ import { API } from "../../configs/api";
 import LoadingBar from "../../components/common/LoadingBar";
 
 export default function Demo() {
+  const hoverRef1 = useRef();
+  const hoverRef2 = useRef();
   const dispatch = useDispatch();
   const isMobile = useSelector((state) => state.common.isMobile);
 
@@ -51,6 +53,12 @@ export default function Demo() {
   });
   const [amount, setAmount] = useState("");
   const [bookMark, setBookMark] = useState([]);
+
+  function turnLoader() {
+    setTimeout(() => {
+      setLoading(false);
+    }, 5000);
+  }
 
   function handleKeyDown(e) {
     if (e.key === "W" && e.shiftKey) {
@@ -111,14 +119,14 @@ export default function Demo() {
       .catch((err) => console.error(err));
   }
 
-  function turnLoader() {
-    setTimeout(() => {
-      setLoading(false);
-    }, 5000);
+  function onMouseOverBtn(e) {
+    hoverRef1.current.style.left = `${e.clientX}px`;
+    hoverRef1.current.style.top = `${e.clientY}px`;
+    hoverRef2.current.style.left = `${e.clientX}px`;
+    hoverRef2.current.style.top = `${e.clientY}px`;
   }
 
   useEffect(() => {
-    axios.defaults.headers.common["Authorization"] = `${token}`;
 
     turnLoader();
   }, []);
@@ -481,7 +489,7 @@ export default function Demo() {
                         <strong className="percent">+80%</strong>
                         <p className="amount">400536157.70</p>
 
-                        <p className="hoverPopup">
+                        <p className="hoverPopup" ref={hoverRef1}>
                           Dividend rate : +80% 400536157.70 USD
                         </p>
                       </span>
@@ -501,7 +509,7 @@ export default function Demo() {
                         <strong className="percent">+80%</strong>
                         <p className="amount">400536157.70</p>
 
-                        <p className="hoverPopup">
+                        <p className="hoverPopup" ref={hoverRef2}>
                           Dividend rate : +80% 400536157.70 USD
                         </p>
                       </span>

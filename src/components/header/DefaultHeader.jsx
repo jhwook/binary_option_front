@@ -49,7 +49,6 @@ export default function DefaultHeader({ white, border, title }) {
     const token = localStorage.getItem("token");
     if (!token) return;
 
-    axios.defaults.headers.common["Authorization"] = `${token}`;
 
     await axios
       .get(`${API.USER_BALANCE}`)

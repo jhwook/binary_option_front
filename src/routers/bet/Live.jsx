@@ -27,6 +27,7 @@ import ReactTradingviewWidget, { Themes } from "react-tradingview-widget";
 import axios from "axios";
 import { API } from "../../configs/api";
 import LoadingBar from "../../components/common/LoadingBar";
+import { D_tokenCategoryList } from "../../data/D_bet";
 
 export default function Live() {
   const hoverRef1 = useRef();
@@ -36,6 +37,7 @@ export default function Live() {
   const token = localStorage.getItem("token");
   const userid = localStorage.getItem("userid");
 
+  const [assetInfo, setAssetInfo] = useState();
   const [loading, setLoading] = useState(true);
   const [liveTradePopup, setLiveTradePopup] = useState(false);
   const [hotKeyPopup, setHotKeyPopup] = useState(true);
@@ -45,9 +47,27 @@ export default function Live() {
   const [insufficientPopup, setInsufficientPopup] = useState(false);
   const [myBalancePopup, setMyBalancePopup] = useState(false);
   const [addPopup, setAddPopup] = useState(false);
-  const [chartSymbol, setChartSymbol] = useState("BTCUSDT");
+  const [chartSymbol, setChartSymbol] = useState("");
   const [amount, setAmount] = useState("");
   const [bookMark, setBookMark] = useState([]);
+
+  function getAssetList() {
+    axios
+      .get(`${API.GET_ASSETS}`, {
+        params: { group: D_tokenCategoryList[1].value },
+      })
+      .then(({ data }) => {
+        console.log(data.respdata);
+        setAssetInfo(data.respdata[0]);
+      })
+      .catch((err) => console.error(err));
+  }
+
+  function turnLoader() {
+    setTimeout(() => {
+      setLoading(false);
+    }, 5000);
+  }
 
   function handleKeyDown(e) {
     if (e.key === "W" && e.shiftKey) {
@@ -59,11 +79,7 @@ export default function Live() {
     switch (type) {
       case "high":
         axios
-          .post(
-            API.BET,
-            { betamount: amount, side: 2, userid },
-            { headers: { Authorization: `Bearer ${token}` } }
-          )
+          .post(`${API.BET}/`, { betamount: amount, side: 2, userid })
           .then((res) => {
             console.log(res);
             setToast({ type: "high", amount });
@@ -75,11 +91,7 @@ export default function Live() {
 
       case "low":
         axios
-          .post(
-            API.BET,
-            { betamount: amount, side: 1, userid },
-            { headers: { Authorization: `Bearer ${token}` } }
-          )
+          .post(API.BET, { betamount: amount, side: 1, userid })
           .then((res) => {
             console.log(res);
             setToast({ type: "low", amount });
@@ -108,17 +120,12 @@ export default function Live() {
       .catch((err) => console.error(err));
   }
 
-  function turnLoader() {
-    setTimeout(() => {
-      setLoading(false);
-    }, 5000);
+  function onMouseOverBtn(e) {
+    hoverRef1.current.style.left = `${e.clientX}px`;
+    hoverRef1.current.style.top = `${e.clientY}px`;
+    hoverRef2.current.style.left = `${e.clientX}px`;
+    hoverRef2.current.style.top = `${e.clientY}px`;
   }
-
-  useEffect(() => {
-    getBookMark();
-
-    turnLoader();
-  }, []);
 
   useLayoutEffect(() => {
     setLiveTradePopup(true);
@@ -127,18 +134,13 @@ export default function Live() {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  function onMouseOverBtn(e) {
-    // console.log(e.screenX);
-    // console.log(e.screenY);
+  useEffect(() => {
+    getAssetList();
 
-    hoverRef1.current.style.left = `${e.clientX}px`;
-    hoverRef1.current.style.top = `${e.clientY}px`;
-    hoverRef2.current.style.left = `${e.clientX}px`;
-    hoverRef2.current.style.top = `${e.clientY}px`;
+    getBookMark();
 
-    console.log(hoverRef1.current.style.left);
-    console.log(hoverRef1.current.style.top);
-  }
+    turnLoader();
+  }, []);
 
   if (isMobile)
     return (
@@ -154,7 +156,7 @@ export default function Live() {
                 <article className="contArea">
                   <div className="chartBox">
                     <ReactTradingviewWidget
-                      symbol={chartSymbol}
+                      symbol={assetInfo.dispSymbol}
                       theme={Themes.DARK}
                       locale="kr"
                       autosize
@@ -177,7 +179,7 @@ export default function Live() {
                             <>
                               <TokenPopup
                                 off={setTokenPopup}
-                                setAsset={setChartSymbol}
+                                setAssetInfo={setAssetInfo}
                                 getBookMark={getBookMark}
                               />
                               <PopupBg off={setTokenPopup} />
@@ -331,7 +333,7 @@ export default function Live() {
                       <>
                         <TokenPopup
                           off={setTokenPopup}
-                          setAsset={setChartSymbol}
+                          setAssetInfo={setAssetInfo}
                           getBookMark={getBookMark}
                         />
                         <PopupBg off={setTokenPopup} />
@@ -362,7 +364,7 @@ export default function Live() {
                     <div className="chart">
                       <ReactTradingviewWidget
                         container_id={"technical-analysis-chart-demo"}
-                        symbol={chartSymbol}
+                        symbol={assetInfo.dispSymbol}
                         theme={Themes.DARK}
                         locale="kr"
                         autosize

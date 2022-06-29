@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { API, URL } from "../../configs/api";
 
-export default function TokenPopup({ off, setAsset, getBookMark }) {
+export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
   const isMobile = useSelector((state) => state.common.isMobile);
   const token = localStorage.getItem("token");
 
@@ -20,7 +20,7 @@ export default function TokenPopup({ off, setAsset, getBookMark }) {
 
   function onClickStock(asset) {
     console.log(asset);
-    setAsset(asset);
+    setAssetInfo(asset);
     off();
   }
 
@@ -54,8 +54,6 @@ export default function TokenPopup({ off, setAsset, getBookMark }) {
   }
 
   useEffect(() => {
-    axios.defaults.headers.common["Authorization"] = `${token}`;
-
     getAssetList();
   }, [category]);
 

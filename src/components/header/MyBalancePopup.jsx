@@ -28,7 +28,6 @@ export default function MyBalancePopup({ off, setAddPopup }) {
 
   function getBalance() {
     if (token) {
-      axios.defaults.headers.common["Authorization"] = `${token}`;
 
       axios
         .get(`${API.USER_BALANCE}`)
