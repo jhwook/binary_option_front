@@ -5,15 +5,19 @@ import { useState } from "react";
 import { D_timeBtnList } from "../../data/D_bet";
 import { useSelector } from "react-redux";
 
-export default function TimePopup({ off }) {
+export default function TimePopup({ off, duration, setDuration }) {
   const isMobile = useSelector((state) => state.common.isMobile);
 
-  const [time, setTime] = useState(0);
-
   function onClickSetBtn(v) {
-    if (time + v < 0) return;
-    else setTime(time + v);
+    if (duration + v < 0) return;
+
+    setDuration(duration + v);
   }
+
+  function onClickOptBtn(v) {
+    setDuration(v);
+  }
+
   if (isMobile)
     return (
       <MtimePopupBox>
@@ -21,8 +25,8 @@ export default function TimePopup({ off }) {
           {D_timeBtnList.map((v, i) => (
             <li
               key={i}
-              className={`${time === v.value && "on"}`}
-              onClick={() => setTime(v.value)}
+              className={`${duration === v.value && "on"}`}
+              onClick={() => onClickOptBtn(v.value)}
             >
               {v.key}
             </li>
@@ -37,16 +41,16 @@ export default function TimePopup({ off }) {
           <li>
             <button
               className="plusBtn setBtn"
-              onClick={() => onClickSetBtn(3600)}
+              onClick={() => onClickSetBtn(60)}
             >
               <img src={I_plusWhite} alt="" />
             </button>
 
-            <p>{`${Math.floor(time / 3600)}`.padStart(2, "0")}</p>
+            <p>{`${Math.floor(duration / 60)}`.padStart(2, "0")}</p>
 
             <button
               className="plusBtn setBtn"
-              onClick={() => onClickSetBtn(-3600)}
+              onClick={() => onClickSetBtn(-60)}
             >
               <img src={I_minusWhite} alt="" />
             </button>
@@ -54,18 +58,15 @@ export default function TimePopup({ off }) {
           <span className="dot">:</span>
 
           <li>
-            <button
-              className="plusBtn setBtn"
-              onClick={() => onClickSetBtn(60)}
-            >
+            <button className="plusBtn setBtn" onClick={() => onClickSetBtn(1)}>
               <img src={I_plusWhite} alt="" />
             </button>
 
-            <p>{`${Math.floor((time % 3600) / 60)}`.padStart(2, "0")}</p>
+            <p>{`${duration % 60}`.padStart(2, "0")}</p>
 
             <button
               className="plusBtn setBtn"
-              onClick={() => onClickSetBtn(-60)}
+              onClick={() => onClickSetBtn(-1)}
             >
               <img src={I_minusWhite} alt="" />
             </button>
@@ -76,8 +77,8 @@ export default function TimePopup({ off }) {
           {D_timeBtnList.map((v, i) => (
             <li
               key={i}
-              className={`${time === v.value && "on"}`}
-              onClick={() => setTime(v.value)}
+              className={`${duration === v.value && "on"}`}
+              onClick={() => onClickOptBtn(v.value)}
             >
               {v.key}
             </li>
@@ -202,6 +203,7 @@ const PtimePopupBox = styled.section`
       background: rgba(0, 0, 0, 0.2);
       border: 1px solid transparent;
       border-radius: 8px;
+      cursor: pointer;
 
       &.on {
         color: #f7ab1f;

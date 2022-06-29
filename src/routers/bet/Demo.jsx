@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import DefaultHeader from "../../components/header/DefaultHeader";
-import { D_tokenList } from "../../data/D_bet";
+import { D_tokenCategoryList, D_tokenList } from "../../data/D_bet";
 import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
 import I_starYellowO from "../../img/icon/I_starYellowO.svg";
 import I_qnaWhite from "../../img/icon/I_qnaWhite.svg";
 import I_langWhite from "../../img/icon/I_langWhite.svg";
-import I_timeWhite from "../../img/icon/I_timeWhite.svg";
-import I_dollarWhite from "../../img/icon/I_dollarWhite.svg";
+import I_flagWhite from "../../img/icon/I_flagWhite.svg";
+import I_percentWhite from "../../img/icon/I_percentWhite.svg";
 import I_highArwGreen from "../../img/icon/I_highArwGreen.svg";
 import I_lowArwRed from "../../img/icon/I_lowArwRed.svg";
 import I_plusWhite from "../../img/icon/I_plusWhite.svg";
@@ -36,23 +36,32 @@ export default function Demo() {
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const token = localStorage.getItem("token");
-  const userid = localStorage.getItem("userid");
 
+  const [assetInfo, setAssetInfo] = useState();
   const [loading, setLoading] = useState(true);
   const [liveTradePopup, setLiveTradePopup] = useState(false);
   const [hotKeyPopup, setHotKeyPopup] = useState(true);
   const [tokenPopup, setTokenPopup] = useState(false);
+  const [duration, setDuration] = useState(1);
   const [timePopup, setTimePopup] = useState(false);
   const [detMode, setDetMode] = useState(false);
   const [insufficientPopup, setInsufficientPopup] = useState(false);
   const [myBalancePopup, setMyBalancePopup] = useState(false);
   const [addPopup, setAddPopup] = useState(false);
-  const [asset, setAsset] = useState({
-    name: "Ethereum",
-    dispSymbol: "ETHUSDT",
-  });
   const [amount, setAmount] = useState("");
   const [bookMark, setBookMark] = useState([]);
+
+  function getAssetList() {
+    axios
+      .get(`${API.GET_ASSETS}`, {
+        params: { group: D_tokenCategoryList[1].value },
+      })
+      .then(({ data }) => {
+        console.log(data.respdata);
+        setAssetInfo(data.respdata[0]);
+      })
+      .catch((err) => console.error(err));
+  }
 
   function turnLoader() {
     setTimeout(() => {
@@ -67,54 +76,41 @@ export default function Demo() {
   }
 
   function onClickPayBtn(type) {
+    let typeForPost;
+
     switch (type) {
       case "high":
-        axios
-          .post(
-            API.BET,
-            { betamount: amount, side: 2 },
-            { headers: { Authorization: `Bearer ${token}` } }
-          )
-          .then((res) => {
-            console.log(res);
-            setToast({ type: "hgih", amount });
-          })
-          .catch((err) => console.error(err));
-
-        // setToast({ type: "closed" });
+        typeForPost = 1;
         break;
 
       case "low":
-        axios
-          .post(
-            API.BET,
-            { betamount: amount, side: 1 },
-            { headers: { Authorization: `Bearer ${token}` } }
-          )
-          .then((res) => {
-            console.log(res);
-            setToast({ type: "low", amount });
-          })
-          .catch((err) => console.error(err));
-
-        // setInsufficientPopup(true);
+        typeForPost = 0;
         break;
 
       default:
         break;
     }
+
+    axios
+      .post(
+        `${API.BET}/DEMO/${assetInfo.id}/${amount}/${duration}/${typeForPost}`
+      )
+      .then((res) => {
+        console.log(res);
+        setToast({ type, amount });
+      })
+      .catch((err) => console.error(err));
+
+    // setToast({ type: "closed" });
+    // setInsufficientPopup(true);
   }
 
   function getBookMark() {
     axios
-      .get(API.BOOKMARK_LIST, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .get(API.BOOKMARKS_MY)
       .then(({ data }) => {
-        console.log(data);
-        setBookMark(data);
+        console.log(data.respdata);
+        setBookMark(data.respdata);
       })
       .catch((err) => console.error(err));
   }
@@ -126,14 +122,22 @@ export default function Demo() {
     hoverRef2.current.style.top = `${e.clientY}px`;
   }
 
-  useEffect(() => {
-
-    turnLoader();
+  useLayoutEffect(() => {
+    localStorage.setItem("balanceType", "Demo");
+    
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      localStorage.setItem("balanceType", "Live");
+    };
   }, []);
 
-  useLayoutEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
+  useEffect(() => {
+    getAssetList();
+
+    getBookMark();
+
+    turnLoader();
   }, []);
 
   if (isMobile)
@@ -150,7 +154,7 @@ export default function Demo() {
                 <article className="contArea">
                   <div className="chartBox">
                     <ReactTradingviewWidget
-                      symbol={asset.dispSymbol}
+                      symbol={assetInfo.dispSymbol}
                       theme={Themes.DARK}
                       locale="kr"
                       autosize
@@ -165,7 +169,7 @@ export default function Demo() {
                             className="tokenBtn"
                             onClick={() => setTokenPopup(true)}
                           >
-                            <p>{asset.name}</p>
+                            <p>{assetInfo.name}</p>
                             <img src={I_dnPolWhite} alt="" />
                           </button>
 
@@ -173,7 +177,7 @@ export default function Demo() {
                             <>
                               <TokenPopup
                                 off={setTokenPopup}
-                                setAsset={setAsset}
+                                setAssetInfo={setAssetInfo}
                                 getBookMark={getBookMark}
                               />
                               <PopupBg off={setTokenPopup} />
@@ -201,14 +205,22 @@ export default function Demo() {
                             className="contBtn"
                             onClick={() => setTimePopup(true)}
                           >
-                            <p>00:01:00</p>
+                            <p>
+                              {`${Math.floor(duration / 60)}`.padStart(2, "0")}:
+                              {`${duration % 60}`.padStart(2, "0")}
+                              :00
+                            </p>
 
-                            <img src={I_timeWhite} alt="" />
+                            <img src={I_flagWhite} alt="" />
                           </button>
 
                           {timePopup && (
                             <>
-                              <TimePopup off={setTimePopup} />
+                              <TimePopup
+                                off={setTimePopup}
+                                duration={duration}
+                                setDuration={setDuration}
+                              />
                               <PopupBg off={setTimePopup} />
                             </>
                           )}
@@ -226,12 +238,10 @@ export default function Demo() {
                             placeholder="0"
                           />
 
-                          <img src={I_dollarWhite} alt="" />
+                          <img src={I_percentWhite} alt="" />
                         </div>
                       </div>
                     </div>
-
-                    <p className="payout">Your payout : $3.40</p>
 
                     <div className="btnCont">
                       <span className="btnBox high">
@@ -321,7 +331,7 @@ export default function Demo() {
                       className="selectBtn"
                       onClick={() => setTokenPopup(true)}
                     >
-                      <p>{asset.name}</p>
+                      <p>{assetInfo.name}</p>
                       <img src={I_dnPolWhite} alt="" />
                     </button>
 
@@ -329,7 +339,7 @@ export default function Demo() {
                       <>
                         <TokenPopup
                           off={setTokenPopup}
-                          setAsset={setAsset}
+                          setAssetInfo={setAssetInfo}
                           getBookMark={getBookMark}
                         />
                         <PopupBg off={setTokenPopup} />
@@ -339,11 +349,11 @@ export default function Demo() {
 
                   <ul className="tokenList">
                     {bookMark.map((v, i) => (
-                      <li key={i} onClick={() => setAsset(v)}>
+                      <li key={i} onClick={() => setAssetInfo(v.asset)}>
                         <img src={I_starYellowO} alt="" />
                         <span className="textBox">
-                          <p className="key">{v.name}</p>
-                          <p className="value">{v.payout}%</p>
+                          <p className="key">{v.asset.name}</p>
+                          {/* <p className="value">{v.payout}%</p> */}
                         </span>
                       </li>
                     ))}
@@ -357,7 +367,7 @@ export default function Demo() {
                     <div className="chart">
                       <ReactTradingviewWidget
                         container_id={"technical-analysis-chart-demo"}
-                        symbol={asset.dispSymbol}
+                        symbol={assetInfo.dispSymbol}
                         theme={Themes.DARK}
                         locale="kr"
                         autosize
@@ -430,14 +440,21 @@ export default function Demo() {
                           className="contBtn"
                           onClick={() => setTimePopup(true)}
                         >
-                          <p>00:01:00</p>
+                          <p>
+                            {`${Math.floor(duration / 60)}`.padStart(2, "0")}:
+                            {`${duration % 60}`.padStart(2, "0")}:00
+                          </p>
 
-                          <img src={I_timeWhite} alt="" />
+                          <img src={I_flagWhite} alt="" />
                         </button>
 
                         {timePopup && (
                           <>
-                            <TimePopup off={setTimePopup} />
+                            <TimePopup
+                              off={setTimePopup}
+                              duration={duration}
+                              setDuration={setDuration}
+                            />
                             <PopupBg off={setTimePopup} />
                           </>
                         )}
@@ -469,51 +486,53 @@ export default function Demo() {
                           placeholder="0"
                         />
 
-                        <img src={I_dollarWhite} alt="" />
+                        <img src={I_percentWhite} alt="" />
                       </div>
                     </div>
 
-                    <p className="payout">Your payout : $3.40</p>
+                    <span className="btnBox" onMouseMove={onMouseOverBtn}>
+                      <button
+                        className="highBtn"
+                        disabled={!amount}
+                        onClick={() => onClickPayBtn("high")}
+                      >
+                        <span className="defaultBox">
+                          <img src={I_highArwGreen} alt="" />
+                          <strong>HIGH</strong>
+                        </span>
 
-                    <button
-                      className="highBtn"
-                      disabled={!amount}
-                      onClick={() => onClickPayBtn("high")}
-                    >
-                      <span className="defaultBox">
-                        <img src={I_highArwGreen} alt="" />
-                        <strong>HIGH</strong>
-                      </span>
+                        <span className="hoverBox">
+                          <strong className="percent">+80%</strong>
+                          <p className="amount">400536157.70</p>
 
-                      <span className="hoverBox">
-                        <strong className="percent">+80%</strong>
-                        <p className="amount">400536157.70</p>
+                          <p className="hoverPopup" ref={hoverRef1}>
+                            Dividend rate : +80% 400536157.70 USD
+                          </p>
+                        </span>
+                      </button>
+                    </span>
 
-                        <p className="hoverPopup" ref={hoverRef1}>
-                          Dividend rate : +80% 400536157.70 USD
-                        </p>
-                      </span>
-                    </button>
+                    <span className="btnBox" onMouseMove={onMouseOverBtn}>
+                      <button
+                        className="lowBtn"
+                        disabled={!amount}
+                        onClick={() => onClickPayBtn("low")}
+                      >
+                        <span className="defaultBox">
+                          <img src={I_lowArwRed} alt="" />
+                          <strong>LOW</strong>
+                        </span>
 
-                    <button
-                      className="lowBtn"
-                      disabled={!amount}
-                      onClick={() => onClickPayBtn("low")}
-                    >
-                      <span className="defaultBox">
-                        <img src={I_lowArwRed} alt="" />
-                        <strong>LOW</strong>
-                      </span>
+                        <span className="hoverBox">
+                          <strong className="percent">+80%</strong>
+                          <p className="amount">400536157.70</p>
 
-                      <span className="hoverBox">
-                        <strong className="percent">+80%</strong>
-                        <p className="amount">400536157.70</p>
-
-                        <p className="hoverPopup" ref={hoverRef2}>
-                          Dividend rate : +80% 400536157.70 USD
-                        </p>
-                      </span>
-                    </button>
+                          <p className="hoverPopup" ref={hoverRef2}>
+                            Dividend rate : +80% 400536157.70 USD
+                          </p>
+                        </span>
+                      </button>
+                    </span>
                   </div>
 
                   <DetBox mode={detMode} />
@@ -1042,82 +1061,76 @@ const PbetBox = styled.main`
           }
         }
 
-        .payout {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 22px;
-          font-size: 12px;
-          background: rgba(0, 0, 0, 0.4);
-          border-radius: 8px;
-        }
+        .btnBox {
+          width: 100%;
 
-        .highBtn,
-        .lowBtn {
-          height: 48px;
-          font-size: 16px;
-          border: 1.2px solid;
-          border-radius: 8px;
-          position: relative;
+          button {
+            width: 100%;
+            height: 48px;
+            font-size: 16px;
+            border: 1.2px solid;
+            border-radius: 8px;
+            position: relative;
 
-          .defaultBox {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-          }
-
-          .hoverBox {
-            display: none;
-
-            .hoverPopup {
-              padding: 10px;
-              font-size: 12px;
-              color: #fff;
-              white-space: nowrap;
-              background: rgba(0, 0, 0, 0.4);
-              border-radius: 4px;
-              backdrop-filter: blur(10px);
-              -webkit-backdrop-filter: blur(10px);
-              right: 140px;
-              position: absolute;
-            }
-          }
-
-          &:hover {
             .defaultBox {
-              display: none;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 20px;
             }
 
             .hoverBox {
-              display: block;
+              display: none;
 
-              .percent {
-              }
-
-              .amount {
+              .hoverPopup {
+                padding: 10px;
                 font-size: 12px;
+                color: #fff;
+                white-space: nowrap;
+                background: rgba(0, 0, 0, 0.4);
+                border-radius: 4px;
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                position: fixed;
+                transform: translate(-100%, 0);
               }
             }
-          }
-
-          &.highBtn {
-            color: #3fb68b;
-            border-color: #3fb68b;
 
             &:hover {
-              background: rgba(63, 182, 139, 0.2);
-              box-shadow: 0px 0px 10px rgba(63, 182, 139, 0.6);
+              .defaultBox {
+                display: none;
+              }
+
+              .hoverBox {
+                display: block;
+
+                .percent {
+                }
+
+                .amount {
+                  font-size: 12px;
+                }
+              }
             }
-          }
 
-          &.lowBtn {
-            color: #ff5353;
-            border-color: #ff5353;
+            &.highBtn {
+              color: #3fb68b;
+              border-color: #3fb68b;
 
-            &:hover {
-              background: rgba(255, 83, 83, 0.2);
-              box-shadow: 0px 0px 10px rgba(255, 83, 83, 0.6);
+              &:hover {
+                background: rgba(63, 182, 139, 0.2);
+                box-shadow: 0px 0px 10px rgba(63, 182, 139, 0.6);
+              }
+            }
+
+            &.lowBtn {
+              color: #ff5353;
+              border-color: #ff5353;
+
+              &:hover {
+                background: rgba(255, 83, 83, 0.2);
+                box-shadow: 0px 0px 10px rgba(255, 83, 83, 0.6);
+              }
             }
           }
         }

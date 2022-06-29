@@ -18,6 +18,7 @@ import moment from "moment";
 import renderCustomHeader from "../../util/DatePickerHeader";
 import { useSelector } from "react-redux";
 import DefaultHeader from "../../components/header/DefaultHeader";
+import { getExcelFile } from "../../util/Util";
 
 export default function TradingHistory() {
   const totalPage = 4;
@@ -36,6 +37,10 @@ export default function TradingHistory() {
       <p>{value}</p>
     </button>
   ));
+
+  function onClickExcelBtn() {
+    getExcelFile(D_trandingList, `Trading history ${category}`);
+  }
 
   function dateChange(dates) {
     const [start, end] = dates;
@@ -286,7 +291,7 @@ export default function TradingHistory() {
                 </button>
               </div>
 
-              <button className="exportBtn" onClick={() => {}}>
+              <button className="exportBtn" onClick={onClickExcelBtn}>
                 <img src={I_exportWhite} alt="" />
               </button>
             </div>

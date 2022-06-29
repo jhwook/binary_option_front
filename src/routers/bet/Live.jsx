@@ -17,7 +17,6 @@ import PopupBg from "../../components/common/PopupBg";
 import TokenPopup from "../../components/bet/TokenPopup";
 import { useDispatch, useSelector } from "react-redux";
 import TimePopup from "../../components/bet/TimePopup";
-import { toast } from "react-toastify";
 import { setToast } from "../../util/Util";
 import DetBox from "../../components/bet/detBox/DetBox";
 import InsufficientPopup from "../../components/bet/InsufficientPopup";
@@ -34,20 +33,18 @@ export default function Live() {
   const hoverRef2 = useRef();
   const dispatch = useDispatch();
   const isMobile = useSelector((state) => state.common.isMobile);
-  const token = localStorage.getItem("token");
-  const userid = localStorage.getItem("userid");
 
   const [assetInfo, setAssetInfo] = useState();
   const [loading, setLoading] = useState(true);
   const [liveTradePopup, setLiveTradePopup] = useState(false);
   const [hotKeyPopup, setHotKeyPopup] = useState(true);
   const [tokenPopup, setTokenPopup] = useState(false);
+  const [duration, setDuration] = useState(1);
   const [timePopup, setTimePopup] = useState(false);
   const [detMode, setDetMode] = useState(false);
   const [insufficientPopup, setInsufficientPopup] = useState(false);
   const [myBalancePopup, setMyBalancePopup] = useState(false);
   const [addPopup, setAddPopup] = useState(false);
-  const [chartSymbol, setChartSymbol] = useState("");
   const [amount, setAmount] = useState("");
   const [bookMark, setBookMark] = useState([]);
 
@@ -76,46 +73,41 @@ export default function Live() {
   }
 
   function onClickPayBtn(type) {
+    let typeForPost;
+
     switch (type) {
       case "high":
-        axios
-          .post(`${API.BET}/`, { betamount: amount, side: 2, userid })
-          .then((res) => {
-            console.log(res);
-            setToast({ type: "high", amount });
-          })
-          .catch((err) => console.error(err));
-
-        // setToast({ type: "closed" });
+        typeForPost = 1;
         break;
 
       case "low":
-        axios
-          .post(API.BET, { betamount: amount, side: 1, userid })
-          .then((res) => {
-            console.log(res);
-            setToast({ type: "low", amount });
-          })
-          .catch((err) => console.error(err));
-
-        // setInsufficientPopup(true);
+        typeForPost = 0;
         break;
 
       default:
         break;
     }
+
+    axios
+      .post(
+        `${API.BET}/LIVE/${assetInfo.id}/${amount}/${duration}/${typeForPost}`
+      )
+      .then((res) => {
+        console.log(res);
+        setToast({ type, amount });
+      })
+      .catch((err) => console.error(err));
+
+    // setToast({ type: "closed" });
+    // setInsufficientPopup(true);
   }
 
   function getBookMark() {
     axios
-      .get(API.BOOKMARK_LIST, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .get(API.BOOKMARKS_MY)
       .then(({ data }) => {
-        console.log(data);
-        setBookMark(data);
+        console.log(data.respdata);
+        setBookMark(data.respdata);
       })
       .catch((err) => console.error(err));
   }
@@ -129,6 +121,8 @@ export default function Live() {
 
   useLayoutEffect(() => {
     setLiveTradePopup(true);
+
+    localStorage.setItem("balanceType", "Live");
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
@@ -171,7 +165,7 @@ export default function Live() {
                             className="tokenBtn"
                             onClick={() => setTokenPopup(true)}
                           >
-                            <p>Ethereum</p>
+                            <p>{assetInfo.name}</p>
                             <img src={I_dnPolWhite} alt="" />
                           </button>
 
@@ -207,14 +201,22 @@ export default function Live() {
                             className="contBtn"
                             onClick={() => setTimePopup(true)}
                           >
-                            <p>00:01:00</p>
+                            <p>
+                              {`${Math.floor(duration / 60)}`.padStart(2, "0")}:
+                              {`${duration % 60}`.padStart(2, "0")}
+                              :00
+                            </p>
 
                             <img src={I_flagWhite} alt="" />
                           </button>
 
                           {timePopup && (
                             <>
-                              <TimePopup off={setTimePopup} />
+                              <TimePopup
+                                off={setTimePopup}
+                                duration={duration}
+                                setDuration={setDuration}
+                              />
                               <PopupBg off={setTimePopup} />
                             </>
                           )}
@@ -325,7 +327,7 @@ export default function Live() {
                       className="selectBtn"
                       onClick={() => setTokenPopup(true)}
                     >
-                      <p>Ethereum</p>
+                      <p>{assetInfo.name}</p>
                       <img src={I_dnPolWhite} alt="" />
                     </button>
 
@@ -343,14 +345,11 @@ export default function Live() {
 
                   <ul className="tokenList">
                     {bookMark.map((v, i) => (
-                      <li
-                        key={i}
-                        onClick={() => setChartSymbol(v.displaysymbol)}
-                      >
+                      <li key={i} onClick={() => setAssetInfo(v.asset)}>
                         <img src={I_starYellowO} alt="" />
                         <span className="textBox">
-                          <p className="key">{v.name}</p>
-                          <p className="value">{v.payout}%</p>
+                          <p className="key">{v.asset.name}</p>
+                          {/* <p className="value">{v.payout}%</p> */}
                         </span>
                       </li>
                     ))}
@@ -437,14 +436,21 @@ export default function Live() {
                           className="contBtn"
                           onClick={() => setTimePopup(true)}
                         >
-                          <p>00:01:00</p>
+                          <p>
+                            {`${Math.floor(duration / 60)}`.padStart(2, "0")}:
+                            {`${duration % 60}`.padStart(2, "0")}:00
+                          </p>
 
                           <img src={I_flagWhite} alt="" />
                         </button>
 
                         {timePopup && (
                           <>
-                            <TimePopup off={setTimePopup} />
+                            <TimePopup
+                              off={setTimePopup}
+                              duration={duration}
+                              setDuration={setDuration}
+                            />
                             <PopupBg off={setTimePopup} />
                           </>
                         )}

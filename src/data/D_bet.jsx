@@ -1614,12 +1614,12 @@ export const D_currencyList = [
 ];
 
 export const D_timeBtnList = [
-  { key: "1m", value: 60 },
-  { key: "2m", value: 120 },
-  { key: "3m", value: 180 },
-  { key: "5m", value: 300 },
-  { key: "10m", value: 600 },
-  { key: "30m", value: 1800 },
+  { key: "1m", value: 1 },
+  { key: "2m", value: 2 },
+  { key: "3m", value: 3 },
+  { key: "5m", value: 5 },
+  { key: "10m", value: 10 },
+  { key: "30m", value: 30 },
 ];
 
 export const D_detCategoryList = ["Opened", "Closed"];

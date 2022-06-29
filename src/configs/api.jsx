@@ -17,20 +17,20 @@ export const API = {
   USER_CERTIFICATION_EMAIL: URL + "/users/certification/email",
   USER_QUERY: URL + "/users/query", //tablename/offset/limit
 
-  BET: URL + "/bet/join", //:assetId/:amount/:dur/:type
+  BET: URL + "/bets/join", // /:type/:assetId/:amount/:dur/:side
   BET_ROUND: URL + "/bet/rounds",
   BET_LOG: URL + "/bet/log", // userid
 
   USER_BALANCE: URL + "/users/balance", //:type
   WITHDRAW: URL + "/transactions/withdraw",
 
-  BOOKMARK: URL + "/bookmarks", //:type/:targetId
-  BOOKMARK_LIST: URL + "/users/bookmark/list",
+  BOOKMARKS: URL + "/bookmarks", //:type/:targetId
+  BOOKMARKS_MY: URL + "/bookmarks/my",
 
   TRANS_DEMO_FUND: URL + "/transactions/demo/fund", //:amount
 
   TRANS_WITHDRAW: URL + "/transactions/live/WITHDRAW", //:amount
   TRANS_DEPOSIT: URL + "/transactions/live/DEPOSIT", //:amount
 
-  LISTEN_TRANSACTION: URL + "/transactions/listen"
+  LISTEN_TRANSACTION: URL + "/transactions/listen",
 };

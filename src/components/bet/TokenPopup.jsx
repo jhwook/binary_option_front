@@ -24,18 +24,16 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
     off();
   }
 
-  function onClickFavBtn(e, i, v) {
+  function onClickFavBtn(e, v) {
     e.stopPropagation();
 
-    console.log(v);
-
     axios
-      .post(`${API.BOOKMARK}/assets/${v.id}`)
+      .post(`${API.BOOKMARKS}/assets/${v.id}`)
       .then((res) => {
-        console.log(res);
-
         let data = listData;
-        data[i].status = !data[i].status;
+        let targetIndex = listData.findIndex((dataV) => dataV.id === v.id);
+
+        data[targetIndex].bookmark = !data[targetIndex].bookmark;
 
         setListData([...data]);
         getBookMark();
@@ -100,18 +98,33 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
         <article className="listArea">
           <ul className="tokenList">
             {listData
-              .filter((e) => !e.fav)
+              .filter((v) => v.bookmark)
               .map((v, i) => (
                 <li key={i} onClick={() => onClickStock(v)}>
                   <button
                     className="favBtn"
-                    onClick={(e) => onClickFavBtn(e, i, v)}
+                    onClick={(e) => onClickFavBtn(e, v)}
                   >
-                    {v.status ? (
-                      <img src={I_starYellowO} alt="" />
-                    ) : (
-                      <img src={I_starYellow} alt="" />
-                    )}
+                    <img src={I_starYellowO} alt="" />
+                  </button>
+
+                  <img className="tknImg" src={v.imgurl} alt="" />
+
+                  <p className="name">{v.name}</p>
+
+                  {/* <p className="percent">{`${v.payout.toFixed(2)}%`}</p> */}
+                </li>
+              ))}
+
+            {listData
+              .filter((v) => !v.bookmark)
+              .map((v, i) => (
+                <li key={i} onClick={() => onClickStock(v)}>
+                  <button
+                    className="favBtn"
+                    onClick={(e) => onClickFavBtn(e, v)}
+                  >
+                    <img src={I_starYellow} alt="" />
                   </button>
 
                   <img className="tknImg" src={v.imgurl} alt="" />
@@ -179,13 +192,9 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
                 <li key={i} onClick={() => onClickStock(v)}>
                   <button
                     className="favBtn"
-                    onClick={(e) => onClickFavBtn(e, i, v)}
+                    onClick={(e) => onClickFavBtn(e, v)}
                   >
-                    {v.status ? (
-                      <img src={I_starYellowO} alt="" />
-                    ) : (
-                      <img src={I_starYellow} alt="" />
-                    )}
+                    <img src={I_starYellowO} alt="" />
                   </button>
 
                   <img className="tknImg" src={v.imgurl} alt="" />
@@ -202,13 +211,9 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
                 <li key={i} onClick={() => onClickStock(v)}>
                   <button
                     className="favBtn"
-                    onClick={(e) => onClickFavBtn(e, i, v)}
+                    onClick={(e) => onClickFavBtn(e, v)}
                   >
-                    {v.status ? (
-                      <img src={I_starYellowO} alt="" />
-                    ) : (
-                      <img src={I_starYellow} alt="" />
-                    )}
+                    <img src={I_starYellow} alt="" />
                   </button>
 
                   <img className="tknImg" src={v.imgurl} alt="" />

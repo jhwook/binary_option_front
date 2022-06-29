@@ -10,7 +10,7 @@ import { setToast } from "../../util/Util";
 import SelectPhoneLocPopup from "../../components/auth/SelectPhoneLocPopup";
 import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
 
-export default function MyProfile({userData}) {
+export default function MyProfile({ userData }) {
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [profData, setProfData] = useState("");
@@ -35,12 +35,8 @@ export default function MyProfile({userData}) {
 
   // function getProfData() {
   //   axios
-  //     .get(`${API.AUTH}`, {
-  //       headers: {
-  //         //Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //         Authorization: `${localStorage.getItem("token")}`,
-  //       },
-  //     })
+  //     .get(`${API.AUTH}`
+  //     )
   //     .then(async ({ data }) => {
   //       console.log(data);
   //       userData.id && setUid(userData.id);
@@ -82,18 +78,12 @@ export default function MyProfile({userData}) {
 
     console.log(patchData);
 
-    axios
-      .patch(`${API.USER_PROFILE}`, patchData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
-      .then(({ data }) => {
-        console.log(data);
+    axios.patch(`${API.USER_PROFILE}`, patchData).then(({ data }) => {
+      console.log(data);
 
-        if (data.message === "successfully updated") window.location.reload();
-        else setToast({ type: "alarm", cont: data.message });
-      });
+      if (data.message === "successfully updated") window.location.reload();
+      else setToast({ type: "alarm", cont: data.message });
+    });
 
     setToast({ type: "alarm", cont: "Your changes have been saved." });
   }
@@ -130,15 +120,15 @@ export default function MyProfile({userData}) {
     if (phone[0] === "0") setPhone(phone.slice(1));
   }
 
-  useEffect(()=>{
-    console.log(userData)
+  useEffect(() => {
+    console.log(userData);
     userData.id && setUid(userData.id);
-        userData.email && setEmail(userData.email);
-        userData.phone && setPhone(userData.phone);
-        userData.firstname && setFirstName(userData.firstname);
-        userData.lastname && setLastName(userData.lastname);
-        userData.countryNum && setCountryNum(userData.countryNum);
-  },[userData])
+    userData.email && setEmail(userData.email);
+    userData.phone && setPhone(userData.phone);
+    userData.firstname && setFirstName(userData.firstname);
+    userData.lastname && setLastName(userData.lastname);
+    userData.countryNum && setCountryNum(userData.countryNum);
+  }, [userData]);
 
   if (isMobile)
     return (

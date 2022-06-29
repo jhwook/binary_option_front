@@ -24,9 +24,6 @@ export default function Referral() {
     axios
       .patch(API.EDIT_REF, {
         refcode: refCode,
-        headers: {
-          Authorization: `${token}`,
-        },
       })
       .then(({ data }) => {
         console.log(data);

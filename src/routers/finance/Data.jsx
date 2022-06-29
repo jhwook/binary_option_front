@@ -10,6 +10,7 @@ import { D_dataList, D_dataListHeader } from "../../data/D_finance";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import DefaultHeader from "../../components/header/DefaultHeader";
+import { getExcelFile } from "../../util/Util";
 
 export default function Data() {
   const totalPage = 4;
@@ -26,6 +27,10 @@ export default function Data() {
       <p>{value}</p>
     </button>
   ));
+
+  function onClickExcelBtn() {
+    getExcelFile(D_dataList, "Finance");
+  }
 
   function dateChange(dates) {
     const [start, end] = dates;
@@ -252,7 +257,7 @@ export default function Data() {
                   </button>
                 </div>
 
-                <button className="exportBtn" onClick={() => {}}>
+                <button className="exportBtn" onClick={onClickExcelBtn}>
                   <img src={I_exportWhite} alt="" />
                 </button>
               </div>

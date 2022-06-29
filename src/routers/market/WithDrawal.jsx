@@ -46,21 +46,19 @@ export default function WithDrawal() {
         .patch(`${API.TRANS_WITHDRAW}/${amount}`, {
           rxaddr: address,
           tokentype: token.text,
-          headers: {
-            Authorization: `${jtoken}`,
-          },
         })
         .then(async ({ data }) => {
           console.log(data);
           console.log(data.payload);
           console.log(data.payload.resp);
           if (data.payload.resp.status == "OK") {
-           
             if (data.payload.resp.message) {
               //Transaction Success
               setToast({ type: "alarm", cont: "Submission Successful" });
               setProcess(true);
-              setTimeout(()=>{window.location.reload(false);}, 3000)
+              setTimeout(() => {
+                window.location.reload(false);
+              }, 3000);
             }
           }
         });
@@ -79,7 +77,9 @@ export default function WithDrawal() {
               <article className="onProcess">
                 <div className="titleBox">
                   <strong className="key">You will get</strong>
-                  <strong className="value">{amount} {token.text}</strong>
+                  <strong className="value">
+                    {amount} {token.text}
+                  </strong>
                 </div>
 
                 <ul className="infoList">
@@ -317,7 +317,9 @@ export default function WithDrawal() {
             <div className={`onProcess value`}>
               <div className="titleBox">
                 <strong className="key">You will get</strong>
-                <strong className="value">{amount} {token.text}</strong>
+                <strong className="value">
+                  {amount} {token.text}
+                </strong>
               </div>
 
               <ul className="infoList">
@@ -333,7 +335,9 @@ export default function WithDrawal() {
 
                 <li>
                   <p className="key">Withdrawal Amount</p>
-                  <strong className="value">{amount} {token.text}</strong>
+                  <strong className="value">
+                    {amount} {token.text}
+                  </strong>
                 </li>
 
                 <li>

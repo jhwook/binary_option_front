@@ -70,9 +70,6 @@ export default function Deposit({ userData }) {
             tokentype: token.text,
             txhash: txHash,
             senderaddr: address[0],
-            headers: {
-              Authorization: `${localStorage.getItem("token")}`,
-            },
           })
           .then((resp) => {
             if (resp) {
@@ -98,10 +95,6 @@ export default function Deposit({ userData }) {
       .patch(`${API.TRANS_DEPOSIT}/${amount}`, {
         tokentype: token.text,
         ...branchData,
-
-        headers: {
-          Authorization: `${localStorage.getItem("token")}`,
-        },
       })
       .then((_) => {
         //Posted

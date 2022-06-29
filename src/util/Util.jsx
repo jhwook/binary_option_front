@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import I_highArwGreen from "../img/icon/I_highArwGreen.svg";
 import I_lowArwRed from "../img/icon/I_lowArwRed.svg";
@@ -8,6 +7,7 @@ import T_silver from "../img/tier/T_silver.svg";
 import T_gold from "../img/tier/T_gold.svg";
 import T_dia from "../img/tier/T_dia.svg";
 import axios from "axios";
+import { utils, writeFile } from "xlsx";
 
 export function strDot(str, startNum = 0, endNum = 0) {
   if (!str?.length) return;
@@ -260,4 +260,14 @@ export function AxiosInterCept() {
 
     return config;
   });
+}
+
+export function getExcelFile(dataList, docName) {
+  const ws = utils.json_to_sheet(dataList);
+
+  const wb = utils.book_new();
+
+  utils.book_append_sheet(wb, ws, "Sheet1");
+
+  writeFile(wb, docName + ".xlsx");
 }

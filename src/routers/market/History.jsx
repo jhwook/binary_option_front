@@ -18,9 +18,14 @@ import { useSelector } from "react-redux";
 import DefaultHeader from "../../components/header/DefaultHeader";
 import axios from "axios";
 import { API } from "../../configs/api";
+import { getExcelFile } from "../../util/Util";
 
 export default function History() {
-  const totalPage = 4;
+  const statusSTR = {
+    0: "Pending",
+    1: "Confirmed",
+    2: "Rejected",
+  };
   registerLocale("ko", ko);
 
   const isMobile = useSelector((state) => state.common.isMobile);
@@ -32,17 +37,38 @@ export default function History() {
   const [tblData, setTblData] = useState([]);
   const [total, setTotal] = useState(0);
 
-  const statusSTR = {
-    0: "Pending",
-    1: "Confirmed",
-    2: "Rejected",
-  };
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
     <button className="dateBtn" onClick={onClick} ref={ref}>
       <img src={I_calender} alt="" />
       <p>{value}</p>
     </button>
   ));
+
+  function getData() {
+    axios
+      .get(`${API.USER_QUERY}/transactions/${(page - 1) * 10}/10`, {
+        params: {
+          key: "typestr",
+          val: category == 0 ? "DEPOSIT" : "WITHDRAW",
+          startDate,
+          endDate,
+        },
+      })
+      .then(({ data }) => {
+        let { respdata } = data;
+        console.log(respdata);
+        setTblData(respdata.rows);
+        setTotal(respdata.count);
+      });
+  }
+
+  function onClickExcelBtn() {
+    let filename;
+    if (category === 0) filename = "DEPOSIT";
+    else filename = "WITHDRAW";
+
+    getExcelFile(tblData, filename);
+  }
 
   function dateChange(dates) {
     const [start, end] = dates;
@@ -56,28 +82,11 @@ export default function History() {
   }
 
   function onClickNextPageBtn() {
-    if (page < totalPage) setPage(page + 1);
+    setPage(page + 1);
   }
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    axios
-      .get(`${API.USER_QUERY}/transactions/0/100`, {
-        params: {
-          key: "typestr",
-          val: category == 0 ? "DEPOSIT" : "WITHDRAW",
-        },
-        headers: {
-          Authorization: `${token}`,
-        },
-      })
-      .then(({ data }) => {
-        let { respdata } = data;
-        console.log(respdata);
-        setTblData(respdata.rows);
-        setTotal(respdata.count);
-      });
+    getData();
   }, [category]);
 
   if (isMobile)
@@ -116,7 +125,7 @@ export default function History() {
                     />
                   </span>
 
-                  <button className="applyBtn" onClick={() => {}}>
+                  <button className="applyBtn" onClick={getData}>
                     Apply
                   </button>
                 </div>
@@ -124,7 +133,7 @@ export default function History() {
 
               <div className="listBox">
                 <ul className="list">
-                  {D_historyList.map((v, i) => (
+                  {tblData.map((v, i) => (
                     <li key={i}>
                       <div>
                         <p className="key">{D_historyListHeader[0]}</p>
@@ -137,7 +146,7 @@ export default function History() {
                         <p className="key">{D_historyListHeader[1]}</p>
                         <div className="value">
                           <p>
-                            {moment(v.openTime).format("YYYY-MM-DD HH:mm:ss")}
+                            {moment(v.createdat).format("YYYY-MM-DD HH:mm:ss")}
                           </p>
                         </div>
                       </div>
@@ -145,28 +154,31 @@ export default function History() {
                       <div>
                         <p className="key">{D_historyListHeader[2]}</p>
                         <div className="value">
-                          <p>{`${v.amount.toLocaleString("eu", "US")} USDT`}</p>
+                          <p>{`${
+                            v?.amount?.toLocaleString("eu", "US") ||
+                            v?.localeAmount?.toLocaleString("cn", "CN")
+                          } ${v.localeUnit || v.unit}`}</p>
                         </div>
                       </div>
 
                       <div>
                         <p className="key">{D_historyListHeader[3]}</p>
                         <div className="value">
-                          <p>{v.method}</p>
+                          <p>{v.type == 2 ? "Bank Transfer" : "Blockchain"}</p>
                         </div>
                       </div>
 
                       <div>
                         <p className="key">{D_historyListHeader[4]}</p>
                         <div className="value">
-                          <p>{v.type}</p>
+                          <p>{v.typestr}</p>
                         </div>
                       </div>
 
                       <div>
                         <p className="key">{D_historyListHeader[5]}</p>
                         <div className="value">
-                          <p>{v.status}</p>
+                          <p>{statusSTR[v.status]}</p>
                         </div>
                       </div>
                     </li>
@@ -210,12 +222,12 @@ export default function History() {
                   />
                 </span>
 
-                <button className="applyBtn" onClick={() => {}}>
+                <button className="applyBtn" onClick={getData}>
                   Apply
                 </button>
               </div>
 
-              <button className="exportBtn" onClick={() => {}}>
+              <button className="exportBtn" onClick={onClickExcelBtn}>
                 <img src={I_exportWhite} alt="" />
               </button>
             </div>
@@ -232,14 +244,17 @@ export default function History() {
               <ul className="list">
                 {tblData.map((v, i) => (
                   <li key={i}>
-                    <span>{v.uid}</span>
+                    <span>{v.id}</span>
 
                     <span>
                       <p>{moment(v.createdat).format("YYYY-MM-DD HH:mm:ss")}</p>
                     </span>
 
                     <span>
-                       <p>{`${v?.amount?.toLocaleString("eu", "US") || v?.localeAmount?.toLocaleString("cn", "CN")} ${v.localeUnit || v.unit}`}</p>
+                      <p>{`${
+                        v?.amount?.toLocaleString("eu", "US") ||
+                        v?.localeAmount?.toLocaleString("cn", "CN")
+                      } ${v.localeUnit || v.unit}`}</p>
                     </span>
 
                     <span>
@@ -268,7 +283,7 @@ export default function History() {
               </button>
 
               <ul className="pageList">
-                {new Array(totalPage).fill("").map((v, i) => (
+                {new Array(Math.ceil(total / 10)).fill("").map((v, i) => (
                   <li
                     key={i}
                     className={`${i + 1 === page && "on"}`}
@@ -282,7 +297,7 @@ export default function History() {
 
               <button
                 className="arwBtn"
-                disabled={page >= totalPage}
+                disabled={page >= Math.ceil(total / 10)}
                 onClick={onClickNextPageBtn}
               >
                 <img src={I_rtArwWhite} alt="" />
@@ -559,13 +574,13 @@ const PhistoryBox = styled.main`
               /* &:nth-of-type(6) {
                 color: #ff5353;
               } */
-              &.Pending{
-                color: 	#FFBF00;
+              &.Pending {
+                color: #ffbf00;
               }
-              &.Confirmed{
+              &.Confirmed {
                 color: #32a869;
               }
-              &.Rejected{
+              &.Rejected {
                 color: #ff5353;
               }
             }
