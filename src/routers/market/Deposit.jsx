@@ -120,7 +120,7 @@ export default function Deposit({ userData }) {
     } else {
       if (!isMobile) directPayment();
       else {
-        axios.post(`${API.LISTEN_TRANSACTION}/USDT`)
+        axios.post(`${API.LISTEN_TRANSACTION}/${token.text}`)
         .then(({data})=>{
           console.log(data);
           window.open(
