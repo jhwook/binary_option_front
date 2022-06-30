@@ -335,7 +335,9 @@ const MtokenPopupBox = styled.section`
         }
 
         .favBtn {
-          width: 3.88vw;
+          img {
+            width: 3.88vw;
+          }
         }
 
         .tknImg {
@@ -488,7 +490,9 @@ const PtokenPopupBox = styled.section`
         }
 
         .favBtn {
-          width: 14px;
+          img {
+            width: 14px;
+          }
         }
 
         .tknImg {

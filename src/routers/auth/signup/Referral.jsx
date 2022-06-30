@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { D_joinData, D_loginCategoryList } from "../../../data/D_auth";
-import Email from "../common/Email";
-import Phone from "../common/Phone";
+import Email from "../../../components/auth/Email";
+import Phone from "../../../components/auth/Phone";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import { API } from "../../../configs/api";
@@ -19,8 +19,6 @@ export default function Referral() {
   const [alarm, setAlarm] = useState("");
 
   function onClickLoginBtn() {
-    console.log("asdf");
-
     axios
       .patch(API.EDIT_REF, {
         refcode: refCode,
@@ -155,9 +153,14 @@ const MreferralBox = styled.main`
       justify-content: center;
       gap: 4.44vw;
 
+      img {
+        width: 16.66vw;
+      }
+
       .titleBox {
         display: flex;
         flex-direction: column;
+        justify-content: flex-end;
         gap: 1.11vw;
         margin: 0 0 3.33vw;
 
@@ -177,6 +180,7 @@ const MreferralBox = styled.main`
       gap: 5vw;
 
       input {
+        width: 100%;
         height: 12.22vw;
         padding: 0 5.55vw;
         font-size: 3.88vw;
@@ -217,13 +221,11 @@ const MreferralBox = styled.main`
   }
 
   .cpRight {
+    margin: 8.33vw 0;
     font-size: 3.33vw;
+    text-align: center;
     white-space: nowrap;
     color: #ddd;
-    bottom: 30px;
-    left: 50%;
-    position: fixed;
-    transform: translate(-50%);
   }
 `;
 

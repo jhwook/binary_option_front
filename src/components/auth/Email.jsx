@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import I_xWhite from "../../../img/icon/I_xWhite.svg";
+import I_xWhite from "../../img/icon/I_xWhite.svg";
 
 export default function Email({ userData, setUserData }) {
   const isMobile = useSelector((state) => state.common.isMobile);

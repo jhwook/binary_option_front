@@ -67,9 +67,11 @@ export default function ReqeustPopup({ off }) {
 }
 
 const MrequestPopupBox = styled.section`
+  max-height: 60vh;
+  overflow-y: scroll;
   color: #fff;
   background: rgba(0, 0, 0, 0.4);
-  border-radius: 20px 20px 0px 0px;
+  border-radius: 5.55vw 5.55vw 0px 0px;
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
   right: 0;

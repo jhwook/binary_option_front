@@ -54,15 +54,12 @@ const MselLangPopupBox = styled.ul`
   -webkit-backdrop-filter: blur(40px);
   box-shadow: inset 0px 3px 3px rgba(255, 255, 255, 0.4),
     0px 10px 40px rgba(0, 0, 0, 0.2);
-  right: 11.66vw;
-  bottom: 0;
-  position: absolute;
-  z-index: 6;
+  right: 17.77vw;
+  bottom: 5.55vw;
+  position: fixed;
+  z-index: 7;
 
   &.white {
-    right: 17.77vw;
-    bottom: 5.55vw;
-
     li {
       color: #888;
       cursor: pointer;

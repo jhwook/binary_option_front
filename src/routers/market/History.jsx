@@ -44,15 +44,22 @@ export default function History() {
     </button>
   ));
 
-  function getData() {
+  function getData(arg) {
+    let params = {
+      key: "typestr",
+      val: category == 0 ? "DEPOSIT" : "WITHDRAW",
+    };
+
+    console.log(arg?.filter);
+
+    if (arg?.filter) {
+      params.startDate = startDate;
+      params.endDate = endDate;
+    }
+
     axios
       .get(`${API.USER_QUERY}/transactions/${(page - 1) * 10}/10`, {
-        params: {
-          key: "typestr",
-          val: category == 0 ? "DEPOSIT" : "WITHDRAW",
-          startDate,
-          endDate,
-        },
+        params,
       })
       .then(({ data }) => {
         let { respdata } = data;
@@ -125,7 +132,10 @@ export default function History() {
                     />
                   </span>
 
-                  <button className="applyBtn" onClick={getData}>
+                  <button
+                    className="applyBtn"
+                    onClick={() => getData({ filter: true })}
+                  >
                     Apply
                   </button>
                 </div>
@@ -133,56 +143,66 @@ export default function History() {
 
               <div className="listBox">
                 <ul className="list">
-                  {tblData.map((v, i) => (
-                    <li key={i}>
-                      <div>
-                        <p className="key">{D_historyListHeader[0]}</p>
-                        <div className="value">
-                          <p>{v.id}</p>
+                  {tblData[0] ? (
+                    tblData.map((v, i) => (
+                      <li key={i}>
+                        <div>
+                          <p className="key">{D_historyListHeader[0]}</p>
+                          <div className="value">
+                            <p>{v.id}</p>
+                          </div>
                         </div>
-                      </div>
 
-                      <div>
-                        <p className="key">{D_historyListHeader[1]}</p>
-                        <div className="value">
-                          <p>
-                            {moment(v.createdat).format("YYYY-MM-DD HH:mm:ss")}
-                          </p>
+                        <div>
+                          <p className="key">{D_historyListHeader[1]}</p>
+                          <div className="value">
+                            <p>
+                              {moment(v.createdat).format(
+                                "YYYY-MM-DD HH:mm:ss"
+                              )}
+                            </p>
+                          </div>
                         </div>
-                      </div>
 
-                      <div>
-                        <p className="key">{D_historyListHeader[2]}</p>
-                        <div className="value">
-                          <p>{`${
-                            v?.amount?.toLocaleString("eu", "US") ||
-                            v?.localeAmount?.toLocaleString("cn", "CN")
-                          } ${v.localeUnit || v.unit}`}</p>
+                        <div>
+                          <p className="key">{D_historyListHeader[2]}</p>
+                          <div className="value">
+                            <p>{`${
+                              v?.amount?.toLocaleString("eu", "US") ||
+                              v?.localeAmount?.toLocaleString("cn", "CN")
+                            } ${v.localeUnit || v.unit}`}</p>
+                          </div>
                         </div>
-                      </div>
 
-                      <div>
-                        <p className="key">{D_historyListHeader[3]}</p>
-                        <div className="value">
-                          <p>{v.type == 2 ? "Bank Transfer" : "Blockchain"}</p>
+                        <div>
+                          <p className="key">{D_historyListHeader[3]}</p>
+                          <div className="value">
+                            <p>
+                              {v.type == 2 ? "Bank Transfer" : "Blockchain"}
+                            </p>
+                          </div>
                         </div>
-                      </div>
 
-                      <div>
-                        <p className="key">{D_historyListHeader[4]}</p>
-                        <div className="value">
-                          <p>{v.typestr}</p>
+                        <div>
+                          <p className="key">{D_historyListHeader[4]}</p>
+                          <div className="value">
+                            <p>{v.typestr}</p>
+                          </div>
                         </div>
-                      </div>
 
-                      <div>
-                        <p className="key">{D_historyListHeader[5]}</p>
-                        <div className="value">
-                          <p>{statusSTR[v.status]}</p>
+                        <div>
+                          <p className="key">{D_historyListHeader[5]}</p>
+                          <div className="value">
+                            <p>{statusSTR[v.status]}</p>
+                          </div>
                         </div>
-                      </div>
-                    </li>
-                  ))}
+                      </li>
+                    ))
+                  ) : (
+                    <p className="notFound">
+                      Nothing found or not yet calculated
+                    </p>
+                  )}
                 </ul>
               </div>
             </article>
@@ -222,7 +242,10 @@ export default function History() {
                   />
                 </span>
 
-                <button className="applyBtn" onClick={getData}>
+                <button
+                  className="applyBtn"
+                  onClick={() => getData({ filter: true })}
+                >
                   Apply
                 </button>
               </div>
@@ -310,6 +333,8 @@ export default function History() {
 }
 
 const MhistoryBox = styled.main`
+  height: 100%;
+
   .innerBox {
     display: flex;
     flex-direction: column;
@@ -373,6 +398,7 @@ const MhistoryBox = styled.main`
                 display: flex;
                 align-items: center;
                 gap: 3.33vw;
+                font-size: 3.88vw;
 
                 img {
                   width: 4.44vw;
@@ -405,33 +431,42 @@ const MhistoryBox = styled.main`
       .listBox {
         padding: 0 5.55vw;
 
-        li {
-          display: flex;
-          flex-direction: column;
-          gap: 1.11vw;
-          padding: 6.66vw 0;
-
-          &:first-of-type {
-            padding: 0 0 6.66vw;
-          }
-
-          &:last-of-type {
-            padding: 6.66vw 0 0;
-          }
-
-          &:nth-of-type(n + 2) {
-            border-top: 1px solid rgba(255, 255, 255, 0.14);
-          }
-
-          div {
+        .list {
+          li {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 3.88vw;
+            flex-direction: column;
+            gap: 1.11vw;
+            padding: 6.66vw 0;
 
-            .key {
-              color: rgba(255, 255, 255, 0.6);
+            &:first-of-type {
+              padding: 0 0 6.66vw;
             }
+
+            &:last-of-type {
+              padding: 6.66vw 0 0;
+            }
+
+            &:nth-of-type(n + 2) {
+              border-top: 1px solid rgba(255, 255, 255, 0.14);
+            }
+
+            div {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              font-size: 3.88vw;
+
+              .key {
+                color: rgba(255, 255, 255, 0.6);
+              }
+            }
+          }
+
+          .notFound {
+            margin: 0 0 9.44vw;
+            font-size: 3.88vw;
+            text-align: center;
+            opacity: 0.4;
           }
         }
       }

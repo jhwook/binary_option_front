@@ -49,7 +49,6 @@ export default function DefaultHeader({ white, border, title }) {
     const token = localStorage.getItem("token");
     if (!token) return;
 
-
     await axios
       .get(`${API.USER_BALANCE}`)
       .then(async ({ data }) => {
@@ -58,15 +57,22 @@ export default function DefaultHeader({ white, border, title }) {
       })
       .catch((err) => {
         console.error(err);
-        localStorage.clear();
       });
 
-    await axios.get(`${API.AUTH}`).then(async ({ data }) => {
-      console.log(data.result);
-      if (data.result?.wallet?.walletaddress)
-        localStorage.setItem("walletAddress", data.result.wallet.walletaddress);
-      setUserData({ ...data.result });
-    });
+    await axios
+      .get(`${API.AUTH}`)
+      .then(async ({ data }) => {
+        console.log(data.result);
+        if (data.result?.wallet?.walletaddress)
+          localStorage.setItem(
+            "walletAddress",
+            data.result.wallet.walletaddress
+          );
+        setUserData({ ...data.result });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
 
   useEffect(() => {
@@ -88,9 +94,9 @@ export default function DefaultHeader({ white, border, title }) {
                 onClick={() => setMyBalancePopup(true)}
               >
                 {balanceType === "Demo" ? (
-                  <p>{`Demo $${balance?.DEMO?.avail}`}</p>
+                  <p>{`Demo $${balance?.DEMO?.avail || 0}`}</p>
                 ) : (
-                  <p>{`Live $${balance?.LIVE?.avail}`}</p>
+                  <p>{`Live $${balance?.LIVE?.avail || 0}`}</p>
                 )}
               </button>
             ) : (
@@ -311,8 +317,6 @@ const MdefaultHeaderBox = styled.header`
     .rightArea {
       .menuBtn {
         svg {
-          width: 5vw;
-
           .fill {
             fill: #000;
           }
@@ -341,6 +345,7 @@ const MdefaultHeaderBox = styled.header`
       align-items: center;
       width: 32.22vw;
       height: 9.44vw;
+      font-size: 3.88vw;
       background: rgba(255, 255, 255, 0.1);
       border-radius: 7.77vw;
     }
@@ -350,6 +355,7 @@ const MdefaultHeaderBox = styled.header`
     .menuBtn {
       svg {
         width: 5vw;
+        height: 5vw;
 
         .fill {
           fill: #fff;

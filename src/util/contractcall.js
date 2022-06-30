@@ -1,9 +1,9 @@
 import Web3 from "web3";
-import sha256 from 'js-sha256';
-import { abi as abi_erc20 } from '../contracts-abi/IERC20';
+import sha256 from "js-sha256";
+import { abi as abi_erc20 } from "../contracts-abi/IERC20";
 
 const jcontracts = {};
-const web3 = new Web3(window.ethereum)
+const web3 = new Web3(window.ethereum);
 
 const MAP_STR_ABI = {
   ERC20: abi_erc20,
@@ -23,7 +23,7 @@ const query_noarg = (jargs) => {
   return new Promise((resolve, reject) => {
     contract.methods[methodname]()
       .call((err, resp) => {
-        console.log('', err, resp);
+        console.log("", err, resp);
         if (err) {
           resolve(null);
           return;
@@ -49,7 +49,7 @@ const query_with_arg = (jargs) => {
   return new Promise((resolve, reject) => {
     contract.methods[methodname](...aargs)
       .call((err, resp) => {
-        console.log('', err, resp);
+        console.log("", err, resp);
         if (err) {
           resolve(null);
           return;
@@ -72,7 +72,7 @@ const getabistr_forfunction = (jargs) => {
   if (jcontracts[sig]) contract = jcontracts[sig];
   else {
     console.log(
-      'JtypWUVHIP',
+      "JtypWUVHIP",
       sig,
       jcontracts[sig],
       abikind,
@@ -81,7 +81,7 @@ const getabistr_forfunction = (jargs) => {
       methodname
     );
     contract = new web3.eth.Contract(MAP_STR_ABI[abikind], contractaddress);
-    console.log('aof8kNLp31', contract);
+    console.log("aof8kNLp31", contract);
     jcontracts[sig] = contract;
   }
 
@@ -90,7 +90,7 @@ const getabistr_forfunction = (jargs) => {
 
 const requesttransaction = async (jdata) => {
   if (!web3) {
-    console.log('Wallet not found');
+    console.log("Wallet not found");
     return null;
   }
   let { from, to, data, value, gas } = jdata;
@@ -113,7 +113,7 @@ const requesttransaction = async (jdata) => {
       to, //contract address
       data, //abi
       value, //'0x00'
-      gas: gas || '250000', //250000
+      gas: gas || "250000", //250000
     })
     .catch((e) => {
       console.log(e);
@@ -121,7 +121,7 @@ const requesttransaction = async (jdata) => {
   return resp;
 };
 
-const reqTx = async (jdata, post) => {
+const reqTx = async (jdata, post, catchFunc) => {
   if (!web3) {
     console.log("Wallet not found");
     return null;
@@ -138,14 +138,42 @@ const reqTx = async (jdata, post) => {
       value, //'0x00'
       gas: gas || "250000", //250000
     })
-    .on('transactionHash', function(hash){
-      post(hash)
+    .on("transactionHash", function (hash) {
+      post(hash);
     })
     .catch((e) => {
-      console.log(e);
+      console.error(e);
+      if (catchFunc) catchFunc();
     });
   return resp;
 };
+
+// const reqTx = async (jdata, post, finallyFunc) => {
+//   if (!web3) {
+//     console.log("Wallet not found");
+//     return null;
+//   }
+//   let { from, to, data, value, gas } = jdata;
+
+//   console.log(jdata);
+
+//   let resp = await web3.eth
+//     .sendTransaction({
+//       from, //wallet address
+//       to, //contract address
+//       data, //abi
+//       value, //'0x00'
+//       gas: gas || "250000", //250000
+//     })
+//     .on("transactionHash", function (hash) {
+//       post(hash);
+//     })
+//     .catch((e) => {
+//       console.log(e);
+//     })
+//     .finally(() => finallyFunc());
+//   return resp;
+// };
 
 const query_eth_balance = (useraddress) => {
   return new Promise((resolve, reject) => {
@@ -161,7 +189,4 @@ const query_eth_balance = (useraddress) => {
 };
 
 export { getabistr_forfunction, requesttransaction, reqTx, query_eth_balance };
-export {
-  query_with_arg,
-  query_noarg,
-};
+export { query_with_arg, query_noarg };

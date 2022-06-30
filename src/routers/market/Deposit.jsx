@@ -4,23 +4,21 @@ import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
 import T_usdt from "../../img/token/T_usdt.png";
 import T_usdc from "../../img/token/T_usdc.png";
 import T_CNY from "../../img/token/T_CNY.png";
+import L_loader from "../../img/loader/L_loader.png";
 import { useSelector } from "react-redux";
 import DefaultHeader from "../../components/header/DefaultHeader";
 import PopupBg from "../../components/common/PopupBg";
-import DetailPopup from "./deposit/DetailPopup";
 import { API } from "../../configs/api";
 import axios from "axios";
-import AddressPopup from "./deposit/AddressPopup";
 import SecurityVerifiPopup from "../../components/market/deposit/SecurityVerifiPopup";
 import CashInPersonPopup from "../../components/market/deposit/CashInPersonPopup";
-import ConfirmUsdt from "../../components/market/deposit/ConfirmUsdt";
 import ConfirmCny from "../../components/market/deposit/ConfirmCny";
 import { reqTx, getabistr_forfunction } from "../../util/contractcall";
 import TokenSelectPopup from "../../components/common/TokenSelectPopup";
 import contractaddr from "../../configs/contractaddr";
 import { setToast } from "../../util/Util";
 import { metaMaskLink } from "../../configs/metaMask";
-import QRCode from "react-qr-code";
+import DetailPopup from "../../components/market/deposit/DetailPopup";
 
 export default function Deposit({ userData }) {
   const walletAddress = localStorage.getItem("walletAddress");
@@ -39,8 +37,10 @@ export default function Deposit({ userData }) {
     { icon: T_usdt, text: "USDT" },
     { icon: T_usdc, text: "USDC" },
   ]);
+  const [loader, setLoader] = useState("");
 
   async function directPayment() {
+    setLoader("depositBtn");
     let { ethereum } = window;
     let address = await ethereum.enable();
     console.log(address[0]);
@@ -74,15 +74,19 @@ export default function Deposit({ userData }) {
           .then((resp) => {
             if (resp) {
               //Success
-              // window.location.reload();
 
               setToast({ type: "alarm", cont: "Submission Successful" });
               setTimeout(() => {
                 window.location.reload(false);
               }, 3000);
             }
-          });
-      }
+          })
+          .catch((err) => {
+            console.error(err);
+          })
+          .finally(() => setLoader());
+      },
+      setLoader
     );
   }
 
@@ -121,9 +125,7 @@ export default function Deposit({ userData }) {
               }/transfer?address=${walletAddress}&uint256=${amount}e6`
             );
           });
-      } else {
-        directPayment();
-      }
+      } else directPayment();
     }
   }
 
@@ -157,17 +159,13 @@ export default function Deposit({ userData }) {
 
         <MdepositBox>
           {confirm ? (
-            isBranch ? (
-              <ConfirmCny
-                setConfirm={setConfirm}
-                amount={amount}
-                setOk={(e) => {
-                  e && postLocale();
-                }}
-              />
-            ) : (
-              <ConfirmUsdt />
-            )
+            <ConfirmCny
+              setConfirm={setConfirm}
+              amount={amount}
+              setOk={(e) => {
+                e && postLocale();
+              }}
+            />
           ) : (
             <section className="innerBox ">
               <ul className="inputList">
@@ -257,11 +255,14 @@ export default function Deposit({ userData }) {
                 </ul>
 
                 <button
-                  className="depositBtn"
+                  className={`${
+                    loader === "depositBtn" && "loading"
+                  } depositBtn`}
                   disabled={!amount}
                   onClick={onClickDepositBtn}
                 >
-                  Deposit
+                  <p className="common">Deposit</p>
+                  <img className="loader" src={L_loader} alt="" />
                 </button>
               </article>
             </section>
@@ -396,11 +397,14 @@ export default function Deposit({ userData }) {
                 </ul>
 
                 <button
-                  className="depositBtn"
+                  className={`${
+                    loader === "depositBtn" && "loading"
+                  } depositBtn`}
                   disabled={!amount}
                   onClick={onClickDepositBtn}
                 >
-                  Deposit
+                  <p className="common">Deposit</p>
+                  <img className="loader" src={L_loader} alt="" />
                 </button>
               </div>
             </div>
@@ -414,17 +418,13 @@ export default function Deposit({ userData }) {
             </div>
 
             {confirm ? (
-              isBranch ? (
-                <ConfirmCny
-                  setConfirm={setConfirm}
-                  amount={amount}
-                  setOk={(e) => {
-                    e && postLocale();
-                  }}
-                />
-              ) : (
-                <ConfirmUsdt />
-              )
+              <ConfirmCny
+                setConfirm={setConfirm}
+                amount={amount}
+                setOk={(e) => {
+                  e && postLocale();
+                }}
+              />
             ) : (
               <div className="value">
                 <p className="head">Important :</p>
@@ -477,12 +477,15 @@ export default function Deposit({ userData }) {
 }
 
 const MdepositBox = styled.main`
+  height: 100%;
   padding: 5.55vw;
 
   .innerBox {
     display: flex;
     flex-direction: column;
     gap: 15vw;
+    height: 100%;
+    overflow-y: scroll;
 
     .inputList {
       display: flex;
@@ -505,7 +508,7 @@ const MdepositBox = styled.main`
               width: 100%;
               height: 13.88vw;
               padding: 0 6.11vw;
-              font-size: 20px;
+              font-size: 5vw;
               font-weight: 700;
 
               &.on {
@@ -526,7 +529,7 @@ const MdepositBox = styled.main`
               }
 
               .arw {
-                height: 8px;
+                height: 2.22vw;
                 opacity: 0.4;
               }
             }

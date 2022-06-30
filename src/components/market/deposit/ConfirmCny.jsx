@@ -264,11 +264,14 @@ const MconfirmCnyBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 11.66vw;
+  height: 100%;
+  overflow-y: scroll;
 
   .headArea {
     display: flex;
     align-items: center;
     gap: 2.77vw;
+    font-size: 4.44vw;
 
     .timerBox {
       display: flex;

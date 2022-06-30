@@ -13,7 +13,7 @@ export const D_headerList = [
     url: "/bet",
     det: [
       { key: "Live Bet", url: "/bet" },
-      { key: "Demo Bet", url: "/bet" },
+      { key: "Demo Bet", url: "/bet/demo" },
     ],
   },
   {

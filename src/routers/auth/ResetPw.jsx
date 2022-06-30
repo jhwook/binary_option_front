@@ -16,7 +16,7 @@ export default function ResetPw() {
 
   const [category, setCategory] = useState(0);
   const [email, setEmail] = useState("");
-  const [phoneLoc, setPhoneLoc] = useState("82");
+  const [phoneLoc, setPhoneLoc] = useState("");
   const [phone, setPhone] = useState("");
   const [selLocPopup, setSelLocPopup] = useState(false);
   const [code, setCode] = useState("");
@@ -107,7 +107,7 @@ export default function ResetPw() {
                               className="selectBtn"
                               onClick={() => setSelLocPopup(true)}
                             >
-                              <p>+{phoneLoc}</p>
+                              <p>{phoneLoc}</p>
 
                               <img src={I_dnPol} alt="" />
                             </button>
@@ -250,7 +250,7 @@ export default function ResetPw() {
                               className="selectBtn"
                               onClick={() => setSelLocPopup(true)}
                             >
-                              <p>+{phoneLoc}</p>
+                              <p>{phoneLoc}</p>
 
                               <img src={I_dnPol} alt="" />
                             </button>
@@ -367,6 +367,7 @@ const MloginBox = styled.main`
               justify-content: center;
               align-items: center;
               height: 8.88vw;
+              font-size: 3.88vw;
               color: #ddd;
 
               &.on {
@@ -428,6 +429,10 @@ const MloginBox = styled.main`
                       height: 100%;
                       padding: 0 4.44vw;
                       font-size: 3.88vw;
+
+                      img {
+                        width: 2.22vw;
+                      }
                     }
                   }
 
@@ -519,13 +524,11 @@ const MloginBox = styled.main`
   }
 
   .cpRight {
+    margin: 8.33vw 0;
     font-size: 3.33vw;
+    text-align: center;
     white-space: nowrap;
     color: #ddd;
-    bottom: 30px;
-    left: 50%;
-    position: fixed;
-    transform: translate(-50%);
   }
 `;
 

@@ -63,6 +63,8 @@ export default function SecurityVerifiPopup({ off, setBalancePopup }) {
 
 const MsecurityVerifiPopupBox = styled.section`
   width: 91.11vw;
+  max-height: 80vh;
+  overflow-y: scroll;
   color: #fff;
 
   .topArea {

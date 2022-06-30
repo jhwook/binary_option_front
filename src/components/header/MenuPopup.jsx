@@ -136,13 +136,6 @@ export default function MenuPopup({ off, userData }) {
               <button className="lngBtn" onClick={() => setLngPopup(true)}>
                 <img src={I_langWhite} alt="" />
               </button>
-
-              {lngPopup && (
-                <>
-                  <SelLngPopup off={setLngPopup} />
-                  <PopupBg off={setLngPopup} />
-                </>
-              )}
             </span>
 
             <button className="quesBtn" onClick={() => navigate("/qna")}>
@@ -178,6 +171,13 @@ export default function MenuPopup({ off, userData }) {
         <>
           <AddPopup off={setAddPopup} />
           <PopupBg off={setAddPopup} />
+        </>
+      )}
+
+      {lngPopup && (
+        <>
+          <SelLngPopup off={setLngPopup} />
+          <PopupBg off={setLngPopup} index={6} />
         </>
       )}
     </>

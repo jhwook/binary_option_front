@@ -1,14 +1,39 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { API } from "../../configs/api";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
 
-export default function InsufficientPopup({ off, nextProc }) {
+export default function InsufficientPopup({ off, amount, type, nextProc }) {
   const isMobile = useSelector((state) => state.common.isMobile);
+
+  const [balance, setBalance] = useState();
 
   function onClickConfirm() {
     off();
     nextProc(true);
   }
+
+  function getBalance() {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    axios
+      .get(`${API.USER_BALANCE}`)
+      .then(async ({ data }) => {
+        console.log(data);
+        setBalance({ ...data.respdata });
+      })
+      .catch((err) => {
+        console.error(err);
+        localStorage.clear();
+      });
+  }
+
+  useEffect(() => {
+    getBalance();
+  }, []);
 
   if (isMobile)
     return (
@@ -25,11 +50,14 @@ export default function InsufficientPopup({ off, nextProc }) {
           <ul className="balanceList">
             <li>
               <p className="key">Your balance</p>
-              <p className="value">{`$${(33.4).toFixed(2)}`}</p>
+              <p className="value">
+                ${type === "Live" && Number(balance?.LIVE?.avail).toFixed(2)}
+                {type === "Demo" && Number(balance?.DEMO?.avail).toFixed(2)}
+              </p>
             </li>
             <li>
               <p className="key">Trace balance</p>
-              <p className="value">{`$${(70).toFixed(2)}`}</p>
+              <p className="value">{`$${Number(amount).toFixed(2)}`}</p>
             </li>
           </ul>
 
@@ -54,11 +82,14 @@ export default function InsufficientPopup({ off, nextProc }) {
           <ul className="balanceList">
             <li>
               <p className="key">Your balance</p>
-              <p className="value">{`$${(33.4).toFixed(2)}`}</p>
+              <p className="value">
+                ${type === "Live" && Number(balance?.LIVE?.avail).toFixed(2)}
+                {type === "Demo" && Number(balance?.DEMO?.avail).toFixed(2)}
+              </p>
             </li>
             <li>
               <p className="key">Trace balance</p>
-              <p className="value">{`$${(70).toFixed(2)}`}</p>
+              <p className="value">{`$${Number(amount).toFixed(2)}`}</p>
             </li>
           </ul>
 

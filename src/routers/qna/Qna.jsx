@@ -227,7 +227,7 @@ export default function Qna() {
     return (
       <>
         <DefaultHeader />
-        
+
         <PqnaBox>
           <header>
             <section className="innerBox">
@@ -504,6 +504,7 @@ const MqnaBox = styled.main`
                 gap: 2.77vw;
 
                 img {
+                  min-width: 2.77vw;
                   width: 2.77vw;
                   opacity: 0.33;
                 }
@@ -536,13 +537,18 @@ const MqnaBox = styled.main`
         z-index: 2;
         transform: translate(-50%, 0);
 
+        &:hover {
+          background: #403f4c;
+        }
+
         strong {
           white-space: nowrap;
         }
 
-        &:hover {
-          background: #403f4c;
+        img{
+          width: 5vw;
         }
+
       }
     }
   }

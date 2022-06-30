@@ -1,4 +1,13 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle, keyframes } from "styled-components";
+
+const aniLoader = keyframes`
+0%{
+  transform: rotate(0)
+}
+100%{
+  transform: rotate(360deg)
+}
+`;
 
 const GlobalStyle = createGlobalStyle`
 
@@ -150,6 +159,23 @@ const GlobalStyle = createGlobalStyle`
     padding: 0 22px;
   }
 
+  button{
+    .loader{
+      display: none;
+      margin: auto;
+      animation: ${aniLoader} 2s infinite linear;
+    }
+
+    &.loading{
+      .common{
+        display: none;
+      }
+
+      .loader{
+        display: block;
+      }
+    }
+  }
   
 `;
 

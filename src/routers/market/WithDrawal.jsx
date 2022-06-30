@@ -2,15 +2,13 @@ import axios from "axios";
 import { useState } from "react";
 import styled from "styled-components";
 import { API } from "../../configs/api";
-import B_withDrawal from "../../img/bg/market/withDrawal/B_withDrawal.svg";
-import B_withDrawal2 from "../../img/bg/market/withDrawal/B_withDrawal2.svg";
-import SetErrorBar from "../../util/SetErrorBar";
+import L_loader from "../../img/loader/L_loader.png";
 import I_alarmYellow from "../../img/icon/I_alarmYellow.svg";
 import T_usdt from "../../img/token/T_usdt.png";
 import T_usdc from "../../img/token/T_usdc.png";
 import TokenSelectPopup from "../../components/common/TokenSelectPopup";
 
-import { setToast } from "../../util/Util";
+import { setToast, strDot } from "../../util/Util";
 import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
 import PopupBg from "../../components/common/PopupBg";
 import { useSelector } from "react-redux";
@@ -36,8 +34,10 @@ export default function WithDrawal() {
     { icon: T_usdc, text: "USDC" },
   ]);
   const [process, setProcess] = useState(false);
+  const [loader, setLoader] = useState("");
 
   async function onClickDrawalBtn() {
+    setLoader("drawalBtn");
     setProcess(true);
     const jtoken = localStorage.getItem("token");
 
@@ -61,9 +61,10 @@ export default function WithDrawal() {
               }, 3000);
             }
           }
-        });
-      //.catch((err) => localStorage.removeItem("token"));
-    }
+        })
+        .catch((err) => console.error(err))
+        .finally(() => setLoader());
+    } else setLoader();
   }
 
   if (isMobile)
@@ -85,7 +86,7 @@ export default function WithDrawal() {
                 <ul className="infoList">
                   <li>
                     <p className="key">Withdrawal to</p>
-                    <strong className="value">0xEED...23a5</strong>
+                    <strong className="value">{strDot(address, 5, 4)}</strong>
                   </li>
 
                   <li>
@@ -95,7 +96,7 @@ export default function WithDrawal() {
 
                   <li>
                     <p className="key">Withdrawal Amount</p>
-                    <strong className="value">1000 {token.text}</strong>
+                    <strong className="value">{amount} {token.text}</strong>
                   </li>
 
                   <li>
@@ -196,11 +197,14 @@ export default function WithDrawal() {
                   </ul>
 
                   <button
-                    className="drawalBtn"
+                    className={`${
+                      loader === "drawalBtn" && "loading"
+                    } drawalBtn`}
                     disabled={!(amount && address)}
                     onClick={onClickDrawalBtn}
                   >
-                    Withdrawal
+                    <p className="common">Withdrawal</p>
+                    <img className="loader" src={L_loader} alt="" />
                   </button>
                 </div>
               </article>
@@ -296,11 +300,12 @@ export default function WithDrawal() {
               </ul>
 
               <button
-                className="drawalBtn"
+                className={`${loader === "drawalBtn" && "loading"} drawalBtn`}
                 disabled={!(amount && address)}
                 onClick={onClickDrawalBtn}
               >
-                Withdrawal
+                <p className="common">Withdrawal</p>
+                <img className="loader" src={L_loader} alt="" />
               </button>
             </div>
           </div>
@@ -325,7 +330,7 @@ export default function WithDrawal() {
               <ul className="infoList">
                 <li>
                   <p className="key">Withdrawal to</p>
-                  <strong className="value">0xEED...23a5</strong>
+                  <strong className="value">{strDot(address, 5, 4)}</strong>
                 </li>
 
                 <li>
@@ -385,8 +390,12 @@ export default function WithDrawal() {
 
 const MwithDrawalBox = styled.main`
   padding: 5.55vw;
+  height: 100%;
 
   .innerBox {
+    height: 100%;
+    overflow-y: scroll;
+
     .onProcess {
       display: flex;
       flex-direction: column;
@@ -477,7 +486,7 @@ const MwithDrawalBox = styled.main`
                 width: 100%;
                 height: 13.88vw;
                 padding: 0 6.11vw;
-                font-size: 20px;
+                font-size: 5vw;
                 font-weight: 700;
 
                 &.on {
@@ -498,7 +507,7 @@ const MwithDrawalBox = styled.main`
                 }
 
                 .arw {
-                  height: 8px;
+                  height: 2.22vw;
                   opacity: 0.4;
                 }
               }

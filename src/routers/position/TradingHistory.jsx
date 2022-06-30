@@ -7,7 +7,7 @@ import {
 } from "../../data/D_position";
 import DatePicker from "react-datepicker";
 import "../../util/react-datepicker.css";
-import I_calender from "../../img/icon/I_calender.png";
+import I_calender from "../../img/icon/I_calender.svg";
 import I_exportWhite from "../../img/icon/I_exportWhite.svg";
 import I_timeWhite from "../../img/icon/I_timeWhite.svg";
 import I_upArw3Green from "../../img/icon/I_upArw3Green.svg";
@@ -401,6 +401,8 @@ export default function TradingHistory() {
 }
 
 const MtradingHistoryBox = styled.main`
+  height: 100%;
+
   .innerBox {
     display: flex;
     flex-direction: column;
@@ -464,6 +466,7 @@ const MtradingHistoryBox = styled.main`
                 display: flex;
                 align-items: center;
                 gap: 3.33vw;
+                font-size: 3.88vw;
 
                 img {
                   width: 4.44vw;

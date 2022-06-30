@@ -2,7 +2,7 @@ import styled from "styled-components";
 import DatePicker from "react-datepicker";
 import "../../util/react-datepicker.css";
 import { forwardRef, useState } from "react";
-import I_calender from "../../img/icon/I_calender.png";
+import I_calender from "../../img/icon/I_calender.svg";
 import I_exportWhite from "../../img/icon/I_exportWhite.svg";
 import I_ltArwWhite from "../../img/icon/I_ltArwWhite.svg";
 import I_rtArwWhite from "../../img/icon/I_rtArwWhite.svg";
@@ -42,6 +42,7 @@ export default function Data() {
   function onClickPrePageBtn() {
     if (page > 1) setPage(page - 1);
   }
+  
 
   function onClickNextPageBtn() {
     if (page < totalPage) setPage(page + 1);
@@ -430,10 +431,11 @@ const MdataBox = styled.main`
             display: flex;
             align-items: center;
             height: 11.11vw;
-            padding: 0 22px;
+            padding: 0 6.11vw;
+            font-size: 3.88vw;
             color: rgba(255, 255, 255, 0.4);
             border: 1px solid #3b3e45;
-            border-radius: 20px;
+            border-radius: 5.55vw;
 
             &:focus-within {
               border-color: #fff;
@@ -447,6 +449,7 @@ const MdataBox = styled.main`
                 display: flex;
                 align-items: center;
                 gap: 8px;
+                font-size: 3.88vw;
 
                 img {
                   width: 22px;
@@ -458,6 +461,8 @@ const MdataBox = styled.main`
               width: 52.77vw;
 
               input {
+                flex:1;
+
                 &::placeholder {
                   color: rgba(255, 255, 255, 0.4);
                 }
@@ -467,11 +472,11 @@ const MdataBox = styled.main`
 
           .applyBtn {
             width: 33.33vw;
-            height: 40px;
-            font-size: 14px;
+            height: 11.11vw;
+            font-size: 3.88vw;
             font-weight: 700;
             border: 1px solid #3b3e45;
-            border-radius: 20px;
+            border-radius: 5.55vw;
 
             &:focus-within {
               border-color: #fff;
@@ -676,6 +681,8 @@ const PdataBox = styled.main`
 
             &.searchBox {
               input {
+                flex:1;
+                
                 &::placeholder {
                   color: rgba(255, 255, 255, 0.4);
                 }

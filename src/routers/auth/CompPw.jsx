@@ -89,13 +89,11 @@ const McompPwBox = styled.main`
   }
 
   .cpRight {
+    margin: 8.33vw 0;
     font-size: 3.33vw;
+    text-align: center;
     white-space: nowrap;
     color: #ddd;
-    bottom: 30px;
-    left: 50%;
-    position: fixed;
-    transform: translate(-50%);
   }
 `;
 

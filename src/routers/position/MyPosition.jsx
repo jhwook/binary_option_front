@@ -28,11 +28,11 @@ export default function MyPosition() {
               <ul className="balanceList">
                 <li>
                   <p className="key">Total</p>
-                  <strong className="price">60 USD</strong>
+                  <strong className="value">60 USD</strong>
                 </li>
                 <li>
                   <p className="key">safe balance</p>
-                  <strong className="price">60 USD</strong>
+                  <strong className="value">60 USD</strong>
                 </li>
               </ul>
             </article>
@@ -121,11 +121,11 @@ export default function MyPosition() {
             <ul className="balanceList">
               <li>
                 <p className="key">Total</p>
-                <strong className="price">60 USD</strong>
+                <strong className="value">60 USD</strong>
               </li>
               <li>
                 <p className="key">safe balance</p>
-                <strong className="price">60 USD</strong>
+                <strong className="value">60 USD</strong>
               </li>
             </ul>
           </article>
@@ -202,6 +202,8 @@ export default function MyPosition() {
 }
 
 const MmyPositionBox = styled.main`
+  height: 100%;
+
   .innerBox {
     display: flex;
     flex-direction: column;
@@ -252,12 +254,12 @@ const MmyPositionBox = styled.main`
           }
 
           .key {
-            font-size: 12px;
+            font-size: 3.88vw;
             color: rgba(255, 255, 255, 0.4);
           }
 
           .value {
-            font-size: 16px;
+            font-size: 4.44vw;
           }
         }
       }

@@ -17,7 +17,6 @@ import PopupBg from "../../components/common/PopupBg";
 import TokenPopup from "../../components/bet/TokenPopup";
 import { useDispatch, useSelector } from "react-redux";
 import TimePopup from "../../components/bet/TimePopup";
-import { setToast } from "../../util/Util";
 import DetBox from "../../components/bet/detBox/DetBox";
 import InsufficientPopup from "../../components/bet/InsufficientPopup";
 import MyBalancePopup from "../../components/header/MyBalancePopup";
@@ -27,6 +26,7 @@ import axios from "axios";
 import { API } from "../../configs/api";
 import LoadingBar from "../../components/common/LoadingBar";
 import { D_tokenCategoryList } from "../../data/D_bet";
+import { setToast } from "../../util/Util";
 
 export default function Live() {
   const hoverRef1 = useRef();
@@ -47,6 +47,23 @@ export default function Live() {
   const [addPopup, setAddPopup] = useState(false);
   const [amount, setAmount] = useState("");
   const [bookMark, setBookMark] = useState([]);
+
+  function chkMinimumBalance() {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    axios
+      .get(`${API.USER_BALANCE}`)
+      .then(async ({ data }) => {
+        console.log(data);
+
+        if (data.respdata.LIVE.avail < 5) setLiveTradePopup(true);
+      })
+      .catch((err) => {
+        console.error(err);
+        localStorage.clear();
+      });
+  }
 
   function getAssetList() {
     axios
@@ -72,20 +89,44 @@ export default function Live() {
     }
   }
 
-  function onClickPayBtn(type) {
+  async function getBalance() {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    return axios.get(`${API.USER_BALANCE}`);
+  }
+
+  async function chkBalance() {
+    const balance = await getBalance();
+    console.log(balance.data.respdata);
+
+    if (balance.data.respdata.LIVE.avail < amount) {
+      setInsufficientPopup(true);
+      throw "Not Balance";
+    }
+  }
+
+  async function onClickPayBtn(type) {
     let typeForPost;
 
-    switch (type) {
-      case "high":
-        typeForPost = 1;
-        break;
+    try {
+      if ((await chkBalance()) === -1) return;
 
-      case "low":
-        typeForPost = 0;
-        break;
+      switch (type) {
+        case "high":
+          typeForPost = 1;
+          break;
 
-      default:
-        break;
+        case "low":
+          typeForPost = 0;
+          break;
+
+        default:
+          break;
+      }
+    } catch (err) {
+      console.error(err);
+      return;
     }
 
     axios
@@ -99,7 +140,6 @@ export default function Live() {
       .catch((err) => console.error(err));
 
     // setToast({ type: "closed" });
-    // setInsufficientPopup(true);
   }
 
   function getBookMark() {
@@ -120,8 +160,6 @@ export default function Live() {
   }
 
   useLayoutEffect(() => {
-    setLiveTradePopup(true);
-
     localStorage.setItem("balanceType", "Live");
 
     document.addEventListener("keydown", handleKeyDown);
@@ -134,6 +172,8 @@ export default function Live() {
     getBookMark();
 
     turnLoader();
+
+    chkMinimumBalance();
   }, []);
 
   if (isMobile)
@@ -284,6 +324,8 @@ export default function Live() {
               <>
                 <InsufficientPopup
                   off={setInsufficientPopup}
+                  amount={amount}
+                  type="Live"
                   nextProc={setMyBalancePopup}
                 />
                 <PopupBg bg off={setInsufficientPopup} />
@@ -563,6 +605,8 @@ export default function Live() {
               <>
                 <InsufficientPopup
                   off={setInsufficientPopup}
+                  amount={amount}
+                  type="Live"
                   nextProc={setMyBalancePopup}
                 />
                 <PopupBg off={setInsufficientPopup} />
@@ -592,8 +636,8 @@ export default function Live() {
 }
 
 const MbetBox = styled.main`
-  height: 100vh;
-  padding: 60px 0 0 0;
+  height: 100%;
+  padding: 15.55vw 0 0 0;
   color: #fff;
   background: #0a0e17;
 
@@ -601,6 +645,7 @@ const MbetBox = styled.main`
     display: flex;
     flex-direction: column;
     height: 100%;
+    overflow-y: scroll;
 
     .contArea {
       flex: 1;
@@ -778,6 +823,10 @@ const MbetBox = styled.main`
               font-weight: 700;
               border: 1.2px solid;
               border-radius: 8px;
+
+              img{
+                width: 3.33vw;
+              }
             }
 
             .rate {

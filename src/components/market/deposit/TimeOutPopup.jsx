@@ -67,6 +67,8 @@ export default function TimeOutPopup({ off }) {
 
 const MtimeOutPopupBox = styled.section`
   width: 91.11vw;
+  max-height: 80vh;
+  overflow-y: scroll;
   color: #fff;
 
   .topArea {

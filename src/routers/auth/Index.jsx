@@ -148,8 +148,9 @@ export default function Index() {
 
 const MindexBox = styled.main`
   display: flex;
-  justify-content: center;
-  padding: 15.55vw 0 0 0;
+  flex-direction: column;
+  align-items: center;
+  padding: 15.55vw 0 0;
 
   .innerBox {
     display: flex;
@@ -204,6 +205,10 @@ const MindexBox = styled.main`
             align-items: center;
             gap: 3.88vw;
             border: 1px solid #e6e6e6;
+
+            img {
+              width: 5.55vw;
+            }
           }
         }
 
@@ -235,13 +240,11 @@ const MindexBox = styled.main`
   }
 
   .cpRight {
+    margin: 8.33vw 0;
     font-size: 3.33vw;
+    text-align: center;
     white-space: nowrap;
     color: #ddd;
-    bottom: 30px;
-    left: 50%;
-    position: fixed;
-    transform: translate(-50%);
   }
 `;
 

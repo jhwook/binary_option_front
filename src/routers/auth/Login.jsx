@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { D_joinData, D_loginCategoryList } from "../../data/D_auth";
-import Email from "./common/Email";
+import Email from "../../components/auth/Email";
 import { GoogleLogin } from "react-google-login";
 import L_google from "../../img/logo/L_google.svg";
-import Phone from "./common/Phone";
+import Phone from "../../components/auth/Phone";
 import QRCode from "react-qr-code";
 import { useNavigate } from "react-router";
 import axios from "axios";
@@ -21,6 +21,26 @@ export default function Login() {
 
   const [category, setCategory] = useState(D_loginCategoryList[0]);
   const [userData, setUserData] = useState(D_joinData);
+
+  function disableLoginBtn() {
+    switch (category) {
+      case D_loginCategoryList[0]:
+        return (
+          !(userData.email && userData.pw) ||
+          userData.emailAlarm ||
+          userData.pwAlarm
+        );
+
+      case D_loginCategoryList[1]:
+        return (
+          !(userData.phoneLoc && userData.phone && userData.pw) ||
+          userData.pwAlarm
+        );
+
+      default:
+        break;
+    }
+  }
 
   function onClickLoginBtn() {
     let loginDataForm;
@@ -45,12 +65,31 @@ export default function Login() {
           localStorage.setItem("token", data.result.tokenId);
           AxiosInterCept();
           navigate("/");
-        } else {
+          return;
+        }
+
+        if (data.message === "EMAIL-DOESNT-EXIST") {
+          setUserData({
+            ...userData,
+            emailAlarm: "The account doesn't exist",
+          });
+          return;
+        }
+
+        if (data.message === "PHONE-NUMBER-DOESNT-EXIST") {
+          setUserData({
+            ...userData,
+            phoneAlarm: "The account doesn't exist",
+          });
+          return;
+        }
+
+        if (data.message === "INVALID-PASSWORD")
           setUserData({
             ...userData,
             pwAlarm: "The password you have entered does not coincide",
           });
-        }
+        return;
       })
       .catch((err) => {
         console.error(err);
@@ -71,6 +110,10 @@ export default function Login() {
       })
       .catch((err) => console.error(err));
   }
+
+  useEffect(() => {
+    setUserData(D_joinData);
+  }, [category]);
 
   if (isMobile)
     return (
@@ -185,7 +228,11 @@ export default function Login() {
                 </div>
 
                 <div className="btnCont">
-                  <button className="loginBtn" onClick={onClickLoginBtn}>
+                  <button
+                    className="loginBtn"
+                    disabled={disableLoginBtn()}
+                    onClick={onClickLoginBtn}
+                  >
                     Login
                   </button>
 
@@ -285,6 +332,7 @@ const MloginBox = styled.main`
               justify-content: center;
               align-items: center;
               height: 8.88vw;
+              font-size: 3.88vw;
               color: #ddd;
 
               &.on {
@@ -337,6 +385,10 @@ const MloginBox = styled.main`
               gap: 3.88vw;
               font-weight: 700;
               border: 1px solid #e6e6e6;
+
+              img {
+                width: 5.55vw;
+              }
             }
           }
 
@@ -368,13 +420,11 @@ const MloginBox = styled.main`
   }
 
   .cpRight {
+    margin: 8.33vw 0;
     font-size: 3.33vw;
+    text-align: center;
     white-space: nowrap;
     color: #ddd;
-    bottom: 30px;
-    left: 50%;
-    position: fixed;
-    transform: translate(-50%);
   }
 `;
 
@@ -402,6 +452,7 @@ const PloginBox = styled.main`
     .contArea {
       display: flex;
       gap: 125px;
+
       .loginArc {
         width: 400px;
 

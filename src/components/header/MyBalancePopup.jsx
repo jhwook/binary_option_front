@@ -187,6 +187,8 @@ export default function MyBalancePopup({ off, setAddPopup }) {
 
 const MmyBalancePopup = styled.section`
   width: 91.11vw;
+  max-height: 80vh;
+  overflow-y: scroll;
   color: #fff;
   z-index: 7;
 

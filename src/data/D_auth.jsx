@@ -5,10 +5,11 @@ export const D_loginCategoryList = [
 
 export const D_joinData = {
   email: "",
-  pw: "",
+  emailAlarm: "",
   phone: "",
   phoneLoc: "",
-  emailAlarm: "",
+  phoneAlarm: "",
+  pw: "",
   pwAlarm: "",
   referral: "",
   referralAlarm: "",

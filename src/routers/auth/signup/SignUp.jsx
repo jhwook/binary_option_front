@@ -1,10 +1,10 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { D_joinData, D_loginCategoryList } from "../../../data/D_auth";
-import Email from "../common/Email";
+import Email from "../../../components/auth/Email";
 import I_dnPol from "../../../img/icon/I_dnPol.svg";
 import I_chkOrange from "../../../img/icon/I_chkOrange.svg";
-import Phone from "../common/Phone";
+import Phone from "../../../components/auth/Phone";
 import QRCode from "react-qr-code";
 import { useNavigate } from "react-router";
 import axios from "axios";
@@ -37,8 +37,6 @@ export default function Signup() {
         password: userData.pw,
         refcode: userData.referral,
       };
-
-    console.log(signDataForm);
 
     axios
       .post(`${API.SIGNUP}/${category.value}`, signDataForm)
@@ -338,6 +336,7 @@ const MsignupBox = styled.main`
               justify-content: center;
               align-items: center;
               height: 8.88vw;
+              font-size: 3.88vw;
               color: #ddd;
 
               &.on {
@@ -389,6 +388,7 @@ const MsignupBox = styled.main`
               display: flex;
               flex-direction: column;
               gap: 2.22vw;
+              font-size: 3.88vw;
               margin: 2.22vw 0 0 0;
 
               .inputBox {
@@ -494,13 +494,11 @@ const MsignupBox = styled.main`
   }
 
   .cpRight {
+    margin: 8.33vw 0;
     font-size: 3.33vw;
+    text-align: center;
     white-space: nowrap;
     color: #ddd;
-    bottom: 30px;
-    left: 50%;
-    position: fixed;
-    transform: translate(-50%);
   }
 `;
 

@@ -238,6 +238,7 @@ export default function ProfPopup({ off, offAll, userData }) {
 const MprofPopupBox = styled.section`
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
   color: #fff;
   background: #181c25;
   top: 0;
@@ -359,6 +360,7 @@ const MprofPopupBox = styled.section`
           width: 100%;
           height: 11.11vw;
           padding: 0 3.88vw;
+          font-size: 3.88vw;
           font-weight: 700;
           color: rgba(255, 255, 255, 0.4);
           border-radius: 1.66vw;

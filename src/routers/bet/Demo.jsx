@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import DefaultHeader from "../../components/header/DefaultHeader";
-import { D_tokenCategoryList, D_tokenList } from "../../data/D_bet";
+import { D_tokenCategoryList } from "../../data/D_bet";
 import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
 import I_starYellowO from "../../img/icon/I_starYellowO.svg";
 import I_qnaWhite from "../../img/icon/I_qnaWhite.svg";
@@ -18,7 +18,6 @@ import PopupBg from "../../components/common/PopupBg";
 import TokenPopup from "../../components/bet/TokenPopup";
 import { useDispatch, useSelector } from "react-redux";
 import TimePopup from "../../components/bet/TimePopup";
-import { toast } from "react-toastify";
 import { setToast } from "../../util/Util";
 import DetBox from "../../components/bet/detBox/DetBox";
 import InsufficientPopup from "../../components/bet/InsufficientPopup";
@@ -39,7 +38,6 @@ export default function Demo() {
 
   const [assetInfo, setAssetInfo] = useState();
   const [loading, setLoading] = useState(true);
-  const [liveTradePopup, setLiveTradePopup] = useState(false);
   const [hotKeyPopup, setHotKeyPopup] = useState(true);
   const [tokenPopup, setTokenPopup] = useState(false);
   const [duration, setDuration] = useState(1);
@@ -75,20 +73,44 @@ export default function Demo() {
     }
   }
 
-  function onClickPayBtn(type) {
+  async function getBalance() {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    return axios.get(`${API.USER_BALANCE}`);
+  }
+
+  async function chkBalance() {
+    const balance = await getBalance();
+    console.log(balance.data.respdata);
+
+    if (balance.data.respdata.LIVE.avail < amount) {
+      setInsufficientPopup(true);
+      throw "Not Balance";
+    }
+  }
+
+  async function onClickPayBtn(type) {
     let typeForPost;
 
-    switch (type) {
-      case "high":
-        typeForPost = 1;
-        break;
+    try {
+      if ((await chkBalance()) === -1) return;
 
-      case "low":
-        typeForPost = 0;
-        break;
+      switch (type) {
+        case "high":
+          typeForPost = 1;
+          break;
 
-      default:
-        break;
+        case "low":
+          typeForPost = 0;
+          break;
+
+        default:
+          break;
+      }
+    } catch (err) {
+      console.error(err);
+      return;
     }
 
     axios
@@ -102,7 +124,6 @@ export default function Demo() {
       .catch((err) => console.error(err));
 
     // setToast({ type: "closed" });
-    // setInsufficientPopup(true);
   }
 
   function getBookMark() {
@@ -124,7 +145,7 @@ export default function Demo() {
 
   useLayoutEffect(() => {
     localStorage.setItem("balanceType", "Demo");
-    
+
     document.addEventListener("keydown", handleKeyDown);
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
@@ -277,17 +298,12 @@ export default function Demo() {
 
             {detMode && <DetBox mode={detMode} off={setDetMode} />}
 
-            {liveTradePopup && (
-              <>
-                <LiveTradePopup off={setLiveTradePopup} />
-                <PopupBg bg off={setLiveTradePopup} />
-              </>
-            )}
-
             {insufficientPopup && (
               <>
                 <InsufficientPopup
                   off={setInsufficientPopup}
+                  amount={amount}
+                  type="Demo"
                   nextProc={setMyBalancePopup}
                 />
                 <PopupBg bg off={setInsufficientPopup} />
@@ -557,17 +573,12 @@ export default function Demo() {
               </footer>
             </PbetBox>
 
-            {liveTradePopup && (
-              <>
-                <LiveTradePopup off={setLiveTradePopup} />
-                <PopupBg off={setLiveTradePopup} />
-              </>
-            )}
-
             {insufficientPopup && (
               <>
                 <InsufficientPopup
                   off={setInsufficientPopup}
+                  amount={amount}
+                  type="Demo"
                   nextProc={setMyBalancePopup}
                 />
                 <PopupBg off={setInsufficientPopup} />
@@ -597,8 +608,8 @@ export default function Demo() {
 }
 
 const MbetBox = styled.main`
-  height: 100vh;
-  padding: 60px 0 0 0;
+  height: 100%;
+  padding: 15.55vw 0 0 0;
   color: #fff;
   background: #0a0e17;
 
@@ -606,6 +617,7 @@ const MbetBox = styled.main`
     display: flex;
     flex-direction: column;
     height: 100%;
+    overflow-y: scroll;
 
     .contArea {
       flex: 1;
@@ -793,6 +805,10 @@ const MbetBox = styled.main`
               font-weight: 700;
               border: 1.2px solid;
               border-radius: 8px;
+
+              img {
+                width: 3.33vw;
+              }
             }
 
             .rate {

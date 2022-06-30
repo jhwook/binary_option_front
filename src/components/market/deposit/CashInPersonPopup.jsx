@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 import I_xWhite from "../../../img/icon/I_xWhite.svg";
 
-export default function BalancePopup({ off, setConfirm, setData }) {
+export default function CashInPersonPopup({ off, setConfirm, setData }) {
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [name, setName] = useState("");
@@ -19,7 +19,7 @@ export default function BalancePopup({ off, setConfirm, setData }) {
 
   if (isMobile)
     return (
-      <MbalancePopupBox>
+      <McashInPersonPopup>
         <article className="topArea">
           <span className="blank" />
 
@@ -87,11 +87,11 @@ export default function BalancePopup({ off, setConfirm, setData }) {
             </button>
           </div>
         </article>
-      </MbalancePopupBox>
+      </McashInPersonPopup>
     );
   else
     return (
-      <PbalancePopupBox className="defaultPopup">
+      <PcashInPersonPopup className="defaultPopup">
         <article className="topArea">
           <span className="blank" />
 
@@ -163,11 +163,11 @@ export default function BalancePopup({ off, setConfirm, setData }) {
             </button>
           </div>
         </article>
-      </PbalancePopupBox>
+      </PcashInPersonPopup>
     );
 }
 
-const MbalancePopupBox = styled.section`
+const McashInPersonPopup = styled.section`
   max-height: 80vh;
   overflow-y: scroll;
   background: rgba(255, 255, 255, 0.3);
@@ -268,7 +268,7 @@ const MbalancePopupBox = styled.section`
   }
 `;
 
-const PbalancePopupBox = styled.section`
+const PcashInPersonPopup = styled.section`
   width: 500px;
   color: #fff;
 
