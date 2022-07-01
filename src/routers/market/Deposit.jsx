@@ -19,6 +19,7 @@ import contractaddr from "../../configs/contractaddr";
 import { setToast } from "../../util/Util";
 import { metaMaskLink } from "../../configs/metaMask";
 import DetailPopup from "../../components/market/deposit/DetailPopup";
+import PreDepositWarningPopup from "../../components/market/deposit/PreDepositWarningPopup";
 
 export default function Deposit({ userData }) {
   const walletAddress = localStorage.getItem("walletAddress");
@@ -38,6 +39,41 @@ export default function Deposit({ userData }) {
     { icon: T_usdc, text: "USDC" },
   ]);
   const [loader, setLoader] = useState("");
+  const [preDepositWarningPopup, setPreDepositWarningPopup] = useState(false);
+
+  function getPreDepositReq() {
+    axios
+      .get(API.PreDeposit)
+      .then(({ data }) => {
+        console.log(data);
+
+        if (data) setPreDepositWarningPopup(true);
+        else reqDeposit();
+      })
+      .catch((err) => console.error(err));
+  }
+
+  async function moDirectPayment() {
+    setLoader("depositBtn");
+
+    window.open(
+      `${metaMaskLink}/${
+        contractaddr[token.text]
+      }/transfer?address=${walletAddress}&uint256=${amount}e6`
+    );
+
+    axios
+      .post(`${API.LISTEN_TRANSACTION}/${token.text}`)
+      .then(({ data }) => {
+        console.log(data);
+
+        setToast({ type: "alarm", cont: "Submission Successful" });
+        setTimeout(() => {
+          window.location.reload(false);
+        }, 3000);
+      })
+      .catch((err) => console.error(err));
+  }
 
   async function directPayment() {
     setLoader("depositBtn");
@@ -110,23 +146,17 @@ export default function Deposit({ userData }) {
       });
   }
 
-  function onClickDepositBtn() {
+  function reqDeposit() {
     if (isBranch) {
       setSecurityVerifiPopup(true);
     } else {
-      if (isMobile) {
-        axios
-          .post(`${API.LISTEN_TRANSACTION}/${token.text}`)
-          .then(({ data }) => {
-            console.log(data);
-            window.open(
-              `${metaMaskLink}/${
-                contractaddr[token.text]
-              }/transfer?address=${walletAddress}&uint256=${amount}e6`
-            );
-          });
-      } else directPayment();
+      if (isMobile) moDirectPayment();
+      else directPayment();
     }
+  }
+
+  function onClickDepositBtn() {
+    getPreDepositReq();
   }
 
   useEffect(() => {
@@ -294,6 +324,16 @@ export default function Deposit({ userData }) {
               setData={setBranchData}
             />
             <PopupBg off={setCashInPersonPopupPopup} />
+          </>
+        )}
+
+        {preDepositWarningPopup && (
+          <>
+            <PreDepositWarningPopup
+              off={setPreDepositWarningPopup}
+              reqDeposit={reqDeposit}
+            />
+            <PopupBg off={setPreDepositWarningPopup} />
           </>
         )}
       </>
@@ -470,6 +510,16 @@ export default function Deposit({ userData }) {
               setData={setBranchData}
             />
             <PopupBg off={setCashInPersonPopupPopup} />
+          </>
+        )}
+
+        {preDepositWarningPopup && (
+          <>
+            <PreDepositWarningPopup
+              off={setPreDepositWarningPopup}
+              reqDeposit={reqDeposit}
+            />
+            <PopupBg off={setPreDepositWarningPopup} />
           </>
         )}
       </>
