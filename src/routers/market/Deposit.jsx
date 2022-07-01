@@ -43,12 +43,12 @@ export default function Deposit({ userData }) {
 
   function getPreDepositReq() {
     axios
-      .get(API.PreDeposit)
+      .get(API.USER_PREDEPOSIT)
       .then(({ data }) => {
         console.log(data);
 
-        if (data) setPreDepositWarningPopup(true);
-        else reqDeposit();
+        if (data.message === "NOT-FOUND") reqDeposit();
+        else setPreDepositWarningPopup(true);
       })
       .catch((err) => console.error(err));
   }
@@ -68,9 +68,9 @@ export default function Deposit({ userData }) {
         console.log(data);
 
         setToast({ type: "alarm", cont: "Submission Successful" });
-        setTimeout(() => {
-          window.location.reload(false);
-        }, 3000);
+        // setTimeout(() => {
+        //   window.location.reload(false);
+        // }, 3000);
       })
       .catch((err) => console.error(err));
   }
