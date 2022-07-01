@@ -42,6 +42,7 @@ export default function MyProfile({ userData }) {
   //       userData.id && setUid(userData.id);
   //       userData.email && setEmail(userData.email);
   //       userData.phone && setPhone(userData.phone);
+
   //       userData.firstname && setFirstName(userData.firstname);
   //       userData.lastname && setLastName(userData.lastname);
   //       userData.countryNum && setCountryNum(userData.countryNum);
@@ -121,7 +122,9 @@ export default function MyProfile({ userData }) {
   }
 
   useEffect(() => {
+    if (!userData) return;
     console.log(userData);
+
     userData.id && setUid(userData.id);
     userData.email && setEmail(userData.email);
     userData.phone && setPhone(userData.phone);
@@ -235,7 +238,7 @@ export default function MyProfile({ userData }) {
                       className="selectBtn"
                       onClick={() => setSelLocPopup(true)}
                     >
-                      <p>{countryNum || 82} </p>
+                      <p>{countryNum} </p>
 
                       <img src={I_dnPolWhite} alt="" />
                     </button>

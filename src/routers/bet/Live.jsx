@@ -636,7 +636,7 @@ export default function Live() {
 }
 
 const MbetBox = styled.main`
-  height: 100%;
+  height: 100vh;
   padding: 15.55vw 0 0 0;
   color: #fff;
   background: #0a0e17;
@@ -824,7 +824,7 @@ const MbetBox = styled.main`
               border: 1.2px solid;
               border-radius: 8px;
 
-              img{
+              img {
                 width: 3.33vw;
               }
             }

@@ -608,7 +608,7 @@ export default function Demo() {
 }
 
 const MbetBox = styled.main`
-  height: 100%;
+  height: 100vh;
   padding: 15.55vw 0 0 0;
   color: #fff;
   background: #0a0e17;
