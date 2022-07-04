@@ -42,7 +42,6 @@ export default function Data() {
   function onClickPrePageBtn() {
     if (page > 1) setPage(page - 1);
   }
-  
 
   function onClickNextPageBtn() {
     if (page < totalPage) setPage(page + 1);
@@ -353,20 +352,20 @@ const MdataBox = styled.main`
 
   .innerBox {
     height: 100%;
-    padding: 5.55vw;
+    padding: 20px;
     overflow-y: scroll;
 
     .titleArea {
       display: flex;
       flex-direction: column;
-      gap: 2.77vw;
+      gap: 10px;
 
       .title {
-        font-size: 5.55vw;
+        font-size: 20px;
       }
 
       .explain {
-        font-size: 3.88vw;
+        font-size: 14px;
         color: rgba(255, 255, 255, 0.6);
 
         .yellow {
@@ -376,37 +375,37 @@ const MdataBox = styled.main`
     }
 
     .initArea {
-      margin: 5.55vw 0 0 0;
+      margin: 20px 0 0 0;
 
       .initList {
         display: flex;
         flex-direction: column;
-        gap: 4.44vw;
+        gap: 16px;
 
         li {
           display: flex;
           flex-direction: column;
-          gap: 4.44vw;
-          padding: 5.55vw;
+          gap: 16px;
+          padding: 20px;
           background: #000;
-          border-radius: 2.77vw;
+          border-radius: 10px;
 
           .key {
-            font-size: 4.44vw;
+            font-size: 16px;
             color: rgba(255, 255, 255, 0.6);
           }
 
           .value {
             display: flex;
             flex-direction: column;
-            gap: 1.11vw;
+            gap: 4px;
 
             .price {
-              font-size: 5.55vw;
+              font-size: 20px;
             }
 
             .time {
-              font-size: 3.88vw;
+              font-size: 14px;
               color: rgba(255, 255, 255, 0.4);
             }
           }
@@ -417,7 +416,7 @@ const MdataBox = styled.main`
     .listArea {
       display: flex;
       flex-direction: column;
-      margin: 16.66vw 0 0 0;
+      margin: 60px 0 0 0;
 
       .filterBar {
         .filterBox {
@@ -425,17 +424,17 @@ const MdataBox = styled.main`
           justify-content: space-between;
           align-items: center;
           flex-wrap: wrap;
-          gap: 2.77vw;
+          gap: 10px;
 
           .filterOpt {
             display: flex;
             align-items: center;
-            height: 11.11vw;
-            padding: 0 6.11vw;
-            font-size: 3.88vw;
+            height: 40px;
+            padding: 0 22px;
+            font-size: 14px;
             color: rgba(255, 255, 255, 0.4);
             border: 1px solid #3b3e45;
-            border-radius: 5.55vw;
+            border-radius: 20px;
 
             &:focus-within {
               border-color: #fff;
@@ -449,7 +448,7 @@ const MdataBox = styled.main`
                 display: flex;
                 align-items: center;
                 gap: 8px;
-                font-size: 3.88vw;
+                font-size: 14px;
 
                 img {
                   width: 22px;
@@ -458,10 +457,10 @@ const MdataBox = styled.main`
             }
 
             &.searchBox {
-              width: 52.77vw;
+              flex: 1;
 
               input {
-                flex:1;
+                flex: 1;
 
                 &::placeholder {
                   color: rgba(255, 255, 255, 0.4);
@@ -471,12 +470,12 @@ const MdataBox = styled.main`
           }
 
           .applyBtn {
-            width: 33.33vw;
-            height: 11.11vw;
-            font-size: 3.88vw;
+            width: 120px;
+            height: 40px;
+            font-size: 14px;
             font-weight: 700;
             border: 1px solid #3b3e45;
-            border-radius: 5.55vw;
+            border-radius: 20px;
 
             &:focus-within {
               border-color: #fff;
@@ -493,11 +492,11 @@ const MdataBox = styled.main`
           li {
             display: flex;
             flex-direction: column;
-            gap: 1.11vw;
-            padding: 6.66vw 0;
+            gap: 4px;
+            padding: 24px 0;
 
             &:last-of-type {
-              padding: 6.66vw 0 0;
+              padding: 24px 0 0;
             }
 
             &:nth-of-type(n + 2) {
@@ -508,11 +507,11 @@ const MdataBox = styled.main`
               display: flex;
               justify-content: space-between;
               align-items: center;
-              font-size: 3.88vw;
+              font-size: 14px;
 
               &.order {
                 .value {
-                  gap: 1.66vw;
+                  gap: 6px;
                 }
               }
 
@@ -535,7 +534,7 @@ const MdataBox = styled.main`
                 }
 
                 img {
-                  width: 3.33vw;
+                  width: 12px;
                 }
 
                 .price {
@@ -546,12 +545,12 @@ const MdataBox = styled.main`
 
             .depositBtn {
               width: 100%;
-              height: 13.88vw;
-              margin: 6.66vw 0 0 0;
-              font-size: 4.44vw;
+              height: 50px;
+              margin: 24px 0 0 0;
+              font-size: 16px;
               font-weight: 700;
               background: #f7ab1f;
-              border-radius: 3.88vw;
+              border-radius: 14px;
             }
           }
         }
@@ -681,8 +680,8 @@ const PdataBox = styled.main`
 
             &.searchBox {
               input {
-                flex:1;
-                
+                flex: 1;
+
                 &::placeholder {
                   color: rgba(255, 255, 255, 0.4);
                 }

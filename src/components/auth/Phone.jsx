@@ -187,23 +187,23 @@ export default function Phone({ userData, setUserData }) {
 const MphoneBox = styled.ul`
   display: flex;
   flex-direction: column;
-  gap: 5.55vw;
+  gap: 20px;
 
   li {
     display: flex;
     flex-direction: column;
-    gap: 2.22vw;
-    font-size: 3.88vw;
+    gap: 8px;
+    font-size: 14px;
 
     &.phoneNumBox {
       .value {
         display: flex;
         flex-direction: row;
-        gap: 2.77vw;
+        gap: 10px;
 
         .selectBox {
-          width: 25vw;
-          border-radius: 2.22vw;
+          width: 90px;
+          border-radius: 8px;
           border: 1px solid #ddd;
           position: relative;
 
@@ -217,11 +217,11 @@ const MphoneBox = styled.ul`
             align-items: center;
             width: 100%;
             height: 100%;
-            padding: 0 4.44vw;
-            font-size: 3.88vw;
+            padding: 0 16px;
+            font-size: 14px;
 
-            img{
-              width: 2.22vw;
+            img {
+              width: 8px;
             }
           }
         }
@@ -238,14 +238,14 @@ const MphoneBox = styled.ul`
     .value {
       display: flex;
       flex-direction: column;
-      gap: 2.22vw;
+      gap: 8px;
 
       .inputBox {
         display: flex;
         align-items: center;
-        height: 12.22vw;
-        padding: 0 4.44vw;
-        border-radius: 2.22vw;
+        height: 44px;
+        padding: 0 16px;
+        border-radius: 8px;
         border: 1px solid #ddd;
 
         &:focus-within {
@@ -264,19 +264,19 @@ const MphoneBox = styled.ul`
           display: flex;
           justify-content: center;
           align-items: center;
-          width: 4.44vw;
-          height: 4.44vw;
+          width: 16px;
+          height: 16px;
           background: #ddd;
           border-radius: 50%;
 
           img {
-            width: 2.22vw;
+            width: 8px;
           }
         }
       }
 
       p.alarm {
-        font-size: 3.33vw;
+        font-size: 12px;
         color: #ff5353;
       }
     }

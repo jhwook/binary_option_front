@@ -306,13 +306,13 @@ export default function Signup() {
 }
 
 const MsignupBox = styled.main`
-  padding: 15.55vw 0 0 0;
+  padding: 56px 0 0;
 
   .innerBox {
     display: flex;
     flex-direction: column;
-    gap: 11.11vw;
-    padding: 11.11vw 4.44vw 0;
+    gap: 40px;
+    padding: 40px 16px 0;
 
     .titleBox {
       display: flex;
@@ -320,7 +320,7 @@ const MsignupBox = styled.main`
       gap: 10px;
 
       .pgTitle {
-        font-size: 6.11vw;
+        font-size: 28px;
       }
     }
 
@@ -329,14 +329,14 @@ const MsignupBox = styled.main`
         .contBox {
           .categoryList {
             display: flex;
-            margin: 0 0 11.11vw 0;
+            margin: 0 0 40px 0;
 
             li {
               display: flex;
               justify-content: center;
               align-items: center;
-              height: 8.88vw;
-              font-size: 3.88vw;
+              height: 32px;
+              font-size: 14px;
               color: #ddd;
 
               &.on {
@@ -349,7 +349,7 @@ const MsignupBox = styled.main`
                     #000000 -12.12%,
                     rgba(0, 0, 0, 0) 131.82%
                   );
-                border-radius: 2.22vw 2.22vw 0 0;
+                border-radius: 8px 8px 0 0;
                 background-origin: border-box;
                 background-clip: content-box, border-box;
               }
@@ -357,13 +357,13 @@ const MsignupBox = styled.main`
               button {
                 width: 100%;
                 height: 100%;
-                padding: 0 5.55vw;
+                padding: 0 20px;
               }
             }
           }
 
           .referralDet {
-            margin: 5.55vw 0 0 0;
+            margin: 20px 0 0 0;
 
             &[open] {
               summary {
@@ -376,27 +376,27 @@ const MsignupBox = styled.main`
             summary {
               display: flex;
               align-items: center;
-              gap: 1.66vw;
-              font-size: 3.88vw;
+              gap: 6px;
+              font-size: 14px;
 
               img {
-                width: 2.22vw;
+                width: 8px;
               }
             }
 
             .inputCont {
               display: flex;
               flex-direction: column;
-              gap: 2.22vw;
-              font-size: 3.88vw;
-              margin: 2.22vw 0 0 0;
+              gap: 8px;
+              font-size: 14px;
+              margin: 8px 0 0 0;
 
               .inputBox {
                 display: flex;
                 align-items: center;
-                height: 12.22vw;
-                padding: 0 4.44vw;
-                border-radius: 2.22vw;
+                height: 44px;
+                padding: 0 16px;
+                border-radius: 8px;
                 border: 1px solid #ddd;
 
                 &:focus-within {
@@ -413,7 +413,7 @@ const MsignupBox = styled.main`
               }
 
               p.alarm {
-                font-size: 3.33vw;
+                font-size: 12px;
                 color: #ff5353;
               }
             }
@@ -423,21 +423,21 @@ const MsignupBox = styled.main`
         .btnBox {
           display: flex;
           flex-direction: column;
-          gap: 3.88vw;
-          margin: 11.11vw 0 0 0;
+          gap: 14px;
+          margin: 40px 0 0 0;
 
           .termBox {
             display: flex;
             align-items: flex-start;
-            gap: 2.77vw;
+            gap: 10px;
 
             .chkBtn {
               display: flex;
               justify-content: center;
               align-items: center;
-              width: 5.55vw;
-              height: 5.55vw;
-              border-radius: 1.11vw;
+              width: 20px;
+              height: 20px;
+              border-radius: 4px;
               box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.3);
 
               &.on {
@@ -448,12 +448,12 @@ const MsignupBox = styled.main`
 
               img {
                 display: none;
-                width: 3.88vw;
+                width: 14px;
               }
             }
 
             .agreeBox {
-              font-size: 3.88vw;
+              font-size: 14px;
 
               .termBtn {
                 color: #f7ab1f;
@@ -462,12 +462,12 @@ const MsignupBox = styled.main`
           }
 
           .nextBtn {
-            height: 13.88vw;
-            font-size: 4.44vw;
+            height: 50px;
+            font-size: 16px;
             font-weight: 700;
             color: #fff;
             background: #2a2a2a;
-            border-radius: 2.22vw;
+            border-radius: 8px;
           }
         }
 
@@ -475,9 +475,9 @@ const MsignupBox = styled.main`
           display: flex;
           flex-direction: column;
           align-items: flex-start;
-          gap: 2.77vw;
-          margin: 5.55vw 0 0 0;
-          font-size: 3.88vw;
+          gap: 10px;
+          margin: 20px 0 0 0;
+          font-size: 14px;
 
           .loginBox {
             display: flex;
@@ -485,7 +485,7 @@ const MsignupBox = styled.main`
           }
 
           button {
-            font-size: 3.88vw;
+            font-size: 14px;
             color: #f7ab1f;
           }
         }
@@ -494,8 +494,8 @@ const MsignupBox = styled.main`
   }
 
   .cpRight {
-    margin: 8.33vw 0;
-    font-size: 3.33vw;
+    margin: 30px 0;
+    font-size: 12px;
     text-align: center;
     white-space: nowrap;
     color: #ddd;

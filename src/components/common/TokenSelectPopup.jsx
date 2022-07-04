@@ -49,10 +49,10 @@ const MselectPopupBox = styled.ul`
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    gap: 2.77vw;
-    height: 13.88vw;
-    padding: 0 4.44vw;
-    font-size: 5vw;
+    gap: 10px;
+    height: 50px;
+    padding: 0 16px;
+    font-size: 18px;
     font-weight: 700;
     opacity: 0.4;
     cursor: pointer;
@@ -62,7 +62,7 @@ const MselectPopupBox = styled.ul`
     }
 
     .icon {
-      width: 8.33vw;
+      width: 30px;
       aspect-ratio: 1;
       object-fit: contain;
     }

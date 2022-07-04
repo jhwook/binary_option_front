@@ -21,7 +21,6 @@ export default function WithDrawal() {
 
   const [amount, setAmount] = useState("");
   const [address, setAddress] = useState("");
-  const [tokenType, setTokenType] = useState("USDC");
   const [tokenPopup, setTokenPopup] = useState(false);
   const [token, setToken] = useState({ icon: T_usdt, text: "USDT" });
   const [settings, setSettings] = useState({
@@ -29,10 +28,7 @@ export default function WithDrawal() {
     minWithdraw: 5,
     maxTransactions: -1,
   });
-  const [tokenList, setTokenList] = useState([
-    { icon: T_usdt, text: "USDT" },
-    { icon: T_usdc, text: "USDC" },
-  ]);
+  const [tokenList, setTokenList] = useState([{ icon: T_usdt, text: "USDT" }]);
   const [process, setProcess] = useState(false);
   const [loader, setLoader] = useState("");
 
@@ -96,7 +92,9 @@ export default function WithDrawal() {
 
                   <li>
                     <p className="key">Withdrawal Amount</p>
-                    <strong className="value">{amount} {token.text}</strong>
+                    <strong className="value">
+                      {amount} {token.text}
+                    </strong>
                   </li>
 
                   <li>
@@ -389,7 +387,7 @@ export default function WithDrawal() {
 }
 
 const MwithDrawalBox = styled.main`
-  padding: 5.55vw;
+  padding: 20px;
   height: 100%;
 
   .innerBox {
@@ -400,31 +398,31 @@ const MwithDrawalBox = styled.main`
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 3.88vw 0 0;
+      padding: 14px 0 0;
 
       .titleBox {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 1.11vw;
+        gap: 4px;
 
         .key {
-          font-size: 4.44vw;
+          font-size: 16px;
         }
 
         .value {
-          font-size: 7.22vw;
+          font-size: 26px;
         }
       }
 
       .infoList {
         display: flex;
         flex-direction: column;
-        gap: 1.66vw;
+        gap: 6px;
         width: 100%;
-        padding: 5.55vw;
-        margin: 5.55vw 0 0;
-        font-size: 3.88vw;
+        padding: 20px;
+        margin: 20px 0 0;
+        font-size: 14px;
         background: rgba(0, 0, 0, 0.2);
         border-radius: 10px;
 
@@ -441,21 +439,21 @@ const MwithDrawalBox = styled.main`
       .explainBox {
         display: flex;
         flex-direction: column;
-        gap: 5.55vw;
-        margin: 11.11vw 0 0;
+        gap: 20px;
+        margin: 40px 0 0;
         color: #f7ab1f;
 
         .explain {
-          padding: 0 6.66vw;
-          font-size: 3.88vw;
+          padding: 0 24px;
+          font-size: 14px;
           text-align: center;
         }
 
         .viewBtn {
-          height: 13.88vw;
-          font-size: 4.44vw;
+          height: 50px;
+          font-size: 16px;
           border: 2px solid rgba(247, 171, 31, 0.8);
-          border-radius: 2.77vw;
+          border-radius: 10px;
         }
       }
     }
@@ -463,17 +461,17 @@ const MwithDrawalBox = styled.main`
     .unProcess {
       display: flex;
       flex-direction: column;
-      gap: 15vw;
+      gap: 54px;
 
       .inputList {
         display: flex;
         flex-direction: column;
-        gap: 3.88vw;
+        gap: 14px;
 
         li {
           &.tokenBox {
             .selectBox {
-              margin: 2.77vw 0 0 0;
+              margin: 10px 0 0 0;
               background: rgba(255, 255, 255, 0.1);
               border: 1.4px solid rgba(0, 0, 0, 0);
               border-radius: 10px;
@@ -482,11 +480,11 @@ const MwithDrawalBox = styled.main`
               .selBtn {
                 display: flex;
                 align-items: center;
-                gap: 2.22vw;
+                gap: 8px;
                 width: 100%;
-                height: 13.88vw;
-                padding: 0 6.11vw;
-                font-size: 5vw;
+                height: 50px;
+                padding: 0 22px;
+                font-size: 18px;
                 font-weight: 700;
 
                 &.on {
@@ -497,7 +495,7 @@ const MwithDrawalBox = styled.main`
                 }
 
                 .token {
-                  width: 8.33vw;
+                  width: 30px;
                   aspect-ratio: 1;
                 }
 
@@ -507,7 +505,7 @@ const MwithDrawalBox = styled.main`
                 }
 
                 .arw {
-                  height: 2.22vw;
+                  height: 8px;
                   opacity: 0.4;
                 }
               }
@@ -517,16 +515,16 @@ const MwithDrawalBox = styled.main`
           &.amountBox {
             .optList {
               display: flex;
-              gap: 2.77vw;
-              margin: 2.77vw 0 0 0;
-              font-size: 4.44vw;
+              gap: 10px;
+              margin: 10px 0 0 0;
+              font-size: 16px;
               overflow-x: scroll;
 
               .optBtn {
                 flex: 1;
-                height: 9.44vw;
+                height: 34px;
                 background: rgba(255, 255, 255, 0.1);
-                border-radius: 2.22vw;
+                border-radius: 8px;
                 color: rgba(255, 255, 255, 0.6);
                 border: 1px solid rgba(255, 255, 255, 0.4);
 
@@ -539,20 +537,20 @@ const MwithDrawalBox = styled.main`
           }
 
           .key {
-            font-size: 3.88vw;
+            font-size: 14px;
           }
 
           .valueBox {
             display: flex;
             align-items: center;
-            gap: 2.22vw;
-            height: 13.88vw;
-            padding: 0 6.11vw;
-            margin: 2.77vw 0 0 0;
-            font-size: 5vw;
+            gap: 8px;
+            height: 50px;
+            padding: 0 22px;
+            margin: 10px 0 0 0;
+            font-size: 18px;
             font-weight: 700;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 2.77vw;
+            border-radius: 10px;
             border: 1.4px solid rgba(0, 0, 0, 0);
             cursor: pointer;
             position: relative;
@@ -573,14 +571,14 @@ const MwithDrawalBox = styled.main`
         .infoList {
           display: flex;
           flex-direction: column;
-          gap: 2.22vw;
-          padding: 3.33vw 3.88vw 3.88vw;
+          gap: 8px;
+          padding: 12px 14px 14px;
           background: rgba(0, 0, 0, 0.6);
 
           li {
             display: flex;
             justify-content: space-between;
-            font-size: 3.88vw;
+            font-size: 14px;
 
             .key {
               opacity: 0.6;
@@ -593,12 +591,12 @@ const MwithDrawalBox = styled.main`
 
         .drawalBtn {
           width: 100%;
-          height: 13.88vw;
-          font-size: 4.44vw;
+          height: 50px;
+          font-size: 16px;
           font-weight: 700;
           color: #4e3200;
           background: linear-gradient(99.16deg, #604719 3.95%, #f7ab1f 52.09%);
-          border-radius: 2.77vw;
+          border-radius: 10px;
 
           &:disabled {
             color: #f7ab1f;

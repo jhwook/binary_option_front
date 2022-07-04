@@ -263,32 +263,32 @@ export default function ConfirmCny({ setConfirm, amount, setOk }) {
 const MconfirmCnyBox = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 11.66vw;
+  gap: 16px;
   height: 100%;
   overflow-y: scroll;
 
   .headArea {
     display: flex;
     align-items: center;
-    gap: 2.77vw;
-    font-size: 4.44vw;
+    gap: 10px;
+    font-size: 16px;
 
     .timerBox {
       display: flex;
       align-items: center;
-      gap: 0.83vw;
+      gap: 3px;
 
       span {
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 6.66vw;
+        width: 24px;
         aspect-ratio: 1;
-        font-size: 3.88vw;
+        font-size: 14px;
         font-weight: 700;
         color: #000;
         background: #fff;
-        border-radius: 0.55vw;
+        border-radius: 2px;
       }
     }
   }
@@ -296,7 +296,7 @@ const MconfirmCnyBox = styled.div`
   .contArea {
     display: flex;
     flex-direction: column;
-    gap: 12.22vw;
+    gap: 18px;
 
     .listCont {
       display: flex;
@@ -305,15 +305,15 @@ const MconfirmCnyBox = styled.div`
       .listBox {
         display: flex;
         flex-direction: column;
-        gap: 3.88vw;
-        font-size: 3.88vw;
+        gap: 14px;
+        font-size: 14px;
 
         &:nth-of-type(1) {
-          padding: 0 0 3.88vw;
+          padding: 0 0 14px;
         }
 
         &:nth-of-type(2) {
-          padding: 3.88vw 0 0;
+          padding: 14px 0 0;
           border-top: 1px solid rgba(255, 255, 255, 0.14);
         }
 
@@ -323,7 +323,7 @@ const MconfirmCnyBox = styled.div`
         ul {
           display: flex;
           flex-direction: column;
-          gap: 1.11vw;
+          gap: 4px;
 
           li {
             display: flex;
@@ -349,31 +349,31 @@ const MconfirmCnyBox = styled.div`
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 5.55vw;
+      gap: 20px;
 
       .explain {
         display: flex;
         align-items: flex-start;
-        gap: 1.66vw;
-        font-size: 3.88vw;
-        line-height: 5vw;
+        gap: 6px;
+        font-size: 14px;
+        line-height: 18px;
         color: #f7ab1f;
 
         img {
           height: 14px;
-          margin: 0.55vw 0;
+          margin: 2px 0;
           aspect-ratio: 1;
         }
       }
 
       .confirmBtn {
         width: 100%;
-        height: 13.88vw;
-        font-size: 5vw;
+        height: 50px;
+        font-size: 18px;
         font-weight: 700;
         color: #f7ab1f;
         border: 2px solid #f7ab1f;
-        border-radius: 2.77vw;
+        border-radius: 10px;
       }
     }
 

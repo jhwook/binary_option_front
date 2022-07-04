@@ -337,13 +337,13 @@ export default function ResetPw() {
 }
 
 const MloginBox = styled.main`
-  padding: 15.55vw 0 0 0;
+  padding: 56px 0 0;
 
   .innerBox {
     display: flex;
     flex-direction: column;
-    gap: 11.11vw;
-    padding: 11.11vw 4.44vw 0;
+    gap: 40px;
+    padding: 40px 16px 0;
 
     .titleBox {
       display: flex;
@@ -351,7 +351,7 @@ const MloginBox = styled.main`
       gap: 10px;
 
       .pgTitle {
-        font-size: 6.11vw;
+        font-size: 22px;
       }
     }
 
@@ -360,14 +360,14 @@ const MloginBox = styled.main`
         .contBox {
           .categoryList {
             display: flex;
-            margin: 0 0 11.11vw 0;
+            margin: 0 0 40px 0;
 
             li {
               display: flex;
               justify-content: center;
               align-items: center;
-              height: 8.88vw;
-              font-size: 3.88vw;
+              height: 32px;
+              font-size: 14px;
               color: #ddd;
 
               &.on {
@@ -380,7 +380,7 @@ const MloginBox = styled.main`
                     #000000 -12.12%,
                     rgba(0, 0, 0, 0) 131.82%
                   );
-                border-radius: 2.22vw 2.22vw 0 0;
+                border-radius: 8px 8px 0 0;
                 background-origin: border-box;
                 background-clip: content-box, border-box;
               }
@@ -388,7 +388,7 @@ const MloginBox = styled.main`
               button {
                 width: 100%;
                 height: 100%;
-                padding: 0 5.55vw;
+                padding: 0 20px;
               }
             }
           }
@@ -396,24 +396,24 @@ const MloginBox = styled.main`
           .inputList {
             display: flex;
             flex-direction: column;
-            gap: 5.55vw;
-            margin: 11.11vw 0 0 0;
+            gap: 20px;
+            margin: 40px 0 0 0;
 
             li {
               display: flex;
               flex-direction: column;
               gap: 8px;
-              font-size: 3.88vw;
+              font-size: 14px;
 
               &.phoneNumBox {
                 .value {
                   display: flex;
                   flex-direction: row;
-                  gap: 2.77vw;
+                  gap: 10px;
 
                   .selectBox {
-                    width: 25vw;
-                    border-radius: 2.22vw;
+                    width: 90px;
+                    border-radius: 8px;
                     border: 1px solid #ddd;
                     position: relative;
 
@@ -427,11 +427,11 @@ const MloginBox = styled.main`
                       align-items: center;
                       width: 100%;
                       height: 100%;
-                      padding: 0 4.44vw;
-                      font-size: 3.88vw;
+                      padding: 0 16px;
+                      font-size: 14px;
 
                       img {
-                        width: 2.22vw;
+                        width: 8px;
                       }
                     }
                   }
@@ -448,14 +448,14 @@ const MloginBox = styled.main`
               .value {
                 display: flex;
                 flex-direction: column;
-                gap: 2.22vw;
+                gap: 8px;
 
                 .inputBox {
                   display: flex;
                   align-items: center;
-                  height: 12.22vw;
-                  padding: 0 5.55vw;
-                  border-radius: 2.22vw;
+                  height: 44px;
+                  padding: 0 20px;
+                  border-radius: 8px;
                   border: 1px solid #ddd;
 
                   &:focus-within {
@@ -474,24 +474,24 @@ const MloginBox = styled.main`
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    width: 4.44vw;
-                    height: 4.44vw;
+                    width: 16px;
+                    height: 16px;
                     background: #ddd;
                     border-radius: 50%;
 
                     img {
-                      width: 2.22vw;
+                      width: 8px;
                     }
                   }
 
                   .getCodeBtn {
-                    font-size: 3.88vw;
+                    font-size: 14px;
                     color: #f7ab1f;
                   }
                 }
 
                 p.alarm {
-                  font-size: 3.33vw;
+                  font-size: 12px;
                   color: #ff5353;
                 }
               }
@@ -503,14 +503,14 @@ const MloginBox = styled.main`
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 3.88vw;
-          margin: 8.33vw 0 0 0;
+          gap: 14px;
+          margin: 30px 0 0 0;
 
           button {
             width: 100%;
-            height: 13.88vw;
-            font-size: 4.44vw;
-            border-radius: 2.22vw;
+            height: 50px;
+            font-size: 16px;
+            border-radius: 8px;
 
             &.loginBtn {
               font-weight: 700;
@@ -524,8 +524,8 @@ const MloginBox = styled.main`
   }
 
   .cpRight {
-    margin: 8.33vw 0;
-    font-size: 3.33vw;
+    margin: 30px 0;
+    font-size: 12px;
     text-align: center;
     white-space: nowrap;
     color: #ddd;

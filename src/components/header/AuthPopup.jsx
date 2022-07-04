@@ -32,10 +32,7 @@ export default function AuthPopup({ off }) {
 
         <article className="contArea">
           <div className="btnBox">
-            <button
-              className="loginBtn"
-              onClick={() => onclickNavBtn("/auth")}
-            >
+            <button className="loginBtn" onClick={() => onclickNavBtn("/auth")}>
               Login
             </button>
 
@@ -80,39 +77,39 @@ const AuthPopupBox = styled.section`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 15.55vw;
-    padding: 0 5.55vw;
+    height: 56px;
+    padding: 0 20px;
 
     .logoBtn {
       display: flex;
       align-items: center;
 
       img {
-        height: 5vw;
+        height: 18px;
       }
     }
 
     .exitBtn {
       img {
-        width: 5vw;
+        width: 18px;
       }
     }
   }
 
   .contArea {
     flex: 1;
-    padding: 11.11vw 4.44vw 0;
+    padding: 40px 16px 0;
 
     .btnBox {
       display: flex;
       flex-direction: column;
-      gap: 3.33vw;
+      gap: 12px;
 
       button {
-        height: 13.88vw;
-        font-size: 4.44vw;
+        height: 50px;
+        font-size: 16px;
         font-weight: 700;
-        border-radius: 2.22vw;
+        border-radius: 8px;
 
         &.loginBtn {
           color: #f7ab1f;
@@ -127,21 +124,21 @@ const AuthPopupBox = styled.section`
     }
 
     .lngBox {
-      bottom: 5.55vw;
-      right: 5.55vw;
+      bottom: 20px;
+      right: 20px;
       position: fixed;
 
       .lngBtn {
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 10vw;
+        width: 36px;
         aspect-ratio: 1;
         background: #e6e6e6;
         border-radius: 50%;
 
         img {
-          width: 5.55vw;
+          width: 20px;
         }
       }
     }

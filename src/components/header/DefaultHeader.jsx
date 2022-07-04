@@ -63,11 +63,8 @@ export default function DefaultHeader({ white, border, title }) {
       .get(`${API.AUTH}`)
       .then(async ({ data }) => {
         console.log(data.result);
-        if (data.result?.wallet?.walletaddress)
-          localStorage.setItem(
-            "walletAddress",
-            data.result.wallet.walletaddress
-          );
+        if (data.result?.wallet)
+          localStorage.setItem("walletAddress", data.result.wallet);
         setUserData({ ...data.result });
       })
       .catch((err) => {
@@ -292,8 +289,8 @@ const MdefaultHeaderBox = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 15.55vw;
-  padding: 0 5.55vw;
+  height: 56px;
+  padding: 0 20px;
   color: #fff;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(6px);
@@ -327,7 +324,7 @@ const MdefaultHeaderBox = styled.header`
 
   .leftArea {
     .title {
-      font-size: 4.44vw;
+      font-size: 16px;
     }
 
     .logoBtn {
@@ -335,7 +332,7 @@ const MdefaultHeaderBox = styled.header`
       align-items: center;
 
       img {
-        height: 5vw;
+        height: 20px;
       }
     }
 
@@ -343,19 +340,19 @@ const MdefaultHeaderBox = styled.header`
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 32.22vw;
-      height: 9.44vw;
-      font-size: 3.88vw;
+      width: 116px;
+      height: 34px;
+      font-size: 14px;
       background: rgba(255, 255, 255, 0.1);
-      border-radius: 7.77vw;
+      border-radius: 28px;
     }
   }
 
   .rightArea {
     .menuBtn {
       svg {
-        width: 5vw;
-        height: 5vw;
+        width: 20px;
+        height: 20px;
 
         .fill {
           fill: #fff;

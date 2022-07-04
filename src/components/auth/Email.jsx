@@ -153,13 +153,13 @@ export default function Email({ userData, setUserData }) {
 const MemailBox = styled.ul`
   display: flex;
   flex-direction: column;
-  gap: 5.55vw;
+  gap: 20px;
 
   li {
     display: flex;
     flex-direction: column;
-    gap: 2.22vw;
-    font-size: 3.88vw;
+    gap: 8px;
+    font-size: 14px;
 
     .key {
     }
@@ -167,14 +167,14 @@ const MemailBox = styled.ul`
     .value {
       display: flex;
       flex-direction: column;
-      gap: 2.22vw;
+      gap: 8px;
 
       .inputBox {
         display: flex;
         align-items: center;
-        height: 12.22vw;
-        padding: 0 4.44vw;
-        border-radius: 2.22vw;
+        height: 44px;
+        padding: 0 16px;
+        border-radius: 8px;
         border: 1px solid #ddd;
 
         &:focus-within {
@@ -193,19 +193,19 @@ const MemailBox = styled.ul`
           display: flex;
           justify-content: center;
           align-items: center;
-          width: 4.44vw;
-          height: 4.44vw;
+          width: 16px;
+          height: 16px;
           background: #ddd;
           border-radius: 50%;
 
           img {
-            width: 2.22vw;
+            width: 8px;
           }
         }
       }
 
       p.alarm {
-        font-size: 3.33vw;
+        font-size: 12px;
         color: #ff5353;
       }
     }

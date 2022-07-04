@@ -71,7 +71,7 @@ const MrequestPopupBox = styled.section`
   overflow-y: scroll;
   color: #fff;
   background: rgba(0, 0, 0, 0.4);
-  border-radius: 5.55vw 5.55vw 0px 0px;
+  border-radius: 20px 20px 0px 0px;
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
   right: 0;
@@ -84,13 +84,13 @@ const MrequestPopupBox = styled.section`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 16.66vw;
-    padding: 0 5.55vw;
-    font-size: 5vw;
+    height: 60px;
+    padding: 0 20px;
+    font-size: 18px;
 
     .blank,
     .exitBtn img {
-      width: 4.44vw;
+      width: 16px;
       opacity: 0.2;
     }
   }
@@ -98,16 +98,16 @@ const MrequestPopupBox = styled.section`
   .contArea {
     display: flex;
     flex-direction: column;
-    gap: 5.55vw;
-    padding: 0 5.55vw 8.33vw;
+    gap: 20px;
+    padding: 0 20px 30px;
 
     textarea {
-      height: 34.44vw;
-      padding: 2.77vw;
-      font-size: 4.44vw;
+      height: 316px;
+      padding: 10px;
+      font-size: 16px;
       background: rgba(0, 0, 0, 0.3);
       border: 1.4px solid transparent;
-      border-radius: 2.77vw;
+      border-radius: 10px;
 
       &:focus-within {
         border-color: #fff;
@@ -115,12 +115,12 @@ const MrequestPopupBox = styled.section`
     }
 
     .sendBtn {
-      height: 13.88vw;
-      font-size: 5vw;
+      height: 50px;
+      font-size: 18px;
       font-weight: 700;
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid #fff;
-      border-radius: 3.33vw;
+      border-radius: 12px;
 
       &:hover {
         box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.2);

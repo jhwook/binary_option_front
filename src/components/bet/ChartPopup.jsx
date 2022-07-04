@@ -256,10 +256,10 @@ export default function ChartPopup({ off }) {
 const MchartPopupBox = styled.section`
   display: flex;
   flex-direction: column;
-  gap: 8.33vw;
-  padding: 5.55vw;
+  gap: 30px;
+  padding: 20px;
   background: rgba(255, 255, 255, 0.2);
-  border-radius: 5.55vw 5.55vw 0 0;
+  border-radius: 20px 20px 0 0;
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
   bottom: 0;
@@ -271,11 +271,11 @@ const MchartPopupBox = styled.section`
   article {
     display: flex;
     flex-direction: column;
-    gap: 2.77vw;
+    gap: 10px;
     color: rgba(255, 255, 255, 0.4);
 
     .key {
-      font-size: 3.88vw;
+      font-size: 14px;
     }
 
     .value {
@@ -284,7 +284,7 @@ const MchartPopupBox = styled.section`
     &.typeArea {
       .value {
         display: flex;
-        gap: 2.77vw;
+        gap: 10px;
 
         li {
           flex: 1;
@@ -292,11 +292,11 @@ const MchartPopupBox = styled.section`
           flex-direction: column;
           justify-content: center;
           align-items: center;
-          gap: 2.22vw;
+          gap: 8px;
           aspect-ratio: 1;
-          font-size: 3.33vw;
+          font-size: 12px;
           border: 1px solid rgba(255, 255, 255, 0.2);
-          border-radius: 2.22vw;
+          border-radius: 8px;
           cursor: pointer;
 
           &.on {
@@ -310,7 +310,7 @@ const MchartPopupBox = styled.section`
           }
 
           img {
-            width: 13.33vw;
+            width: 112px;
             opacity: 0.4;
           }
         }
@@ -327,10 +327,10 @@ const MchartPopupBox = styled.section`
           display: flex;
           justify-content: center;
           align-items: center;
-          width: 20vw;
-          height: 10.55vw;
+          width: 72px;
+          height: 12px;
           border: 1px solid rgba(255, 255, 255, 0.2);
-          border-radius: 2.22vw;
+          border-radius: 8px;
           cursor: pointer;
 
           &.on {
@@ -346,24 +346,24 @@ const MchartPopupBox = styled.section`
       .value {
         display: flex;
         flex-direction: column;
-        gap: 2.77vw;
+        gap: 10px;
 
         li {
           display: flex;
           align-items: center;
-          gap: 2.77vw;
-          height: 6.66vw;
+          gap: 10px;
+          height: 24px;
           color: #fff;
 
           .toggleBtn {
             display: flex;
             align-items: center;
-            width: 16.11vw;
-            height: 6.66vw;
-            padding: 0.83vw;
-            font-size: 3.88vw;
+            width: 122px;
+            height: 24px;
+            padding: 3px;
+            font-size: 14px;
             background: rgba(255, 255, 255, 0.2);
-            border-radius: 3.33vw;
+            border-radius: 12px;
             position: relative;
 
             &,
@@ -375,7 +375,7 @@ const MchartPopupBox = styled.section`
               background: rgba(247, 171, 31, 0.2);
 
               span {
-                margin: 0 0 0 9.44vw;
+                margin: 0 0 0 34px;
                 background: rgba(247, 171, 31, 0.8);
               }
 
@@ -391,7 +391,7 @@ const MchartPopupBox = styled.section`
             }
 
             span {
-              width: 5vw;
+              width: 18px;
               aspect-ratio: 1;
               border-radius: 50%;
               background: rgba(255, 255, 255, 0.8);
@@ -404,12 +404,12 @@ const MchartPopupBox = styled.section`
 
               &.on {
                 opacity: 0;
-                left: 3.33vw;
+                left: 12px;
               }
 
               &.off {
                 opacity: 1;
-                right: 3.33vw;
+                right: 12px;
               }
             }
           }

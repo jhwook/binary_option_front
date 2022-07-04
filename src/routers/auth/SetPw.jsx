@@ -178,13 +178,13 @@ export default function SetPw() {
 }
 
 const MsetPwBox = styled.main`
-  padding: 15.55vw 0 0 0;
+  padding: 56px 0 0;
 
   .innerBox {
     display: flex;
     flex-direction: column;
-    gap: 11.11vw;
-    padding: 11.11vw 4.44vw 0;
+    gap: 40px;
+    padding: 40px 16px 0;
 
     .titleBox {
       display: flex;
@@ -192,7 +192,7 @@ const MsetPwBox = styled.main`
       gap: 10px;
 
       .pgTitle {
-        font-size: 6.11vw;
+        font-size: 22px;
       }
     }
 
@@ -202,13 +202,13 @@ const MsetPwBox = styled.main`
           .inputList {
             display: flex;
             flex-direction: column;
-            gap: 5.55vw;
+            gap: 20px;
 
             li {
               display: flex;
               flex-direction: column;
-              gap: 2.22vw;
-              font-size: 3.88vw;
+              gap: 8px;
+              font-size: 14px;
 
               .key {
               }
@@ -216,14 +216,14 @@ const MsetPwBox = styled.main`
               .value {
                 display: flex;
                 flex-direction: column;
-                gap: 2.22vw;
+                gap: 8px;
 
                 .inputBox {
                   display: flex;
                   align-items: center;
-                  height: 12.22vw;
-                  padding: 0 5.55vw;
-                  border-radius: 2.22vw;
+                  height: 50px;
+                  padding: 0 20px;
+                  border-radius: 8px;
                   border: 1px solid #ddd;
 
                   &:focus-within {
@@ -242,24 +242,24 @@ const MsetPwBox = styled.main`
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    width: 4.44vw;
-                    height: 4.44vw;
+                    width: 16px;
+                    height: 16px;
                     background: #ddd;
                     border-radius: 50%;
 
                     img {
-                      width: 2.22vw;
+                      width: 8px;
                     }
                   }
 
                   .getCodeBtn {
-                    font-size: 3.88vw;
+                    font-size: 14px;
                     color: #f7ab1f;
                   }
                 }
 
                 p.alarm {
-                  font-size: 3.33vw;
+                  font-size: 12px;
                   color: #ff5353;
                 }
               }
@@ -271,14 +271,14 @@ const MsetPwBox = styled.main`
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 3.88vw;
-          margin: 8.33vw 0 0 0;
+          gap: 14px;
+          margin: 30px 0 0 0;
 
           button {
             width: 100%;
-            height: 13.88vw;
-            font-size: 4.44vw;
-            border-radius: 2.22vw;
+            height: 50px;
+            font-size: 16px;
+            border-radius: 8px;
 
             &.loginBtn {
               font-weight: 700;
@@ -292,8 +292,8 @@ const MsetPwBox = styled.main`
   }
 
   .cpRight {
-    margin: 8.33vw 0;
-    font-size: 3.33vw;
+    margin: 30px 0;
+    font-size: 12px;
     text-align: center;
     white-space: nowrap;
     color: #ddd;

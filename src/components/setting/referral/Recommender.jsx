@@ -192,15 +192,15 @@ const MrecommenderBox = styled.div`
       li {
         display: flex;
         flex-direction: column;
-        gap: 1.11vw;
-        padding: 6.66vw 0;
+        gap: 4px;
+        padding: 24px 0;
 
         &:first-of-type {
-          padding: 0 0 6.66vw;
+          padding: 0 0 24px;
         }
 
         &:last-of-type {
-          padding: 6.66vw 0 0;
+          padding: 24px 0 0;
         }
 
         &:nth-of-type(n + 2) {
@@ -211,11 +211,11 @@ const MrecommenderBox = styled.div`
           display: flex;
           justify-content: space-between;
           align-items: center;
-          font-size: 3.88vw;
+          font-size: 14px;
 
           &.order {
             .value {
-              gap: 1.66vw;
+              gap: 6px;
             }
           }
 
@@ -238,7 +238,7 @@ const MrecommenderBox = styled.div`
             }
 
             img {
-              width: 3.33vw;
+              width: 12px;
             }
 
             .price {

@@ -54,43 +54,43 @@ export default function CompPw() {
 }
 
 const McompPwBox = styled.main`
-  padding: 15.55vw 0 0 0;
+  padding: 56px 0 0;
 
   .innerBox {
     display: flex;
     flex-direction: column;
-    gap: 12.22vw;
-    padding: 38.88vw 4.44vw 0;
+    gap: 18px;
+    padding: 140px 16px 0;
 
     .titleArea {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 3.33vw;
+      gap: 12px;
       color: #2a2a2a;
 
       .title {
-        font-size: 6.11vw;
+        font-size: 22px;
       }
 
       .explain {
-        font-size: 3.88vw;
+        font-size: 14px;
       }
     }
 
     .contBtn {
-      height: 13.88vw;
-      font-size: 4.44vw;
+      height: 50px;
+      font-size: 16px;
       font-weight: 700;
       color: #4e3200;
       background: linear-gradient(98.13deg, #604719 -9.29%, #f7ab1f 45.07%);
-      border-radius: 2.22vw;
+      border-radius: 8px;
     }
   }
 
   .cpRight {
-    margin: 8.33vw 0;
-    font-size: 3.33vw;
+    margin: 30px 0;
+    font-size: 12px;
     text-align: center;
     white-space: nowrap;
     color: #ddd;

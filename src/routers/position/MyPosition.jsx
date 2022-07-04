@@ -214,8 +214,8 @@ const MmyPositionBox = styled.main`
       .posBox {
         display: flex;
         align-items: center;
-        gap: 3.33vw;
-        padding: 3.88vw 5.55vw;
+        gap: 12px;
+        padding: 14px 20px;
 
         img {
           height: 74px;
@@ -224,14 +224,14 @@ const MmyPositionBox = styled.main`
         .textBox {
           display: flex;
           flex-direction: column;
-          gap: 1.11vw;
+          gap: 4px;
 
           .pos {
-            font-size: 5.55vw;
+            font-size: 20px;
           }
 
           .cashBack {
-            font-size: 3.88vw;
+            font-size: 14px;
             opacity: 0.4;
           }
         }
@@ -239,27 +239,27 @@ const MmyPositionBox = styled.main`
 
       .balanceList {
         display: flex;
-        padding: 3.33vw 0;
+        padding: 12px 0;
         border-top: 1px solid rgba(255, 255, 255, 0.2);
 
         li {
           flex: 1;
           display: flex;
           flex-direction: column;
-          gap: 1.66vw;
-          padding: 1.11vw 5.55vw;
+          gap: 6px;
+          padding: 4px 20px;
 
           &:nth-of-type(n + 2) {
             border-left: 1px solid rgba(255, 255, 255, 0.2);
           }
 
           .key {
-            font-size: 3.88vw;
+            font-size: 14px;
             color: rgba(255, 255, 255, 0.4);
           }
 
           .value {
-            font-size: 4.44vw;
+            font-size: 16px;
           }
         }
       }
@@ -270,36 +270,36 @@ const MmyPositionBox = styled.main`
         .posBox {
           display: flex;
           flex-direction: column;
-          gap: 3.88vw;
-          padding: 4.44vw 5.55vw;
+          gap: 14px;
+          padding: 16px 20px;
           border-top: 1px solid rgba(255, 255, 255, 0.2);
 
           .key {
-            font-size: 3.88vw;
+            font-size: 14px;
             opacity: 0.4;
           }
 
           .value {
             display: flex;
             flex-direction: column;
-            gap: 1.11vw;
+            gap: 4px;
 
             .price {
-              font-size: 6.66vw;
+              font-size: 24px;
             }
 
             .changeBox {
               display: flex;
               align-items: center;
-              gap: 1.11vw;
+              gap: 4px;
 
               img {
-                width: 2.77vw;
+                width: 10px;
               }
 
               .text {
                 display: flex;
-                font-size: 3.88vw;
+                font-size: 14px;
 
                 .change {
                   color: #3fb68b;
@@ -317,9 +317,9 @@ const MmyPositionBox = styled.main`
           flex: 1;
           display: flex;
           flex-direction: column;
-          gap: 2.77vw;
-          padding: 4.44vw 5.55vw;
-          font-size: 3.88vw;
+          gap: 10px;
+          padding: 16px 20px;
+          font-size: 14px;
           border-top: 1px solid rgba(255, 255, 255, 0.2);
 
           li {

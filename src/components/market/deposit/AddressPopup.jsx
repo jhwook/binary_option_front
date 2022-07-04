@@ -64,7 +64,7 @@ const MaddressPopupBox = styled.section`
   max-height: 72vh;
   overflow-y: scroll;
   background: rgba(255, 255, 255, 0.3);
-  border-radius: 5.55vw 5.55vw 0px 0px;
+  border-radius: 20px 20px 0px 0px;
   box-shadow: inset 0px 3px 3px rgba(255, 255, 255, 0.14);
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
@@ -78,13 +78,13 @@ const MaddressPopupBox = styled.section`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 16.66vw;
-    padding: 0 6.66vw;
-    font-size: 4.44vw;
+    height: 60px;
+    padding: 0 24px;
+    font-size: 16px;
 
     .blank,
     .exitBtn img {
-      width: 4.44vw;
+      width: 16px;
     }
   }
 
@@ -92,8 +92,8 @@ const MaddressPopupBox = styled.section`
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5.55vw;
-    padding: 3.88vw 11.66vw 16.66vw;
+    gap: 20px;
+    padding: 14px 16px 60px;
 
     .qrBox {
       display: flex;
@@ -111,19 +111,19 @@ const MaddressPopupBox = styled.section`
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 2.22vw;
+      gap: 8px;
       width: 100%;
 
       p {
         flex: 1;
-        font-size: 4.44vw;
+        font-size: 16px;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
       }
 
       img {
-        height: 5.55vw;
+        height: 20px;
       }
     }
   }

@@ -81,16 +81,16 @@ const MverificationPopupBox = styled.section`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 16.66vw;
-    padding: 0 8.33vw;
+    height: 60px;
+    padding: 0 30px;
 
     .title {
-      font-size: 4.44vw;
+      font-size: 16px;
     }
 
     .blank,
     .exitBtn img {
-      width: 4.44vw;
+      width: 16px;
       opacity: 0.4;
     }
   }
@@ -103,23 +103,23 @@ const MverificationPopupBox = styled.section`
   .contArea {
     display: flex;
     flex-direction: column;
-    gap: 5.55vw;
-    padding: 2.77vw 6.66vw 8.33vw;
+    gap: 20px;
+    padding: 10px 24px 30px;
 
     .explain {
-      font-size: 3.88vw;
+      font-size: 14px;
       color: rgba(255, 255, 255, 0.4);
       text-align: center;
     }
 
     .confirmBtn {
       width: 100%;
-      height: 13.88vw;
-      font-size: 5vw;
+      height: 50px;
+      font-size: 18px;
       font-weight: 700;
       color: #4e3200;
       background: linear-gradient(99.16deg, #604719 3.95%, #f7ab1f 52.09%);
-      border-radius: 2.22vw;
+      border-radius: 8px;
     }
   }
 `;

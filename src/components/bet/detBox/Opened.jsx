@@ -298,14 +298,14 @@ export default function Opened({ data }) {
 const MopenedBox = styled.ul`
   display: flex;
   flex-direction: column;
-  gap: 2.77vw;
+  gap: 10px;
   overflow-y: scroll;
 
   li {
     details {
-      padding: 3.88vw 4.44vw;
+      padding: 14px 16px;
       background: rgba(255, 255, 255, 0.1);
-      border-radius: 2.22vw;
+      border-radius: 8px;
       border: 1px solid rgba(255, 255, 255, 0.2);
       box-shadow: 0px 0px 0px rgba(255, 255, 255, 0.2);
 
@@ -317,8 +317,8 @@ const MopenedBox = styled.ul`
       summary {
         display: flex;
         flex-direction: column;
-        gap: 1.11vw;
-        font-size: 3.88vw;
+        gap: 4px;
+        font-size: 14px;
 
         .contBox {
           display: flex;
@@ -328,10 +328,10 @@ const MopenedBox = styled.ul`
           .forecast {
             display: flex;
             align-items: center;
-            gap: 1.11vw;
+            gap: 4px;
 
             img {
-              height: 2.22vw;
+              height: 8px;
             }
           }
 
@@ -350,23 +350,23 @@ const MopenedBox = styled.ul`
       .openBox {
         display: flex;
         flex-direction: column;
-        gap: 3.88vw;
-        margin: 3.88vw 0 0 0;
+        gap: 14px;
+        margin: 14px 0 0 0;
 
         .timeBox {
           display: flex;
           flex-direction: column;
-          gap: 2.77vw;
+          gap: 10px;
 
           .timeList {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 2.77vw 4.44vw;
-            font-size: 3.33vw;
+            padding: 10px 16px;
+            font-size: 12px;
             color: rgba(255, 255, 255, 0.4);
             background: #111722;
-            border-radius: 1.66vw;
+            border-radius: 6px;
 
             li {
               display: flex;
@@ -379,14 +379,14 @@ const MopenedBox = styled.ul`
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 2.2vw;
-            font-size: 3.33vw;
+            gap: 8px;
+            font-size: 12px;
 
             .bar {
               width: 100%;
-              height: 1.11vw;
+              height: 4px;
               background: rgba(255, 255, 255, 0.1);
-              border-radius: 2.77vw;
+              border-radius: 10px;
 
               div {
                 width: 20%;
@@ -404,23 +404,23 @@ const MopenedBox = styled.ul`
         .resBox {
           display: flex;
           flex-direction: column;
-          gap: 3.33vw;
+          gap: 12px;
 
           .detResBox {
-            padding: 3.88vw 4.44vw;
+            padding: 14px 16px;
             background: #111722;
             border-radius: 6px;
 
             .forcastList {
               display: flex;
               flex-direction: column;
-              gap: 1.11vw;
-              padding: 0 0 3.33vw 0;
+              gap: 4px;
+              padding: 0 0 12px 0;
 
               li {
                 display: flex;
                 justify-content: space-between;
-                font-size: 3.33vw;
+                font-size: 12px;
                 color: rgba(255, 255, 255, 0.4);
               }
             }
@@ -428,15 +428,15 @@ const MopenedBox = styled.ul`
             .priceList {
               display: flex;
               flex-direction: column;
-              gap: 1.11vw;
-              padding: 3.33vw 0 0 0;
+              gap: 4px;
+              padding: 12px 0 0 0;
               border-top: 1px solid rgba(255, 255, 255, 0.4);
 
               li {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                font-size: 3.33vw;
+                font-size: 12px;
 
                 .point {
                   color: #ff5353;
@@ -446,11 +446,11 @@ const MopenedBox = styled.ul`
           }
 
           .getBtn {
-            height: 11.11vw;
-            font-size: 3.88vw;
+            height: 40px;
+            font-size: 14px;
             color: #f7ab1f;
             background: rgba(247, 171, 31, 0.1);
-            border-radius: 1.66vw;
+            border-radius: 6px;
 
             &:hover {
               color: #4e3200;

@@ -171,7 +171,7 @@ const McashInPersonPopup = styled.section`
   max-height: 80vh;
   overflow-y: scroll;
   background: rgba(255, 255, 255, 0.3);
-  border-radius: 5.55vw 5.55vw 0px 0px;
+  border-radius: 20px 20px 0px 0px;
   box-shadow: inset 0px 3px 3px rgba(255, 255, 255, 0.14);
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
@@ -185,16 +185,16 @@ const McashInPersonPopup = styled.section`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 16.66vw;
-    padding: 0 7.5vw;
+    height: 60px;
+    padding: 0 27px;
 
     .title {
-      font-size: 4.44vw;
+      font-size: 16px;
     }
 
     .exitBtn {
       img {
-        width: 4.44vw;
+        width: 16px;
       }
     }
   }
@@ -203,30 +203,30 @@ const McashInPersonPopup = styled.section`
     display: flex;
     flex-direction: column;
     gap: 44px;
-    padding: 3.88vw 5.55vw 11.66vw;
+    padding: 14px 20px 16px;
 
     .inputList {
       display: flex;
       flex-direction: column;
-      gap: 3.88vw;
+      gap: 14px;
 
       li {
         display: flex;
         flex-direction: column;
-        gap: 2.77vw;
+        gap: 10px;
 
         .key {
-          font-size: 3.88vw;
+          font-size: 14px;
         }
 
         .inputBox {
           display: flex;
           align-items: center;
-          font-size: 3.88vw;
-          height: 12.22vw;
+          font-size: 14px;
+          height: 50px;
           background: rgba(0, 0, 0, 0.4);
           border: 1px solid transparent;
-          border-radius: 2.22vw;
+          border-radius: 8px;
 
           &:focus-within {
             border-color: #fff;
@@ -236,7 +236,7 @@ const McashInPersonPopup = styled.section`
           input {
             flex: 1;
             height: 100%;
-            padding: 0 5vw;
+            padding: 0 18px;
           }
         }
       }
@@ -249,10 +249,10 @@ const McashInPersonPopup = styled.section`
 
       button {
         flex: 1;
-        height: 13.88vw;
-        font-size: 4.44vw;
+        height: 50px;
+        font-size: 16px;
         font-weight: 700;
-        border-radius: 2.77vw;
+        border-radius: 10px;
 
         &.confirmBtn {
           color: #4e3200;

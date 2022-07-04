@@ -39,37 +39,12 @@ export default function TimePopup({ off, duration, setDuration }) {
       <PtimePopupBox>
         <ul className="timeList">
           <li>
-            <button
-              className="plusBtn setBtn"
-              onClick={() => onClickSetBtn(60)}
-            >
-              <img src={I_plusWhite} alt="" />
-            </button>
-
             <p>{`${Math.floor(duration / 60)}`.padStart(2, "0")}</p>
-
-            <button
-              className="plusBtn setBtn"
-              onClick={() => onClickSetBtn(-60)}
-            >
-              <img src={I_minusWhite} alt="" />
-            </button>
           </li>
           <span className="dot">:</span>
 
           <li>
-            <button className="plusBtn setBtn" onClick={() => onClickSetBtn(1)}>
-              <img src={I_plusWhite} alt="" />
-            </button>
-
             <p>{`${duration % 60}`.padStart(2, "0")}</p>
-
-            <button
-              className="plusBtn setBtn"
-              onClick={() => onClickSetBtn(-1)}
-            >
-              <img src={I_minusWhite} alt="" />
-            </button>
           </li>
         </ul>
 
@@ -89,35 +64,35 @@ export default function TimePopup({ off, duration, setDuration }) {
 }
 
 const MtimePopupBox = styled.section`
-  width: 46vw;
-  padding: 3.33vw;
+  width: 166px;
+  padding: 12px;
   background: rgba(255, 255, 255, 0.1);
   border: 1.4px solid rgba(255, 255, 255, 0.14);
-  border-radius: 2.22vw;
+  border-radius: 8px;
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
   box-shadow: inset 0px 3px 3px rgba(255, 255, 255, 0.4),
     0px 10px 40px rgba(0, 0, 0, 0.2);
   left: 0;
-  bottom: 13.33vw;
+  bottom: 48px;
   position: absolute;
   z-index: 6;
 
   .btnList {
     display: flex;
     flex-wrap: wrap;
-    gap: 2.22vw;
+    gap: 8px;
 
     li {
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 11.11vw;
-      height: 8.33vw;
-      font-size: 3.88vw;
+      width: 40px;
+      height: 30px;
+      font-size: 14px;
       background: rgba(0, 0, 0, 0.2);
       border: 1px solid transparent;
-      border-radius: 1.11vw;
+      border-radius: 4px;
 
       &.on {
         color: #f7ab1f;

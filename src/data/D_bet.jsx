@@ -1620,6 +1620,9 @@ export const D_timeBtnList = [
   { key: "5m", value: 5 },
   { key: "10m", value: 10 },
   { key: "30m", value: 30 },
+  { key: "1h", value: 60 },
+  { key: "6h", value: 360 },
+  { key: "12h", value: 720 },
 ];
 
 export const D_detCategoryList = ["Opened", "Closed"];

@@ -268,26 +268,26 @@ const MnotificationsBox = styled.main`
   .innerBox {
     height: 100%;
     overflow-y: scroll;
-    padding: 5.55vw;
+    padding: 20px;
 
     .contArea {
       display: flex;
       flex-direction: column;
-      padding: 6.66vw 5.55vw;
+      padding: 24px 20px;
       background: rgba(255, 255, 255, 0.2);
       border: 2px solid rgba(255, 255, 255, 0.1);
-      border-radius: 5.55vw;
+      border-radius: 20px;
 
       .optList {
         li {
           display: flex;
           flex-direction: column;
-          gap: 2.77vw;
-          padding: 3.88vw 0;
+          gap: 10px;
+          padding: 14px 0;
           border-top: 1px solid rgba(255, 255, 255, 0.2);
 
           &:first-of-type {
-            padding: 0 0 3.88vw 0;
+            padding: 0 0 14px 0;
             border: none;
           }
 
@@ -297,7 +297,7 @@ const MnotificationsBox = styled.main`
             align-items: center;
 
             .title {
-              font-size: 4.44vw;
+              font-size: 16px;
             }
 
             .toggleBtn {
@@ -364,13 +364,13 @@ const MnotificationsBox = styled.main`
 
       .saveBtn {
         width: 100%;
-        height: 13.88vw;
-        margin: 4.44vw 0 0 0;
-        font-size: 5vw;
+        height: 50px;
+        margin: 16px 0 0 0;
+        font-size: 18px;
         font-weight: 700;
         background: rgba(255, 255, 255, 0.1);
         border: 1.4px solid #fff;
-        border-radius: 3.33vw;
+        border-radius: 12px;
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
       }
     }

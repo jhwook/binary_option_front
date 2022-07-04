@@ -12,7 +12,6 @@ export default function AddPopup({ off }) {
   const [amount, setAmount] = useState("");
 
   function onClickAddBtn() {
-
     axios
       .patch(`${API.TRANS_DEMO_FUND}/${amount}`)
       .then((res) => {
@@ -91,40 +90,40 @@ export default function AddPopup({ off }) {
 }
 
 const MaddPopupBox = styled.section`
-  width: 91.11vw;
+  width: 328px;
   color: #fff;
 
   .topArea {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 16.66vw;
-    padding: 0 8.33vw;
+    height: 60px;
+    padding: 0 30px;
 
     .title {
-      font-size: 4.44vw;
+      font-size: 16px;
     }
 
     .blank,
     .exitBtn img {
-      width: 4.44vw;
+      width: 16px;
     }
   }
 
   .contArea {
     display: flex;
     flex-direction: column;
-    gap: 5.55vw;
-    padding: 2.77vw 6.66vw 8.33vw;
+    gap: 20px;
+    padding: 10px 24px 30px;
 
     .inputCont {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 3.33vw;
+      gap: 12px;
 
       .key {
-        font-size: 3.33vw;
+        font-size: 12px;
         color: rgba(255, 255, 255, 0.4);
       }
 
@@ -132,12 +131,12 @@ const MaddPopupBox = styled.section`
         display: flex;
         align-items: center;
         width: 100%;
-        height: 11.11vw;
-        padding: 0 5.55vw;
-        font-size: 3.88vw;
+        height: 40px;
+        padding: 0 20px;
+        font-size: 14px;
         background: rgba(0, 0, 0, 0.4);
         border: 1.4px solid transparent;
-        border-radius: 1.66vw;
+        border-radius: 6px;
 
         &:focus-within {
           border-color: rgba(247, 171, 31, 0.4);
@@ -150,12 +149,12 @@ const MaddPopupBox = styled.section`
     }
 
     .addBtn {
-      height: 13.88vw;
-      font-size: 5vw;
+      height: 50px;
+      font-size: 18px;
       font-weight: 700;
       color: #4e3200;
       background: linear-gradient(99.16deg, #604719 3.95%, #f7ab1f 52.09%);
-      border-radius: 2.22vw;
+      border-radius: 8px;
     }
   }
 `;

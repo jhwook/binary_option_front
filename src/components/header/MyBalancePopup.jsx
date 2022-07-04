@@ -20,15 +20,12 @@ export default function MyBalancePopup({ off, setAddPopup }) {
 
   function onClickConfirmBtn(nextProc, isNotNavigate) {
     off();
-    if(isNotNavigate)
-    nextProc(true);
-    else
-    navigate("/market/deposit")
+    if (isNotNavigate) nextProc(true);
+    else navigate("/market/deposit");
   }
 
   function getBalance() {
     if (token) {
-
       axios
         .get(`${API.USER_BALANCE}`)
         .then(({ data }) => {
@@ -76,7 +73,9 @@ export default function MyBalancePopup({ off, setAddPopup }) {
             {stateBalanceType === "Live" && (
               <button
                 className="actionBtn"
-                onClick={() => onClickConfirmBtn(navigate("/market/deposit"), false)}
+                onClick={() =>
+                  onClickConfirmBtn(navigate("/market/deposit"), false)
+                }
               >
                 Deposit
               </button>
@@ -143,7 +142,9 @@ export default function MyBalancePopup({ off, setAddPopup }) {
             {stateBalanceType === "Live" && (
               <button
                 className="actionBtn"
-                onClick={() => onClickConfirmBtn(navigate("/market/deposit"), false)}
+                onClick={() =>
+                  onClickConfirmBtn(navigate("/market/deposit"), false)
+                }
               >
                 Deposit
               </button>
@@ -186,7 +187,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
 }
 
 const MmyBalancePopup = styled.section`
-  width: 91.11vw;
+  width: 328px;
   max-height: 80vh;
   overflow-y: scroll;
   color: #fff;
@@ -196,51 +197,51 @@ const MmyBalancePopup = styled.section`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 16.66vw;
-    padding: 0 8.33vw;
+    height: 60px;
+    padding: 0 30px;
 
     .title {
-      font-size: 4.44vw;
+      font-size: 16px;
     }
 
     .blank,
     .exitBtn img {
-      width: 4.44vw;
+      width: 16px;
     }
   }
 
   .contArea {
-    padding: 2.77vw 6.66vw 8.33vw;
+    padding: 10px 24px 30px;
 
     .targetBox {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      height: 20vw;
+      height: 72px;
 
       .leftBox {
         display: flex;
         flex-direction: column;
-        gap: 0.55vw;
+        gap: 2px;
 
         .type {
-          font-size: 3.33vw;
-          height: 4.44vw;
+          font-size: 12px;
+          height: 16px;
         }
 
         .balance {
-          font-size: 5vw;
+          font-size: 18px;
         }
       }
 
       .actionBtn {
-        width: 22.77vw;
-        height: 8.33vw;
-        font-size: 3.88vw;
+        width: 82px;
+        height: 30px;
+        font-size: 14px;
         font-weight: 700;
         background: rgba(255, 255, 255, 0.1);
         border: 1.4px solid #fff;
-        border-radius: 5.55vw;
+        border-radius: 20px;
 
         &:hover {
           color: #f7ab1f;
@@ -254,18 +255,18 @@ const MmyBalancePopup = styled.section`
     .typeList {
       display: flex;
       flex-direction: column;
-      gap: 2.22vw;
+      gap: 8px;
 
       li {
         display: flex;
         align-items: center;
-        gap: 3.88vw;
-        height: 11.11vw;
-        padding: 0 5.55vw;
-        font-size: 3.88vw;
+        gap: 14px;
+        height: 40px;
+        padding: 0 20px;
+        font-size: 14px;
         background: rgba(0, 0, 0, 0.4);
         border: 1.4px solid transparent;
-        border-radius: 1.66vw;
+        border-radius: 6px;
         cursor: pointer;
 
         &.on {
@@ -278,7 +279,7 @@ const MmyBalancePopup = styled.section`
 
         img {
           opacity: 0;
-          width: 5vw;
+          width: 18px;
         }
 
         .key {

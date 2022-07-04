@@ -200,24 +200,24 @@ const MenuPopupBox = styled.section`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 15.55vw;
-    padding: 0 4.44vw;
-    font-size: 3.88vw;
+    height: 56px;
+    padding: 0 16px;
+    font-size: 14px;
 
     .accountBox {
       display: flex;
-      height: 9.44vw;
-      font-size: 3.88vw;
+      height: 34px;
+      font-size: 14px;
       background: rgba(247, 171, 31, 0.2);
-      border-radius: 7.77vw;
+      border-radius: 28px;
       overflow: hidden;
 
       .accountBtn {
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 1.11vw;
-        width: 35vw;
+        gap: 4px;
+        width: 126px;
         overflow: hidden;
 
         .value {
@@ -231,13 +231,13 @@ const MenuPopupBox = styled.section`
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 9.44vw;
+        width: 34px;
         aspect-ratio: 1;
         background: #f7ab1f;
         border-radius: 50%;
 
         img {
-          height: 3.88vw;
+          height: 14px;
         }
       }
     }
@@ -246,28 +246,28 @@ const MenuPopupBox = styled.section`
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 9.44vw;
+      width: 34px;
       aspect-ratio: 1;
       background: rgba(255, 255, 255, 0.1);
       border-radius: 50%;
 
       img {
-        width: 6.11vw;
+        width: 22px;
       }
     }
 
     .loginBtn {
-      width: 36.66vw;
-      height: 9.44vw;
+      width: 140px;
+      height: 34px;
       font-weight: 700;
       border: 1px solid #fff;
-      border-radius: 7.77vw;
+      border-radius: 28px;
     }
   }
 
   .contArea {
     flex: 1;
-    padding: 5.55vw;
+    padding: 20px;
     overflow-y: scroll;
     position: relative;
 
@@ -286,23 +286,23 @@ const MenuPopupBox = styled.section`
         summary {
           display: flex;
           align-items: center;
-          gap: 2.77vw;
-          height: 13.88vw;
-          font-size: 6.11vw;
+          gap: 10px;
+          height: 50px;
+          font-size: 22px;
           opacity: 0.4;
 
           img {
-            height: 1.66vw;
+            height: 6px;
           }
         }
 
         .detNavList {
-          padding: 2.77vw 0;
+          padding: 10px 0;
 
           li {
-            height: 12.22vw;
-            padding: 0 5.55vw;
-            font-size: 5.55vw;
+            height: 44px;
+            padding: 0 20px;
+            font-size: 20px;
             font-weight: 700;
             border-left: 1px solid rgba(255, 255, 255, 0.1);
             opacity: 0.4;
@@ -313,8 +313,8 @@ const MenuPopupBox = styled.section`
       .navBtn {
         display: flex;
         align-items: center;
-        height: 13.88vw;
-        font-size: 6.11vw;
+        height: 50px;
+        font-size: 22px;
         opacity: 0.4;
 
         &:focus {
@@ -326,23 +326,23 @@ const MenuPopupBox = styled.section`
     .btnBox {
       display: flex;
       flex-direction: column;
-      gap: 3.33vw;
+      gap: 12px;
       position: fixed;
-      right: 6.11vw;
-      bottom: 20vw;
+      right: 22px;
+      bottom: 72px;
 
       button {
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 9.44vw;
+        width: 34px;
         aspect-ratio: 1;
         background: rgba(255, 255, 255, 0.1);
         border-radius: 50%;
 
         img {
-          width: 5.55vw;
-          height: 5.55vw;
+          width: 20px;
+          height: 20px;
           object-fit: contain;
         }
       }
@@ -352,25 +352,25 @@ const MenuPopupBox = styled.section`
   footer {
     display: flex;
     align-items: center;
-    height: 15.55vw;
+    height: 56px;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
 
     .exitBtn {
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 17.22vw;
+      width: 62px;
       height: 100%;
 
       img {
-        width: 4.44vw;
+        width: 16px;
       }
     }
 
     .explain {
-      padding: 0 5.55vw;
-      margin: 3.33vw 0;
-      font-size: 4.44vw;
+      padding: 0 20px;
+      margin: 12px 0;
+      font-size: 16px;
       color: rgba(255, 255, 255, 0.6);
       border-left: 1px solid rgba(255, 255, 255, 0.2);
     }

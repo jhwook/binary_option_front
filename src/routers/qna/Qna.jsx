@@ -444,20 +444,20 @@ export default function Qna() {
 }
 
 const MqnaBox = styled.main`
-  padding: 15.55vw 0 0 0;
+  padding: 56px 0 0;
   color: #fff;
   background: #0a0e17;
 
   header {
     display: flex;
     justify-content: center;
-    height: 35vw;
+    height: 126px;
 
     .innerBox {
-      padding: 5.55vw 5.55vw 8.33vw;
+      padding: 20px 20px 30px;
 
       .title {
-        font-size: 8.33vw;
+        font-size: 30px;
         opacity: 0.6;
       }
     }
@@ -466,21 +466,21 @@ const MqnaBox = styled.main`
   .contSec {
     display: flex;
     justify-content: center;
-    font-size: 4.44vw;
+    font-size: 16px;
     color: #000;
     background: #fff;
-    padding: 5.55vw 5.55vw 50vw;
+    padding: 20px 20px 180px;
 
     .innerBox {
       .listBox {
         display: flex;
         flex-direction: column;
-        gap: 5.55vw;
+        gap: 20px;
 
         ul {
           display: flex;
           flex-direction: column;
-          gap: 3.33vw;
+          gap: 12px;
 
           .title {
           }
@@ -501,18 +501,18 @@ const MqnaBox = styled.main`
               summary {
                 display: flex;
                 align-items: center;
-                gap: 2.77vw;
+                gap: 10px;
 
                 img {
-                  min-width: 2.77vw;
-                  width: 2.77vw;
+                  min-width: 10px;
+                  width: 10px;
                   opacity: 0.33;
                 }
               }
 
               .answerBox {
-                padding: 3.88vw 4.44vw;
-                margin: 3.88vw 0 0;
+                padding: 14px 16px;
+                margin: 14px 0 0;
                 background: #f3f5f7;
                 border-radius: 8px;
               }
@@ -524,14 +524,14 @@ const MqnaBox = styled.main`
       .sendBtn {
         display: flex;
         align-items: center;
-        gap: 2.77vw;
-        height: 11.11vw;
-        padding: 0 8.33vw;
-        font-size: 3.88vw;
+        gap: 10px;
+        height: 40px;
+        padding: 0 30px;
+        font-size: 14px;
         color: #fff;
         background: #81828a;
-        border-radius: 5.55vw;
-        bottom: 8.33vw;
+        border-radius: 20px;
+        bottom: 30px;
         left: 50%;
         position: fixed;
         z-index: 2;
@@ -545,10 +545,9 @@ const MqnaBox = styled.main`
           white-space: nowrap;
         }
 
-        img{
-          width: 5vw;
+        img {
+          width: 18px;
         }
-
       }
     }
   }

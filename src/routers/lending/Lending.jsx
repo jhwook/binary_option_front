@@ -278,38 +278,38 @@ const MlendingBox = styled.main`
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
-    gap: 11.11vw;
-    height: 200vw;
-    padding: 0 5.55vw 69.44vw;
+    gap: 40px;
+    height: 720px;
+    padding: 0 20px 250px;
     background: url(${B_lending1});
     position: relative;
 
     .banner {
       display: flex;
       align-items: center;
-      gap: 5.55vw;
+      gap: 20px;
       width: 88.88vw;
-      height: 15vw;
-      padding: 0 6.11vw;
+      height: 54px;
+      padding: 0 22px;
       background: rgba(255, 255, 255, 0.2);
-      border-radius: 8.33vw;
-      bottom: 15vw;
+      border-radius: 30px;
+      bottom: 54px;
       position: absolute;
 
       .contBox {
         flex: 1;
         display: flex;
         align-items: center;
-        gap: 4.44vw;
+        gap: 16px;
         overflow: hidden;
 
         .icon {
-          height: 7.77vw;
+          height: 28px;
         }
 
         .cont {
           flex: 1;
-          font-size: 4.44vw;
+          font-size: 16px;
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
@@ -319,14 +319,14 @@ const MlendingBox = styled.main`
       .btnBox {
         display: flex;
         align-items: center;
-        gap: 3.33vw;
+        gap: 12px;
 
         button {
           display: flex;
           align-items: center;
 
           img {
-            height: 5.55vw;
+            height: 20px;
           }
         }
       }
@@ -336,26 +336,26 @@ const MlendingBox = styled.main`
       display: flex;
       flex-direction: column;
       text-align: center;
-      gap: 3.88vw;
+      gap: 14px;
 
       .explain {
-        font-size: 6.66vw;
+        font-size: 24px;
         font-weight: 800;
         font-family: "Open Sans", sans-serif;
       }
 
       .do {
-        font-size: 3.88vw;
+        font-size: 14px;
       }
     }
 
     .tradeBtn {
-      width: 61.11vw;
-      height: 13.88vw;
-      font-size: 5.55vw;
+      width: 220px;
+      height: 50px;
+      font-size: 20px;
       font-weight: 700;
       border: 1px solid #fff;
-      border-radius: 7.77vw;
+      border-radius: 28px;
 
       &:hover {
         color: #0a0e17;
@@ -372,10 +372,10 @@ const MlendingBox = styled.main`
     .windowArea {
       display: flex;
       justify-content: center;
-      padding: 32.77vw 0;
+      padding: 118px 0;
 
       .window {
-        width: 59.44vw;
+        width: 214px;
         position: relative;
 
         .floatBox {
@@ -419,19 +419,20 @@ const MlendingBox = styled.main`
     .featureList {
       display: flex;
       flex-direction: column;
-      gap: 25vw;
-      padding: 6.11vw 11.11vw 0;
+      align-items: center;
+      gap: 90px;
+      padding: 22px 40px 0;
 
       li {
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 100%;
-        height: 41.66vw;
-        padding: 0 12.22vw;
+        width: 280px;
+        height: 150px;
+        padding: 0 18px;
         background: rgba(255, 255, 255, 0.04);
         border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 3.88vw;
+        border-radius: 14px;
         position: relative;
 
         &:nth-of-type(1) {
@@ -527,19 +528,19 @@ const MlendingBox = styled.main`
           overflow: hidden;
 
           .shadow {
-            width: 45.55vw;
-            height: 20vw;
-            top: -20vw;
+            width: 164px;
+            height: 72px;
+            top: -90px;
             position: absolute;
           }
         }
 
         .iconBox {
-          width: 22.22vw;
-          height: 22.22vw;
+          width: 80px;
+          height: 80px;
           border: 3px solid rgba(255, 255, 255, 0.3);
-          border-radius: 5.55vw;
-          top: -13.88vw;
+          border-radius: 20px;
+          top: -50px;
           position: absolute;
 
           .borderBox {
@@ -548,7 +549,7 @@ const MlendingBox = styled.main`
             align-items: center;
             width: inherit;
             height: inherit;
-            padding: 5vw;
+            padding: 18px;
             border: 3px solid;
             border-radius: inherit;
             top: -3px;
@@ -564,7 +565,7 @@ const MlendingBox = styled.main`
         }
 
         p {
-          font-size: 3.88vw;
+          font-size: 14px;
           color: rgba(255, 255, 255, 0.7);
           text-align: center;
         }
@@ -574,11 +575,11 @@ const MlendingBox = styled.main`
 
   .rollSec {
     display: flex;
-    padding: 38.88vw 0 0 0;
+    padding: 140px 0 0 0;
 
     p {
-      padding: 0 0 0 11.11vw;
-      font-size: 22.22vw;
+      padding: 0 0 0 40px;
+      font-size: 80px;
       font-family: "Open Sans Hebrew";
       white-space: nowrap;
 
@@ -596,7 +597,7 @@ const MlendingBox = styled.main`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 22.22vw 5.55vw 0;
+    padding: 28px 20px 0;
 
     .bg {
       align-self: flex-end;
@@ -606,16 +607,16 @@ const MlendingBox = styled.main`
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2.77vw;
-      margin: 3.33vw 0 0 0;
+      gap: 10px;
+      margin: 12px 0 0 0;
       text-align: center;
 
       .title {
-        font-size: 6.11vw;
+        font-size: 22px;
       }
 
       .explain {
-        font-size: 3.88vw;
+        font-size: 14px;
         color: rgba(255, 255, 255, 0.6);
       }
     }
@@ -623,26 +624,25 @@ const MlendingBox = styled.main`
     .futureList {
       display: flex;
       flex-direction: column;
-      gap: 3.33vw;
-      margin: 16.66vw 0 0 0;
+      gap: 12px;
+      margin: 60px 0 0 0;
 
       li {
         display: flex;
         flex-direction: column;
-        gap: 2.77vw;
-        height: 35.55vw;
-        padding: 4.44vw 5.55vw;
+        gap: 10px;
+        padding: 16px 20px;
         background: rgba(255, 255, 255, 0.1);
-        border-radius: 2.77vw;
+        border-radius: 10px;
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
 
         .key {
-          font-size: 5vw;
+          font-size: 18px;
         }
 
         .value {
-          font-size: 3.88vw;
+          font-size: 14px;
           color: rgba(255, 255, 255, 0.6);
         }
       }

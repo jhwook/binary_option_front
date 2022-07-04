@@ -112,22 +112,22 @@ export default function LendingFooter() {
 }
 
 const MlendingFooterBox = styled.footer`
-  padding: 0 5.55vw 5.55vw;
-  margin: 33.33vw 0 0 0;
+  padding: 0 20px 20px;
+  margin: 312px 0 0 0;
 
   .innerBox {
     display: flex;
     flex-direction: column;
-    font-size: 3.88vw;
+    font-size: 14px;
 
     .topArea {
-      padding: 0 0 5.55vw 0;
+      padding: 0 0 20px 0;
 
       .termList {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        gap: 2.77vw;
+        gap: 10px;
       }
     }
 
@@ -135,22 +135,22 @@ const MlendingFooterBox = styled.footer`
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 5.55vw 0 0 0;
+      padding: 20px 0 0 0;
       border-top: 1px solid rgba(255, 255, 255, 0.2);
 
       .copyright {
-        font-size: 3.33vw;
+        font-size: 12px;
         color: rgba(255, 255, 255, 0.6);
       }
 
       .navList {
         display: flex;
         align-items: center;
-        gap: 2.77vw;
+        gap: 10px;
 
         button{
           img{
-            height: 3.33vw;
+            height: 12px;
           }
         }
       }

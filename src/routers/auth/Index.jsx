@@ -150,19 +150,19 @@ const MindexBox = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 15.55vw 0 0;
+  padding: 56px 0 0;
 
   .innerBox {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6.66vw;
+    gap: 24px;
     width: 100%;
-    padding: 12.22vw 4.44vw 0;
+    padding: 38px 16px 0;
 
     .bgArea {
       img {
-        width: 50vw;
+        width: 162px;
       }
     }
 
@@ -174,25 +174,26 @@ const MindexBox = styled.main`
       .titleBox {
         display: flex;
         flex-direction: column;
-        gap: 2.77vw;
+        gap: 10px;
 
         .pgTitle {
-          font-size: 6.66vw;
+          font-size: 24px;
+          text-align: center;
         }
       }
 
       .btnBox {
         display: flex;
         flex-direction: column;
-        gap: 3.88vw;
-        margin: 6.66vw 0 0 0;
+        gap: 14px;
+        margin: 24px 0 0 0;
 
         .signUpBtn,
         .googleBtn {
-          height: 13.88vw;
-          font-size: 4.44vw;
+          height: 50px;
+          font-size: 16px;
           font-weight: 700;
-          border-radius: 2.22vw;
+          border-radius: 8px;
 
           &.signUpBtn {
             color: #fff;
@@ -203,17 +204,17 @@ const MindexBox = styled.main`
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 3.88vw;
+            gap: 14px;
             border: 1px solid #e6e6e6;
 
             img {
-              width: 5.55vw;
+              width: 20px;
             }
           }
         }
 
         .or {
-          font-size: 4.44vw;
+          font-size: 16px;
           text-align: center;
         }
       }
@@ -222,9 +223,9 @@ const MindexBox = styled.main`
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        gap: 2.77vw;
-        margin: 3.88vw 0 0 0;
-        font-size: 3.88vw;
+        gap: 10px;
+        margin: 14px 0 0 0;
+        font-size: 14px;
 
         .loginBox {
           display: flex;
@@ -232,7 +233,7 @@ const MindexBox = styled.main`
         }
 
         button {
-          font-size: 3.88vw;
+          font-size: 14px;
           color: #f7ab1f;
         }
       }
@@ -240,8 +241,8 @@ const MindexBox = styled.main`
   }
 
   .cpRight {
-    margin: 8.33vw 0;
-    font-size: 3.33vw;
+    margin: 30px 0;
+    font-size: 12px;
     text-align: center;
     white-space: nowrap;
     color: #ddd;

@@ -57,18 +57,18 @@ export default function LiveTradePopup({ off }) {
 }
 
 const MliveTradePopupBox = styled.section`
-  width: 83.33vw;
-  font-size: 3.88vw;
+  width: 300px;
+  font-size: 14px;
   color: #fff;
-  border-radius: 3.88vw;
+  border-radius: 14px;
   overflow: hidden;
 
   .explain {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 28.88vw;
-    padding: 0 12.5vw;
+    height: 104px;
+    padding: 0 45px;
     text-align: center;
   }
 
@@ -79,7 +79,7 @@ const MliveTradePopupBox = styled.section`
 
     button {
       flex: 1;
-      height: 13.88vw;
+      height: 50px;
       color: #f7ab1f;
 
       &:nth-of-type(n + 2) {

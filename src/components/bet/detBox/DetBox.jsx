@@ -101,8 +101,8 @@ const MdetBoxCont = styled.div`
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 15.55vw;
-      font-size: 5vw;
+      height: 56px;
+      font-size: 18px;
       color: rgba(255, 255, 255, 0.2);
       cursor: pointer;
 
@@ -115,7 +115,7 @@ const MdetBoxCont = styled.div`
 
   .detContList {
     flex: 1;
-    padding: 3.88vw 5.55vw;
+    padding: 14px 20px;
     background: #111722;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
   }
@@ -123,25 +123,25 @@ const MdetBoxCont = styled.div`
   footer {
     display: flex;
     align-items: center;
-    height: 15.55vw;
+    height: 56px;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
 
     .exitBtn {
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 17.22vw;
+      width: 62px;
       height: 100%;
 
       img {
-        width: 4.44vw;
+        width: 16px;
       }
     }
 
     .explain {
-      padding: 0 5.55vw;
-      margin: 3.33vw 0;
-      font-size: 4.44vw;
+      padding: 0 20px;
+      margin: 12px 0;
+      font-size: 16px;
       color: rgba(255, 255, 255, 0.6);
       border-left: 1px solid rgba(255, 255, 255, 0.2);
     }

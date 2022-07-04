@@ -417,8 +417,8 @@ const MtradingHistoryBox = styled.main`
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 11.66vw;
-        font-size: 4.44vw;
+        height: 56px;
+        font-size: 16px;
         font-weight: 700;
         border-bottom: 4px solid transparent;
         opacity: 0.4;
@@ -434,25 +434,25 @@ const MtradingHistoryBox = styled.main`
     .contArea {
       display: flex;
       flex-direction: column;
-      gap: 2.22vw;
+      gap: 8px;
 
       .filterBar {
-        padding: 5.55vw;
+        padding: 20px;
 
         .filterBox {
           display: flex;
           flex-direction: column;
-          gap: 2.22vw;
+          gap: 8px;
 
           .filterOpt {
             display: flex;
             align-items: center;
             width: 100%;
-            height: 11.11vw;
-            padding: 0 6.66vw;
+            height: 40px;
+            padding: 0 24px;
             color: rgba(255, 255, 255, 0.4);
             border: 1px solid #3b3e45;
-            border-radius: 5.55vw;
+            border-radius: 20px;
 
             &:focus-within {
               border-color: #fff;
@@ -465,16 +465,16 @@ const MtradingHistoryBox = styled.main`
               .dateBtn {
                 display: flex;
                 align-items: center;
-                gap: 3.33vw;
-                font-size: 3.88vw;
+                gap: 12px;
+                font-size: 14px;
 
                 img {
-                  width: 4.44vw;
+                  width: 16px;
                 }
               }
 
               .react-datepicker-popper {
-                top: 11.11vw !important;
+                top: 40px !important;
                 left: 50% !important;
                 transform: translate(-50%, 0) !important;
               }
@@ -483,11 +483,11 @@ const MtradingHistoryBox = styled.main`
 
           .applyBtn {
             width: 100%;
-            height: 11.11vw;
-            font-size: 3.88vw;
+            height: 40px;
+            font-size: 14px;
             font-weight: 700;
             border: 1px solid #3b3e45;
-            border-radius: 5.55vw;
+            border-radius: 20px;
 
             &:focus-within {
               border-color: #fff;
@@ -497,20 +497,20 @@ const MtradingHistoryBox = styled.main`
       }
 
       .listBox {
-        padding: 0 5.55vw;
+        padding: 0 20px;
 
         li {
           display: flex;
           flex-direction: column;
-          gap: 1.11vw;
-          padding: 6.66vw 0;
+          gap: 4px;
+          padding: 24px 0;
 
           &:first-of-type {
-            padding: 0 0 6.66vw;
+            padding: 0 0 24px;
           }
 
           &:last-of-type {
-            padding: 6.66vw 0 0;
+            padding: 24px 0 0;
           }
 
           &:nth-of-type(n + 2) {
@@ -521,11 +521,11 @@ const MtradingHistoryBox = styled.main`
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 3.88vw;
+            font-size: 14px;
 
             &.order {
               .value {
-                gap: 1.66vw;
+                gap: 6px;
               }
             }
 
@@ -548,7 +548,7 @@ const MtradingHistoryBox = styled.main`
               }
 
               img {
-                width: 3.33vw;
+                width: 12px;
               }
             }
           }

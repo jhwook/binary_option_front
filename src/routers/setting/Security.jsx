@@ -15,16 +15,15 @@ export default function Security() {
 
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const [tblData, setTblData] = useState([])
+  const [tblData, setTblData] = useState([]);
 
-  useEffect(()=>{
-    axios.get(`${API.USER_QUERY}/loginhistories/0/100`)
-    .then(({data})=>{
-      console.log(data.respdata)
+  useEffect(() => {
+    axios.get(`${API.USER_QUERY}/loginhistories/0/100`).then(({ data }) => {
+      console.log(data.respdata);
       setTblData(data.respdata.rows);
-      setTotal(data.respdata.count)
-    })
-  },[])
+      setTotal(data.respdata.count);
+    });
+  }, []);
 
   function onClickPrePageBtn() {
     if (page > 1) setPage(page - 1);
@@ -50,7 +49,9 @@ export default function Security() {
                         <p className="key">{D_securityListHeader[0]}</p>
 
                         <span className="value">
-                          <p>{moment(v.createdat).format("YYYY-MM-DD HH:mm:ss")}</p>
+                          <p>
+                            {moment(v.createdat).format("YYYY-MM-DD HH:mm:ss")}
+                          </p>
                         </span>
                       </div>
 
@@ -153,7 +154,9 @@ export default function Security() {
                   {tblData.map((v, i) => (
                     <li key={i}>
                       <span>
-                        <p>{moment(v.createdat).format("YYYY-MM-DD HH:mm:ss")}</p>
+                        <p>
+                          {moment(v.createdat).format("YYYY-MM-DD HH:mm:ss")}
+                        </p>
                       </span>
 
                       <span>
@@ -169,7 +172,9 @@ export default function Security() {
                       </span>
 
                       <span>
-                        <p>{v.country} / {v.status}</p>
+                        <p>
+                          {v.country} / {v.status}
+                        </p>
                       </span>
                     </li>
                   ))}
@@ -214,6 +219,8 @@ export default function Security() {
 }
 
 const MsecurityBox = styled.main`
+  height: 100%;
+  
   .innerBox {
     display: flex;
     flex-direction: column;
@@ -223,7 +230,7 @@ const MsecurityBox = styled.main`
 
     .contArea {
       .listBox {
-        padding: 0 5.55vw;
+        padding: 0 20px;
         overflow-x: scroll;
 
         .list {
@@ -233,15 +240,15 @@ const MsecurityBox = styled.main`
           li {
             display: flex;
             flex-direction: column;
-            gap: 1.11vw;
-            padding: 6.66vw 0;
+            gap: 4px;
+            padding: 24px 0;
 
             &:first-of-type {
-              padding: 0 0 6.66vw;
+              padding: 0 0 24px;
             }
 
             &:last-of-type {
-              padding: 6.66vw 0 0;
+              padding: 24px 0 0;
             }
 
             &:nth-of-type(n + 2) {
@@ -252,11 +259,11 @@ const MsecurityBox = styled.main`
               display: flex;
               justify-content: space-between;
               align-items: center;
-              font-size: 3.88vw;
+              font-size: 14px;
 
               &.order {
                 .value {
-                  gap: 1.66vw;
+                  gap: 6px;
                 }
               }
 
@@ -279,7 +286,7 @@ const MsecurityBox = styled.main`
                 }
 
                 img {
-                  width: 3.33vw;
+                  width: 12px;
                 }
 
                 .price {
@@ -447,7 +454,7 @@ const PsecurityBox = styled.main`
           &:nth-of-type(5) {
             width: 190px;
             min-width: 190px;
-            flex:1;
+            flex: 1;
           }
 
           &:nth-of-type(6) {

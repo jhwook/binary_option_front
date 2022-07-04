@@ -252,13 +252,13 @@ const MprofPopupBox = styled.section`
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    height: 15.56vw;
-    min-height: 15.56vw;
-    padding: 0 4.44vw;
+    height: 56px;
+    min-height: 56px;
+    padding: 0 16px;
 
     .clsBtn {
       img {
-        height: 4.44vw;
+        height: 16px;
         opacity: 0.4;
       }
     }
@@ -269,9 +269,9 @@ const MprofPopupBox = styled.section`
     display: flex;
     flex-direction: column;
     width: 100%;
-    padding: 3.88vw 5.55vw 8.33vw;
+    padding: 14px 20px 30px;
     background: rgba(255, 255, 255, 0.3);
-    border-radius: 5.55vw 5.55vw 0 0;
+    border-radius: 20px 20px 0 0;
     box-shadow: inset 0px 3px 3px rgba(255, 255, 255, 0.14);
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
@@ -279,24 +279,24 @@ const MprofPopupBox = styled.section`
     .profBox {
       display: flex;
       align-items: center;
-      gap: 2.22vw;
+      gap: 8px;
 
       .tierImg {
-        height: 18.88vw;
+        height: 68px;
       }
 
       .textBox {
         display: flex;
         flex-direction: column;
-        gap: 0.55vw;
+        gap: 2px;
 
         .id {
-          font-size: 5vw;
+          font-size: 18px;
           color: #fff;
         }
 
         .pos {
-          font-size: 3.88vw;
+          font-size: 14px;
           color: rgba(255, 255, 255, 0.4);
         }
       }
@@ -305,18 +305,18 @@ const MprofPopupBox = styled.section`
     .accountBox {
       display: flex;
       flex-direction: column;
-      gap: 2.77vw;
-      padding: 6.66vw 0;
-      font-size: 3.88vw;
+      gap: 10px;
+      padding: 24px 0;
+      font-size: 14px;
 
       .title {
         display: flex;
         align-items: center;
-        gap: 1.66vw;
+        gap: 6px;
 
         .dot {
-          width: 1.66vw;
-          height: 1.66vw;
+          width: 6px;
+          height: 6px;
           background: #fff;
           border-radius: 50%;
         }
@@ -325,15 +325,15 @@ const MprofPopupBox = styled.section`
       .infoList {
         display: flex;
         flex-direction: column;
-        gap: 1.11vw;
-        padding: 3.88vw 5.55vw;
+        gap: 4px;
+        padding: 14px 20px;
         background: rgba(0, 0, 0, 0.4);
-        border-radius: 2.77vw;
+        border-radius: 10px;
 
         li {
           display: flex;
           justify-content: space-between;
-          height: 5vw;
+          height: 18px;
 
           .key {
             color: rgba(255, 255, 255, 0.4);
@@ -349,21 +349,21 @@ const MprofPopupBox = styled.section`
       flex: 1;
       display: flex;
       flex-direction: column;
-      padding: 3.33vw 0;
+      padding: 12px 0;
       border-top: 1.4px solid rgba(255, 255, 255, 0.2);
 
       li {
         .navBtn {
           display: flex;
           align-items: center;
-          gap: 2.77vw;
+          gap: 10px;
           width: 100%;
-          height: 11.11vw;
-          padding: 0 3.88vw;
-          font-size: 3.88vw;
+          height: 40px;
+          padding: 0 14px;
+          font-size: 14px;
           font-weight: 700;
           color: rgba(255, 255, 255, 0.4);
-          border-radius: 1.66vw;
+          border-radius: 6px;
 
           &:hover {
             color: #fff;
@@ -379,11 +379,11 @@ const MprofPopupBox = styled.section`
 
     .logOutBtn {
       width: 100%;
-      height: 13.88vw;
-      font-size: 4.44vw;
+      height: 50px;
+      font-size: 16px;
       background: rgba(255, 255, 255, 0.1);
       border: 1.2px solid #fff;
-      border-radius: 2.77vw;
+      border-radius: 10px;
     }
   }
 `;

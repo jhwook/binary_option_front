@@ -243,19 +243,19 @@ const MtokenPopupBox = styled.section`
   .topArea {
     display: flex;
     align-items: center;
-    gap: 5.55vw;
-    height: 17.77vw;
-    padding: 0 4.44vw;
+    gap: 20px;
+    height: 64px;
+    padding: 0 16px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 
     .searchBox {
       flex: 1;
       display: flex;
-      gap: 2.22vw;
-      height: 10.55vw;
-      font-size: 3.88vw;
+      gap: 8px;
+      height: 38px;
+      font-size: 14px;
       background: rgba(255, 255, 255, 0.1);
-      border-radius: 5.55vw;
+      border-radius: 20px;
 
       .cancelBtn {
         display: flex;
@@ -268,7 +268,7 @@ const MtokenPopupBox = styled.section`
         border-radius: 50%;
 
         img {
-          width: 4.44vw;
+          width: 16px;
           opacity: 0.4;
         }
       }
@@ -277,15 +277,15 @@ const MtokenPopupBox = styled.section`
     .categoryList {
       flex: 1;
       display: flex;
-      gap: 2.22vw;
+      gap: 8px;
 
       li {
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 10.55vw;
-        padding: 0 4.44vw;
-        font-size: 3.88vw;
+        height: 38px;
+        padding: 0 16px;
+        font-size: 14px;
         font-weight: 700;
         background: rgba(255, 255, 255, 0.1);
         border: 1px solid transparent;
@@ -302,13 +302,13 @@ const MtokenPopupBox = styled.section`
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 10.55vw;
+      width: 12px;
       aspect-ratio: 1;
       background: rgba(255, 255, 255, 0.1);
       border-radius: 50%;
 
       img {
-        width: 5vw;
+        width: 18px;
       }
     }
   }
@@ -320,14 +320,14 @@ const MtokenPopupBox = styled.section`
     .tokenList {
       display: flex;
       flex-direction: column;
-      font-size: 4.44vw;
+      font-size: 16px;
 
       & > li {
         display: flex;
         align-items: center;
-        gap: 2.77vw;
-        height: 16.66vw;
-        padding: 0 5.55vw;
+        gap: 10px;
+        height: 60px;
+        padding: 0 20px;
         cursor: pointer;
 
         &:hover {
@@ -336,12 +336,12 @@ const MtokenPopupBox = styled.section`
 
         .favBtn {
           img {
-            width: 3.88vw;
+            width: 14px;
           }
         }
 
         .tknImg {
-          height: 9.44vw;
+          height: 34px;
         }
 
         .name {
@@ -354,25 +354,25 @@ const MtokenPopupBox = styled.section`
   footer {
     display: flex;
     align-items: center;
-    height: 15.55vw;
+    height: 56px;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
 
     .exitBtn {
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 17.22vw;
+      width: 62px;
       height: 100%;
 
       img {
-        width: 4.44vw;
+        width: 16px;
       }
     }
 
     .explain {
-      padding: 0 5.55vw;
-      margin: 3.33vw 0;
-      font-size: 4.44vw;
+      padding: 0 20px;
+      margin: 12px 0;
+      font-size: 16px;
       color: rgba(255, 255, 255, 0.6);
       border-left: 1px solid rgba(255, 255, 255, 0.2);
     }

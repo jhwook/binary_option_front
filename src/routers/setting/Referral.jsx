@@ -159,7 +159,7 @@ export default function Referal({userData}) {
 
 const MreferralBox = styled.main`
   height: 100%;
-  padding: 5.55vw;
+  padding: 20px;
   overflow: hidden;
 
   .innerBox {
@@ -168,7 +168,7 @@ const MreferralBox = styled.main`
 
     .titleArea {
       .explain {
-        font-size: 3.88vw;
+        font-size: 14px;
         color: rgba(255, 255, 255, 0.6);
       }
     }
@@ -176,28 +176,28 @@ const MreferralBox = styled.main`
     .recommendArea {
       display: flex;
       flex-direction: column;
-      gap: 2.77vw;
-      margin: 11.11vw 0 0 0;
+      gap: 10px;
+      margin: 40px 0 0 0;
 
       .title {
-        font-size: 4.44vw;
+        font-size: 16px;
       }
 
       .dataList {
         display: flex;
         flex-direction: column;
-        gap: 3.88vw;
+        gap: 14px;
 
         li {
           display: flex;
           align-items: center;
-          gap: 5.55vw;
-          height: 13.88vw;
-          padding: 0 5.55vw;
-          font-size: 3.88vw;
+          gap: 20px;
+          height: 50px;
+          padding: 0 20px;
+          font-size: 14px;
           background: rgba(255, 255, 255, 0.1);
           border: 1.4px solid rgba(255, 255, 255, 0.2);
-          border-radius: 2.77vw;
+          border-radius: 10px;
 
           &:focus-within {
             border-color: #fff;
@@ -211,11 +211,11 @@ const MreferralBox = styled.main`
             flex: 1;
             display: flex;
             align-items: center;
-            gap: 3.33vw;
+            gap: 12px;
             overflow: hidden;
 
             img {
-              width: 5vw;
+              width: 18px;
             }
 
             p {
@@ -231,17 +231,17 @@ const MreferralBox = styled.main`
     .listArea {
       display: flex;
       flex-direction: column;
-      gap: 5.55vw;
+      gap: 20px;
       max-width: 100%;
-      margin: 16.66vw 0 0 0;
+      margin: 60px 0 0 0;
 
       .categoryList {
         display: flex;
 
         li {
           flex: 1;
-          height: 8.88vw;
-          font-size: 4.44vw;
+          height: 32px;
+          font-size: 16px;
           font-weight: 700;
           text-align: center;
           border-bottom: 4px solid transparent;

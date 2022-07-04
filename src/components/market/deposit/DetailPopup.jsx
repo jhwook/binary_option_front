@@ -49,7 +49,7 @@ const MdetailPopupBox = styled.section`
   max-height: 72vh;
   overflow-y: scroll;
   background: rgba(255, 255, 255, 0.3);
-  border-radius: 5.55vw 5.55vw 0px 0px;
+  border-radius: 20px 20px 0px 0px;
   box-shadow: inset 0px 3px 3px rgba(255, 255, 255, 0.14);
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
@@ -63,13 +63,13 @@ const MdetailPopupBox = styled.section`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 16.66vw;
-    padding: 0 6.66vw;
-    font-size: 5vw;
+    height: 60px;
+    padding: 0 24px;
+    font-size: 18px;
 
     .blank,
     .exitBtn img {
-      width: 4.44vw;
+      width: 16px;
       opacity: 0.4;
     }
   }
@@ -77,14 +77,14 @@ const MdetailPopupBox = styled.section`
   .contArea {
     display: flex;
     flex-direction: column;
-    gap: 8.33vw;
-    padding: 5vw 5.55vw 8.88vw;
+    gap: 30px;
+    padding: 18px 20px 32px;
 
     .detailBox {
       display: flex;
       flex-direction: column;
-      gap: 5vw;
-      font-size: 3.88vw;
+      gap: 18px;
+      font-size: 14px;
 
       .key {
 
@@ -93,8 +93,8 @@ const MdetailPopupBox = styled.section`
       .valueList {
         display: flex;
         flex-direction: column;
-        gap: 3.88vw;
-        padding: 0 0 0 4.44vw;
+        gap: 14px;
+        padding: 0 0 0 16px;
         opacity: 0.4;
 
         li {
@@ -104,11 +104,11 @@ const MdetailPopupBox = styled.section`
     }
 
     .confirmBtn {
-      height: 13.88vw;
-      font-size: 4.44vw;
+      height: 50px;
+      font-size: 16px;
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid #fff;
-      border-radius: 2.77vw;
+      border-radius: 10px;
     }
   }
 `;

@@ -519,29 +519,29 @@ const MmyProfileBox = styled.main`
     display: flex;
     flex-direction: column;
     height: 100%;
-    padding: 5.55vw;
+    padding: 20px;
     overflow-y: scroll;
 
     .contArea {
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 16.66vw;
-      padding: 6.66vw 5.55vw;
+      gap: 60px;
+      padding: 24px 20px;
       background: rgba(255, 255, 255, 0.2);
       border: 2px solid rgba(255, 255, 255, 0.1);
-      border-radius: 5.55vw;
+      border-radius: 20px;
 
       .inputList {
         display: flex;
         flex-direction: column;
-        gap: 5.55vw;
-        font-size: 4.44vw;
+        gap: 20px;
+        font-size: 16px;
 
         li {
           display: flex;
           flex-direction: column;
-          gap: 2.22vw;
+          gap: 8px;
 
           .key {
           }
@@ -549,10 +549,10 @@ const MmyProfileBox = styled.main`
           .selectBox {
             display: flex;
             align-items: center;
-            height: 12.22vw;
+            height: 50px;
             background: rgba(0, 0, 0, 0.4);
             border: 1px solid transparent;
-            border-radius: 2.77vw;
+            border-radius: 10px;
             position: relative;
 
             .selectBtn {
@@ -561,10 +561,10 @@ const MmyProfileBox = styled.main`
               align-items: center;
               width: 100%;
               height: 100%;
-              padding: 0 5vw;
+              padding: 0 18px;
 
               img {
-                width: 4vw;
+                width: 16px;
               }
             }
 
@@ -574,7 +574,7 @@ const MmyProfileBox = styled.main`
               -webkit-backdrop-filter: blur(40px);
               left: 0;
               top: unset;
-              bottom: 14.44vw;
+              bottom: 50px;
               border: 2px solid rgba(255, 255, 255, 0.1);
             }
           }
@@ -582,11 +582,11 @@ const MmyProfileBox = styled.main`
           .value {
             display: flex;
             align-items: center;
-            height: 12.22vw;
-            padding: 0 5vw;
+            height: 50px;
+            padding: 0 18px;
             background: rgba(0, 0, 0, 0.4);
             border: 1px solid transparent;
-            border-radius: 2.77vw;
+            border-radius: 10px;
 
             &:focus-within {
               border-color: #fff;
@@ -619,8 +619,8 @@ const MmyProfileBox = styled.main`
           }
 
           .alarm {
-            margin: 2.77vw 0 0 0;
-            font-size: 3.88vw;
+            margin: 10px 0 0 0;
+            font-size: 14px;
             color: #ff5353;
           }
         }
@@ -628,13 +628,13 @@ const MmyProfileBox = styled.main`
 
       .saveBtn {
         width: 100%;
-        height: 13.88vw;
-        font-size: 5vw;
+        height: 50px;
+        font-size: 18px;
         font-weight: 700;
         color: #f7ab1f;
         background: rgba(247, 171, 31, 0.1);
         border: 1px solid #f7ab1f;
-        border-radius: 3.33vw;
+        border-radius: 12px;
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
 
         &:disabled {

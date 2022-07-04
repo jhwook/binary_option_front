@@ -50,7 +50,7 @@ export default function Market() {
 const MmarketBox = styled.main`
   width: 100vw;
   height: 100vh;
-  padding: 15.55vw 0 0 0;
+  padding: 56px 0 0;
   color: #fff;
   background: #0a0e17;
   overflow: hidden;

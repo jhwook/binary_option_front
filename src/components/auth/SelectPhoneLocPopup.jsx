@@ -61,13 +61,13 @@ export default function SelectPhoneLocPopup({ off, setCont }) {
 const MselectPhoneLocPopup = styled.section`
   display: flex;
   flex-direction: column;
-  width: 77.77vw;
-  height: 74.44vw;
-  padding: 4.44vw 2.22vw 4.44vw 0;
+  width: 280px;
+  height: 268px;
+  padding: 16px 8px 16px 0;
   background: #fff;
   box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.2);
   border-radius: inherit;
-  top: 14.44vw;
+  top: 50px;
   position: absolute;
   z-index: 6;
 
@@ -87,9 +87,9 @@ const MselectPhoneLocPopup = styled.section`
     li {
       display: flex;
       align-items: center;
-      height: 9.44vw;
-      padding: 0 5.55vw;
-      font-size: 3.88vw;
+      height: 34px;
+      padding: 0 20px;
+      font-size: 14px;
       cursor: pointer;
 
       &:hover {

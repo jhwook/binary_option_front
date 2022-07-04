@@ -102,23 +102,23 @@ export default function InsufficientPopup({ off, amount, type, nextProc }) {
 }
 
 const MinsufficientPopupBox = styled.section`
-  width: 91.11vw;
+  width: 328px;
   color: #fff;
 
   .topArea {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 16.66vw;
-    padding: 0 8.33vw;
+    height: 60px;
+    padding: 0 30px;
 
     .title {
-      font-size: 4.44vw;
+      font-size: 16px;
     }
 
     .exitBtn {
       img {
-        width: 4.44vw;
+        width: 16px;
       }
     }
   }
@@ -126,15 +126,15 @@ const MinsufficientPopupBox = styled.section`
   .contArea {
     display: flex;
     flex-direction: column;
-    gap: 5.55vw;
-    padding: 2.77vw 6.66vw 8.33vw;
+    gap: 20px;
+    padding: 10px 24px 30px;
 
     .balanceList {
       display: flex;
       flex-direction: column;
-      gap: 1.11vw;
-      padding: 0 1.66vw;
-      font-size: 3.88vw;
+      gap: 4px;
+      padding: 0 6px;
+      font-size: 14px;
 
       li {
         display: flex;
@@ -143,12 +143,12 @@ const MinsufficientPopupBox = styled.section`
     }
 
     .addBtn {
-      height: 13.88vw;
-      font-size: 5vw;
+      height: 50px;
+      font-size: 18px;
       font-weight: 700;
       color: #4e3200;
       background: linear-gradient(99.16deg, #604719 3.95%, #f7ab1f 52.09%);
-      border-radius: 2.22vw;
+      border-radius: 8px;
     }
   }
 `;

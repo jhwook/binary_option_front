@@ -37,7 +37,6 @@ export default function Live() {
   const [assetInfo, setAssetInfo] = useState();
   const [loading, setLoading] = useState(true);
   const [liveTradePopup, setLiveTradePopup] = useState(false);
-  const [hotKeyPopup, setHotKeyPopup] = useState(true);
   const [tokenPopup, setTokenPopup] = useState(false);
   const [duration, setDuration] = useState(1);
   const [timePopup, setTimePopup] = useState(false);
@@ -194,6 +193,7 @@ export default function Live() {
                       theme={Themes.DARK}
                       locale="kr"
                       autosize
+                      interval="1"
                       timezone="Asia/Seoul"
                       allow_symbol_change={false}
                     />
@@ -409,49 +409,11 @@ export default function Live() {
                         theme={Themes.DARK}
                         locale="kr"
                         autosize
+                        interval="1"
                         timezone="Asia/Seoul"
                         allow_symbol_change={false}
                       />
                     </div>
-
-                    {hotKeyPopup && (
-                      <div className="hotKeyPopup">
-                        <div className="topBar">
-                          <span className="blank" />
-                          <p className="title">Hotkeys</p>
-
-                          <button
-                            className="closeBtn"
-                            onClick={() => setHotKeyPopup(false)}
-                          >
-                            <img src={I_xWhite} alt="" />
-                          </button>
-                        </div>
-
-                        <ul className="hotKeyList">
-                          <li>
-                            <p className="key">Shift + W</p>
-                            <p className="value">Higher(New trade)</p>
-                          </li>
-                          <li>
-                            <p className="key">Shift + S</p>
-                            <p className="value">Lower(New trade)</p>
-                          </li>
-                          <li>
-                            <p className="key">Shift + A</p>
-                            <p className="value">Decrease trade amount</p>
-                          </li>
-                          <li>
-                            <p className="key">Shift + D</p>
-                            <p className="value">Increase trade amount</p>
-                          </li>
-                          <li>
-                            <p className="key">Shift + TAB</p>
-                            <p className="value">Next favorite asset</p>
-                          </li>
-                        </ul>
-                      </div>
-                    )}
                   </div>
 
                   <div className="actionBox">
@@ -637,7 +599,7 @@ export default function Live() {
 
 const MbetBox = styled.main`
   height: 100vh;
-  padding: 15.55vw 0 0 0;
+  padding: 56px 0 0;
   color: #fff;
   background: #0a0e17;
 
@@ -656,20 +618,20 @@ const MbetBox = styled.main`
         flex: 1;
         background: #181c25;
         position: relative;
-        padding: 17.2vw 0 0;
+        padding: 62px 0 0;
 
         .utilBox {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          top: 3.88vw;
-          left: 4.44vw;
-          right: 4.44vw;
+          top: 14px;
+          left: 16px;
+          right: 16px;
           position: absolute;
 
           .btnList {
             display: flex;
-            gap: 2.22vw;
+            gap: 8px;
 
             & > li {
               position: relative;
@@ -678,16 +640,16 @@ const MbetBox = styled.main`
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                width: 31.66vw;
-                height: 9.44vw;
-                padding: 0 4.44vw;
-                font-size: 3.88vw;
+                width: 112px;
+                height: 34px;
+                padding: 0 16px;
+                font-size: 14px;
                 font-weight: 700;
                 border: 1px solid #fff;
-                border-radius: 5.55vw;
+                border-radius: 20px;
 
                 img {
-                  width: 2.22vw;
+                  width: 8px;
                 }
               }
 
@@ -695,13 +657,13 @@ const MbetBox = styled.main`
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                width: 9.44vw;
+                width: 34px;
                 aspect-ratio: 1;
                 border: 1px solid #fff;
                 border-radius: 50%;
 
                 img {
-                  height: 3.88vw;
+                  height: 14px;
                 }
               }
             }
@@ -711,13 +673,13 @@ const MbetBox = styled.main`
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 9.44vw;
+            width: 34px;
             aspect-ratio: 1;
             border: 1px solid #fff;
             border-radius: 50%;
 
             img {
-              height: 3.88vw;
+              height: 14px;
             }
           }
         }
@@ -726,38 +688,38 @@ const MbetBox = styled.main`
       .actionBox {
         display: flex;
         flex-direction: column;
-        gap: 2.22vw;
-        padding: 4.44vw 4.44vw 6.66vw 4.44vw;
+        gap: 8px;
+        padding: 16px 16px 24px 16px;
         background: linear-gradient(
           180deg,
           rgba(255, 255, 255, 0.14) 0%,
           rgba(10, 14, 23, 0.14) 100%
         );
-        border-radius: 5.55vw 5.55vw 0 0;
+        border-radius: 20px 20px 0 0;
 
         .infoBox {
           display: flex;
-          gap: 3.33vw;
+          gap: 12px;
 
           .contBox {
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 1.66vw;
+            gap: 6px;
 
             .key {
-              font-size: 3.88vw;
+              font-size: 14px;
               color: rgba(255, 255, 255, 0.4);
             }
 
             .value {
               display: flex;
               align-items: center;
-              height: 11.11vw;
-              padding: 0 3.88vw;
-              font-size: 4.44vw;
+              height: 40px;
+              padding: 0 14px;
+              font-size: 16px;
               border: 1px solid rgba(255, 255, 255, 0.4);
-              border-radius: 2.22vw;
+              border-radius: 8px;
               position: relative;
 
               input {
@@ -777,7 +739,7 @@ const MbetBox = styled.main`
               }
 
               img {
-                height: 5.55vw;
+                height: 20px;
               }
             }
           }
@@ -785,14 +747,14 @@ const MbetBox = styled.main`
 
         .btnCont {
           display: flex;
-          gap: 3.33vw;
+          gap: 12px;
 
           .btnBox {
             flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 1.66vw;
+            gap: 6px;
 
             &.low {
               color: #ff5353;
@@ -816,21 +778,21 @@ const MbetBox = styled.main`
               display: flex;
               align-items: center;
               justify-content: center;
-              gap: 5.55vw;
+              gap: 20px;
               width: 100%;
-              height: 13.33vw;
-              font-size: 4.44vw;
+              height: 48px;
+              font-size: 16px;
               font-weight: 700;
               border: 1.2px solid;
               border-radius: 8px;
 
               img {
-                width: 3.33vw;
+                width: 12px;
               }
             }
 
             .rate {
-              font-size: 3.88vw;
+              font-size: 14px;
             }
           }
         }
@@ -944,66 +906,6 @@ const PbetBox = styled.main`
           height: calc(100% + 2px);
           top: -1px;
           left: -1px;
-        }
-
-        .hotKeyPopup {
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-          padding: 16px;
-          background: rgba(50, 50, 61, 0.8);
-          border-radius: 6px;
-          right: 18px;
-          bottom: 26px;
-          position: absolute;
-          z-index: 3;
-
-          .topBar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-
-            .title {
-              font-size: 12px;
-            }
-
-            .blank,
-            .closeBtn img {
-              width: 10px;
-            }
-
-            .closeBtn {
-              display: flex;
-              align-items: center;
-            }
-          }
-
-          .hotKeyList {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            font-size: 12px;
-
-            li {
-              display: flex;
-              gap: 12px;
-
-              p {
-                overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-
-                &.key {
-                  width: 58px;
-                }
-
-                &.value {
-                  color: rgba(255, 255, 255, 0.4);
-                  width: 130px;
-                }
-              }
-            }
-          }
         }
       }
 

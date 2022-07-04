@@ -140,36 +140,36 @@ export default function Referral() {
 }
 
 const MreferralBox = styled.main`
-  padding: 15.55vw 0 0 0;
+  padding: 56px 0 0;
 
   .innerBox {
     display: flex;
     flex-direction: column;
-    gap: 11.11vw;
-    padding: 30.55vw 4.44vw 0;
+    gap: 40px;
+    padding: 32px 16px 0;
 
     .titleCont {
       display: flex;
       justify-content: center;
-      gap: 4.44vw;
+      gap: 16px;
 
       img {
-        width: 16.66vw;
+        width: 60px;
       }
 
       .titleBox {
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
-        gap: 1.11vw;
-        margin: 0 0 3.33vw;
+        gap: 4px;
+        margin: 0 0 12px;
 
         .title {
-          font-size: 6.11vw;
+          font-size: 22px;
         }
 
         .sub {
-          font-size: 3.88vw;
+          font-size: 14px;
         }
       }
     }
@@ -177,15 +177,15 @@ const MreferralBox = styled.main`
     .contArea {
       display: flex;
       flex-direction: column;
-      gap: 5vw;
+      gap: 18px;
 
       input {
         width: 100%;
-        height: 12.22vw;
-        padding: 0 5.55vw;
-        font-size: 3.88vw;
+        height: 50px;
+        padding: 0 20px;
+        font-size: 14px;
         border: 1.4px solid #e6e6e6;
-        border-radius: 2.22vw;
+        border-radius: 8px;
 
         &.alarmBox {
           border-color: #ff5353;
@@ -201,12 +201,12 @@ const MreferralBox = styled.main`
       }
 
       .loginBtn {
-        height: 12.22vw;
-        font-size: 4.44vw;
+        height: 50px;
+        font-size: 16px;
         font-weight: 700;
         color: #f7ab1f;
         border: 2px solid #f7ab1f;
-        border-radius: 2.22vw;
+        border-radius: 8px;
 
         &:disabled {
           border-color: #e6e6e6;
@@ -214,15 +214,15 @@ const MreferralBox = styled.main`
       }
 
       .noCode {
-        font-size: 3.88vw;
+        font-size: 14px;
         color: #2a2a2a;
       }
     }
   }
 
   .cpRight {
-    margin: 8.33vw 0;
-    font-size: 3.33vw;
+    margin: 30px 0;
+    font-size: 12px;
     text-align: center;
     white-space: nowrap;
     color: #ddd;

@@ -8,7 +8,7 @@ import L_loader from "../../img/loader/L_loader.png";
 import { useSelector } from "react-redux";
 import DefaultHeader from "../../components/header/DefaultHeader";
 import PopupBg from "../../components/common/PopupBg";
-import { API } from "../../configs/api";
+import { API, URL } from "../../configs/api";
 import axios from "axios";
 import SecurityVerifiPopup from "../../components/market/deposit/SecurityVerifiPopup";
 import CashInPersonPopup from "../../components/market/deposit/CashInPersonPopup";
@@ -20,6 +20,7 @@ import { setToast } from "../../util/Util";
 import { metaMaskLink } from "../../configs/metaMask";
 import DetailPopup from "../../components/market/deposit/DetailPopup";
 import PreDepositWarningPopup from "../../components/market/deposit/PreDepositWarningPopup";
+import io from "socket.io-client";
 
 export default function Deposit({ userData }) {
   const walletAddress = localStorage.getItem("walletAddress");
@@ -34,10 +35,7 @@ export default function Deposit({ userData }) {
   const [cashInPersonPopup, setCashInPersonPopupPopup] = useState(false);
   const [tokenPopup, setTokenPopup] = useState(false);
   const [token, setToken] = useState({ icon: T_usdt, text: "USDT" });
-  const [tokenList, setTokenList] = useState([
-    { icon: T_usdt, text: "USDT" },
-    { icon: T_usdc, text: "USDC" },
-  ]);
+  const [tokenList, setTokenList] = useState([{ icon: T_usdt, text: "USDT" }]);
   const [loader, setLoader] = useState("");
   const [preDepositWarningPopup, setPreDepositWarningPopup] = useState(false);
 
@@ -55,6 +53,11 @@ export default function Deposit({ userData }) {
 
   async function moDirectPayment() {
     setLoader("depositBtn");
+    console.log(
+      `${metaMaskLink}/${
+        contractaddr[token.text]
+      }/transfer?address=${walletAddress}&uint256=${amount}e6`
+    );
 
     window.open(
       `${metaMaskLink}/${
@@ -62,17 +65,33 @@ export default function Deposit({ userData }) {
       }/transfer?address=${walletAddress}&uint256=${amount}e6`
     );
 
-    axios
-      .post(`${API.LISTEN_TRANSACTION}/${token.text}`)
-      .then(({ data }) => {
-        console.log(data);
+    const socket = io("http://litriggy.com:30708/noauth", {
+      extraHeaders: {
+        type: "USDT",
+      },
+    });
 
-        setToast({ type: "alarm", cont: "Submission Successful" });
-        // setTimeout(() => {
-        //   window.location.reload(false);
-        // }, 3000);
-      })
-      .catch((err) => console.error(err));
+    socket.on("connect", (res) => {
+      console.log("connect");
+      console.log(res);
+    });
+
+    socket.on("transactions", (res) => {
+      console.log("transactions");
+      console.log(res);
+    });
+
+    // axios
+    //   .post(`${API.LISTEN_TRANSACTION}/${token.text}`)
+    //   .then(({ data }) => {
+    //     console.log(data);
+
+    //     setToast({ type: "alarm", cont: "Submission Successful" });
+    //     // setTimeout(() => {
+    //     //   window.location.reload(false);
+    //     // }, 3000);
+    //   })
+    //   .catch((err) => console.error(err));
   }
 
   async function directPayment() {
@@ -169,18 +188,17 @@ export default function Deposit({ userData }) {
     if (isbranch) {
       setTokenList([{ icon: T_CNY, text: "CNY" }]);
     } else {
-      setTokenList([
-        { icon: T_usdt, text: "USDT" },
-        { icon: T_usdc, text: "USDC" },
-      ]);
+      setTokenList([{ icon: T_usdt, text: "USDT" }]);
     }
   }, [userData]);
 
   useEffect(() => {
-    if (tokenList) {
-      setToken(tokenList[0]);
-    }
+    if (tokenList) setToken(tokenList[0]);
   }, [tokenList]);
+
+  useEffect(() => {
+    return () => io(URL).disconnect();
+  }, []);
 
   if (isMobile)
     return (
@@ -528,24 +546,24 @@ export default function Deposit({ userData }) {
 
 const MdepositBox = styled.main`
   height: 100%;
-  padding: 5.55vw;
+  padding: 20px;
 
   .innerBox {
     display: flex;
     flex-direction: column;
-    gap: 15vw;
+    gap: 54px;
     height: 100%;
     overflow-y: scroll;
 
     .inputList {
       display: flex;
       flex-direction: column;
-      gap: 3.88vw;
+      gap: 14px;
 
       li {
         &.tokenBox {
           .selectBox {
-            margin: 2.77vw 0 0 0;
+            margin: 10px 0 0 0;
             background: rgba(255, 255, 255, 0.1);
             border: 1.4px solid rgba(0, 0, 0, 0);
             border-radius: 10px;
@@ -554,11 +572,11 @@ const MdepositBox = styled.main`
             .selBtn {
               display: flex;
               align-items: center;
-              gap: 2.22vw;
+              gap: 8px;
               width: 100%;
-              height: 13.88vw;
-              padding: 0 6.11vw;
-              font-size: 5vw;
+              height: 50px;
+              padding: 0 22px;
+              font-size: 18px;
               font-weight: 700;
 
               &.on {
@@ -569,7 +587,7 @@ const MdepositBox = styled.main`
               }
 
               .token {
-                width: 8.33vw;
+                width: 30px;
                 aspect-ratio: 1;
               }
 
@@ -579,7 +597,7 @@ const MdepositBox = styled.main`
               }
 
               .arw {
-                height: 2.22vw;
+                height: 8px;
                 opacity: 0.4;
               }
             }
@@ -589,16 +607,16 @@ const MdepositBox = styled.main`
         &.amountBox {
           .optList {
             display: flex;
-            gap: 2.77vw;
-            margin: 2.77vw 0 0 0;
-            font-size: 4.44vw;
+            gap: 10px;
+            margin: 10px 0 0 0;
+            font-size: 16px;
             overflow-x: scroll;
 
             .optBtn {
               flex: 1;
-              height: 9.44vw;
+              height: 34px;
               background: rgba(255, 255, 255, 0.1);
-              border-radius: 2.22vw;
+              border-radius: 8px;
               color: rgba(255, 255, 255, 0.6);
               border: 1px solid rgba(255, 255, 255, 0.4);
 
@@ -611,20 +629,20 @@ const MdepositBox = styled.main`
         }
 
         .key {
-          font-size: 3.88vw;
+          font-size: 14px;
         }
 
         .valueBox {
           display: flex;
           align-items: center;
-          gap: 2.22vw;
-          height: 13.88vw;
-          padding: 0 6.11vw;
-          margin: 2.77vw 0 0 0;
-          font-size: 5vw;
+          gap: 8px;
+          height: 50px;
+          padding: 0 22px;
+          margin: 10px 0 0 0;
+          font-size: 18px;
           font-weight: 700;
           background: rgba(255, 255, 255, 0.1);
-          border-radius: 2.77vw;
+          border-radius: 10px;
           border: 1.4px solid rgba(0, 0, 0, 0);
           cursor: pointer;
           position: relative;
@@ -645,14 +663,14 @@ const MdepositBox = styled.main`
       .infoList {
         display: flex;
         flex-direction: column;
-        gap: 2.22vw;
-        padding: 3.33vw 3.88vw 3.88vw;
+        gap: 8px;
+        padding: 12px 14px 14px;
         background: rgba(0, 0, 0, 0.6);
 
         li {
           display: flex;
           justify-content: space-between;
-          font-size: 3.88vw;
+          font-size: 14px;
 
           .key {
             opacity: 0.6;
@@ -665,12 +683,12 @@ const MdepositBox = styled.main`
 
       .depositBtn {
         width: 100%;
-        height: 13.88vw;
-        font-size: 4.44vw;
+        height: 50px;
+        font-size: 16px;
         font-weight: 700;
         color: #4e3200;
         background: linear-gradient(99.16deg, #604719 3.95%, #f7ab1f 52.09%);
-        border-radius: 2.77vw;
+        border-radius: 10px;
 
         &:disabled {
           color: #f7ab1f;
