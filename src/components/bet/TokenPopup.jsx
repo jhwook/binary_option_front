@@ -18,6 +18,22 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
   const [search, setSearch] = useState("");
   const [listData, setListData] = useState([]);
 
+  function onKeyDown(e) {
+    if (e.key === "Enter") getAssetWithSearch();
+  }
+
+  function getAssetWithSearch() {
+    axios
+      .get(`${API.GET_ASSETS}`, {
+        params: { group: category, searchkey: search },
+      })
+      .then(({ data }) => {
+        console.log(data.respdata);
+        setListData(data.respdata);
+      })
+      .catch((err) => console.error(err));
+  }
+
   function onClickStock(asset) {
     console.log(asset);
     setAssetInfo(asset);
@@ -164,20 +180,18 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
 
           <div className="searchBox">
             {search ? (
-              <button
-                className="cancelBtn"
-                onClick={() => setSearchMode(false)}
-              >
+              <button className="cancelBtn" onClick={() => setSearch("")}>
                 <img src={I_xWhite} alt="" />
               </button>
             ) : (
-              <button className="searchBtn" onClick={() => setSearchMode(true)}>
+              <button className="searchBtn">
                 <img src={I_searchWhite} alt="" />
               </button>
             )}
 
             <input
               value={search}
+              onKeyDown={onKeyDown}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="e.g. “ETH” or “Ethereum”"
             />
@@ -432,6 +446,10 @@ const PtokenPopupBox = styled.section`
       height: inherit;
       background: rgba(255, 255, 255, 0.1);
       border-radius: 20px;
+
+      &:hover {
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+      }
 
       button {
         display: flex;

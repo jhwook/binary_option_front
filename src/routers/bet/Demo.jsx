@@ -83,7 +83,7 @@ export default function Demo() {
     const balance = await getBalance();
     console.log(balance.data.respdata);
 
-    if (balance.data.respdata.LIVE.avail < amount) {
+    if (balance.data.respdata.LIVE.avail/10**6 < amount) {
       setInsufficientPopup(true);
       throw "Not Balance";
     }

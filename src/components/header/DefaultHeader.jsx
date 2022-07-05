@@ -91,9 +91,9 @@ export default function DefaultHeader({ white, border, title }) {
                 onClick={() => setMyBalancePopup(true)}
               >
                 {balanceType === "Demo" ? (
-                  <p>{`Demo $${balance?.DEMO?.avail || 0}`}</p>
+                  <p>{`Demo $${balance?.DEMO?.avail/10**6 || 0}`}</p>
                 ) : (
-                  <p>{`Live $${balance?.LIVE?.avail || 0}`}</p>
+                  <p>{`Live $${balance?.LIVE?.avail/10**6 || 0}`}</p>
                 )}
               </button>
             ) : (
@@ -191,14 +191,14 @@ export default function DefaultHeader({ white, border, title }) {
                         <>
                           <strong className="key">Demo</strong>
                           <strong className="value">{`$${Number(
-                            balance?.DEMO?.avail || 0
+                            balance?.DEMO?.avail/10**6 || 0
                           ).toFixed(2)}`}</strong>
                         </>
                       ) : (
                         <>
                           <strong className="key">Live</strong>
                           <strong className="value">{`$${Number(
-                            balance?.LIVE?.avail || 0
+                            balance?.LIVE?.avail/10**6 || 0
                           ).toFixed(2)}`}</strong>
                         </>
                       )}

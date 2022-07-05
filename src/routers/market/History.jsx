@@ -168,8 +168,14 @@ export default function History() {
                           <p className="key">{D_historyListHeader[2]}</p>
                           <div className="value">
                             <p>{`${
-                              v?.amount?.toLocaleString("eu", "US") ||
-                              v?.localeAmount?.toLocaleString("cn", "CN")
+                              (v?.amount / 10 ** 6)?.toLocaleString(
+                                "eu",
+                                "US"
+                              ) ||
+                              (v?.localeAmount / 10 ** 6)?.toLocaleString(
+                                "cn",
+                                "CN"
+                              )
                             } ${v.localeUnit || v.unit}`}</p>
                           </div>
                         </div>
@@ -275,8 +281,8 @@ export default function History() {
 
                     <span>
                       <p>{`${
-                        v?.amount?.toLocaleString("eu", "US") ||
-                        v?.localeAmount?.toLocaleString("cn", "CN")
+                        (v?.amount / 10 ** 6)?.toLocaleString("eu", "US") ||
+                        (v?.localeAmount / 10 ** 6)?.toLocaleString("cn", "CN")
                       } ${v.localeUnit || v.unit}`}</p>
                     </span>
 
@@ -349,7 +355,7 @@ const MhistoryBox = styled.main`
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 16px;
+        height: 44px;
         font-size: 16px;
         font-weight: 700;
         border-bottom: 4px solid transparent;
@@ -606,9 +612,6 @@ const PhistoryBox = styled.main`
               height: 60px;
               border-top: 1px solid #3b3e45;
 
-              /* &:nth-of-type(6) {
-                color: #ff5353;
-              } */
               &.Pending {
                 color: #ffbf00;
               }
@@ -635,7 +638,6 @@ const PhistoryBox = styled.main`
           }
 
           &:first-of-type {
-            padding: 0 0 0 20px;
           }
 
           &:last-of-type {
@@ -643,8 +645,9 @@ const PhistoryBox = styled.main`
           }
 
           &:nth-of-type(1) {
-            width: 190px;
-            min-width: 190px;
+            justify-content: center;
+            width: 90px;
+            min-width: 90px;
           }
 
           &:nth-of-type(2) {
@@ -653,6 +656,7 @@ const PhistoryBox = styled.main`
           }
 
           &:nth-of-type(3) {
+            flex: 1;
             width: 168px;
             min-width: 168px;
           }

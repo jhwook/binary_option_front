@@ -56,7 +56,7 @@ export default function Live() {
       .then(async ({ data }) => {
         console.log(data);
 
-        if (data.respdata.LIVE.avail < 5) setLiveTradePopup(true);
+        if (data.respdata.LIVE.avail / 10 ** 6 < 5) setLiveTradePopup(true);
       })
       .catch((err) => {
         console.error(err);
@@ -82,12 +82,6 @@ export default function Live() {
     }, 5000);
   }
 
-  function handleKeyDown(e) {
-    if (e.key === "W" && e.shiftKey) {
-      console.log("A");
-    }
-  }
-
   async function getBalance() {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -99,7 +93,7 @@ export default function Live() {
     const balance = await getBalance();
     console.log(balance.data.respdata);
 
-    if (balance.data.respdata.LIVE.avail < amount) {
+    if (balance.data.respdata.LIVE.avail / 10 ** 6 < amount) {
       setInsufficientPopup(true);
       throw "Not Balance";
     }
@@ -160,9 +154,6 @@ export default function Live() {
 
   useLayoutEffect(() => {
     localStorage.setItem("balanceType", "Live");
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   useEffect(() => {
@@ -184,7 +175,7 @@ export default function Live() {
           <LoadingBar />
         ) : (
           <>
-            <MbetBox onKeyDown={handleKeyDown}>
+            <MbetBox>
               <section className="innerBox">
                 <article className="contArea">
                   <div className="chartBox">
@@ -361,7 +352,7 @@ export default function Live() {
           <LoadingBar />
         ) : (
           <>
-            <PbetBox onKeyDown={handleKeyDown}>
+            <PbetBox>
               <section className="innerBox">
                 <article className="tokenArea">
                   <div className="selectBox">

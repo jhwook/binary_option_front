@@ -51,8 +51,8 @@ export default function InsufficientPopup({ off, amount, type, nextProc }) {
             <li>
               <p className="key">Your balance</p>
               <p className="value">
-                ${type === "Live" && Number(balance?.LIVE?.avail).toFixed(2)}
-                {type === "Demo" && Number(balance?.DEMO?.avail).toFixed(2)}
+                ${type === "Live" && Number(balance?.LIVE?.avail/10**6).toFixed(2)}
+                {type === "Demo" && Number(balance?.DEMO?.avail/10**6).toFixed(2)}
               </p>
             </li>
             <li>
@@ -83,8 +83,8 @@ export default function InsufficientPopup({ off, amount, type, nextProc }) {
             <li>
               <p className="key">Your balance</p>
               <p className="value">
-                ${type === "Live" && Number(balance?.LIVE?.avail).toFixed(2)}
-                {type === "Demo" && Number(balance?.DEMO?.avail).toFixed(2)}
+                ${type === "Live" && Number(balance?.LIVE?.avail/10**6).toFixed(2)}
+                {type === "Demo" && Number(balance?.DEMO?.avail/10**6).toFixed(2)}
               </p>
             </li>
             <li>

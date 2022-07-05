@@ -53,6 +53,7 @@ export default function Deposit({ userData }) {
 
   async function moDirectPayment() {
     setLoader("depositBtn");
+
     console.log(
       `${metaMaskLink}/${
         contractaddr[token.text]
@@ -65,33 +66,28 @@ export default function Deposit({ userData }) {
       }/transfer?address=${walletAddress}&uint256=${amount}e6`
     );
 
-    const socket = io("http://litriggy.com:30708/noauth", {
-      extraHeaders: {
-        type: "USDT",
+    const socket = io(URL, {
+      query: {
+        token: localStorage.getItem("token"),
       },
-    });
-
-    socket.on("connect", (res) => {
-      console.log("connect");
-      console.log(res);
     });
 
     socket.on("transactions", (res) => {
       console.log("transactions");
       console.log(res);
+
+      if (res) {
+        setToast({ type: "alarm", cont: "Submission Successful" });
+        setTimeout(() => {
+          window.location.reload(false);
+        }, 3000);
+      }
     });
 
-    // axios
-    //   .post(`${API.LISTEN_TRANSACTION}/${token.text}`)
-    //   .then(({ data }) => {
-    //     console.log(data);
-
-    //     setToast({ type: "alarm", cont: "Submission Successful" });
-    //     // setTimeout(() => {
-    //     //   window.location.reload(false);
-    //     // }, 3000);
-    //   })
-    //   .catch((err) => console.error(err));
+    socket.emit("transactions", { type: "USDT" }, (res) => {
+      console.log("emit");
+      console.log(res);
+    });
   }
 
   async function directPayment() {
