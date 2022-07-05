@@ -26,14 +26,12 @@ export default function EventListener() {
     window.gapi.load("client:auth2", start);
   }
 
- 
-
   useLayoutEffect(() => {
     initGApi();
 
     handleResize();
 
-    AxiosInterCept();
+    AxiosInterCept(localStorage.getItem("token"));
 
     window.addEventListener("resize", handleResize);
 

@@ -49,7 +49,7 @@ export default function Signup() {
 
         if (data.message === "TOKEN_CREATED") {
           localStorage.setItem("token", data.result.tokenId);
-          AxiosInterCept();
+          AxiosInterCept(data.result.tokenId);
           navigate("/");
         }
       })

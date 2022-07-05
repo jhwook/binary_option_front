@@ -63,7 +63,7 @@ export default function Login() {
 
         if (data.message === "TOKEN_CREATED") {
           localStorage.setItem("token", data.result.tokenId);
-          AxiosInterCept();
+          AxiosInterCept(data.result.tokenId);
           navigate("/");
           return;
         }
@@ -104,6 +104,8 @@ export default function Login() {
         let { isFirstSocial } = data;
 
         localStorage.setItem("token", data.result.tokenId);
+
+        AxiosInterCept(data.result.tokenId);
 
         if (isFirstSocial) navigate("/auth/signup/referral");
         else navigate("/");

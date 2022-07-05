@@ -8,7 +8,6 @@ import I_percentWhite from "../../img/icon/I_percentWhite.svg";
 import I_highArwGreen from "../../img/icon/I_highArwGreen.svg";
 import I_lowArwRed from "../../img/icon/I_lowArwRed.svg";
 import I_plusWhite from "../../img/icon/I_plusWhite.svg";
-import I_xWhite from "../../img/icon/I_xWhite.svg";
 import I_flagWhite from "../../img/icon/I_flagWhite.svg";
 import I_barChartWhite from "../../img/icon/I_barChartWhite.svg";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -818,7 +817,7 @@ const PbetBox = styled.main`
           display: flex;
           justify-content: space-between;
           align-items: center;
-          width: 154px;
+          min-width: 154px;
           height: 40px;
           padding: 0 24px;
           font-size: 16px;

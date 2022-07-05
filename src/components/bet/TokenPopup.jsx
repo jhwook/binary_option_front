@@ -25,7 +25,7 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
   function getAssetWithSearch() {
     axios
       .get(`${API.GET_ASSETS}`, {
-        params: { group: category, searchkey: search },
+        params: { searchkey: search },
       })
       .then(({ data }) => {
         console.log(data.respdata);

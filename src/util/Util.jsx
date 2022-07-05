@@ -251,8 +251,7 @@ export function GetTier(v) {
   }
 }
 
-export function AxiosInterCept() {
-  const token = localStorage.getItem("token");
+export function AxiosInterCept(token) {
   if (!token) return;
 
   axios.interceptors.request.use(function (config) {
