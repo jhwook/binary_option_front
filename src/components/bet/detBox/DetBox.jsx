@@ -170,7 +170,7 @@ const PdetBoxCont = styled.div`
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 50px;
+      height: 38px;
       font-size: 16px;
       color: rgba(255, 255, 255, 0.2);
       border-radius: 12px 12px 0px 0px;

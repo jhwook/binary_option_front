@@ -30,7 +30,7 @@ export default function Lending() {
               <div className="contBox">
                 <img className="icon" src={I_thunderGrad} alt="" />
 
-                <strong className="cont">Start trading on Beteit today.</strong>
+                <strong className="cont">Start trading on Betbit today.</strong>
               </div>
 
               <div className="btnBox">
@@ -135,7 +135,7 @@ export default function Lending() {
               <div className="contBox">
                 <img className="icon" src={I_thunderGrad} alt="" />
 
-                <strong className="cont">Start trading on Beteit today.</strong>
+                <strong className="cont">Start trading on Betbit today.</strong>
               </div>
 
               <div className="btnBox">

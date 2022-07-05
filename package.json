@@ -9,7 +9,6 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.27.2",
     "i18next": "^21.8.9",
-    "install": "^0.13.0",
     "js-sha256": "^0.9.0",
     "moment": "^2.29.3",
     "npm": "^8.10.0",
