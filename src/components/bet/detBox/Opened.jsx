@@ -1,23 +1,69 @@
+import axios from "axios";
 import moment from "moment";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { API } from "../../../configs/api";
 import { D_openedList } from "../../../data/D_bet";
 import I_highArwGreen from "../../../img/icon/I_highArwGreen.svg";
 import I_lowArwRed from "../../../img/icon/I_lowArwRed.svg";
 
-export default function Opened({ data }) {
+export default function Opened({ socket }) {
   const isMobile = useSelector((state) => state.common.isMobile);
+  const betFlag = useSelector((state) => state.bet.betFlag);
+
+  const [data, setData] = useState([]);
+  const [now, setNow] = useState(new Date());
+
+  function getLog() {
+    socket.emit("bet", {}, (res) => {
+      console.log(res);
+      setData(res);
+    });
+  }
 
   function getIcon(type) {
     switch (type) {
-      case 2:
+      case "HIGH":
         return I_highArwGreen;
-      case 1:
+      case "LOW":
         return I_lowArwRed;
       default:
         break;
     }
   }
+
+  function getForcast(type) {
+    switch (type) {
+      case "HIGH":
+        return "Higher";
+      case "LOW":
+        return "Lower";
+      default:
+        break;
+    }
+  }
+
+  useEffect(() => {
+    getLog();
+
+    let timeInterval = setInterval(() => {
+      setNow(new Date());
+    }, 1000);
+
+    let logInterval = setInterval(() => {
+      getLog();
+    }, 60000);
+
+    return () => {
+      clearInterval(timeInterval);
+      clearInterval(logInterval);
+    };
+  }, []);
+
+  useEffect(() => {
+    getLog();
+  }, [betFlag]);
 
   if (isMobile)
     return (
@@ -28,11 +74,9 @@ export default function Opened({ data }) {
               <details>
                 <summary>
                   <div className="contBox">
-                    <p className="token">Bitcoin</p>
-                    {/* <p className="token">{v.token}</p> */}
+                    <p className="token">{v.asset.name}</p>
 
-                    <p className="percent">{`5%`}</p>
-                    {/* <p className="percent">{`${v.percent}%`}</p> */}
+                    <p className="percent">{`${v.diffRate}%`}</p>
                   </div>
 
                   <div className="contBox">
@@ -46,16 +90,10 @@ export default function Opened({ data }) {
                         1.05 < 0 && "minus"
                       } benefit`}
                     >{`$${(1.05).toFixed(2)}`}</p>
-                    {/* <p
-                      className={`${v.benefit > 0 && "plus"} ${
-                        v.benefit < 0 && "minus"
-                      } benefit`}
-                       >{`$${v.benefit?.toFixed(2)}`}</p> */}
 
                     <p className="time">
-                      {moment(v.createdat).format("mm:ss")}
+                      {moment(moment.unix(v.expiry).diff(now)).format("mm:ss")}
                     </p>
-                    {/* <p className="time">{moment(v.time).format("mm:ss")}</p> */}
                   </div>
                 </summary>
 
@@ -65,21 +103,23 @@ export default function Opened({ data }) {
                       <li>
                         <p className="key">Open time</p>
                         <p className="value">
-                          {moment(v.createdat).format("hh:mm:ss")}
-                          {/* {moment(v.det?.openTime).format("hh:mm:ss")} */}
+                          {moment.unix(v.starting).format("hh:mm:ss")}
                         </p>
                       </li>
 
                       <li>
-                        <p>{"M5"}</p>
-                        {/* <p>{v.det?.limit}</p> */}
+                        <p>
+                          M
+                          {moment(
+                            moment.unix(v.expiry).diff(moment.unix(v.starting))
+                          ).format("m")}
+                        </p>
                       </li>
 
                       <li>
                         <p className="key">ClosingTime</p>
                         <p className="value">
-                          {moment(v.createdat).format("hh:mm:ss")}
-                          {/* {moment(v.det?.closingTime).format("hh:mm:ss")} */}
+                          {moment.unix(v.expiry).format("hh:mm:ss")}
                         </p>
                       </li>
                     </ul>
@@ -90,11 +130,8 @@ export default function Opened({ data }) {
                       </div>
 
                       <p className="left">{`Time left : ${moment(
-                        v.createdat
+                        moment.unix(v.expiry).diff(now)
                       ).format("mm:ss")}`}</p>
-                      {/* <p className="left">{`Time left : ${moment(v.time).format(
-                        "mm:ss"
-                      )}`}</p> */}
                     </div>
                   </div>
 
@@ -103,22 +140,15 @@ export default function Opened({ data }) {
                       <ul className="forcastList">
                         <li>
                           <p className="key">Your forecast</p>
-                          <p className="value">{"Higher"}</p>
-                          {/* <p className="value">{v.forcast?.type}</p> */}
+                          <p className="value">{getForcast(v.side)}</p>
                         </li>
                         <li>
                           <p className="key">Payout</p>
-                          <p className="value">{`$${(0).toFixed(2)}`}</p>
-                          {/* <p className="value">{`$${v.forcast?.payout?.toFixed(
-                            2
-                          )}`}</p> */}
+                          <p className="value">{`$${v.amount.toFixed(2)}`}</p>
                         </li>
                         <li>
                           <p className="key">Profit</p>
                           <p className="value">{`$${(0).toFixed(2)}`}</p>
-                          {/* <p className="value">{`$${v.forcast?.profit?.toFixed(
-                            2
-                          )}`}</p> */}
                         </li>
                       </ul>
 
@@ -126,29 +156,24 @@ export default function Opened({ data }) {
                         <li>
                           <p className="key">Open price</p>
 
-                          <p className="value">{29781}</p>
-                          {/* <p className="value">{v.starttickerprice}</p> */}
+                          <p className="value">
+                            {v.startingPrice
+                              ? Number(v.startingPrice).toFixed(2)
+                              : "-"}
+                          </p>
                         </li>
                         <li>
                           <p className="key">Current price</p>
 
                           <p className="value">{29746}</p>
-                          {/* <p className="value">{v.endtickerprice}</p> */}
                         </li>
                         <li>
                           <p className="key">Difference</p>
 
                           <p className="value point">{`${-1} points`}</p>
-                          {/* <p className="value point">{`${v.price?.diff} points`}</p> */}
                         </li>
                       </ul>
                     </div>
-
-                    <button
-                      className="getBtn"
-                      onClick={() => {}}
-                    >{`Get $${(30).toFixed(2)}`}</button>
-                    {/* >{`Get $${(30).toFixed(2)}`}</button> */}
                   </div>
                 </div>
               </details>
@@ -165,11 +190,9 @@ export default function Opened({ data }) {
               <details>
                 <summary>
                   <div className="contBox">
-                    <p className="token">Bitcoin</p>
-                    {/* <p className="token">{v.token}</p> */}
+                    <p className="token">{v?.asset?.name}</p>
 
                     <p className="percent">{`5%`}</p>
-                    {/* <p className="percent">{`${v.percent}%`}</p> */}
                   </div>
 
                   <div className="contBox">
@@ -183,16 +206,10 @@ export default function Opened({ data }) {
                         1.05 < 0 && "minus"
                       } benefit`}
                     >{`$${(1.05).toFixed(2)}`}</p>
-                    {/* <p
-                      className={`${v.benefit > 0 && "plus"} ${
-                        v.benefit < 0 && "minus"
-                      } benefit`}
-                       >{`$${v.benefit?.toFixed(2)}`}</p> */}
 
                     <p className="time">
-                      {moment(v.createdat).format("mm:ss")}
+                      {moment(moment.unix(v.expiry).diff(now)).format("mm:ss")}
                     </p>
-                    {/* <p className="time">{moment(v.time).format("mm:ss")}</p> */}
                   </div>
                 </summary>
 
@@ -202,36 +219,44 @@ export default function Opened({ data }) {
                       <li>
                         <p className="key">Open time</p>
                         <p className="value">
-                          {moment(v.createdat).format("hh:mm:ss")}
-                          {/* {moment(v.det?.openTime).format("hh:mm:ss")} */}
+                          {moment.unix(v.starting).format("hh:mm:ss")}
                         </p>
                       </li>
 
                       <li>
-                        <p>{"M5"}</p>
-                        {/* <p>{v.det?.limit}</p> */}
+                        <p>
+                          M
+                          {moment(
+                            moment.unix(v.expiry).diff(moment.unix(v.starting))
+                          ).format("m")}
+                        </p>
                       </li>
 
                       <li>
                         <p className="key">ClosingTime</p>
                         <p className="value">
-                          {moment(v.createdat).format("hh:mm:ss")}
-                          {/* {moment(v.det?.closingTime).format("hh:mm:ss")} */}
+                          {moment.unix(v.expiry).format("hh:mm:ss")}
                         </p>
                       </li>
                     </ul>
 
                     <div className="barBox">
                       <div className="bar">
-                        <div />
+                        <div
+                          style={{
+                            width: `${
+                              100 -
+                              (moment.unix(v.expiry).diff(now, "seconds") *
+                                100) /
+                                (v.expiry - v.starting)
+                            }%`,
+                          }}
+                        />
                       </div>
 
                       <p className="left">{`Time left : ${moment(
-                        v.createdat
+                        moment.unix(v.expiry).diff(now)
                       ).format("mm:ss")}`}</p>
-                      {/* <p className="left">{`Time left : ${moment(v.time).format(
-                        "mm:ss"
-                      )}`}</p> */}
                     </div>
                   </div>
 
@@ -240,22 +265,17 @@ export default function Opened({ data }) {
                       <ul className="forcastList">
                         <li>
                           <p className="key">Your forecast</p>
-                          <p className="value">{"Higher"}</p>
-                          {/* <p className="value">{v.forcast?.type}</p> */}
+                          <p className="value">{getForcast(v.side)}</p>
                         </li>
                         <li>
                           <p className="key">Payout</p>
-                          <p className="value">{`$${(0).toFixed(2)}`}</p>
-                          {/* <p className="value">{`$${v.forcast?.payout?.toFixed(
-                            2
-                          )}`}</p> */}
+                          <p className="value">{`$${
+                            v.amount && v.amount.toFixed(2)
+                          }`}</p>
                         </li>
                         <li>
                           <p className="key">Profit</p>
                           <p className="value">{`$${(0).toFixed(2)}`}</p>
-                          {/* <p className="value">{`$${v.forcast?.profit?.toFixed(
-                            2
-                          )}`}</p> */}
                         </li>
                       </ul>
 
@@ -263,29 +283,30 @@ export default function Opened({ data }) {
                         <li>
                           <p className="key">Open price</p>
 
-                          <p className="value">{29781}</p>
-                          {/* <p className="value">{v.starttickerprice}</p> */}
+                          <p className="value">
+                            {v.startingPrice
+                              ? Number(v.startingPrice).toFixed(2)
+                              : "-"}
+                          </p>
                         </li>
                         <li>
                           <p className="key">Current price</p>
 
-                          <p className="value">{29746}</p>
-                          {/* <p className="value">{v.endtickerprice}</p> */}
+                          <p className="value">
+                            {v.currentPrice
+                              ? Number(v.currentPrice).toFixed(2)
+                              : "-"}
+                          </p>
                         </li>
                         <li>
                           <p className="key">Difference</p>
 
-                          <p className="value point">{`${-1} points`}</p>
-                          {/* <p className="value point">{`${v.price?.diff} points`}</p> */}
+                          <p className="value point">{`${Number(
+                            v.currentPrice - v.startingPrice
+                          ).toFixed(2)} points`}</p>
                         </li>
                       </ul>
                     </div>
-
-                    <button
-                      className="getBtn"
-                      onClick={() => {}}
-                    >{`Get $${(30).toFixed(2)}`}</button>
-                    {/* >{`Get $${(30).toFixed(2)}`}</button> */}
                   </div>
                 </div>
               </details>
@@ -387,9 +408,9 @@ const MopenedBox = styled.ul`
               height: 4px;
               background: rgba(255, 255, 255, 0.1);
               border-radius: 10px;
+              overflow: hidden;
 
               div {
-                width: 20%;
                 height: 100%;
                 background: rgba(255, 255, 255, 0.4);
                 border-radius: inherit;
@@ -442,19 +463,6 @@ const MopenedBox = styled.ul`
                   color: #ff5353;
                 }
               }
-            }
-          }
-
-          .getBtn {
-            height: 40px;
-            font-size: 14px;
-            color: #f7ab1f;
-            background: rgba(247, 171, 31, 0.1);
-            border-radius: 6px;
-
-            &:hover {
-              color: #4e3200;
-              background: #f7ab1f;
             }
           }
         }
@@ -555,9 +563,9 @@ const PopenedBox = styled.ul`
               height: 4px;
               background: rgba(255, 255, 255, 0.1);
               border-radius: 10px;
+              overflow: hidden;
 
               div {
-                width: 20%;
                 height: 100%;
                 background: rgba(255, 255, 255, 0.4);
                 border-radius: inherit;
@@ -610,19 +618,6 @@ const PopenedBox = styled.ul`
                   color: #ff5353;
                 }
               }
-            }
-          }
-
-          .getBtn {
-            height: 34px;
-            font-size: 14px;
-            color: #f7ab1f;
-            background: rgba(247, 171, 31, 0.1);
-            border-radius: 6px;
-
-            &:hover {
-              color: #4e3200;
-              background: #f7ab1f;
             }
           }
         }

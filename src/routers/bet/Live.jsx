@@ -26,8 +26,9 @@ import { API } from "../../configs/api";
 import LoadingBar from "../../components/common/LoadingBar";
 import { D_tokenCategoryList } from "../../data/D_bet";
 import { setToast } from "../../util/Util";
+import { setBetFlag } from "../../reducers/bet";
 
-export default function Live() {
+export default function Live({ socket }) {
   const hoverRef1 = useRef();
   const hoverRef2 = useRef();
   const dispatch = useDispatch();
@@ -46,6 +47,34 @@ export default function Live() {
   const [amount, setAmount] = useState("");
   const [bookMark, setBookMark] = useState([]);
 
+  function getAssetList() {
+    axios
+      .get(`${API.GET_ASSETS}`, {
+        params: { group: D_tokenCategoryList[1].value },
+      })
+      .then(({ data }) => {
+        console.log(data.respdata);
+        setAssetInfo(data.respdata[0]);
+      })
+      .catch((err) => console.error(err));
+  }
+
+  function getBookMark() {
+    axios
+      .get(API.BOOKMARKS_MY)
+      .then(({ data }) => {
+        console.log(data.respdata);
+        setBookMark(data.respdata);
+      })
+      .catch((err) => console.error(err));
+  }
+
+  function turnLoader() {
+    setTimeout(() => {
+      setLoading(false);
+    }, 5000);
+  }
+
   function chkMinimumBalance() {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -61,24 +90,6 @@ export default function Live() {
         console.error(err);
         localStorage.clear();
       });
-  }
-
-  function getAssetList() {
-    axios
-      .get(`${API.GET_ASSETS}`, {
-        params: { group: D_tokenCategoryList[1].value },
-      })
-      .then(({ data }) => {
-        console.log(data.respdata);
-        setAssetInfo(data.respdata[0]);
-      })
-      .catch((err) => console.error(err));
-  }
-
-  function turnLoader() {
-    setTimeout(() => {
-      setLoading(false);
-    }, 5000);
   }
 
   async function getBalance() {
@@ -99,49 +110,25 @@ export default function Live() {
   }
 
   async function onClickPayBtn(type) {
-    let typeForPost;
-
     try {
       if ((await chkBalance()) === -1) return;
-
-      switch (type) {
-        case "high":
-          typeForPost = 1;
-          break;
-
-        case "low":
-          typeForPost = 0;
-          break;
-
-        default:
-          break;
-      }
     } catch (err) {
       console.error(err);
       return;
     }
 
     axios
-      .post(
-        `${API.BET}/LIVE/${assetInfo.id}/${amount}/${duration}/${typeForPost}`
-      )
+      .post(`${API.BETS}/LIVE/${assetInfo.id}/${amount}/${duration}/${type}`)
       .then((res) => {
         console.log(res);
+
+        dispatch(setBetFlag());
+
         setToast({ type, amount });
       })
       .catch((err) => console.error(err));
 
     // setToast({ type: "closed" });
-  }
-
-  function getBookMark() {
-    axios
-      .get(API.BOOKMARKS_MY)
-      .then(({ data }) => {
-        console.log(data.respdata);
-        setBookMark(data.respdata);
-      })
-      .catch((err) => console.error(err));
   }
 
   function onMouseOverBtn(e) {
@@ -274,7 +261,7 @@ export default function Live() {
                         <button
                           className="highBtn"
                           disabled={!amount}
-                          onClick={() => onClickPayBtn("high")}
+                          onClick={() => onClickPayBtn("HIGH")}
                         >
                           <img src={I_highArwGreen} alt="" />
                           <p>HIGH</p>
@@ -287,7 +274,7 @@ export default function Live() {
                         <button
                           className="lowBtn"
                           disabled={!amount}
-                          onClick={() => onClickPayBtn("low")}
+                          onClick={() => onClickPayBtn("LOW")}
                         >
                           <img src={I_lowArwRed} alt="" />
                           <p>LOW</p>
@@ -301,7 +288,9 @@ export default function Live() {
               </section>
             </MbetBox>
 
-            {detMode && <DetBox mode={detMode} off={setDetMode} />}
+            {detMode && (
+              <DetBox mode={detMode} socket={socket} off={setDetMode} />
+            )}
 
             {liveTradePopup && (
               <>
@@ -359,7 +348,7 @@ export default function Live() {
                       className="selectBtn"
                       onClick={() => setTokenPopup(true)}
                     >
-                      <p>{assetInfo.name}</p>
+                      <p>{assetInfo?.name}</p>
                       <img src={I_dnPolWhite} alt="" />
                     </button>
 
@@ -395,7 +384,7 @@ export default function Live() {
                     <div className="chart">
                       <ReactTradingviewWidget
                         container_id={"technical-analysis-chart-demo"}
-                        symbol={assetInfo.dispSymbol}
+                        symbol={assetInfo?.dispSymbol}
                         theme={Themes.DARK}
                         locale="kr"
                         autosize
@@ -483,7 +472,7 @@ export default function Live() {
                       <button
                         className="highBtn"
                         disabled={!amount}
-                        onClick={() => onClickPayBtn("high")}
+                        onClick={() => onClickPayBtn("HIGH")}
                       >
                         <span className="defaultBox">
                           <img src={I_highArwGreen} alt="" />
@@ -505,7 +494,7 @@ export default function Live() {
                       <button
                         className="lowBtn"
                         disabled={!amount}
-                        onClick={() => onClickPayBtn("low")}
+                        onClick={() => onClickPayBtn("LOW")}
                       >
                         <span className="defaultBox">
                           <img src={I_lowArwRed} alt="" />
@@ -524,7 +513,7 @@ export default function Live() {
                     </span>
                   </div>
 
-                  <DetBox mode={detMode} />
+                  <DetBox mode={detMode} socket={socket} off={setDetMode} />
 
                   <button
                     className={`${detMode && "on"} plusBtn`}

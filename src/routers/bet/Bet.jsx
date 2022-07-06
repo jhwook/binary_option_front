@@ -8,30 +8,41 @@ import Live from "./Live";
 export default function Bet() {
   const token = localStorage.getItem("token");
 
-  // const [socket, setSocket] = useState();
+  const [socket, setSocket] = useState();
 
-  function getRoomList() {
-    const socket = io("http://litriggy.com:30708/noauth");
-    // const socket = io("http://litriggy.com:30708/noauth", { query: token });
+  function getBetSocket() {
+    const socketIo = io(URL, {
+      query: {
+        token: localStorage.getItem("token"),
+      },
+    });
 
-    socket.on("connect", (res) => {
+    setSocket(socketIo);
+
+    socketIo.on("connect", (res) => {
       console.log("connect");
       console.log(res);
     });
 
-    socket.onAny((event, ...args) => {
-      console.log(`got ${event}`);
+    // socketIo.on("bet_update", (res) => {
+    //   console.log("bet_update");
+    //   console.log(res);
+    // });
+
+    socketIo.on("bet", (res) => {
+      console.log("bet");
+      console.log(res);
     });
   }
 
   useEffect(() => {
-    getRoomList();
+    getBetSocket();
   }, []);
 
   return (
     <Routes>
-      <Route path="/" element={<Live />} />
-      <Route path="/demo" element={<Demo />} />
+      <Route path="/" element={<Live socket={socket} />} />
+      <Route path="/demo" element={<Demo socket={socket} />} />
     </Routes>
   );
 }

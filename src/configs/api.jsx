@@ -17,9 +17,8 @@ export const API = {
 
   PHONE_COUNTRY_CODE: URL + "/queries/v1/rows/country_code", //:offset/:limit
 
-  BET: URL + "/bets/join", // /:type/:assetId/:amount/:dur/:side
-  BET_ROUND: URL + "/bet/rounds",
-  BET_LOG: URL + "/bet/log", // userid
+  BETS: URL + "/bets/join", // /:type/:assetId/:amount/:dur/:side
+  MY_BETS: URL + "/bets/my", // type
 
   WITHDRAW: URL + "/transactions/withdraw",
 

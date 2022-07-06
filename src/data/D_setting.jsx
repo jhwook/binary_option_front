@@ -3,6 +3,7 @@ import I_divisionWhite from "../img/icon/I_divisionWhite.svg";
 import I_bellWhite from "../img/icon/I_bellWhite.svg";
 import I_securityWhite from "../img/icon/I_securityWhite.svg";
 import I_financeWhite from "../img/icon/I_financeWhite.svg";
+import I_orders from "../img/icon/I_orders.svg";
 
 export const D_settingNavList = [
   {
@@ -164,5 +165,10 @@ export const D_financeNavList = [
     icon: I_financeWhite,
     key: "Finance",
     url: "data",
+  },
+  {
+    icon: I_orders,
+    key: "Orders",
+    url: "orders",
   },
 ];

@@ -114,7 +114,7 @@ export default function Demo() {
 
     axios
       .post(
-        `${API.BET}/DEMO/${assetInfo.id}/${amount}/${duration}/${typeForPost}`
+        `${API.BETS}/DEMO/${assetInfo.id}/${amount}/${duration}/${typeForPost}`
       )
       .then((res) => {
         console.log(res);

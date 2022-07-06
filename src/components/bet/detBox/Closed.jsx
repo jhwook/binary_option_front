@@ -5,9 +5,25 @@ import I_highArwGreen from "../../../img/icon/I_highArwGreen.svg";
 import I_lowArwRed from "../../../img/icon/I_lowArwRed.svg";
 import E_Closedchart from "../../../img/example/bet/E_Closedchart.svg";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import { API } from "../../../configs/api";
+import { useEffect, useState } from "react";
 
-export default function Closed({ data }) {
+export default function Closed() {
   const isMobile = useSelector((state) => state.common.isMobile);
+
+  const [data, setData] = useState([]);
+  const [now, setNow] = useState(new Date());
+
+  function getMyBets() {
+    axios
+      .get(`${API.MY_BETS}/history`)
+      .then(({ data }) => {
+        console.log(data.respdata);
+        setData(data.respdata);
+      })
+      .catch((err) => console.error(err));
+  }
 
   function getIcon(type) {
     switch (type) {
@@ -19,6 +35,27 @@ export default function Closed({ data }) {
         break;
     }
   }
+
+  function getForcast(type) {
+    switch (type) {
+      case "HIGH":
+        return "Higher";
+      case "LOW":
+        return "Lower";
+      default:
+        break;
+    }
+  }
+
+  useEffect(() => {
+    getMyBets();
+
+    let timeInterval = setInterval(() => {
+      setNow(new Date());
+    }, 1000);
+
+    return () => clearInterval(timeInterval);
+  }, []);
 
   if (isMobile)
     return (
@@ -41,11 +78,9 @@ export default function Closed({ data }) {
                       <details>
                         <summary>
                           <div className="contBox">
-                            <p className="token">Bitcoin</p>
-                            {/* <p className="token">{v.token}</p> */}
+                            <p className="token">{v.asset.name}</p>
 
                             <p className="percent">{`5%`}</p>
-                            {/* <p className="percent">{`${v.percent}%`}</p> */}
                           </div>
 
                           <div className="contBox">
@@ -189,11 +224,9 @@ export default function Closed({ data }) {
                       <details>
                         <summary>
                           <div className="contBox">
-                            <p className="token">Bitcoin</p>
-                            {/* <p className="token">{v.token}</p> */}
+                            <p className="token">{v.asset.name}</p>
 
                             <p className="percent">{`5%`}</p>
-                            {/* <p className="percent">{`${v.percent}%`}</p> */}
                           </div>
 
                           <div className="contBox">
