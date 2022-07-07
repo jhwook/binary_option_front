@@ -91,9 +91,9 @@ export default function DefaultHeader({ white, border, title }) {
                 onClick={() => setMyBalancePopup(true)}
               >
                 {balanceType === "Demo" ? (
-                  <p>{`Demo $${balance?.DEMO?.avail/10**6 || 0}`}</p>
+                  <p>{`Demo $${balance?.DEMO?.avail / 10 ** 6 || 0}`}</p>
                 ) : (
-                  <p>{`Live $${balance?.LIVE?.avail/10**6 || 0}`}</p>
+                  <p>{`Live $${balance?.LIVE?.avail / 10 ** 6 || 0}`}</p>
                 )}
               </button>
             ) : (
@@ -158,6 +158,24 @@ export default function DefaultHeader({ white, border, title }) {
                   </li>
                 ))}
 
+                {/* {D_headerList.map((v, i) =>
+                  v.key === "Finance" && !userData.isAdmin ? (
+                    <Fragment key={i} />
+                  ) : (
+                    <li
+                      key={i}
+                      className={`${
+                        location.pathname.indexOf(
+                          String(v.key).toLocaleLowerCase()
+                        ) !== -1 && "on"
+                      }`}
+                      onClick={() => navigate(v.url)}
+                    >
+                      {v.key}
+                    </li>
+                  )
+                )} */}
+
                 <li className={`${morePopup && "on"} moreBox`}>
                   <button
                     className="moreBtn"
@@ -191,14 +209,14 @@ export default function DefaultHeader({ white, border, title }) {
                         <>
                           <strong className="key">Demo</strong>
                           <strong className="value">{`$${Number(
-                            balance?.DEMO?.avail/10**6 || 0
+                            balance?.DEMO?.avail / 10 ** 6 || 0
                           ).toFixed(2)}`}</strong>
                         </>
                       ) : (
                         <>
                           <strong className="key">Live</strong>
                           <strong className="value">{`$${Number(
-                            balance?.LIVE?.avail/10**6 || 0
+                            balance?.LIVE?.avail / 10 ** 6 || 0
                           ).toFixed(2)}`}</strong>
                         </>
                       )}

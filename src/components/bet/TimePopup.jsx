@@ -9,7 +9,7 @@ export default function TimePopup({ off, duration, setDuration }) {
   const isMobile = useSelector((state) => state.common.isMobile);
 
   function onClickSetBtn(v) {
-    if (duration + v < 0) return;
+    if (duration + v < 1) return;
 
     setDuration(duration + v);
   }
@@ -39,12 +39,34 @@ export default function TimePopup({ off, duration, setDuration }) {
       <PtimePopupBox>
         <ul className="timeList">
           <li>
+            <button className="plusBtn setBtn" onClick={() => onClickSetBtn(60)}>
+              <img src={I_plusWhite} alt="" />
+            </button>
+
             <p>{`${Math.floor(duration / 60)}`.padStart(2, "0")}</p>
+
+            <button
+              className="plusBtn setBtn"
+              onClick={() => onClickSetBtn(-60)}
+            >
+              <img src={I_minusWhite} alt="" />
+            </button>
           </li>
           <span className="dot">:</span>
 
           <li>
+            <button className="plusBtn setBtn" onClick={() => onClickSetBtn(1)}>
+              <img src={I_plusWhite} alt="" />
+            </button>
+
             <p>{`${duration % 60}`.padStart(2, "0")}</p>
+
+            <button
+              className="plusBtn setBtn"
+              onClick={() => onClickSetBtn(-1)}
+            >
+              <img src={I_minusWhite} alt="" />
+            </button>
           </li>
         </ul>
 

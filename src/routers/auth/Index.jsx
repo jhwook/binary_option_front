@@ -7,7 +7,6 @@ import { gCliId } from "../../configs/setting";
 import axios from "axios";
 import { API } from "../../configs/api";
 import { useSelector } from "react-redux";
-import { AxiosInterCept } from "../../util/Util";
 
 export default function Index() {
   const navigate = useNavigate();
@@ -23,7 +22,6 @@ export default function Index() {
 
         localStorage.setItem("token", data.result.tokenId);
 
-        AxiosInterCept(data.result.tokenId);
 
         if (isFirstSocial) navigate("/auth/signup/referral");
         else navigate("/");

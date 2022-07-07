@@ -54,12 +54,6 @@ export default function Deposit({ userData }) {
   async function moDirectPayment() {
     setLoader("depositBtn");
 
-    console.log(
-      `${metaMaskLink}/${
-        contractaddr[token.text]
-      }/transfer?address=${walletAddress}&uint256=${amount}e6`
-    );
-
     window.open(
       `${metaMaskLink}/${
         contractaddr[token.text]

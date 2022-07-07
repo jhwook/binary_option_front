@@ -1,25 +1,36 @@
+import { forwardRef, useEffect, useState } from "react";
 import styled from "styled-components";
-import DatePicker from "react-datepicker";
+import DatePicker, { registerLocale } from "react-datepicker";
+import ko from "date-fns/locale/ko";
 import "../../util/react-datepicker.css";
-import { forwardRef, useState } from "react";
 import I_calender from "../../img/icon/I_calender.svg";
 import I_exportWhite from "../../img/icon/I_exportWhite.svg";
 import I_ltArwWhite from "../../img/icon/I_ltArwWhite.svg";
 import I_rtArwWhite from "../../img/icon/I_rtArwWhite.svg";
-import { D_dataList, D_dataListHeader } from "../../data/D_finance";
 import moment from "moment";
+import renderCustomHeader from "../../util/DatePickerHeader";
 import { useSelector } from "react-redux";
 import DefaultHeader from "../../components/header/DefaultHeader";
+import axios from "axios";
+import { API } from "../../configs/api";
 import { getExcelFile } from "../../util/Util";
+import { D_ordersList, D_ordersListHeader } from "../../data/D_finance";
 
 export default function Orders() {
-  const totalPage = 4;
+  const statusSTR = {
+    0: "Pending",
+    1: "Confirmed",
+    2: "Rejected",
+  };
+  registerLocale("ko", ko);
+
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-  const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [tblData, setTblData] = useState([]);
+  const [total, setTotal] = useState(0);
 
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
     <button className="dateBtn" onClick={onClick} ref={ref}>
@@ -28,8 +39,16 @@ export default function Orders() {
     </button>
   ));
 
-  function onClickExcelBtn() {
-    getExcelFile(D_dataList, "Finance");
+  function getData(arg) {
+    axios
+      .get(`${API.TRANSACTION_BRANCH_LIST}/${(page - 1) * 10}/10`)
+
+      .then(({ data }) => {
+        let { respdata } = data;
+        console.log(data);
+        setTblData(respdata.rows);
+        setTotal(respdata.length);
+      });
   }
 
   function dateChange(dates) {
@@ -44,78 +63,41 @@ export default function Orders() {
   }
 
   function onClickNextPageBtn() {
-    if (page < totalPage) setPage(page + 1);
+    setPage(page + 1);
   }
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   if (isMobile)
     return (
       <>
-        <DefaultHeader title="Finance" />
+        <DefaultHeader title="Orders" />
 
         <MordersBox>
           <section className="innerBox">
-            <article className="titleArea">
-              <strong className="title">Trading Rewards Data</strong>
-              <strong className="explain">
-                All rewards are made available through&nbsp;
-                <span className="yellow">Betbit.</span>
-              </strong>
-            </article>
-
-            <article className="initArea">
-              <ul className="initList">
-                <li>
-                  <p className="key">Rewards Paid</p>
-
-                  <div className="value">
-                    <strong className="price">100 USD</strong>
-                    <p className="time">in this epoch</p>
-                  </div>
-                </li>
-
-                <li>
-                  <p className="key">Open Interest</p>
-
-                  <div className="value">
-                    <strong className="price">100 USD</strong>
-                    <p className="time">in this epoch</p>
-                  </div>
-                </li>
-
-                <li>
-                  <p className="key">Estimated Rewards</p>
-
-                  <div className="value">
-                    <strong className="price">100 USD</strong>
-                    <p className="time">estimated for this epoch</p>
-                  </div>
-                </li>
-              </ul>
-            </article>
-
-            <article className="listArea">
+            <article className="contArea">
               <div className="filterBar">
                 <div className="filterBox">
                   <span className="dateBox filterOpt">
                     <DatePicker
+                      calendarClassName="moDatePicker"
+                      locale="ko"
                       selected={startDate}
                       onChange={dateChange}
                       startDate={startDate}
                       endDate={endDate}
                       selectsRange
+                      renderCustomHeader={renderCustomHeader}
                       customInput={<ExampleCustomInput />}
                     />
                   </span>
 
-                  <span className="searchBox filterOpt">
-                    <input
-                      value={search}
-                      onChange={(e) => setSearch(e.target.value)}
-                      placeholder="Order"
-                    />
-                  </span>
-
-                  <button className="applyBtn" onClick={() => {}}>
+                  <button
+                    className="applyBtn"
+                    onClick={() => getData({ filter: true })}
+                  >
                     Apply
                   </button>
                 </div>
@@ -123,62 +105,76 @@ export default function Orders() {
 
               <div className="listBox">
                 <ul className="list">
-                  {D_dataList.map((v, i) => (
-                    <li key={i}>
-                      <div>
-                        <p className="key">{D_dataListHeader[0]}</p>
+                  {tblData[0] ? (
+                    tblData.map((v, i) => (
+                      <li key={i}>
+                        <div>
+                          <p className="key">{D_ordersListHeader[0]}</p>
+                          <div className="value">
+                            <p>{v.account}</p>
+                          </div>
+                        </div>
 
-                        <span className="value">
-                          <p>{v.account}</p>
-                        </span>
-                      </div>
+                        <div>
+                          <p className="key">{D_ordersListHeader[1]}</p>
+                          <div className="value">
+                            <p>{`${v.level} Level`}</p>
+                          </div>
+                        </div>
 
-                      <div>
-                        <p className="key">{D_dataListHeader[1]}</p>
+                        <div>
+                          <p className="key">{D_ordersListHeader[2]}</p>
+                          <div className="value">
+                            <p>{moment(v.date).format("YYYY-MM-DD")}</p>
+                          </div>
+                        </div>
 
-                        <span className="value">
-                          <p>{v.level} Level</p>
-                        </span>
-                      </div>
+                        <div>
+                          <p className="key">{D_ordersListHeader[3]}</p>
+                          <div className="value">
+                            <p>
+                              {`¥${(v?.amount / 10 ** 6)?.toLocaleString(
+                                "cn",
+                                "CN"
+                              )}`}
+                            </p>
+                          </div>
+                        </div>
 
-                      <div>
-                        <p className="key">{D_dataListHeader[2]}</p>
+                        <div>
+                          <p className="key">{D_ordersListHeader[4]}</p>
+                          <div className="value">
+                            <p>
+                              {`¥${(v?.cumulative / 10 ** 6)?.toLocaleString(
+                                "cn",
+                                "CN"
+                              )}`}
+                            </p>
+                          </div>
+                        </div>
 
-                        <span className="value">
-                          <p>{moment(v.date).format("YYYY-MM-DD")}</p>
-                        </span>
-                      </div>
+                        <div>
+                          <p className="key">{D_ordersListHeader[5]}</p>
+                          <div className="value">
+                            <p>{`${v.accountName}/${v.accountNum}`}</p>
+                          </div>
+                        </div>
 
-                      <div>
-                        <p className="key">{D_dataListHeader[3]}</p>
-
-                        <span className="value">
-                          <p>${v.amount}</p>
-                        </span>
-                      </div>
-
-                      <div>
-                        <p className="key">{D_dataListHeader[4]}</p>
-
-                        <span className="value">
-                          <p className="price">${v.profit}</p>&nbsp;
-                          <p className="percent">{`(${92}%)`}</p>
-                        </span>
-                      </div>
-
-                      <div>
-                        <p className="key">{D_dataListHeader[5]}</p>
-
-                        <span className="value">
-                          <p>{v.received} USD</p>
-                        </span>
-                      </div>
-
-                      <button className="depositBtn" onClick={() => {}}>
-                        Deposit
-                      </button>
-                    </li>
-                  ))}
+                        <div>
+                          <p className="key">{D_ordersListHeader[6]}</p>
+                          <div className="value">
+                            <button className="depositBtn" onClick={() => {}}>
+                              Deposit
+                            </button>
+                          </div>
+                        </div>
+                      </li>
+                    ))
+                  ) : (
+                    <p className="notFound">
+                      Nothing found or not yet calculated
+                    </p>
+                  )}
                 </ul>
               </div>
             </article>
@@ -188,98 +184,61 @@ export default function Orders() {
     );
   else
     return (
-      <>
-        <PordersBox>
-          <section className="innerBox">
-            <article className="titleArea">
-              <strong className="title">Trading Rewards Data</strong>
-              <strong className="explain">
-                All rewards are made available through&nbsp;
-                <span className="yellow">Betbit.</span>
-              </strong>
-            </article>
+      <PordersBox>
+        <section className="innerBox">
+          <strong className="pageTitle">Orders</strong>
 
-            <article className="initArea">
-              <ul className="initList">
-                <li>
-                  <p className="key">Rewards Paid</p>
+          <article className="contArea">
+            <div className="filterBar">
+              <div className="filterBox">
+                <span className="dateBox filterOpt">
+                  <DatePicker
+                    locale="ko"
+                    selected={startDate}
+                    onChange={dateChange}
+                    startDate={startDate}
+                    endDate={endDate}
+                    selectsRange
+                    renderCustomHeader={renderCustomHeader}
+                    customInput={<ExampleCustomInput />}
+                  />
+                </span>
 
-                  <div className="value">
-                    <strong className="price">100 USD</strong>
-                    <p className="time">in this epoch</p>
-                  </div>
-                </li>
-
-                <li>
-                  <p className="key">Open Interest</p>
-
-                  <div className="value">
-                    <strong className="price">100 USD</strong>
-                    <p className="time">in this epoch</p>
-                  </div>
-                </li>
-
-                <li>
-                  <p className="key">Estimated Rewards</p>
-
-                  <div className="value">
-                    <strong className="price">100 USD</strong>
-                    <p className="time">estimated for this epoch</p>
-                  </div>
-                </li>
-              </ul>
-            </article>
-
-            <article className="listArea">
-              <div className="filterBar">
-                <div className="filterBox">
-                  <span className="dateBox filterOpt">
-                    <DatePicker
-                      selected={startDate}
-                      onChange={dateChange}
-                      startDate={startDate}
-                      endDate={endDate}
-                      selectsRange
-                      customInput={<ExampleCustomInput />}
-                    />
-                  </span>
-
-                  <span className="searchBox filterOpt">
-                    <input
-                      value={search}
-                      onChange={(e) => setSearch(e.target.value)}
-                      placeholder="Order"
-                    />
-                  </span>
-
-                  <button className="applyBtn" onClick={() => {}}>
-                    Apply
-                  </button>
-                </div>
-
-                <button className="exportBtn" onClick={onClickExcelBtn}>
-                  <img src={I_exportWhite} alt="" />
+                <button
+                  className="applyBtn"
+                  onClick={() => getData({ filter: true })}
+                >
+                  Apply
                 </button>
               </div>
 
-              <div className="listBox">
-                <ul className="listHeader">
-                  {D_dataListHeader.map((v, i) => (
-                    <li key={i}>
-                      <p>{v}</p>
-                    </li>
-                  ))}
-                </ul>
+              <button
+                className="exportBtn"
+                onClick={() => getExcelFile(tblData, "Orders")}
+              >
+                <img src={I_exportWhite} alt="" />
+              </button>
+            </div>
 
-                <ul className="list">
-                  {D_dataList.map((v, i) => (
+            <div className="listBox">
+              <ul className="listHeader">
+                {D_ordersListHeader.map((v, i) => (
+                  <li key={i}>
+                    <p>{v}</p>
+                  </li>
+                ))}
+              </ul>
+
+              <ul className="list">
+                {tblData &&
+                  tblData.map((v, i) => (
                     <li key={i}>
                       <span>
                         <p>{v.account}</p>
                       </span>
 
                       <span>
-                        <p>{v.level} Level</p>
+                        <p>{`${v.level} Level`}</p>
                       </span>
 
                       <span>
@@ -287,16 +246,25 @@ export default function Orders() {
                       </span>
 
                       <span>
-                        <p>${v.amount}</p>
+                        <p>
+                          {`¥${(v?.amount / 10 ** 6)?.toLocaleString(
+                            "cn",
+                            "CN"
+                          )}`}
+                        </p>
                       </span>
 
                       <span>
-                        <p className="price">${v.profit}</p>&nbsp;
-                        <p className="percent">{`(${92}%)`}</p>
+                        <p>
+                          {`¥${(v?.cumulative / 10 ** 6)?.toLocaleString(
+                            "cn",
+                            "CN"
+                          )}`}
+                        </p>
                       </span>
 
                       <span>
-                        <p>{v.received} USD</p>
+                        <p>{`${v.accountName}/${v.accountNum}`}</p>
                       </span>
 
                       <span>
@@ -306,132 +274,73 @@ export default function Orders() {
                       </span>
                     </li>
                   ))}
-                </ul>
-              </div>
+              </ul>
+            </div>
 
-              <div className="pageBox">
-                <button
-                  className="arwBtn"
-                  disabled={page <= 1}
-                  onClick={onClickPrePageBtn}
-                >
-                  <img src={I_ltArwWhite} alt="" />
-                </button>
+            <div className="pageBox">
+              <button
+                className="arwBtn"
+                disabled={page <= 1}
+                onClick={onClickPrePageBtn}
+              >
+                <img src={I_ltArwWhite} alt="" />
+              </button>
 
-                <ul className="pageList">
-                  {new Array(totalPage).fill("").map((v, i) => (
-                    <li
-                      key={i}
-                      className={`${i + 1 === page && "on"}`}
-                      onClick={() => setPage(i + 1)}
-                    >
-                      <strong>{i + 1}</strong>
-                      <span className="onBar" />
-                    </li>
-                  ))}
-                </ul>
+              <ul className="pageList">
+                {new Array(Math.ceil(total / 10)).fill("").map((v, i) => (
+                  <li
+                    key={i}
+                    className={`${i + 1 === page && "on"}`}
+                    onClick={() => setPage(i + 1)}
+                  >
+                    <strong>{i + 1}</strong>
+                    <span className="onBar" />
+                  </li>
+                ))}
+              </ul>
 
-                <button
-                  className="arwBtn"
-                  disabled={page >= totalPage}
-                  onClick={onClickNextPageBtn}
-                >
-                  <img src={I_rtArwWhite} alt="" />
-                </button>
-              </div>
-            </article>
-          </section>
-        </PordersBox>
-      </>
+              <button
+                className="arwBtn"
+                disabled={page >= Math.ceil(total / 10)}
+                onClick={onClickNextPageBtn}
+              >
+                <img src={I_rtArwWhite} alt="" />
+              </button>
+            </div>
+          </article>
+        </section>
+      </PordersBox>
     );
 }
 
 const MordersBox = styled.main`
   height: 100%;
-  overflow: hidden;
 
   .innerBox {
+    display: flex;
+    flex-direction: column;
     height: 100%;
-    padding: 20px;
     overflow-y: scroll;
 
-    .titleArea {
+    .contArea {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-
-      .title {
-        font-size: 20px;
-      }
-
-      .explain {
-        font-size: 14px;
-        color: rgba(255, 255, 255, 0.6);
-
-        .yellow {
-          color: #f7ab1f;
-        }
-      }
-    }
-
-    .initArea {
-      margin: 20px 0 0 0;
-
-      .initList {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-
-        li {
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-          padding: 20px;
-          background: #000;
-          border-radius: 10px;
-
-          .key {
-            font-size: 16px;
-            color: rgba(255, 255, 255, 0.6);
-          }
-
-          .value {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-
-            .price {
-              font-size: 20px;
-            }
-
-            .time {
-              font-size: 14px;
-              color: rgba(255, 255, 255, 0.4);
-            }
-          }
-        }
-      }
-    }
-
-    .listArea {
-      display: flex;
-      flex-direction: column;
-      margin: 60px 0 0 0;
+      gap: 8px;
 
       .filterBar {
+        padding: 20px;
+
         .filterBox {
           display: flex;
-          justify-content: space-between;
-          align-items: center;
-          flex-wrap: wrap;
-          gap: 10px;
+          flex-direction: column;
+          gap: 8px;
 
           .filterOpt {
             display: flex;
             align-items: center;
+            width: 100%;
             height: 40px;
-            padding: 0 22px;
-            font-size: 14px;
+            padding: 0 24px;
             color: rgba(255, 255, 255, 0.4);
             border: 1px solid #3b3e45;
             border-radius: 20px;
@@ -442,35 +351,29 @@ const MordersBox = styled.main`
             }
 
             &.dateBox {
-              width: 100%;
+              position: relative;
 
               .dateBtn {
                 display: flex;
                 align-items: center;
-                gap: 8px;
+                gap: 12px;
                 font-size: 14px;
 
                 img {
-                  width: 22px;
+                  width: 16px;
                 }
               }
-            }
 
-            &.searchBox {
-              flex: 1;
-
-              input {
-                flex: 1;
-
-                &::placeholder {
-                  color: rgba(255, 255, 255, 0.4);
-                }
+              .react-datepicker-popper {
+                top: 40px !important;
+                left: 50% !important;
+                transform: translate(-50%, 0) !important;
               }
             }
           }
 
           .applyBtn {
-            width: 120px;
+            width: 100%;
             height: 40px;
             font-size: 14px;
             font-weight: 700;
@@ -485,15 +388,18 @@ const MordersBox = styled.main`
       }
 
       .listBox {
-        .list {
-          display: flex;
-          flex-direction: column;
+        padding: 0 20px;
 
+        .list {
           li {
             display: flex;
             flex-direction: column;
             gap: 4px;
             padding: 24px 0;
+
+            &:first-of-type {
+              padding: 0 0 24px;
+            }
 
             &:last-of-type {
               padding: 24px 0 0;
@@ -503,55 +409,34 @@ const MordersBox = styled.main`
               border-top: 1px solid rgba(255, 255, 255, 0.14);
             }
 
-            div {
+            & > div {
               display: flex;
               justify-content: space-between;
               align-items: center;
               font-size: 14px;
 
-              &.order {
-                .value {
-                  gap: 6px;
-                }
-              }
-
               .key {
-                flex: 1;
                 color: rgba(255, 255, 255, 0.6);
               }
 
               .value {
-                flex: 1;
-                display: flex;
-                justify-content: flex-end;
-                align-items: center;
-                overflow: hidden;
-
-                p {
-                  overflow: hidden;
-                  white-space: nowrap;
-                  text-overflow: ellipsis;
-                }
-
-                img {
-                  width: 12px;
-                }
-
-                .price {
-                  color: #3fb68b;
+                .depositBtn {
+                  padding: 0 10px;
+                  height: 28px;
+                  font-size: 12px;
+                  font-weight: 700;
+                  background: #f7ab1f;
+                  border-radius: 6px;
                 }
               }
             }
+          }
 
-            .depositBtn {
-              width: 100%;
-              height: 50px;
-              margin: 24px 0 0 0;
-              font-size: 16px;
-              font-weight: 700;
-              background: #f7ab1f;
-              border-radius: 14px;
-            }
+          .notFound {
+            margin: 0 0 34px;
+            font-size: 14px;
+            text-align: center;
+            opacity: 0.4;
           }
         }
       }
@@ -569,75 +454,22 @@ const PordersBox = styled.main`
   }
 
   .innerBox {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
     height: 100%;
     overflow-y: scroll;
 
-    .titleArea {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      width: 618px;
-
-      .title {
-        font-size: 24px;
-      }
-
-      .explain {
-        font-size: 14px;
-        color: rgba(255, 255, 255, 0.6);
-
-        .yellow {
-          color: #f7ab1f;
-        }
-      }
+    .pageTitle {
+      height: 36px;
+      font-size: 18px;
+      font-weight: 700;
     }
 
-    .initArea {
-      margin: 40px 0 0 0;
-
-      .initList {
-        display: flex;
-        gap: 30px;
-
-        li {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          gap: 20px;
-          height: 130px;
-          padding: 20px 30px;
-          background: #000;
-          border-radius: 10px;
-
-          .key {
-            font-size: 16px;
-            color: rgba(255, 255, 255, 0.6);
-          }
-
-          .value {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-
-            .price {
-              font-size: 20px;
-            }
-
-            .time {
-              font-size: 14px;
-              color: rgba(255, 255, 255, 0.4);
-            }
-          }
-        }
-      }
-    }
-
-    .listArea {
+    .contArea {
       display: flex;
       flex-direction: column;
       gap: 20px;
-      margin: 60px 0 0 0;
 
       .filterBar {
         display: flex;
@@ -677,16 +509,6 @@ const PordersBox = styled.main`
                 }
               }
             }
-
-            &.searchBox {
-              input {
-                flex: 1;
-
-                &::placeholder {
-                  color: rgba(255, 255, 255, 0.4);
-                }
-              }
-            }
           }
 
           .applyBtn {
@@ -706,14 +528,14 @@ const PordersBox = styled.main`
         .exportBtn {
           display: flex;
           justify-content: center;
-          align-items: center;
           width: 40px;
           height: 40px;
+          padding: 10px 13px 13px;
           border: 1px solid #3b3e45;
           border-radius: 50%;
 
           img {
-            width: 20px;
+            width: 14px;
           }
         }
       }
@@ -741,12 +563,8 @@ const PordersBox = styled.main`
               height: 60px;
               border-top: 1px solid #3b3e45;
 
-              .price {
-                color: #3fb68b;
-              }
-
               .depositBtn {
-                width: 64px;
+                padding: 0 10px;
                 height: 28px;
                 font-size: 12px;
                 font-weight: 700;
@@ -760,7 +578,6 @@ const PordersBox = styled.main`
         .listHeader li,
         .list li span {
           display: flex;
-
           align-items: center;
           font-size: 14px;
 
@@ -779,8 +596,8 @@ const PordersBox = styled.main`
           }
 
           &:nth-of-type(1) {
-            width: 236px;
-            min-width: 236px;
+            width: 238px;
+            min-width: 238px;
           }
 
           &:nth-of-type(2) {
@@ -789,33 +606,29 @@ const PordersBox = styled.main`
           }
 
           &:nth-of-type(3) {
-            width: 188px;
-            min-width: 188px;
+            width: 150px;
+            min-width: 150px;
           }
 
           &:nth-of-type(4) {
-            width: 156px;
-            min-width: 156px;
+            width: 158px;
+            min-width: 158px;
           }
 
           &:nth-of-type(5) {
-            width: 194px;
-            min-width: 194px;
+            width: 158px;
+            min-width: 158px;
           }
 
           &:nth-of-type(6) {
-            width: 162px;
-            min-width: 162px;
+            width: 240px;
+            min-width: 240px;
           }
 
           &:nth-of-type(7) {
-            width: 166px;
-            min-width: 166px;
-          }
-
-          &:nth-of-type(8) {
-            width: 166px;
-            min-width: 166px;
+            flex: 1;
+            width: 64px;
+            min-width: 64px;
           }
         }
       }

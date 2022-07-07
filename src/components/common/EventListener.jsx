@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { gCliId } from "../../configs/setting";
 import { useDispatch } from "react-redux";
 import { setMobile } from "../../reducers/common";
-import { AxiosInterCept } from "../../util/Util";
+import axios from "axios";
 
 export default function EventListener() {
   const location = useLocation();
@@ -31,8 +31,7 @@ export default function EventListener() {
 
     handleResize();
 
-    AxiosInterCept(localStorage.getItem("token"));
-
+    axios.defaults.headers.Authorization = localStorage.getItem("token");
     window.addEventListener("resize", handleResize);
 
     return () => window.removeEventListener("resize", handleResize);
@@ -40,6 +39,7 @@ export default function EventListener() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    axios.defaults.headers.Authorization = localStorage.getItem("token");
   }, [location]);
 
   return <></>;

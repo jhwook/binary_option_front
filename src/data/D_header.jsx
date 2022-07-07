@@ -27,6 +27,10 @@ export const D_headerList = [
   {
     key: "Finance",
     url: "/finance/data",
+    det: [
+      { key: "Finance", url: "/finance/data" },
+      { key: "Orders", url: "/finance/orders" },
+    ],
   },
 ];
 

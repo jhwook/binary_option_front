@@ -21,6 +21,7 @@ export const API = {
   MY_BETS: URL + "/bets/my", // type
 
   WITHDRAW: URL + "/transactions/withdraw",
+  TRANSACTION_BRANCH_LIST: URL + "/transactions/branch/list",
 
   BOOKMARKS: URL + "/bookmarks", //:type/:targetId
   BOOKMARKS_MY: URL + "/bookmarks/my",

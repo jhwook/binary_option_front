@@ -12,7 +12,6 @@ import { API } from "../../configs/api";
 import { gCliId } from "../../configs/setting";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { AxiosInterCept } from "../../util/Util";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -63,7 +62,6 @@ export default function Login() {
 
         if (data.message === "TOKEN_CREATED") {
           localStorage.setItem("token", data.result.tokenId);
-          AxiosInterCept(data.result.tokenId);
           navigate("/");
           return;
         }
@@ -105,7 +103,6 @@ export default function Login() {
 
         localStorage.setItem("token", data.result.tokenId);
 
-        AxiosInterCept(data.result.tokenId);
 
         if (isFirstSocial) navigate("/auth/signup/referral");
         else navigate("/");

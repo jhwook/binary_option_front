@@ -168,14 +168,15 @@ export default function History() {
                           <p className="key">{D_historyListHeader[2]}</p>
                           <div className="value">
                             <p>{`${
-                              (v?.amount / 10 ** 6)?.toLocaleString(
-                                "eu",
-                                "US"
-                              ) ||
-                              (v?.localeAmount / 10 ** 6)?.toLocaleString(
-                                "cn",
-                                "CN"
-                              )
+                              v?.amount
+                                ? (v?.amount / 10 ** 6)?.toLocaleString(
+                                    "eu",
+                                    "US"
+                                  )
+                                : (v?.localeAmount / 10 ** 6)?.toLocaleString(
+                                    "cn",
+                                    "CN"
+                                  )
                             } ${v.localeUnit || v.unit}`}</p>
                           </div>
                         </div>
@@ -281,8 +282,12 @@ export default function History() {
 
                     <span>
                       <p>{`${
-                        (v?.amount / 10 ** 6)?.toLocaleString("eu", "US") ||
-                        (v?.localeAmount / 10 ** 6)?.toLocaleString("cn", "CN")
+                        v?.amount
+                          ? (v?.amount / 10 ** 6)?.toLocaleString("eu", "US")
+                          : (v?.localeAmount / 10 ** 6)?.toLocaleString(
+                              "cn",
+                              "CN"
+                            )
                       } ${v.localeUnit || v.unit}`}</p>
                     </span>
 
