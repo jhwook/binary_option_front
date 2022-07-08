@@ -10,7 +10,7 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 import { API } from "../../../configs/api";
 import { useSelector } from "react-redux";
-import {  setToast } from "../../../util/Util";
+import { setToast } from "../../../util/Util";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -328,6 +328,7 @@ const MsignupBox = styled.main`
         .contBox {
           .categoryList {
             display: flex;
+            gap: 2px;
             margin: 0 0 40px 0;
 
             li {
@@ -532,6 +533,7 @@ const PsignupBox = styled.main`
         .contBox {
           .categoryList {
             display: flex;
+            gap: 2px;
             margin: 0 0 40px 0;
 
             li {

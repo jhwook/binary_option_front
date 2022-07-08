@@ -41,13 +41,17 @@ export default function Orders() {
     </button>
   ));
 
-  async function moDirectPayment(data, i) {
+  async function moDirectPayment(forex, data, i) {
     setLoader(i);
 
     console.log(walletAddress);
 
     window.open(
-      `${metaMaskLink}/${contractaddr.USDT}/transfer?address=${walletAddress}&uint256=${data.localeAmount}e6`
+      `${metaMaskLink}/${
+        contractaddr.USDT
+      }/transfer?address=${walletAddress}&uint256=${
+        data.localeAmount * forex
+      }e6`
     );
 
     const socket = io(URL, {
@@ -68,13 +72,13 @@ export default function Orders() {
       }
     });
 
-    socket.emit("transactions", { type: "USDT" }, (res) => {
+    socket.emit("transactions", { type: "USDT", txId: data.id }, (res) => {
       console.log("emit");
       console.log(res);
     });
   }
 
-  async function directPayment(data, i) {
+  async function directPayment(forex, data, i) {
     setLoader(i);
 
     let { ethereum } = window;
@@ -90,7 +94,7 @@ export default function Orders() {
       contractaddress: contractaddr.USDT,
       abikind: "ERC20",
       methodname: "transfer",
-      aargs: [walletAddress, data.localeAmount + ""],
+      aargs: [walletAddress, data.localeAmount * forex + ""],
     });
 
     reqTx(
@@ -103,7 +107,7 @@ export default function Orders() {
       (txHash) => {
         axios
           .patch(`${API.TRANSACTION_BRANCH_TRANSFER}`, {
-            amount: data.localeAmount / 10 ** 6,
+            amount: (data.localeAmount * forex) / 10 ** 6,
             tokentype: "USDT",
             txhash: txHash,
             txId: data.id,
@@ -127,9 +131,27 @@ export default function Orders() {
     );
   }
 
-  function onClickDepositBtn(data, i) {
-    if (isMobile) moDirectPayment(data, i);
-    else directPayment(data, i);
+  function getForex() {
+    return axios
+      .get(`${API.QUERIES_FOREX}/CNYUSD`)
+      .catch((err) => console.error(err));
+  }
+
+  async function onClickDepositBtn(data, i) {
+    let forex;
+    try {
+      const forexRes = await getForex();
+      forex = forexRes.data.CNYUSD;
+      console.log(forex);
+    } catch (err) {
+      console.error(err);
+      return;
+    }
+
+    console.log("s");
+
+    if (isMobile) moDirectPayment(forex, data, i);
+    else directPayment(forex, data, i);
   }
 
   function getData(arg) {
@@ -575,7 +597,7 @@ const MordersBox = styled.main`
 
 const PordersBox = styled.main`
   flex: 1;
-  padding: 70px 140px;
+  padding: 70px 140px 0;
 
   @media (max-width: 1440px) {
     max-width: 1020px;

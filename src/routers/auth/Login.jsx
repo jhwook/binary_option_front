@@ -103,7 +103,6 @@ export default function Login() {
 
         localStorage.setItem("token", data.result.tokenId);
 
-
         if (isFirstSocial) navigate("/auth/signup/referral");
         else navigate("/");
       })
@@ -324,6 +323,7 @@ const MloginBox = styled.main`
         .contBox {
           .categoryList {
             display: flex;
+            gap: 2px;
             margin: 0 0 40px 0;
 
             li {
@@ -458,6 +458,7 @@ const PloginBox = styled.main`
         .contBox {
           .categoryList {
             display: flex;
+            gap: 2px;
             margin: 0 0 40px 0;
 
             li {
@@ -470,7 +471,7 @@ const PloginBox = styled.main`
               &.on {
                 color: inherit;
                 border: solid transparent;
-                border-width: 2px 2px 0 2px;
+                border-width: 3px 3px 0 3px;
                 background-image: linear-gradient(#fff, #fff),
                   linear-gradient(
                     180deg,
@@ -558,8 +559,8 @@ const PloginBox = styled.main`
           width: 240px;
           height: 240px;
           padding: 10px;
-          border: 1px solid #ddd;
           border-radius: 14px;
+          box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.14);
         }
 
         .textBox {

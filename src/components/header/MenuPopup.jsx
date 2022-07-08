@@ -3,7 +3,7 @@ import MyBalancePopup from "./MyBalancePopup";
 import AddPopup from "./AddPopup";
 import PopupBg from "../common/PopupBg";
 import ProfPopup from "./ProfPopup";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { D_headerList, D_moreList } from "../../data/D_header";
 import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
@@ -19,6 +19,8 @@ export default function MenuPopup({ off, userData }) {
 
   const token = localStorage.getItem("token");
   const balanceType = localStorage.getItem("balanceType");
+
+  console.log(userData);
 
   const [lngPopup, setLngPopup] = useState(false);
   const [profPopup, setProfPopup] = useState(false);
@@ -85,37 +87,36 @@ export default function MenuPopup({ off, userData }) {
 
         <article className="contArea">
           <ul className="navList">
-            {D_headerList.map((v, i) => {
-              if (v.det)
-                return (
-                  <li key={i}>
-                    <details>
-                      <summary>
-                        <strong className="title">{v.key}</strong>
-                        <img src={I_dnPolWhite} alt="" />
-                      </summary>
+            {D_headerList.map((v, i) =>
+              v.key === "Finance" && !userData.isbranch ? (
+                <Fragment key={i} />
+              ) : v.det ? (
+                <li key={i}>
+                  <details>
+                    <summary>
+                      <strong className="title">{v.key}</strong>
+                      <img src={I_dnPolWhite} alt="" />
+                    </summary>
 
-                      <ul className="detNavList">
-                        {v.det.map((detV, i) => (
-                          <li key={i} onClick={() => onClickNav(detV.url)}>
-                            {detV.key}
-                          </li>
-                        ))}
-                      </ul>
-                    </details>
-                  </li>
-                );
-              else
-                return (
-                  <button
-                    key={i}
-                    className="navBtn"
-                    onClick={() => navigate(v.url)}
-                  >
-                    <strong className="title">{v.key}</strong>
-                  </button>
-                );
-            })}
+                    <ul className="detNavList">
+                      {v.det.map((detV, i) => (
+                        <li key={i} onClick={() => onClickNav(detV.url)}>
+                          {detV.key}
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                </li>
+              ) : (
+                <button
+                  key={i}
+                  className="navBtn"
+                  onClick={() => navigate(v.url)}
+                >
+                  <strong className="title">{v.key}</strong>
+                </button>
+              )
+            )}
 
             <details>
               <summary>

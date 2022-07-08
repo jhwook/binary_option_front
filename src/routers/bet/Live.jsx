@@ -619,7 +619,8 @@ const MbetBox = styled.main`
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                width: 112px;
+                gap: 16px;
+                min-width: 112px;
                 height: 34px;
                 padding: 0 16px;
                 font-size: 14px;
@@ -806,6 +807,7 @@ const PbetBox = styled.main`
           display: flex;
           justify-content: space-between;
           align-items: center;
+          gap: 16px;
           min-width: 154px;
           height: 40px;
           padding: 0 24px;

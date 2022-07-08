@@ -561,7 +561,7 @@ const MdataBox = styled.main`
 
 const PdataBox = styled.main`
   flex: 1;
-  padding: 70px 140px;
+  padding: 70px 140px 0;
 
   @media (max-width: 1440px) {
     max-width: 1020px;

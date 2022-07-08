@@ -24,12 +24,14 @@ export const API = {
   TRANSACTION_BRANCH_TRANSFER: URL + "/transactions/branch/transfer",
   TRANS_DEPOSIT: URL + "/transactions/live/DEPOSIT", //:amount
   LISTEN_TRANSACTION: URL + "/transactions/listen",
-  
+
   TRANS_DEMO_FUND: URL + "/transactions/demo/fund", //:amount
-  
+
   TRANS_WITHDRAW: URL + "/transactions/live/withdraw", //:amount
   WITHDRAW: URL + "/transactions/withdraw",
 
   BOOKMARKS: URL + "/bookmarks", //:type/:targetId
   BOOKMARKS_MY: URL + "/bookmarks/my",
+
+  QUERIES_FOREX: URL + "/queries/forex", //:type
 };
