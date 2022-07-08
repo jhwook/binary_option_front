@@ -328,7 +328,6 @@ const MsignupBox = styled.main`
         .contBox {
           .categoryList {
             display: flex;
-            gap: 2px;
             margin: 0 0 40px 0;
 
             li {
@@ -338,6 +337,8 @@ const MsignupBox = styled.main`
               height: 32px;
               font-size: 14px;
               color: #ddd;
+              border: 3px solid transparent;
+              border-bottom: unset;
 
               &.on {
                 color: inherit;
@@ -533,7 +534,6 @@ const PsignupBox = styled.main`
         .contBox {
           .categoryList {
             display: flex;
-            gap: 2px;
             margin: 0 0 40px 0;
 
             li {
@@ -542,6 +542,8 @@ const PsignupBox = styled.main`
               align-items: center;
               height: 34px;
               color: #ddd;
+              border: 3px solid transparent;
+              border-bottom: unset;
 
               &.on {
                 color: inherit;

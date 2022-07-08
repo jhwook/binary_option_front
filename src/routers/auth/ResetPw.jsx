@@ -369,11 +369,13 @@ const MloginBox = styled.main`
               height: 32px;
               font-size: 14px;
               color: #ddd;
+              border: 3px solid transparent;
+              border-bottom: unset;
 
               &.on {
                 color: inherit;
                 border: solid transparent;
-                border-width: 2px 2px 0 2px;
+                border-width: 3px 3px 0 3px;
                 background-image: linear-gradient(#fff, #fff),
                   linear-gradient(
                     180deg,
@@ -570,11 +572,13 @@ const PloginBox = styled.main`
               align-items: center;
               height: 34px;
               color: #ddd;
+              border: 3px solid transparent;
+              border-bottom: unset;
 
               &.on {
                 color: inherit;
                 border: solid transparent;
-                border-width: 2px 2px 0 2px;
+                border-width: 3px 3px 0 3px;
                 background-image: linear-gradient(#fff, #fff),
                   linear-gradient(
                     180deg,
@@ -756,8 +760,8 @@ const PloginBox = styled.main`
           width: 240px;
           height: 240px;
           padding: 10px;
-          border: 1px solid #ddd;
           border-radius: 14px;
+          box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.14);
         }
 
         .textBox {
