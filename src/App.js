@@ -63,5 +63,7 @@ export default function App() {
 }
 
 const AppBox = styled.div`
+  width: 100vw;
   color: #2a2a2a;
+  overflow-x: hidden;
 `;

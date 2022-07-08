@@ -12,17 +12,18 @@ import renderCustomHeader from "../../util/DatePickerHeader";
 import { useSelector } from "react-redux";
 import DefaultHeader from "../../components/header/DefaultHeader";
 import axios from "axios";
-import { API } from "../../configs/api";
-import { getExcelFile } from "../../util/Util";
-import { D_ordersList, D_ordersListHeader } from "../../data/D_finance";
+import { API, URL } from "../../configs/api";
+import { getExcelFile, setToast } from "../../util/Util";
+import { D_ordersListHeader } from "../../data/D_finance";
+import L_loader from "../../img/loader/L_loader.png";
+import { getabistr_forfunction, reqTx } from "../../util/contractcall";
+import contractaddr from "../../configs/contractaddr";
+import { metaMaskLink } from "../../configs/metaMask";
+import { io } from "socket.io-client";
 
 export default function Orders() {
-  const statusSTR = {
-    0: "Pending",
-    1: "Confirmed",
-    2: "Rejected",
-  };
   registerLocale("ko", ko);
+  const walletAddress = localStorage.getItem("walletAddress");
 
   const isMobile = useSelector((state) => state.common.isMobile);
 
@@ -31,6 +32,7 @@ export default function Orders() {
   const [page, setPage] = useState(1);
   const [tblData, setTblData] = useState([]);
   const [total, setTotal] = useState(0);
+  const [loader, setLoader] = useState("");
 
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
     <button className="dateBtn" onClick={onClick} ref={ref}>
@@ -39,14 +41,115 @@ export default function Orders() {
     </button>
   ));
 
-  function getData(arg) {
-    axios
-      .get(`${API.TRANSACTION_BRANCH_LIST}/${(page - 1) * 10}/10`)
+  async function moDirectPayment(data, i) {
+    setLoader(i);
 
+    console.log(walletAddress);
+
+    window.open(
+      `${metaMaskLink}/${contractaddr.USDT}/transfer?address=${walletAddress}&uint256=${data.localeAmount}e6`
+    );
+
+    const socket = io(URL, {
+      query: {
+        token: localStorage.getItem("token"),
+      },
+    });
+
+    socket.on("transactions", (res) => {
+      console.log("transactions");
+      console.log(res);
+
+      if (res) {
+        setToast({ type: "alarm", cont: "Submission Successful" });
+        setTimeout(() => {
+          window.location.reload(false);
+        }, 3000);
+      }
+    });
+
+    socket.emit("transactions", { type: "USDT" }, (res) => {
+      console.log("emit");
+      console.log(res);
+    });
+  }
+
+  async function directPayment(data, i) {
+    setLoader(i);
+
+    let { ethereum } = window;
+    let address = await ethereum.enable();
+    console.log(address[0]);
+
+    if (!ethereum) {
+      alert("Install Metamask");
+      return;
+    }
+
+    let abistr = getabistr_forfunction({
+      contractaddress: contractaddr.USDT,
+      abikind: "ERC20",
+      methodname: "transfer",
+      aargs: [walletAddress, data.localeAmount + ""],
+    });
+
+    reqTx(
+      {
+        from: address[0],
+        to: contractaddr.USDT,
+        data: abistr,
+        gas: 3000000,
+      },
+      (txHash) => {
+        axios
+          .patch(`${API.TRANSACTION_BRANCH_TRANSFER}`, {
+            amount: data.localeAmount / 10 ** 6,
+            tokentype: "USDT",
+            txhash: txHash,
+            txId: data.id,
+          })
+          .then((resp) => {
+            if (resp) {
+              //Success
+
+              setToast({ type: "alarm", cont: "Submission Successful" });
+              setTimeout(() => {
+                window.location.reload(false);
+              }, 3000);
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          })
+          .finally(() => setLoader());
+      },
+      setLoader
+    );
+  }
+
+  function onClickDepositBtn(data, i) {
+    if (isMobile) moDirectPayment(data, i);
+    else directPayment(data, i);
+  }
+
+  function getData(arg) {
+    let params = {};
+
+    console.log(arg?.filter);
+
+    if (arg?.filter) {
+      params.startDate = startDate;
+      params.endDate = endDate;
+    }
+
+    axios
+      .get(`${API.TRANSACTION_BRANCH_LIST}/${(page - 1) * 10}/10`, {
+        params,
+      })
       .then(({ data }) => {
         let { respdata } = data;
         console.log(data);
-        setTblData(respdata.rows);
+        setTblData(respdata);
         setTotal(respdata.length);
       });
   }
@@ -111,21 +214,24 @@ export default function Orders() {
                         <div>
                           <p className="key">{D_ordersListHeader[0]}</p>
                           <div className="value">
-                            <p>{v.account}</p>
+                            <p>
+                              {v.user.email ||
+                                (v.user.phone && `0${v.user.phone}`)}
+                            </p>
                           </div>
                         </div>
 
                         <div>
                           <p className="key">{D_ordersListHeader[1]}</p>
                           <div className="value">
-                            <p>{`${v.level} Level`}</p>
+                            <p>{`${v.user.level} Level`}</p>
                           </div>
                         </div>
 
                         <div>
                           <p className="key">{D_ordersListHeader[2]}</p>
                           <div className="value">
-                            <p>{moment(v.date).format("YYYY-MM-DD")}</p>
+                            <p>{moment(v.createdat).format("YYYY-MM-DD")}</p>
                           </div>
                         </div>
 
@@ -133,7 +239,7 @@ export default function Orders() {
                           <p className="key">{D_ordersListHeader[3]}</p>
                           <div className="value">
                             <p>
-                              {`¥${(v?.amount / 10 ** 6)?.toLocaleString(
+                              {`¥${(v?.localeAmount / 10 ** 6)?.toLocaleString(
                                 "cn",
                                 "CN"
                               )}`}
@@ -145,10 +251,10 @@ export default function Orders() {
                           <p className="key">{D_ordersListHeader[4]}</p>
                           <div className="value">
                             <p>
-                              {`¥${(v?.cumulative / 10 ** 6)?.toLocaleString(
-                                "cn",
-                                "CN"
-                              )}`}
+                              {`¥${(
+                                v?.user?.transaction?.cumulAmount /
+                                10 ** 6
+                              )?.toLocaleString("cn", "CN")}`}
                             </p>
                           </div>
                         </div>
@@ -156,15 +262,23 @@ export default function Orders() {
                         <div>
                           <p className="key">{D_ordersListHeader[5]}</p>
                           <div className="value">
-                            <p>{`${v.accountName}/${v.accountNum}`}</p>
+                            <p>{`${v.name || "-"}/${v.cardNum || "-"}`}</p>
                           </div>
                         </div>
 
                         <div>
                           <p className="key">{D_ordersListHeader[6]}</p>
                           <div className="value">
-                            <button className="depositBtn" onClick={() => {}}>
-                              Deposit
+                            <button
+                              className={`${
+                                loader === i && "loading"
+                              } depositBtn`}
+                              disabled={loader !== "" || v.txhash}
+                              onClick={() => onClickDepositBtn(v, i)}
+                            >
+                              <p className="common">Deposit</p>
+
+                              <img className="loader" src={L_loader} alt="" />
                             </button>
                           </div>
                         </div>
@@ -230,50 +344,57 @@ export default function Orders() {
               </ul>
 
               <ul className="list">
-                {tblData &&
-                  tblData.map((v, i) => (
-                    <li key={i}>
-                      <span>
-                        <p>{v.account}</p>
-                      </span>
+                {tblData.map((v, i) => (
+                  <li key={i}>
+                    <span>
+                      <p>
+                        {v.user.email || (v.user.phone && `0${v.user.phone}`)}
+                      </p>
+                    </span>
 
-                      <span>
-                        <p>{`${v.level} Level`}</p>
-                      </span>
+                    <span>
+                      <p>{`${v.user.level} Level`}</p>
+                    </span>
 
-                      <span>
-                        <p>{moment(v.date).format("YYYY-MM-DD")}</p>
-                      </span>
+                    <span>
+                      <p>{moment(v.createdat).format("YYYY-MM-DD")}</p>
+                    </span>
 
-                      <span>
-                        <p>
-                          {`¥${(v?.amount / 10 ** 6)?.toLocaleString(
-                            "cn",
-                            "CN"
-                          )}`}
-                        </p>
-                      </span>
+                    <span>
+                      <p>
+                        {`¥${(v?.localeAmount / 10 ** 6)?.toLocaleString(
+                          "cn",
+                          "CN"
+                        )}`}
+                      </p>
+                    </span>
 
-                      <span>
-                        <p>
-                          {`¥${(v?.cumulative / 10 ** 6)?.toLocaleString(
-                            "cn",
-                            "CN"
-                          )}`}
-                        </p>
-                      </span>
+                    <span>
+                      <p>
+                        {`¥${(
+                          v?.user?.transaction?.cumulAmount /
+                          10 ** 6
+                        )?.toLocaleString("cn", "CN")}`}
+                      </p>
+                    </span>
 
-                      <span>
-                        <p>{`${v.accountName}/${v.accountNum}`}</p>
-                      </span>
+                    <span>
+                      <p>{`${v.name || "-"}/${v.cardNum || "-"}`}</p>
+                    </span>
 
-                      <span>
-                        <button className="depositBtn" onClick={() => {}}>
-                          Deposit
-                        </button>
-                      </span>
-                    </li>
-                  ))}
+                    <span>
+                      <button
+                        className={`${loader === i && "loading"} depositBtn`}
+                        disabled={loader !== "" || v.txhash}
+                        onClick={() => onClickDepositBtn(v, i)}
+                      >
+                        <p className="common">Deposit</p>
+
+                        <img className="loader" src={L_loader} alt="" />
+                      </button>
+                    </span>
+                  </li>
+                ))}
               </ul>
             </div>
 
@@ -421,12 +542,20 @@ const MordersBox = styled.main`
 
               .value {
                 .depositBtn {
-                  padding: 0 10px;
+                  width: 64px;
                   height: 28px;
                   font-size: 12px;
                   font-weight: 700;
                   background: #f7ab1f;
                   border-radius: 6px;
+
+                  &:disabled {
+                    filter: brightness(50%);
+                  }
+
+                  .loader {
+                    height: 20px;
+                  }
                 }
               }
             }
@@ -564,12 +693,20 @@ const PordersBox = styled.main`
               border-top: 1px solid #3b3e45;
 
               .depositBtn {
-                padding: 0 10px;
+                width: 64px;
                 height: 28px;
                 font-size: 12px;
                 font-weight: 700;
                 background: #f7ab1f;
                 border-radius: 6px;
+
+                &:disabled {
+                  filter: brightness(50%);
+                }
+
+                .loader {
+                  height: 20px;
+                }
               }
             }
           }
@@ -627,8 +764,8 @@ const PordersBox = styled.main`
 
           &:nth-of-type(7) {
             flex: 1;
-            width: 64px;
-            min-width: 64px;
+            width: 84px;
+            min-width: 84px;
           }
         }
       }

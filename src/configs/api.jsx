@@ -20,16 +20,16 @@ export const API = {
   BETS: URL + "/bets/join", // /:type/:assetId/:amount/:dur/:side
   MY_BETS: URL + "/bets/my", // type
 
-  WITHDRAW: URL + "/transactions/withdraw",
   TRANSACTION_BRANCH_LIST: URL + "/transactions/branch/list",
+  TRANSACTION_BRANCH_TRANSFER: URL + "/transactions/branch/transfer",
+  TRANS_DEPOSIT: URL + "/transactions/live/DEPOSIT", //:amount
+  LISTEN_TRANSACTION: URL + "/transactions/listen",
+  
+  TRANS_DEMO_FUND: URL + "/transactions/demo/fund", //:amount
+  
+  TRANS_WITHDRAW: URL + "/transactions/live/withdraw", //:amount
+  WITHDRAW: URL + "/transactions/withdraw",
 
   BOOKMARKS: URL + "/bookmarks", //:type/:targetId
   BOOKMARKS_MY: URL + "/bookmarks/my",
-
-  TRANS_DEMO_FUND: URL + "/transactions/demo/fund", //:amount
-
-  TRANS_WITHDRAW: URL + "/transactions/live/WITHDRAW", //:amount
-  TRANS_DEPOSIT: URL + "/transactions/live/DEPOSIT", //:amount
-
-  LISTEN_TRANSACTION: URL + "/transactions/listen",
 };

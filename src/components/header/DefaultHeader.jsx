@@ -8,7 +8,7 @@ import I_wallet from "../../img/icon/I_wallet.svg";
 import { ReactComponent as I_hamburger } from "../../img/icon/I_hamburger.svg";
 import PopupBg from "../common/PopupBg";
 import SelLngPopup from "./SelLngPopup";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import ProfPopup from "./ProfPopup";
 import { useSelector } from "react-redux";
@@ -144,22 +144,8 @@ export default function DefaultHeader({ white, border, title }) {
 
             {!white && (
               <ul className="navList">
-                {D_headerList.map((v, i) => (
-                  <li
-                    key={i}
-                    className={`${
-                      location.pathname.indexOf(
-                        String(v.key).toLocaleLowerCase()
-                      ) !== -1 && "on"
-                    }`}
-                    onClick={() => navigate(v.url)}
-                  >
-                    {v.key}
-                  </li>
-                ))}
-
-                {/* {D_headerList.map((v, i) =>
-                  v.key === "Finance" && !userData.isAdmin ? (
+                {D_headerList.map((v, i) =>
+                  v.key === "Finance" && !userData.isbranch ? (
                     <Fragment key={i} />
                   ) : (
                     <li
@@ -174,7 +160,7 @@ export default function DefaultHeader({ white, border, title }) {
                       {v.key}
                     </li>
                   )
-                )} */}
+                )}
 
                 <li className={`${morePopup && "on"} moreBox`}>
                   <button
