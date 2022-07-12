@@ -28,7 +28,7 @@ import axios from "axios";
 import { API } from "../../configs/api";
 import LoadingBar from "../../components/common/LoadingBar";
 
-export default function Demo() {
+export default function Demo({ socket }) {
   const hoverRef1 = useRef();
   const hoverRef2 = useRef();
   const dispatch = useDispatch();
@@ -83,7 +83,7 @@ export default function Demo() {
     const balance = await getBalance();
     console.log(balance.data.respdata);
 
-    if (balance.data.respdata.LIVE.avail/10**6 < amount) {
+    if (balance.data.respdata.LIVE.avail / 10 ** 6 < amount) {
       setInsufficientPopup(true);
       throw "Not Balance";
     }
@@ -296,7 +296,9 @@ export default function Demo() {
               </section>
             </MbetBox>
 
-            {detMode && <DetBox mode={detMode} off={setDetMode} />}
+            {detMode && (
+              <DetBox mode={detMode} off={setDetMode} socket={socket} />
+            )}
 
             {insufficientPopup && (
               <>
@@ -513,7 +515,7 @@ export default function Demo() {
                     </span>
                   </div>
 
-                  <DetBox mode={detMode} />
+                  <DetBox mode={detMode} socket={socket} />
 
                   <button
                     className={`${detMode && "on"} plusBtn`}

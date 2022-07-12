@@ -77,7 +77,10 @@ export default function Live({ socket }) {
 
   function chkMinimumBalance() {
     const token = localStorage.getItem("token");
-    if (!token) return;
+    if (!token) {
+      setLiveTradePopup(true);
+      return;
+    }
 
     axios
       .get(`${API.USER_BALANCE}`)

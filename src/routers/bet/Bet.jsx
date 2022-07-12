@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Route, Routes } from "react-router";
+import { Route, Routes, Navigate } from "react-router";
 import { io } from "socket.io-client";
 import { URL } from "../../configs/api";
 import Demo from "./Demo";
@@ -41,7 +41,8 @@ export default function Bet() {
 
   return (
     <Routes>
-      <Route path="/" element={<Live socket={socket} />} />
+      <Route path="/" element={<Navigate to="live" />} />
+      <Route path="/live" element={<Live socket={socket} />} />
       <Route path="/demo" element={<Demo socket={socket} />} />
     </Routes>
   );
