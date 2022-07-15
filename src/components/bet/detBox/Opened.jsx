@@ -1,10 +1,7 @@
-import axios from "axios";
 import moment from "moment";
 import { Fragment, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { API } from "../../../configs/api";
-import { D_openedList } from "../../../data/D_bet";
 import I_highArwGreen from "../../../img/icon/I_highArwGreen.svg";
 import I_lowArwRed from "../../../img/icon/I_lowArwRed.svg";
 
@@ -36,20 +33,25 @@ export default function Opened({ socket }) {
   function getPreResult(v) {
     let result;
 
+    console.log(v.side, v.currentPrice - v.startingPrice > 0, v.diffRate);
+
     switch (v.side) {
       case "HIGH":
         if (v.currentPrice - v.startingPrice > 0) result = "plus";
         else if (v.currentPrice - v.startingPrice < 0) result = "minus";
+        break;
 
       case "LOW":
         if (v.currentPrice - v.startingPrice > 0) result = "minus";
         else if (v.currentPrice - v.startingPrice < 0) result = "plus";
+        break;
 
       default:
         break;
     }
 
     if (v.diffRate === 0) result = null;
+    console.log(result);
 
     return result;
   }
@@ -105,7 +107,7 @@ export default function Opened({ socket }) {
                       <div className="contBox">
                         <span className="forecast">
                           <img src={getIcon(v.side)} alt="" />
-                          <p>{`$${v.amount}`}</p>
+                          <p>{`$${v.amount / 10 ** 6}`}</p>
                         </span>
 
                         <p
@@ -171,13 +173,16 @@ export default function Opened({ socket }) {
                             </li>
                             <li>
                               <p className="key">Payout</p>
-                              <p className="value">{`$${v.amount.toFixed(
-                                2
-                              )}`}</p>
+                              <p className="value">{`$${
+                                v.amount && (v.amount / 10 ** 6).toFixed(2)
+                              }`}</p>
                             </li>
                             <li>
                               <p className="key">Profit</p>
-                              <p className="value">{`$${(0).toFixed(2)}`}</p>
+                              <p className="value">{`$${(
+                                (v.amount * v.diffRate) /
+                                10 ** 6
+                              ).toFixed(2)}`}</p>
                             </li>
                           </ul>
 
@@ -231,10 +236,10 @@ export default function Opened({ socket }) {
                       <div className="contBox">
                         <span className="forecast">
                           <img src={getIcon(v.side)} alt="" />
-                          <p>{`$${v.amount}`}</p>
+                          <p>{`$${v.amount / 10 ** 6}`}</p>
                         </span>
 
-                        <p className={`${getPreResult(v)}  benefit`}>{`$${(
+                        <p className={`${getPreResult(v)} benefit`}>{`$${(
                           (v.currentPrice - v.startingPrice) *
                           v.diffRate
                         ).toFixed(2)}`}</p>
@@ -306,13 +311,14 @@ export default function Opened({ socket }) {
                             <li>
                               <p className="key">Payout</p>
                               <p className="value">{`$${
-                                v.amount && v.amount.toFixed(2)
+                                v.amount && (v.amount / 10 ** 6).toFixed(2)
                               }`}</p>
                             </li>
                             <li>
                               <p className="key">Profit</p>
                               <p className="value">{`$${(
-                                v.amount * v.diffRate
+                                (v.amount * v.diffRate) /
+                                10 ** 6
                               ).toFixed(2)}`}</p>
                             </li>
                           </ul>

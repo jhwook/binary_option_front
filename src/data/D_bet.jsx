@@ -1698,3 +1698,5 @@ export const D_openedList = [
     },
   },
 ];
+
+export const D_amountTypeList = ["int", "percent"];

@@ -212,7 +212,7 @@ export default function Closed() {
 
         <ul className="dataList">
           {data &&
-            data.map((v, i) => (
+            [].map((v, i) => (
               <li key={i}>
                 <p className="date">
                   {moment(new Date()).format("YYYY-MM-DD")}

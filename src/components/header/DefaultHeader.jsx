@@ -26,6 +26,7 @@ export default function DefaultHeader({ white, border, title }) {
   const { i18n } = useTranslation();
 
   const isMobile = useSelector((state) => state.common.isMobile);
+  const betFlag = useSelector((state) => state.bet.betFlag);
 
   const token = localStorage.getItem("token");
   const balanceType = localStorage.getItem("balanceType");
@@ -74,7 +75,7 @@ export default function DefaultHeader({ white, border, title }) {
 
   useEffect(() => {
     getUserData();
-  }, []);
+  }, [betFlag]);
 
   if (isMobile)
     return (

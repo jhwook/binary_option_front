@@ -18,6 +18,6 @@ export const common = createSlice({
   },
 });
 
-export const { setMobile, setLogin, setAddress } = common.actions;
+export const { setMobile, setLogin } = common.actions;
 
 export default common.reducer;

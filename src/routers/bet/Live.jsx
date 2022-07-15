@@ -4,11 +4,12 @@ import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
 import I_starYellowO from "../../img/icon/I_starYellowO.svg";
 import I_qnaWhite from "../../img/icon/I_qnaWhite.svg";
 import I_langWhite from "../../img/icon/I_langWhite.svg";
+import I_dollarWhite from "../../img/icon/I_dollarWhite.svg";
 import I_percentWhite from "../../img/icon/I_percentWhite.svg";
 import I_highArwGreen from "../../img/icon/I_highArwGreen.svg";
 import I_lowArwRed from "../../img/icon/I_lowArwRed.svg";
 import I_plusWhite from "../../img/icon/I_plusWhite.svg";
-import I_flagWhite from "../../img/icon/I_flagWhite.svg";
+import I_timeWhite from "../../img/icon/I_timeWhite.svg";
 import I_barChartWhite from "../../img/icon/I_barChartWhite.svg";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import LiveTradePopup from "../../components/bet/LiveTradePopup";
@@ -24,7 +25,7 @@ import ReactTradingviewWidget, { Themes } from "react-tradingview-widget";
 import axios from "axios";
 import { API } from "../../configs/api";
 import LoadingBar from "../../components/common/LoadingBar";
-import { D_tokenCategoryList } from "../../data/D_bet";
+import { D_amountTypeList, D_tokenCategoryList } from "../../data/D_bet";
 import { setToast } from "../../util/Util";
 import { setBetFlag } from "../../reducers/bet";
 
@@ -45,6 +46,7 @@ export default function Live({ socket }) {
   const [myBalancePopup, setMyBalancePopup] = useState(false);
   const [addPopup, setAddPopup] = useState(false);
   const [amount, setAmount] = useState("");
+  const [amountMode, setAmountMode] = useState(D_amountTypeList[0]);
   const [bookMark, setBookMark] = useState([]);
 
   function getAssetList() {
@@ -102,26 +104,42 @@ export default function Live({ socket }) {
     return axios.get(`${API.USER_BALANCE}`);
   }
 
-  async function chkBalance() {
+  async function getAmountFromMode() {
     const balance = await getBalance();
-    console.log(balance.data.respdata);
 
-    if (balance.data.respdata.LIVE.avail / 10 ** 6 < amount) {
-      setInsufficientPopup(true);
-      throw "Not Balance";
+    switch (amountMode) {
+      case "int":
+        if (amount <= 0) throw "Not Possible Percent";
+
+        if (balance.data.respdata.LIVE.avail / 10 ** 6 < amount) {
+          setInsufficientPopup(true);
+          throw "Not Balance";
+        }
+
+        return amount * 10 ** 6;
+
+      case "percent":
+        if (amount > 100 || amount <= 0) throw "Not Possible Percent";
+
+        return (balance.data.respdata.LIVE.avail * amount) / 100;
+
+      default:
+        break;
     }
   }
 
   async function onClickPayBtn(type) {
+    let _amount;
+
     try {
-      if ((await chkBalance()) === -1) return;
+      _amount = await getAmountFromMode();
     } catch (err) {
       console.error(err);
       return;
     }
 
     axios
-      .post(`${API.BETS}/LIVE/${assetInfo.id}/${amount}/${duration}/${type}`)
+      .post(`${API.BETS}/LIVE/${assetInfo.id}/${_amount}/${duration}/${type}`)
       .then((res) => {
         console.log(res);
 
@@ -139,6 +157,20 @@ export default function Live({ socket }) {
     hoverRef1.current.style.top = `${e.clientY}px`;
     hoverRef2.current.style.left = `${e.clientX}px`;
     hoverRef2.current.style.top = `${e.clientY}px`;
+  }
+
+  function onClickAmountModeBtn() {
+    switch (amountMode) {
+      case "int":
+        setAmountMode("percent");
+        break;
+      case "percent":
+        setAmountMode("int");
+        break;
+
+      default:
+        break;
+    }
   }
 
   useLayoutEffect(() => {
@@ -227,7 +259,7 @@ export default function Live({ socket }) {
                               :00
                             </p>
 
-                            <img src={I_flagWhite} alt="" />
+                            <img src={I_timeWhite} alt="" />
                           </button>
 
                           {timePopup && (
@@ -254,7 +286,17 @@ export default function Live({ socket }) {
                             placeholder="0"
                           />
 
-                          <img src={I_percentWhite} alt="" />
+                          <button
+                            className="modeBtn"
+                            onClick={onClickAmountModeBtn}
+                          >
+                            {amountMode === "int" && (
+                              <img src={I_dollarWhite} alt="" />
+                            )}
+                            {amountMode === "percent" && (
+                              <img src={I_percentWhite} alt="" />
+                            )}
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -408,10 +450,9 @@ export default function Live({ socket }) {
 
                           <span className="hoverPopup">
                             <p>
-                              Set the time (UTC+2) when your trading operation
-                              will be dosed. By placing a “Higher” or “Lower”
-                              forecast you will receve the result exactly at
-                              17.05.2022 11:45:16.
+                              Set the time when your trading operation will be
+                              dosed. By placing a “Higher” or “Lower” forecast
+                              you will receive the result in 5min.
                             </p>
                           </span>
                         </button>
@@ -427,7 +468,7 @@ export default function Live({ socket }) {
                             {`${duration % 60}`.padStart(2, "0")}:00
                           </p>
 
-                          <img src={I_flagWhite} alt="" />
+                          <img src={I_timeWhite} alt="" />
                         </button>
 
                         {timePopup && (
@@ -452,8 +493,10 @@ export default function Live({ socket }) {
 
                           <span className="hoverPopup">
                             <p>
-                              Specify the percentage of the trading account
-                              balance used calculate your trade amount.
+                              {amountMode === "int" &&
+                                "Specify the exact amount of trade."}
+                              {amountMode === "percent" &&
+                                "Specify the percentage of the trading account balance used calculate your trade amount."}
                             </p>
                           </span>
                         </button>
@@ -467,7 +510,17 @@ export default function Live({ socket }) {
                           placeholder="0"
                         />
 
-                        <img src={I_percentWhite} alt="" />
+                        <button
+                          className="modeBtn"
+                          onClick={onClickAmountModeBtn}
+                        >
+                          {amountMode === "int" && (
+                            <img src={I_dollarWhite} alt="" />
+                          )}
+                          {amountMode === "percent" && (
+                            <img src={I_percentWhite} alt="" />
+                          )}
+                        </button>
                       </div>
                     </div>
 
