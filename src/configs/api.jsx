@@ -1,6 +1,5 @@
-// export const URL = "http://3.34.76.233:30559";
-// export const URL = "http://options1.net:30708";
-export const URL = "http://litriggy.com:30708";
+export const URL = "http://options1.net:30708";
+// export const URL = "http://litriggy.com:30708";
 
 export const API = {
   SIGNUP: URL + "/users/signup", //type

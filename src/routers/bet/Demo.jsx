@@ -1,19 +1,18 @@
 import styled from "styled-components";
 import DefaultHeader from "../../components/header/DefaultHeader";
-import { D_tokenCategoryList } from "../../data/D_bet";
+import { D_amountTypeList, D_tokenCategoryList } from "../../data/D_bet";
 import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
 import I_starYellowO from "../../img/icon/I_starYellowO.svg";
 import I_qnaWhite from "../../img/icon/I_qnaWhite.svg";
 import I_langWhite from "../../img/icon/I_langWhite.svg";
+import I_dollarWhite from "../../img/icon/I_dollarWhite.svg";
 import I_flagWhite from "../../img/icon/I_flagWhite.svg";
 import I_percentWhite from "../../img/icon/I_percentWhite.svg";
 import I_highArwGreen from "../../img/icon/I_highArwGreen.svg";
 import I_lowArwRed from "../../img/icon/I_lowArwRed.svg";
 import I_plusWhite from "../../img/icon/I_plusWhite.svg";
-import I_xWhite from "../../img/icon/I_xWhite.svg";
 import I_barChartWhite from "../../img/icon/I_barChartWhite.svg";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import LiveTradePopup from "../../components/bet/LiveTradePopup";
 import PopupBg from "../../components/common/PopupBg";
 import TokenPopup from "../../components/bet/TokenPopup";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,6 +26,7 @@ import ReactTradingviewWidget, { Themes } from "react-tradingview-widget";
 import axios from "axios";
 import { API } from "../../configs/api";
 import LoadingBar from "../../components/common/LoadingBar";
+import { setBetFlag } from "../../reducers/bet";
 
 export default function Demo({ socket }) {
   const hoverRef1 = useRef();
@@ -46,6 +46,7 @@ export default function Demo({ socket }) {
   const [myBalancePopup, setMyBalancePopup] = useState(false);
   const [addPopup, setAddPopup] = useState(false);
   const [amount, setAmount] = useState("");
+  const [amountMode, setAmountMode] = useState(D_amountTypeList[0]);
   const [bookMark, setBookMark] = useState([]);
 
   function getAssetList() {
@@ -60,73 +61,6 @@ export default function Demo({ socket }) {
       .catch((err) => console.error(err));
   }
 
-  function turnLoader() {
-    setTimeout(() => {
-      setLoading(false);
-    }, 5000);
-  }
-
-  function handleKeyDown(e) {
-    if (e.key === "W" && e.shiftKey) {
-      console.log("A");
-    }
-  }
-
-  async function getBalance() {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    return axios.get(`${API.USER_BALANCE}`);
-  }
-
-  async function chkBalance() {
-    const balance = await getBalance();
-    console.log(balance.data.respdata);
-
-    if (balance.data.respdata.LIVE.avail / 10 ** 6 < amount) {
-      setInsufficientPopup(true);
-      throw "Not Balance";
-    }
-  }
-
-  async function onClickPayBtn(type) {
-    let typeForPost;
-
-    try {
-      if ((await chkBalance()) === -1) return;
-
-      switch (type) {
-        case "high":
-          typeForPost = 1;
-          break;
-
-        case "low":
-          typeForPost = 0;
-          break;
-
-        default:
-          break;
-      }
-    } catch (err) {
-      console.error(err);
-      return;
-    }
-
-    axios
-      .post(
-        `${API.BETS}/DEMO/${assetInfo.id}/${
-          amount * 10 ** 6
-        }/${duration}/${typeForPost}`
-      )
-      .then((res) => {
-        console.log(res);
-        setToast({ type, amount });
-      })
-      .catch((err) => console.error(err));
-
-    // setToast({ type: "closed" });
-  }
-
   function getBookMark() {
     axios
       .get(API.BOOKMARKS_MY)
@@ -137,6 +71,67 @@ export default function Demo({ socket }) {
       .catch((err) => console.error(err));
   }
 
+  function turnLoader() {
+    setTimeout(() => {
+      setLoading(false);
+    }, 5000);
+  }
+
+  async function getBalance() {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    return axios.get(`${API.USER_BALANCE}`);
+  }
+
+  async function getAmountFromMode() {
+    const balance = await getBalance();
+
+    switch (amountMode) {
+      case "int":
+        if (amount <= 0) throw "Not Possible Percent";
+
+        if (balance.data.respdata.DEMO.avail / 10 ** 6 < amount) {
+          setInsufficientPopup(true);
+          throw "Not Balance";
+        }
+
+        return amount * 10 ** 6;
+
+      case "percent":
+        if (amount > 100 || amount <= 0) throw "Not Possible Percent";
+
+        return (balance.data.respdata.DEMO.avail * amount) / 100;
+
+      default:
+        break;
+    }
+  }
+
+  async function onClickPayBtn(type) {
+    let _amount;
+
+    try {
+      _amount = await getAmountFromMode();
+    } catch (err) {
+      console.error(err);
+      return;
+    }
+
+    axios
+      .post(`${API.BETS}/DEMO/${assetInfo.id}/${_amount}/${duration}/${type}`)
+      .then((res) => {
+        console.log(res);
+
+        dispatch(setBetFlag());
+
+        setToast({ type, amount });
+      })
+      .catch((err) => console.error(err));
+
+    // setToast({ type: "closed" });
+  }
+
   function onMouseOverBtn(e) {
     hoverRef1.current.style.left = `${e.clientX}px`;
     hoverRef1.current.style.top = `${e.clientY}px`;
@@ -144,14 +139,22 @@ export default function Demo({ socket }) {
     hoverRef2.current.style.top = `${e.clientY}px`;
   }
 
+  function onClickAmountModeBtn() {
+    switch (amountMode) {
+      case "int":
+        setAmountMode("percent");
+        break;
+      case "percent":
+        setAmountMode("int");
+        break;
+
+      default:
+        break;
+    }
+  }
+
   useLayoutEffect(() => {
     localStorage.setItem("balanceType", "Demo");
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      localStorage.setItem("balanceType", "Live");
-    };
   }, []);
 
   useEffect(() => {
@@ -171,7 +174,7 @@ export default function Demo({ socket }) {
           <LoadingBar />
         ) : (
           <>
-            <MbetBox onKeyDown={handleKeyDown}>
+            <MbetBox>
               <section className="innerBox">
                 <article className="contArea">
                   <div className="chartBox">
@@ -261,7 +264,17 @@ export default function Demo({ socket }) {
                             placeholder="0"
                           />
 
-                          <img src={I_percentWhite} alt="" />
+                          <button
+                            className="modeBtn"
+                            onClick={onClickAmountModeBtn}
+                          >
+                            {amountMode === "int" && (
+                              <img src={I_dollarWhite} alt="" />
+                            )}
+                            {amountMode === "percent" && (
+                              <img src={I_percentWhite} alt="" />
+                            )}
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -343,7 +356,7 @@ export default function Demo({ socket }) {
           <LoadingBar />
         ) : (
           <>
-            <PbetBox onKeyDown={handleKeyDown}>
+            <PbetBox>
               <section className="innerBox">
                 <article className="tokenArea">
                   <div className="selectBox">
@@ -452,8 +465,10 @@ export default function Demo({ socket }) {
 
                           <span className="hoverPopup">
                             <p>
-                              Specify the percentage of the trading account
-                              balance used calculate your trade amount.
+                              {amountMode === "int" &&
+                                "Specify the exact amount of trade."}
+                              {amountMode === "percent" &&
+                                "Specify the percentage of the trading account balance used calculate your trade amount."}
                             </p>
                           </span>
                         </button>
@@ -461,14 +476,23 @@ export default function Demo({ socket }) {
 
                       <div className="value">
                         <p className="unit">$</p>
-
                         <input
                           value={amount}
                           onChange={(e) => setAmount(e.target.value)}
                           placeholder="0"
                         />
 
-                        <img src={I_percentWhite} alt="" />
+                        <button
+                          className="modeBtn"
+                          onClick={onClickAmountModeBtn}
+                        >
+                          {amountMode === "int" && (
+                            <img src={I_dollarWhite} alt="" />
+                          )}
+                          {amountMode === "percent" && (
+                            <img src={I_percentWhite} alt="" />
+                          )}
+                        </button>
                       </div>
                     </div>
 

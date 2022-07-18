@@ -51,7 +51,6 @@ export default function Opened({ socket }) {
     }
 
     if (v.diffRate === 0) result = null;
-    console.log(result);
 
     return result;
   }

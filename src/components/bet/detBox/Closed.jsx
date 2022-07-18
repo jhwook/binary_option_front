@@ -8,12 +8,14 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { API } from "../../../configs/api";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Closed() {
+  const navigate = useNavigate();
+
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [data, setData] = useState([]);
-  const [now, setNow] = useState(new Date());
 
   function getMyBets() {
     axios
@@ -27,13 +29,36 @@ export default function Closed() {
 
   function getIcon(type) {
     switch (type) {
-      case 2:
+      case "HIGH":
         return I_highArwGreen;
-      case 1:
+      case "LOW":
         return I_lowArwRed;
       default:
         break;
     }
+  }
+
+  function getPreResult(v) {
+    let result;
+
+    switch (v.side) {
+      case "HIGH":
+        if (v.currentPrice - v.startingPrice > 0) result = "plus";
+        else if (v.currentPrice - v.startingPrice < 0) result = "minus";
+        break;
+
+      case "LOW":
+        if (v.currentPrice - v.startingPrice > 0) result = "minus";
+        else if (v.currentPrice - v.startingPrice < 0) result = "plus";
+        break;
+
+      default:
+        break;
+    }
+
+    if (v.diffRate === 0) result = null;
+
+    return result;
   }
 
   function getForcast(type) {
@@ -49,61 +74,46 @@ export default function Closed() {
 
   useEffect(() => {
     getMyBets();
-
-    let timeInterval = setInterval(() => {
-      setNow(new Date());
-    }, 1000);
-
-    return () => clearInterval(timeInterval);
   }, []);
 
   if (isMobile)
     return (
       <MclosedBox className="detContList">
-        <button className="viewDemoBtn" onClick={() => {}}>
-          View history of demo trades
-        </button>
-
         <ul className="dataList">
           {data &&
             data.map((v, i) => (
               <li key={i}>
-                <p className="date">
-                  {moment(new Date()).format("YYYY-MM-DD")}
-                </p>
+                <p className="date">{v.time}</p>
 
                 <ul className="detListByDate">
-                  {D_openedList.map((detV, i) => (
+                  {v.value.map((detV, i) => (
                     <li key={i}>
                       <details>
                         <summary>
                           <div className="contBox">
-                            <p className="token">{v.asset.name}</p>
+                            <p className="token">{detV?.asset?.name}</p>
 
-                            <p className="percent">{`5%`}</p>
+                            <p className="percent">{`${detV.diffRate}%`}</p>
                           </div>
 
                           <div className="contBox">
                             <span className="forecast">
-                              <img src={getIcon(v.side)} alt="" />
-                              <p>{`$${v.amount}`}</p>
+                              <img src={getIcon(detV.side)} alt="" />
+                              <p>{`$${detV.amount / 10 ** 6}`}</p>
                             </span>
 
                             <p
                               className={`${1.05 > 0 && "plus"} ${
                                 1.05 < 0 && "minus"
                               } benefit`}
-                            >{`$${(1.05).toFixed(2)}`}</p>
-                            {/* <p
-                      className={`${v.benefit > 0 && "plus"} ${
-                        v.benefit < 0 && "minus"
-                      } benefit`}
-                       >{`$${v.benefit?.toFixed(2)}`}</p> */}
+                            >{`$${(
+                              (detV.endingPrice - detV.startingPrice) *
+                              detV.diffRate
+                            ).toFixed(2)}`}</p>
 
                             <p className="time">
-                              {moment(v.createdat).format("mm:ss")}
+                              {moment(detV.starting).format("mm:ss")}
                             </p>
-                            {/* <p className="time">{moment(v.time).format("mm:ss")}</p> */}
                           </div>
                         </summary>
 
@@ -113,21 +123,25 @@ export default function Closed() {
                               <li>
                                 <p className="key">Open time</p>
                                 <p className="value">
-                                  {moment(v.createdat).format("hh:mm:ss")}
-                                  {/* {moment(v.det?.openTime).format("hh:mm:ss")} */}
+                                  {moment(v.starting).format("hh:mm:ss")}
                                 </p>
                               </li>
 
                               <li>
-                                <p>{"M5"}</p>
-                                {/* <p>{v.det?.limit}</p> */}
+                                <p>
+                                  M
+                                  {moment(
+                                    moment
+                                      .unix(detV.expiry)
+                                      .diff(moment.unix(detV.starting))
+                                  ).format("m")}
+                                </p>
                               </li>
 
                               <li>
                                 <p className="key">ClosingTime</p>
                                 <p className="value">
-                                  {moment(v.createdat).format("hh:mm:ss")}
-                                  {/* {moment(v.det?.closingTime).format("hh:mm:ss")} */}
+                                  {moment(v.expiry).format("hh:mm:ss")}
                                 </p>
                               </li>
                             </ul>
@@ -142,26 +156,23 @@ export default function Closed() {
                               <ul className="forcastList">
                                 <li>
                                   <p className="key">Your forecast</p>
-                                  <p className="value">{"Higher"}</p>
-                                  {/* <p className="value">{v.forcast?.type}</p> */}
+                                  <p className="value">
+                                    {getForcast(detV.side)}
+                                  </p>
                                 </li>
                                 <li>
                                   <p className="key">Payout</p>
-                                  <p className="value">{`$${(0).toFixed(
-                                    2
-                                  )}`}</p>
-                                  {/* <p className="value">{`$${v.forcast?.payout?.toFixed(
-                            2
-                          )}`}</p> */}
+                                  <p className="value">{`$${
+                                    detV.amount &&
+                                    (detV.amount / 10 ** 6).toFixed(2)
+                                  }`}</p>
                                 </li>
                                 <li>
                                   <p className="key">Profit</p>
-                                  <p className="value">{`$${(0).toFixed(
-                                    2
-                                  )}`}</p>
-                                  {/* <p className="value">{`$${v.forcast?.profit?.toFixed(
-                            2
-                          )}`}</p> */}
+                                  <p className="value">{`$${(
+                                    (detV.amount * detV.diffRate) /
+                                    10 ** 6
+                                  ).toFixed(2)}`}</p>
                                 </li>
                               </ul>
 
@@ -169,29 +180,39 @@ export default function Closed() {
                                 <li>
                                   <p className="key">Open price</p>
 
-                                  <p className="value">{29781}</p>
-                                  {/* <p className="value">{v.starttickerprice}</p> */}
+                                  <p className="value">
+                                    {detV.startingPrice
+                                      ? Number(detV.startingPrice).toFixed(2)
+                                      : "-"}
+                                  </p>
                                 </li>
                                 <li>
                                   <p className="key">Current price</p>
 
-                                  <p className="value">{29746}</p>
-                                  {/* <p className="value">{v.endtickerprice}</p> */}
+                                  <p className="value">
+                                    {detV.currentPrice
+                                      ? Number(v.currentPrice).toFixed(2)
+                                      : "-"}
+                                  </p>
                                 </li>
                                 <li>
                                   <p className="key">Difference</p>
 
-                                  <p className="value point">{`${-1} points`}</p>
-                                  {/* <p className="value point">{`${v.price?.diff} points`}</p> */}
+                                  <p
+                                    className={`${
+                                      (detV.currentPrice - detV.startingPrice >
+                                        0 &&
+                                        "plus") ||
+                                      (detV.currentPrice - detV.startingPrice <
+                                        0 &&
+                                        "minus")
+                                    } value point`}
+                                  >{`${Number(
+                                    detV.endingPrice - detV.startingPrice
+                                  ).toFixed(2)} points`}</p>
                                 </li>
                               </ul>
                             </div>
-
-                            <button
-                              className="getBtn"
-                              onClick={() => {}}
-                            >{`Get $${(30).toFixed(2)}`}</button>
-                            {/* >{`Get $${(30).toFixed(2)}`}</button> */}
                           </div>
                         </div>
                       </details>
@@ -206,50 +227,39 @@ export default function Closed() {
   else
     return (
       <PclosedBox className="detContList">
-        <button className="viewDemoBtn" onClick={() => {}}>
-          View history of demo trades
-        </button>
-
         <ul className="dataList">
           {data &&
-            [].map((v, i) => (
+            data.map((v, i) => (
               <li key={i}>
-                <p className="date">
-                  {moment(new Date()).format("YYYY-MM-DD")}
-                </p>
+                <p className="date">{v.time}</p>
 
                 <ul className="detListByDate">
-                  {D_openedList.map((detV, i) => (
+                  {v.value.map((detV, i) => (
                     <li key={i}>
                       <details>
                         <summary>
                           <div className="contBox">
-                            <p className="token">{v.asset.name}</p>
+                            <p className="token">{detV?.asset?.name}</p>
 
-                            <p className="percent">{`5%`}</p>
+                            <p className="percent">{`${detV.diffRate}%`}</p>
                           </div>
 
                           <div className="contBox">
                             <span className="forecast">
-                              <img src={getIcon(v.side)} alt="" />
-                              <p>{`$${v.amount}`}</p>
+                              <img src={getIcon(detV.side)} alt="" />
+                              <p>{`$${detV.amount / 10 ** 6}`}</p>
                             </span>
 
                             <p
-                              className={`${1.05 > 0 && "plus"} ${
-                                1.05 < 0 && "minus"
-                              } benefit`}
-                            >{`$${(1.05).toFixed(2)}`}</p>
-                            {/* <p
-                      className={`${v.benefit > 0 && "plus"} ${
-                        v.benefit < 0 && "minus"
-                      } benefit`}
-                       >{`$${v.benefit?.toFixed(2)}`}</p> */}
+                              className={`${getPreResult(detV)} benefit`}
+                            >{`$${(
+                              (detV.endingPrice - detV.startingPrice) *
+                              detV.diffRate
+                            ).toFixed(2)}`}</p>
 
                             <p className="time">
-                              {moment(v.createdat).format("mm:ss")}
+                              {moment(detV.starting).format("mm:ss")}
                             </p>
-                            {/* <p className="time">{moment(v.time).format("mm:ss")}</p> */}
                           </div>
                         </summary>
 
@@ -259,21 +269,25 @@ export default function Closed() {
                               <li>
                                 <p className="key">Open time</p>
                                 <p className="value">
-                                  {moment(v.createdat).format("hh:mm:ss")}
-                                  {/* {moment(v.det?.openTime).format("hh:mm:ss")} */}
+                                  {moment(v.starting).format("hh:mm:ss")}
                                 </p>
                               </li>
 
                               <li>
-                                <p>{"M5"}</p>
-                                {/* <p>{v.det?.limit}</p> */}
+                                <p>
+                                  M
+                                  {moment(
+                                    moment
+                                      .unix(detV.expiry)
+                                      .diff(moment.unix(detV.starting))
+                                  ).format("m")}
+                                </p>
                               </li>
 
                               <li>
                                 <p className="key">ClosingTime</p>
                                 <p className="value">
-                                  {moment(v.createdat).format("hh:mm:ss")}
-                                  {/* {moment(v.det?.closingTime).format("hh:mm:ss")} */}
+                                  {moment(v.expiry).format("hh:mm:ss")}
                                 </p>
                               </li>
                             </ul>
@@ -288,26 +302,23 @@ export default function Closed() {
                               <ul className="forcastList">
                                 <li>
                                   <p className="key">Your forecast</p>
-                                  <p className="value">{"Higher"}</p>
-                                  {/* <p className="value">{v.forcast?.type}</p> */}
+                                  <p className="value">
+                                    {getForcast(detV.side)}
+                                  </p>
                                 </li>
                                 <li>
                                   <p className="key">Payout</p>
-                                  <p className="value">{`$${(0).toFixed(
-                                    2
-                                  )}`}</p>
-                                  {/* <p className="value">{`$${v.forcast?.payout?.toFixed(
-                            2
-                          )}`}</p> */}
+                                  <p className="value">{`$${
+                                    detV.amount &&
+                                    (detV.amount / 10 ** 6).toFixed(2)
+                                  }`}</p>
                                 </li>
                                 <li>
                                   <p className="key">Profit</p>
-                                  <p className="value">{`$${(0).toFixed(
-                                    2
-                                  )}`}</p>
-                                  {/* <p className="value">{`$${v.forcast?.profit?.toFixed(
-                            2
-                          )}`}</p> */}
+                                  <p className="value">{`$${(
+                                    (detV.amount * detV.diffRate) /
+                                    10 ** 6
+                                  ).toFixed(2)}`}</p>
                                 </li>
                               </ul>
 
@@ -315,29 +326,39 @@ export default function Closed() {
                                 <li>
                                   <p className="key">Open price</p>
 
-                                  <p className="value">{29781}</p>
-                                  {/* <p className="value">{v.starttickerprice}</p> */}
+                                  <p className="value">
+                                    {detV.startingPrice
+                                      ? Number(detV.startingPrice).toFixed(2)
+                                      : "-"}
+                                  </p>
                                 </li>
                                 <li>
                                   <p className="key">Current price</p>
 
-                                  <p className="value">{29746}</p>
-                                  {/* <p className="value">{v.endtickerprice}</p> */}
+                                  <p className="value">
+                                    {detV.currentPrice
+                                      ? Number(v.currentPrice).toFixed(2)
+                                      : "-"}
+                                  </p>
                                 </li>
                                 <li>
                                   <p className="key">Difference</p>
 
-                                  <p className="value point">{`${-1} points`}</p>
-                                  {/* <p className="value point">{`${v.price?.diff} points`}</p> */}
+                                  <p
+                                    className={`${
+                                      (detV.currentPrice - detV.startingPrice >
+                                        0 &&
+                                        "plus") ||
+                                      (detV.currentPrice - detV.startingPrice <
+                                        0 &&
+                                        "minus")
+                                    } value point`}
+                                  >{`${Number(
+                                    detV.endingPrice - detV.startingPrice
+                                  ).toFixed(2)} points`}</p>
                                 </li>
                               </ul>
                             </div>
-
-                            <button
-                              className="getBtn"
-                              onClick={() => {}}
-                            >{`Get $${(30).toFixed(2)}`}</button>
-                            {/* >{`Get $${(30).toFixed(2)}`}</button> */}
                           </div>
                         </div>
                       </details>
@@ -358,6 +379,7 @@ const MclosedBox = styled.ul`
   overflow-y: scroll;
 
   .viewDemoBtn {
+    min-height: 34px;
     height: 34px;
     font-size: 14px;
     color: rgba(255, 255, 255, 0.4);
@@ -494,9 +516,15 @@ const MclosedBox = styled.ul`
                 display: flex;
                 justify-content: center;
                 align-items: flex-end;
-                height: 36px;
-                min-height: 36px;
+                height: 116px;
+                min-height: 116px;
                 padding: 0 16px;
+                background: #111722;
+                border-radius: 6px;
+
+                img {
+                  width: 100%;
+                }
               }
 
               .resBox {
@@ -571,6 +599,7 @@ const PclosedBox = styled.ul`
   overflow-y: scroll;
 
   .viewDemoBtn {
+    min-height: 34px;
     height: 34px;
     font-size: 14px;
     color: rgba(255, 255, 255, 0.4);

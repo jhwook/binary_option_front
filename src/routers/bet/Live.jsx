@@ -173,6 +173,14 @@ export default function Live({ socket }) {
     }
   }
 
+  function getDivRate() {
+
+      socket.emit("dividendrate", {}, (res) => {
+        console.log(res);
+      });
+    
+  }
+
   useLayoutEffect(() => {
     localStorage.setItem("balanceType", "Live");
   }, []);
@@ -186,6 +194,16 @@ export default function Live({ socket }) {
 
     chkMinimumBalance();
   }, []);
+
+  useEffect(() => {
+    let divRateInterval = setInterval(() => {
+      getDivRate();
+    }, 5000);
+
+    return () => {
+      clearInterval(divRateInterval);
+    };
+  }, [socket]);
 
   if (isMobile)
     return (

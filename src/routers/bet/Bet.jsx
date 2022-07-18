@@ -24,10 +24,9 @@ export default function Bet() {
       console.log(res);
     });
 
-    // socketIo.on("bet_update", (res) => {
-    //   console.log("bet_update");
-    //   console.log(res);
-    // });
+    socketIo.on("dividendrate", (res) => {
+      console.log("dividendrate", res);
+    });
 
     socketIo.on("bet", (res) => {
       console.log("bet");
