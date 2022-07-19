@@ -270,3 +270,41 @@ export function getExcelFile(dataList, docName) {
 
   writeFile(wb, docName + ".xlsx");
 }
+
+// custom
+
+export function getDividFromData({ id, _case, dataObj }) {
+  let _dividObj = Object.values(dataObj);
+
+  if (!dataObj) return "";
+
+  let _targetData = _dividObj.find((e) => e.assetId === id);
+
+  if (!_targetData) return;
+
+  let dividendrate = _targetData.dividendrate;
+
+  switch (_case) {
+    case "totalRate":
+      if (
+        dividendrate.high_side_dividendrate < dividendrate.low_side_dividendrate
+      )
+        return Math.floor(dividendrate.low_side_dividendrate * 100) / 100;
+      else return Math.floor(dividendrate.high_side_dividendrate * 100) / 100;
+
+    case "highRate":
+      return Math.floor(dividendrate.high_side_dividendrate * 100) / 100;
+
+    case "lowRate":
+      return Math.floor(dividendrate.low_side_dividendrate * 100) / 100;
+
+    case "highAmount":
+      return Math.floor(_targetData.high_side_amount * 100) / 100;
+
+    case "lowAmount":
+      return Math.floor(_targetData.low_side_amount * 100) / 100;
+
+    default:
+      break;
+  }
+}

@@ -33,8 +33,6 @@ export default function Opened({ socket }) {
   function getPreResult(v) {
     let result;
 
-    console.log(v.side, v.currentPrice - v.startingPrice > 0, v.diffRate);
-
     switch (v.side) {
       case "HIGH":
         if (v.currentPrice - v.startingPrice > 0) result = "plus";

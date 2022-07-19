@@ -5,12 +5,16 @@ import I_searchWhite from "../../img/icon/I_searchWhite.svg";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
 import I_starYellow from "../../img/icon/I_starYellow.svg";
 import I_starYellowO from "../../img/icon/I_starYellowO.svg";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { API, URL } from "../../configs/api";
+import { setTokenPopupData } from "../../reducers/bet";
+import { getDividFromData } from "../../util/Util";
 
-export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
+export default function TokenPopup({ off, setAssetInfo, getBookMark, socket }) {
+  const dispatch = useDispatch();
   const isMobile = useSelector((state) => state.common.isMobile);
+  const dividObj = useSelector((state) => state.bet.dividObj);
   const token = localStorage.getItem("token");
 
   const [category, setCategory] = useState(D_tokenCategoryList[0].value);
@@ -30,6 +34,7 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
       .then(({ data }) => {
         console.log(data.respdata);
         setListData(data.respdata);
+        dispatch(setTokenPopupData(data.respdata));
       })
       .catch((err) => console.error(err));
   }
@@ -63,6 +68,7 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
       .then(({ data }) => {
         console.log(data.respdata);
         setListData(data.respdata);
+        dispatch(setTokenPopupData(data.respdata));
       })
       .catch((err) => console.error(err));
   }
@@ -128,7 +134,11 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
 
                   <p className="name">{v.name}</p>
 
-                  {/* <p className="percent">{`${v.payout.toFixed(2)}%`}</p> */}
+                  <p className="percent">{`${getDividFromData({
+                    id: v.id,
+                    _case: "totalRate",
+                    dataObj: dividObj,
+                  })}%`}</p>
                 </li>
               ))}
 
@@ -147,7 +157,11 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
 
                   <p className="name">{v.name}</p>
 
-                  {/* <p className="percent">{`${v.payout.toFixed(2)}%`}</p> */}
+                  <p className="percent">{`${getDividFromData({
+                    id: v.id,
+                    _case: "totalRate",
+                    dataObj: dividObj,
+                  })}%`}</p>
                 </li>
               ))}
           </ul>
@@ -215,7 +229,11 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
 
                   <p className="name">{v.name}</p>
 
-                  {/* <p className="percent">{`${v.payout.toFixed(2)}%`}</p> */}
+                  <p className="percent">{`${getDividFromData({
+                    id: v.id,
+                    _case: "totalRate",
+                    dataObj: dividObj,
+                  })}%`}</p>
                 </li>
               ))}
 
@@ -234,7 +252,11 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
 
                   <p className="name">{v.name}</p>
 
-                  {/* <p className="percent">{`${v.payout.toFixed(2)}%`}</p> */}
+                  <p className="percent">{`${getDividFromData({
+                    id: v.id,
+                    _case: "totalRate",
+                    dataObj: dividObj,
+                  })}%`}</p>
                 </li>
               ))}
           </ul>

@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Route, Routes, Navigate } from "react-router";
 import { io } from "socket.io-client";
 import { URL } from "../../configs/api";
+import { setDividObj } from "../../reducers/bet";
 import Demo from "./Demo";
 import Live from "./Live";
 
 export default function Bet() {
+  const dispatch = useDispatch();
   const token = localStorage.getItem("token");
 
   const [socket, setSocket] = useState();
@@ -13,7 +16,7 @@ export default function Bet() {
   function getBetSocket() {
     const socketIo = io(URL, {
       query: {
-        token: localStorage.getItem("token"),
+        token,
       },
     });
 
@@ -26,6 +29,7 @@ export default function Bet() {
 
     socketIo.on("dividendrate", (res) => {
       console.log("dividendrate", res);
+      dispatch(setDividObj(res));
     });
 
     socketIo.on("bet", (res) => {

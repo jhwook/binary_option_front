@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   betFlag: false,
+  tokenPopupData: [],
+  dividObj: "",
 };
 
 export const bet = createSlice({
@@ -11,9 +13,17 @@ export const bet = createSlice({
     setBetFlag: (state, action) => {
       state.betFlag = !state.betFlag;
     },
+
+    setTokenPopupData: (state, action) => {
+      state.tokenPopupData = action.payload;
+    },
+
+    setDividObj: (state, action) => {
+      state.dividObj = action.payload;
+    },
   },
 });
 
-export const { setBetFlag } = bet.actions;
+export const { setBetFlag, setTokenPopupData, setDividObj } = bet.actions;
 
 export default bet.reducer;

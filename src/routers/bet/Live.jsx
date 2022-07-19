@@ -26,7 +26,7 @@ import axios from "axios";
 import { API } from "../../configs/api";
 import LoadingBar from "../../components/common/LoadingBar";
 import { D_amountTypeList, D_tokenCategoryList } from "../../data/D_bet";
-import { setToast } from "../../util/Util";
+import { getDividFromData, setToast } from "../../util/Util";
 import { setBetFlag } from "../../reducers/bet";
 
 export default function Live({ socket }) {
@@ -34,6 +34,8 @@ export default function Live({ socket }) {
   const hoverRef2 = useRef();
   const dispatch = useDispatch();
   const isMobile = useSelector((state) => state.common.isMobile);
+  const tokenPopupData = useSelector((state) => state.bet.tokenPopupData);
+  const dividObj = useSelector((state) => state.bet.dividObj);
 
   const [assetInfo, setAssetInfo] = useState();
   const [loading, setLoading] = useState(true);
@@ -148,8 +150,6 @@ export default function Live({ socket }) {
         setToast({ type, amount });
       })
       .catch((err) => console.error(err));
-
-    // setToast({ type: "closed" });
   }
 
   function onMouseOverBtn(e) {
@@ -174,11 +174,17 @@ export default function Live({ socket }) {
   }
 
   function getDivRate() {
+    let _dividList = [assetInfo?.id];
+    if (!_dividList) return;
 
-      socket.emit("dividendrate", {}, (res) => {
-        console.log(res);
-      });
-    
+    bookMark.map((e) => _dividList.push(e.asset.id));
+    tokenPopupData.map((e) => _dividList.push(e.id));
+
+    _dividList = new Set(_dividList);
+
+    socket.emit("dividendrate", [..._dividList], (res) => {
+      console.log(res);
+    });
   }
 
   useLayoutEffect(() => {
@@ -196,6 +202,9 @@ export default function Live({ socket }) {
   }, []);
 
   useEffect(() => {
+    if (!socket) return;
+    getDivRate();
+
     let divRateInterval = setInterval(() => {
       getDivRate();
     }, 5000);
@@ -203,7 +212,7 @@ export default function Live({ socket }) {
     return () => {
       clearInterval(divRateInterval);
     };
-  }, [socket]);
+  }, [socket, assetInfo, bookMark, tokenPopupData]);
 
   if (isMobile)
     return (
@@ -245,6 +254,7 @@ export default function Live({ socket }) {
                                 off={setTokenPopup}
                                 setAssetInfo={setAssetInfo}
                                 getBookMark={getBookMark}
+                                socket={socket}
                               />
                               <PopupBg off={setTokenPopup} />
                             </>
@@ -330,7 +340,17 @@ export default function Live({ socket }) {
                           <p>HIGH</p>
                         </button>
 
-                        <p className="rate">+80% 400536157.70</p>
+                        <p className="rate">
+                          {`+${getDividFromData({
+                            id: assetInfo.id,
+                            _case: "highRate",
+                            dataObj: dividObj,
+                          })}%  ${getDividFromData({
+                            id: assetInfo.id,
+                            _case: "highAmount",
+                            dataObj: dividObj,
+                          })}`}
+                        </p>
                       </span>
 
                       <span className="btnBox low">
@@ -343,7 +363,17 @@ export default function Live({ socket }) {
                           <p>LOW</p>
                         </button>
 
-                        <p className="rate">+80% 400536157.70</p>
+                        <p className="rate">
+                          {`+${getDividFromData({
+                            id: assetInfo.id,
+                            _case: "lowRate",
+                            dataObj: dividObj,
+                          })}%  ${getDividFromData({
+                            id: assetInfo.id,
+                            _case: "lowAmount",
+                            dataObj: dividObj,
+                          })}`}
+                        </p>
                       </span>
                     </div>
                   </div>
@@ -421,6 +451,7 @@ export default function Live({ socket }) {
                           off={setTokenPopup}
                           setAssetInfo={setAssetInfo}
                           getBookMark={getBookMark}
+                          socket={socket}
                         />
                         <PopupBg off={setTokenPopup} />
                       </>
@@ -433,7 +464,14 @@ export default function Live({ socket }) {
                         <img src={I_starYellowO} alt="" />
                         <span className="textBox">
                           <p className="key">{v.asset.name}</p>
-                          {/* <p className="value">{v.payout}%</p> */}
+                          <p className="value">
+                            {getDividFromData({
+                              id: v.asset.id,
+                              _case: "totalRate",
+                              dataObj: dividObj,
+                            })}
+                            %
+                          </p>
                         </span>
                       </li>
                     ))}
@@ -554,11 +592,29 @@ export default function Live({ socket }) {
                         </span>
 
                         <span className="hoverBox">
-                          <strong className="percent">+80%</strong>
-                          <p className="amount">400536157.70</p>
+                          <strong className="percent">{`+${getDividFromData({
+                            id: assetInfo.id,
+                            _case: "highRate",
+                            dataObj: dividObj,
+                          })}%`}</strong>
+                          <p className="amount">
+                            {getDividFromData({
+                              id: assetInfo.id,
+                              _case: "highAmount",
+                              dataObj: dividObj,
+                            })}
+                          </p>
 
                           <p className="hoverPopup" ref={hoverRef1}>
-                            Dividend rate : +80% 400536157.70 USD
+                            {`Dividend rate : +${getDividFromData({
+                              id: assetInfo.id,
+                              _case: "highRate",
+                              dataObj: dividObj,
+                            })}%  ${getDividFromData({
+                              id: assetInfo.id,
+                              _case: "highAmount",
+                              dataObj: dividObj,
+                            })} USD`}
                           </p>
                         </span>
                       </button>
@@ -576,11 +632,29 @@ export default function Live({ socket }) {
                         </span>
 
                         <span className="hoverBox">
-                          <strong className="percent">+80%</strong>
-                          <p className="amount">400536157.70</p>
+                          <strong className="percent">{`+${getDividFromData({
+                            id: assetInfo.id,
+                            _case: "lowRate",
+                            dataObj: dividObj,
+                          })}%`}</strong>
+                          <p className="amount">
+                            {getDividFromData({
+                              id: assetInfo.id,
+                              _case: "lowAmount",
+                              dataObj: dividObj,
+                            })}
+                          </p>
 
                           <p className="hoverPopup" ref={hoverRef2}>
-                            Dividend rate : +80% 400536157.70 USD
+                            {`Dividend rate : +${getDividFromData({
+                              id: assetInfo.id,
+                              _case: "lowRate",
+                              dataObj: dividObj,
+                            })}%  ${getDividFromData({
+                              id: assetInfo.id,
+                              _case: "lowAmount",
+                              dataObj: dividObj,
+                            })} USD`}
                           </p>
                         </span>
                       </button>
