@@ -5,7 +5,7 @@ import styled from "styled-components";
 import I_highArwGreen from "../../../img/icon/I_highArwGreen.svg";
 import I_lowArwRed from "../../../img/icon/I_lowArwRed.svg";
 import { setOpenedData } from "../../../reducers/bet";
-import { authSocket } from "../../../util/socket";
+import { socketIo } from "../../../util/socket";
 import { getDividFromData } from "../../../util/Util";
 
 export default function Opened({ socket }) {
@@ -18,7 +18,7 @@ export default function Opened({ socket }) {
   const [now, setNow] = useState(new Date());
 
   function getLog() {
-    authSocket.emit("bet", {}, (res) => {
+    socketIo.emit("bet", {}, (res) => {
       console.log("bet", res);
       setData(res);
       dispatch(setOpenedData(res));

@@ -28,7 +28,7 @@ import LoadingBar from "../../components/common/LoadingBar";
 import { D_amountTypeList, D_tokenCategoryList } from "../../data/D_bet";
 import { getDividFromData, setToast } from "../../util/Util";
 import { setBetFlag } from "../../reducers/bet";
-import { noAuthSocket } from "../../util/socket";
+import { socketIo } from "../../util/socket";
 
 export default function Live() {
   const hoverRef1 = useRef();
@@ -186,7 +186,7 @@ export default function Live() {
 
     _dividList = new Set(_dividList);
 
-    noAuthSocket.emit(
+    socketIo.emit(
       "dividendrate",
       [..._dividList],
       (res) => {
@@ -212,7 +212,7 @@ export default function Live() {
   }, []);
 
   useEffect(() => {
-    if (!noAuthSocket) return;
+    if (!socketIo) return;
     getDivRate();
 
     let divRateInterval = setInterval(() => {
@@ -222,7 +222,7 @@ export default function Live() {
     return () => {
       clearInterval(divRateInterval);
     };
-  }, [noAuthSocket, assetInfo, bookMark, tokenPopupData, openedData]);
+  }, [socketIo, assetInfo, bookMark, tokenPopupData, openedData]);
 
   if (isMobile)
     return (

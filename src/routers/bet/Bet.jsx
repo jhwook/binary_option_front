@@ -2,12 +2,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Route, Routes, Navigate } from "react-router";
 import { setDividObj } from "../../reducers/bet";
-import {
-  authSocket,
-  initConnectAuthSocket,
-  initConnectNoAuthSocket,
-  noAuthSocket,
-} from "../../util/socket";
+import { socketIo, connectSocketIo } from "../../util/socket";
 import Demo from "./Demo";
 import Live from "./Live";
 
@@ -15,22 +10,21 @@ export default function Bet() {
   const dispatch = useDispatch();
 
   function getBetSocket() {
-    initConnectNoAuthSocket();
-    initConnectAuthSocket(authSocket);
+    connectSocketIo();
 
-    noAuthSocket.on("dividendrate", (res) => {
+    socketIo.on("dividendrate", (res) => {
       console.log("dividendrate", res);
       dispatch(setDividObj(res));
     });
 
-    authSocket.on("bet", (res) => {
+    socketIo.on("bet", (res) => {
       console.log("bet", res);
     });
   }
 
   useEffect(() => {
     getBetSocket();
-  }, [authSocket]);
+  }, [socketIo]);
 
   return (
     <Routes>

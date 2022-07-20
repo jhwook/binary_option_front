@@ -17,7 +17,7 @@ import PopupBg from "../../components/common/PopupBg";
 import TokenPopup from "../../components/bet/TokenPopup";
 import { useDispatch, useSelector } from "react-redux";
 import TimePopup from "../../components/bet/TimePopup";
-import { setToast } from "../../util/Util";
+import { getDividFromData, setToast } from "../../util/Util";
 import DetBox from "../../components/bet/detBox/DetBox";
 import InsufficientPopup from "../../components/bet/InsufficientPopup";
 import MyBalancePopup from "../../components/header/MyBalancePopup";
@@ -27,7 +27,7 @@ import axios from "axios";
 import { API } from "../../configs/api";
 import LoadingBar from "../../components/common/LoadingBar";
 import { setBetFlag } from "../../reducers/bet";
-import { noAuthSocket } from "../../util/socket";
+import { socketIo } from "../../util/socket";
 
 export default function Demo({ socket }) {
   const hoverRef1 = useRef();
@@ -164,7 +164,7 @@ export default function Demo({ socket }) {
 
     _dividList = new Set(_dividList);
 
-    noAuthSocket.emit(
+    socketIo.emit(
       "dividendrate",
       [..._dividList],
       (res) => {
@@ -188,7 +188,7 @@ export default function Demo({ socket }) {
   }, []);
 
   useEffect(() => {
-    if (!noAuthSocket) return;
+    if (!socketIo) return;
     getDivRate();
 
     let divRateInterval = setInterval(() => {
@@ -198,7 +198,7 @@ export default function Demo({ socket }) {
     return () => {
       clearInterval(divRateInterval);
     };
-  }, [noAuthSocket, assetInfo, bookMark, tokenPopupData, openedData]);
+  }, [socketIo, assetInfo, bookMark, tokenPopupData, openedData]);
 
   if (isMobile)
     return (
@@ -325,7 +325,17 @@ export default function Demo({ socket }) {
                           <p>HIGH</p>
                         </button>
 
-                        <p className="rate">+80% 400536157.70</p>
+                        <p className="rate">
+                          {`+${getDividFromData({
+                            id: assetInfo.id,
+                            _case: "highRate",
+                            dataObj: dividObj,
+                          })}%  ${getDividFromData({
+                            id: assetInfo.id,
+                            _case: "highAmount",
+                            dataObj: dividObj,
+                          })}`}
+                        </p>
                       </span>
 
                       <span className="btnBox low">
@@ -338,7 +348,17 @@ export default function Demo({ socket }) {
                           <p>LOW</p>
                         </button>
 
-                        <p className="rate">+80% 400536157.70</p>
+                        <p className="rate">
+                          {`+${getDividFromData({
+                            id: assetInfo.id,
+                            _case: "lowRate",
+                            dataObj: dividObj,
+                          })}%  ${getDividFromData({
+                            id: assetInfo.id,
+                            _case: "lowAmount",
+                            dataObj: dividObj,
+                          })}`}
+                        </p>
                       </span>
                     </div>
                   </div>
@@ -543,11 +563,29 @@ export default function Demo({ socket }) {
                         </span>
 
                         <span className="hoverBox">
-                          <strong className="percent">+80%</strong>
-                          <p className="amount">400536157.70</p>
+                          <strong className="percent">{`+${getDividFromData({
+                            id: assetInfo.id,
+                            _case: "highRate",
+                            dataObj: dividObj,
+                          })}%`}</strong>
+                          <p className="amount">
+                            {getDividFromData({
+                              id: assetInfo.id,
+                              _case: "highAmount",
+                              dataObj: dividObj,
+                            })}
+                          </p>
 
                           <p className="hoverPopup" ref={hoverRef1}>
-                            Dividend rate : +80% 400536157.70 USD
+                            {`Dividend rate : +${getDividFromData({
+                              id: assetInfo.id,
+                              _case: "highRate",
+                              dataObj: dividObj,
+                            })}%  ${getDividFromData({
+                              id: assetInfo.id,
+                              _case: "highAmount",
+                              dataObj: dividObj,
+                            })} USD`}
                           </p>
                         </span>
                       </button>
@@ -565,11 +603,29 @@ export default function Demo({ socket }) {
                         </span>
 
                         <span className="hoverBox">
-                          <strong className="percent">+80%</strong>
-                          <p className="amount">400536157.70</p>
+                          <strong className="percent">{`+${getDividFromData({
+                            id: assetInfo.id,
+                            _case: "lowRate",
+                            dataObj: dividObj,
+                          })}%`}</strong>
+                          <p className="amount">
+                            {getDividFromData({
+                              id: assetInfo.id,
+                              _case: "lowAmount",
+                              dataObj: dividObj,
+                            })}
+                          </p>
 
                           <p className="hoverPopup" ref={hoverRef2}>
-                            Dividend rate : +80% 400536157.70 USD
+                            {`Dividend rate : +${getDividFromData({
+                              id: assetInfo.id,
+                              _case: "lowRate",
+                              dataObj: dividObj,
+                            })}%  ${getDividFromData({
+                              id: assetInfo.id,
+                              _case: "lowAmount",
+                              dataObj: dividObj,
+                            })} USD`}
                           </p>
                         </span>
                       </button>
