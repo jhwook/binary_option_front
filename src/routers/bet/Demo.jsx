@@ -27,14 +27,16 @@ import axios from "axios";
 import { API } from "../../configs/api";
 import LoadingBar from "../../components/common/LoadingBar";
 import { setBetFlag } from "../../reducers/bet";
+import { noAuthSocket } from "../../util/socket";
 
 export default function Demo({ socket }) {
   const hoverRef1 = useRef();
   const hoverRef2 = useRef();
   const dispatch = useDispatch();
   const isMobile = useSelector((state) => state.common.isMobile);
-
-  const token = localStorage.getItem("token");
+  const openedData = useSelector((state) => state.bet.openedData);
+  const tokenPopupData = useSelector((state) => state.bet.tokenPopupData);
+  const dividObj = useSelector((state) => state.bet.dividObj);
 
   const [assetInfo, setAssetInfo] = useState();
   const [loading, setLoading] = useState(true);
@@ -128,8 +130,6 @@ export default function Demo({ socket }) {
         setToast({ type, amount });
       })
       .catch((err) => console.error(err));
-
-    // setToast({ type: "closed" });
   }
 
   function onMouseOverBtn(e) {
@@ -153,6 +153,28 @@ export default function Demo({ socket }) {
     }
   }
 
+  function getDivRate() {
+    let _dividList = [assetInfo?.id];
+
+    if (!_dividList) return;
+
+    bookMark.map((e) => _dividList.push(e.asset.id));
+    tokenPopupData.map((e) => _dividList.push(e.id));
+    openedData.map((e) => _dividList.push(e.assetId));
+
+    _dividList = new Set(_dividList);
+
+    noAuthSocket.emit(
+      "dividendrate",
+      [..._dividList],
+      (res) => {
+        console.log(_dividList);
+        console.log(res);
+      },
+      (err) => console.error("timeout", err)
+    );
+  }
+
   useLayoutEffect(() => {
     localStorage.setItem("balanceType", "Demo");
   }, []);
@@ -164,6 +186,19 @@ export default function Demo({ socket }) {
 
     turnLoader();
   }, []);
+
+  useEffect(() => {
+    if (!noAuthSocket) return;
+    getDivRate();
+
+    let divRateInterval = setInterval(() => {
+      getDivRate();
+    }, 5000);
+
+    return () => {
+      clearInterval(divRateInterval);
+    };
+  }, [noAuthSocket, assetInfo, bookMark, tokenPopupData, openedData]);
 
   if (isMobile)
     return (

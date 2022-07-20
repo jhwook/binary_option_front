@@ -1,21 +1,27 @@
 import moment from "moment";
 import { Fragment, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import I_highArwGreen from "../../../img/icon/I_highArwGreen.svg";
 import I_lowArwRed from "../../../img/icon/I_lowArwRed.svg";
+import { setOpenedData } from "../../../reducers/bet";
+import { authSocket } from "../../../util/socket";
+import { getDividFromData } from "../../../util/Util";
 
 export default function Opened({ socket }) {
+  const dispatch = useDispatch();
   const isMobile = useSelector((state) => state.common.isMobile);
   const betFlag = useSelector((state) => state.bet.betFlag);
+  const dividObj = useSelector((state) => state.bet.dividObj);
 
   const [data, setData] = useState([]);
   const [now, setNow] = useState(new Date());
 
   function getLog() {
-    socket.emit("bet", {}, (res) => {
-      console.log(res);
+    authSocket.emit("bet", {}, (res) => {
+      console.log("bet", res);
       setData(res);
+      dispatch(setOpenedData(res));
     });
   }
 
@@ -65,8 +71,6 @@ export default function Opened({ socket }) {
   }
 
   useEffect(() => {
-    getLog();
-
     let timeInterval = setInterval(() => {
       setNow(new Date());
     }, 1000);
@@ -98,7 +102,11 @@ export default function Opened({ socket }) {
                       <div className="contBox">
                         <p className="token">{v.asset.name}</p>
 
-                        <p className="percent">{`${v.diffRate}%`}</p>
+                        <p className="percent">{`${getDividFromData({
+                          id: v.assetId,
+                          _case: "totalRate",
+                          dataObj: dividObj,
+                        })}%`}</p>
                       </div>
 
                       <div className="contBox">
@@ -227,7 +235,11 @@ export default function Opened({ socket }) {
                       <div className="contBox">
                         <p className="token">{v?.asset?.name}</p>
 
-                        <p className="percent">{`${v.diffRate}%`}</p>
+                        <p className="percent">{`${getDividFromData({
+                          id: v.assetId,
+                          _case: "totalRate",
+                          dataObj: dividObj,
+                        })}%`}</p>
                       </div>
 
                       <div className="contBox">
@@ -395,6 +407,13 @@ const MopenedBox = styled.ul`
           display: flex;
           justify-content: space-between;
           align-items: center;
+          gap: 10px;
+
+          .percent {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
 
           .forecast {
             display: flex;
@@ -550,6 +569,13 @@ const PopenedBox = styled.ul`
           display: flex;
           justify-content: space-between;
           align-items: center;
+          gap: 10px;
+
+          .percent {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
 
           .forecast {
             display: flex;

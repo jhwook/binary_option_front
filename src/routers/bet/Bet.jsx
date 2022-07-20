@@ -1,52 +1,42 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Route, Routes, Navigate } from "react-router";
-import { io } from "socket.io-client";
-import { URL } from "../../configs/api";
 import { setDividObj } from "../../reducers/bet";
+import {
+  authSocket,
+  initConnectAuthSocket,
+  initConnectNoAuthSocket,
+  noAuthSocket,
+} from "../../util/socket";
 import Demo from "./Demo";
 import Live from "./Live";
 
 export default function Bet() {
   const dispatch = useDispatch();
-  const token = localStorage.getItem("token");
-
-  const [socket, setSocket] = useState();
 
   function getBetSocket() {
-    const socketIo = io(URL, {
-      query: {
-        token,
-      },
-    });
+    initConnectNoAuthSocket();
+    initConnectAuthSocket(authSocket);
 
-    setSocket(socketIo);
-
-    socketIo.on("connect", (res) => {
-      console.log("connect");
-      console.log(res);
-    });
-
-    socketIo.on("dividendrate", (res) => {
+    noAuthSocket.on("dividendrate", (res) => {
       console.log("dividendrate", res);
       dispatch(setDividObj(res));
     });
 
-    socketIo.on("bet", (res) => {
-      console.log("bet");
-      console.log(res);
+    authSocket.on("bet", (res) => {
+      console.log("bet", res);
     });
   }
 
   useEffect(() => {
     getBetSocket();
-  }, []);
+  }, [authSocket]);
 
   return (
     <Routes>
       <Route path="/" element={<Navigate to="live" />} />
-      <Route path="/live" element={<Live socket={socket} />} />
-      <Route path="/demo" element={<Demo socket={socket} />} />
+      <Route path="/live" element={<Live />} />
+      <Route path="/demo" element={<Demo />} />
     </Routes>
   );
 }

@@ -11,7 +11,7 @@ import { API, URL } from "../../configs/api";
 import { setTokenPopupData } from "../../reducers/bet";
 import { getDividFromData } from "../../util/Util";
 
-export default function TokenPopup({ off, setAssetInfo, getBookMark, socket }) {
+export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
   const dispatch = useDispatch();
   const isMobile = useSelector((state) => state.common.isMobile);
   const dividObj = useSelector((state) => state.bet.dividObj);
@@ -134,11 +134,13 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark, socket }) {
 
                   <p className="name">{v.name}</p>
 
-                  <p className="percent">{`${getDividFromData({
-                    id: v.id,
-                    _case: "totalRate",
-                    dataObj: dividObj,
-                  })}%`}</p>
+                  <p className="percent">{`${
+                    getDividFromData({
+                      id: v.id,
+                      _case: "totalRate",
+                      dataObj: dividObj,
+                    }) || "-"
+                  }%`}</p>
                 </li>
               ))}
 
@@ -157,11 +159,13 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark, socket }) {
 
                   <p className="name">{v.name}</p>
 
-                  <p className="percent">{`${getDividFromData({
-                    id: v.id,
-                    _case: "totalRate",
-                    dataObj: dividObj,
-                  })}%`}</p>
+                  <p className="percent">{`${
+                    getDividFromData({
+                      id: v.id,
+                      _case: "totalRate",
+                      dataObj: dividObj,
+                    }) || "-"
+                  }%`}</p>
                 </li>
               ))}
           </ul>

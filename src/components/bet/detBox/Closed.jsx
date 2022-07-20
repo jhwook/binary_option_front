@@ -436,6 +436,14 @@ const MclosedBox = styled.ul`
                 justify-content: space-between;
                 align-items: center;
 
+                gap: 10px;
+
+                .percent {
+                  overflow: hidden;
+                  white-space: nowrap;
+                  text-overflow: ellipsis;
+                }
+
                 .forecast {
                   display: flex;
                   align-items: center;
@@ -654,6 +662,13 @@ const PclosedBox = styled.ul`
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                gap: 10px;
+
+                .percent {
+                  overflow: hidden;
+                  white-space: nowrap;
+                  text-overflow: ellipsis;
+                }
 
                 .forecast {
                   display: flex;

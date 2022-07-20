@@ -28,12 +28,14 @@ import LoadingBar from "../../components/common/LoadingBar";
 import { D_amountTypeList, D_tokenCategoryList } from "../../data/D_bet";
 import { getDividFromData, setToast } from "../../util/Util";
 import { setBetFlag } from "../../reducers/bet";
+import { noAuthSocket } from "../../util/socket";
 
-export default function Live({ socket }) {
+export default function Live() {
   const hoverRef1 = useRef();
   const hoverRef2 = useRef();
   const dispatch = useDispatch();
   const isMobile = useSelector((state) => state.common.isMobile);
+  const openedData = useSelector((state) => state.bet.openedData);
   const tokenPopupData = useSelector((state) => state.bet.tokenPopupData);
   const dividObj = useSelector((state) => state.bet.dividObj);
 
@@ -175,16 +177,24 @@ export default function Live({ socket }) {
 
   function getDivRate() {
     let _dividList = [assetInfo?.id];
+
     if (!_dividList) return;
 
     bookMark.map((e) => _dividList.push(e.asset.id));
     tokenPopupData.map((e) => _dividList.push(e.id));
+    openedData.map((e) => _dividList.push(e.assetId));
 
     _dividList = new Set(_dividList);
 
-    socket.emit("dividendrate", [..._dividList], (res) => {
-      console.log(res);
-    });
+    noAuthSocket.emit(
+      "dividendrate",
+      [..._dividList],
+      (res) => {
+        console.log(_dividList);
+        console.log(res);
+      },
+      (err) => console.error("timeout", err)
+    );
   }
 
   useLayoutEffect(() => {
@@ -202,7 +212,7 @@ export default function Live({ socket }) {
   }, []);
 
   useEffect(() => {
-    if (!socket) return;
+    if (!noAuthSocket) return;
     getDivRate();
 
     let divRateInterval = setInterval(() => {
@@ -212,7 +222,7 @@ export default function Live({ socket }) {
     return () => {
       clearInterval(divRateInterval);
     };
-  }, [socket, assetInfo, bookMark, tokenPopupData]);
+  }, [noAuthSocket, assetInfo, bookMark, tokenPopupData, openedData]);
 
   if (isMobile)
     return (
@@ -254,7 +264,6 @@ export default function Live({ socket }) {
                                 off={setTokenPopup}
                                 setAssetInfo={setAssetInfo}
                                 getBookMark={getBookMark}
-                                socket={socket}
                               />
                               <PopupBg off={setTokenPopup} />
                             </>
@@ -381,9 +390,7 @@ export default function Live({ socket }) {
               </section>
             </MbetBox>
 
-            {detMode && (
-              <DetBox mode={detMode} socket={socket} off={setDetMode} />
-            )}
+            {detMode && <DetBox mode={detMode} off={setDetMode} />}
 
             {liveTradePopup && (
               <>
@@ -451,7 +458,6 @@ export default function Live({ socket }) {
                           off={setTokenPopup}
                           setAssetInfo={setAssetInfo}
                           getBookMark={getBookMark}
-                          socket={socket}
                         />
                         <PopupBg off={setTokenPopup} />
                       </>
@@ -661,7 +667,7 @@ export default function Live({ socket }) {
                     </span>
                   </div>
 
-                  <DetBox mode={detMode} socket={socket} off={setDetMode} />
+                  <DetBox mode={detMode} off={setDetMode} />
 
                   <button
                     className={`${detMode && "on"} plusBtn`}

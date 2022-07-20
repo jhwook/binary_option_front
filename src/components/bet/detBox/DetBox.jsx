@@ -6,7 +6,7 @@ import Closed from "./Closed";
 import Opened from "./Opened";
 import I_xWhite from "../../../img/icon/I_xWhite.svg";
 
-export default function DetBox({ off, socket, mode }) {
+export default function DetBox({ off, mode }) {
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [detCategory, setDetCategory] = useState(D_detCategoryList[0]);
@@ -26,7 +26,7 @@ export default function DetBox({ off, socket, mode }) {
           ))}
         </ul>
 
-        {detCategory === "Opened" && <Opened socket={socket} />}
+        {detCategory === "Opened" && <Opened />}
         {detCategory === "Closed" && <Closed />}
 
         <footer>
@@ -53,7 +53,7 @@ export default function DetBox({ off, socket, mode }) {
           ))}
         </ul>
 
-        {detCategory === "Opened" && <Opened socket={socket} />}
+        {detCategory === "Opened" && <Opened />}
         {detCategory === "Closed" && <Closed />}
       </PdetBoxCont>
     );
