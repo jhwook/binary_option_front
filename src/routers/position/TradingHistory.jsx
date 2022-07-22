@@ -1,4 +1,4 @@
-import { forwardRef, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import styled from "styled-components";
 import {
   D_historyCategoryList,
@@ -19,17 +19,19 @@ import renderCustomHeader from "../../util/DatePickerHeader";
 import { useSelector } from "react-redux";
 import DefaultHeader from "../../components/header/DefaultHeader";
 import { getExcelFile } from "../../util/Util";
+import axios from "axios";
+import { API } from "../../configs/api";
 
 export default function TradingHistory() {
-  const totalPage = 4;
-
   const isMobile = useSelector((state) => state.common.isMobile);
 
-  const [category, setCategory] = useState(0);
+  const [category, setCategory] = useState(D_historyCategoryList[0]);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
+  const [listData, setListData] = useState([]);
 
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
     <button className="dateBtn" onClick={onClick} ref={ref}>
@@ -57,6 +59,17 @@ export default function TradingHistory() {
     if (page < totalPage) setPage(page + 1);
   }
 
+  useEffect(() => {
+    axios
+      .get(`${API.USER_BETLOGS}/${category}/${(page - 1) * 10}/10`)
+      .then(({ data }) => {
+        console.log(data.bet_log);
+        setListData(data.bet_log.rows);
+        setTotalPage(data.beg_log.count / 10 + (data.beg_log.count % 10 && 1));
+      })
+      .catch((err) => console.error(err));
+  }, [category]);
+
   if (isMobile)
     return (
       <>
@@ -68,8 +81,8 @@ export default function TradingHistory() {
               {D_historyCategoryList.map((v, i) => (
                 <li
                   key={i}
-                  className={`${category === i && "on"}`}
-                  onClick={() => setCategory(i)}
+                  className={`${category === v && "on"}`}
+                  onClick={() => setCategory(v)}
                 >
                   {v}
                 </li>
@@ -109,7 +122,7 @@ export default function TradingHistory() {
 
               <div className="listBox">
                 <ul className="list">
-                  {D_trandingList.map((v, i) => (
+                  {listData.map((v, i) => (
                     <li key={i}>
                       <div>
                         <p className="key">{D_trandingListHeader[0]}</p>
@@ -126,13 +139,13 @@ export default function TradingHistory() {
                           <img
                             className="arwImg"
                             src={
-                              (v.type === "high" && I_upArw3Green) ||
-                              (v.type === "low" && I_dnArw3Red)
+                              (v.side === "HIGH" && I_upArw3Green) ||
+                              (v.side === "LOW" && I_dnArw3Red)
                             }
                             alt=""
                           />
 
-                          <p>{v.order}</p>
+                          <p>{v.id}</p>
                         </span>
                       </div>
 
@@ -140,7 +153,7 @@ export default function TradingHistory() {
                         <p className="key">{D_trandingListHeader[2]}</p>
 
                         <span className="value">
-                          <p>{v.expiration}</p>
+                          <p>{moment(v.starting).diff(moment(v.expiry))}</p>
                         </span>
                       </div>
 
@@ -148,7 +161,7 @@ export default function TradingHistory() {
                         <p className="key">{D_trandingListHeader[3]}</p>
 
                         <span className="value">
-                          <p>#{v.asset}</p>
+                          <p>#{v.name}</p>
                         </span>
                       </div>
 
@@ -157,7 +170,9 @@ export default function TradingHistory() {
 
                         <span className="value">
                           <p>
-                            {moment(v.openTime).format("YYYY-MM-DD HH:mm:ss")}
+                            {moment
+                              .unix(v.starting)
+                              .format("YYYY-MM-DD HH:mm:ss")}
                           </p>
                         </span>
                       </div>
@@ -167,9 +182,9 @@ export default function TradingHistory() {
 
                         <span className="value">
                           <p>
-                            {moment(v.closingTime).format(
-                              "YYYY-MM-DD HH:mm:ss"
-                            )}
+                            {moment
+                              .unix(v.expiry)
+                              .format("YYYY-MM-DD HH:mm:ss")}
                           </p>
                         </span>
                       </div>
@@ -178,7 +193,7 @@ export default function TradingHistory() {
                         <p className="key">{D_trandingListHeader[6]}</p>
 
                         <span className="value">
-                          <p>{v.openPrice}</p>
+                          <p>{v.startingPrice}</p>
                         </span>
                       </div>
 
@@ -186,7 +201,7 @@ export default function TradingHistory() {
                         <p className="key">{D_trandingListHeader[7]}</p>
 
                         <span className="value">
-                          <p>{v.closingPrice}</p>
+                          <p>{v.endingPrice}</p>
                         </span>
                       </div>
 
@@ -194,7 +209,9 @@ export default function TradingHistory() {
                         <p className="key">{D_trandingListHeader[8]}</p>
 
                         <span className="value">
-                          <p>${v.tradeAmount.toLocaleString("eu", "US")}</p>
+                          <p>
+                            ${(v.amount / 10 ** 6).toLocaleString("eu", "US")}
+                          </p>
                         </span>
                       </div>
 
@@ -202,9 +219,13 @@ export default function TradingHistory() {
                         <p className="key">{D_trandingListHeader[9]}</p>
 
                         <span className="value">
-                          <p className="price">$11.31</p>
+                          <p className="price">{`$${
+                            v.profit_amount || "-"
+                          }`}</p>
                           &nbsp;
-                          <p className="percent">{`(${62}%)`}</p>
+                          <p className="percent">{`(${
+                            v.profit_percent || "-"
+                          }%)`}</p>
                         </span>
                       </div>
                     </li>
@@ -255,8 +276,8 @@ export default function TradingHistory() {
             {D_historyCategoryList.map((v, i) => (
               <li
                 key={i}
-                className={`${category === i && "on"}`}
-                onClick={() => setCategory(i)}
+                className={`${category === v && "on"}`}
+                onClick={() => setCategory(v)}
               >
                 {v}
               </li>
@@ -306,58 +327,64 @@ export default function TradingHistory() {
               </ul>
 
               <ul className="list">
-                {D_trandingList.map((v, i) => (
+                {listData.map((v, i) => (
                   <li key={i}>
                     <span>
                       <img className="timeImg" src={I_timeWhite} alt="" />
                       <img
                         className="arwImg"
                         src={
-                          (v.type === "high" && I_upArw3Green) ||
-                          (v.type === "low" && I_dnArw3Red)
+                          (v.side === "HIGH" && I_upArw3Green) ||
+                          (v.side === "LOW" && I_dnArw3Red)
                         }
                         alt=""
                       />
                     </span>
 
                     <span>
-                      <p>{v.order}</p>
+                      <p>{v.id}</p>
                     </span>
 
                     <span>
-                      <p>{v.expiration}</p>
+                      <p>{`M${
+                        moment(v.expiry).diff(moment(v.starting)) / 60
+                      }`}</p>
                     </span>
 
                     <span>
-                      <p>#{v.asset}</p>
-                    </span>
-
-                    <span>
-                      <p>{moment(v.openTime).format("YYYY-MM-DD HH:mm:ss")}</p>
+                      <p>#{v.name}</p>
                     </span>
 
                     <span>
                       <p>
-                        {moment(v.closingTime).format("YYYY-MM-DD HH:mm:ss")}
+                        {moment.unix(v.starting).format("YYYY-MM-DD HH:mm:ss")}
                       </p>
                     </span>
 
                     <span>
-                      <p>{v.openPrice}</p>
+                      <p>
+                        {moment.unix(v.expiry).format("YYYY-MM-DD HH:mm:ss")}
+                      </p>
                     </span>
 
                     <span>
-                      <p>{v.closingPrice}</p>
+                      <p>{v.startingPrice}</p>
                     </span>
 
                     <span>
-                      <p>${v.tradeAmount.toLocaleString("eu", "US")}</p>
+                      <p>{v.endingPrice}</p>
                     </span>
 
                     <span>
-                      <p className="price">$11.31</p>
+                      <p>${(v.amount / 10 ** 6).toLocaleString("eu", "US")}</p>
+                    </span>
+
+                    <span>
+                      <p className="price">{`$${v.profit_amount || "-"}`}</p>
                       &nbsp;
-                      <p className="percent">{`(${62}%)`}</p>
+                      <p className="percent">{`(${
+                        v.profit_percent || "-"
+                      }%)`}</p>
                     </span>
                   </li>
                 ))}
@@ -743,8 +770,8 @@ const PtradingHistoryBox = styled.main`
           }
 
           &:nth-of-type(2) {
-            width: 312px;
-            min-width: 312px;
+            width: 98px;
+            min-width: 98px;
           }
 
           &:nth-of-type(3) {
@@ -753,8 +780,8 @@ const PtradingHistoryBox = styled.main`
           }
 
           &:nth-of-type(4) {
-            width: 98px;
-            min-width: 98px;
+            width: 312px;
+            min-width: 312px;
           }
 
           &:nth-of-type(5) {

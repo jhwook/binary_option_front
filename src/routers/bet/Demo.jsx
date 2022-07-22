@@ -319,7 +319,7 @@ export default function Demo({ socket }) {
                         <button
                           className="highBtn"
                           disabled={!amount}
-                          onClick={() => onClickPayBtn("high")}
+                          onClick={() => onClickPayBtn("HIGH")}
                         >
                           <img src={I_highArwGreen} alt="" />
                           <p>HIGH</p>
@@ -342,7 +342,7 @@ export default function Demo({ socket }) {
                         <button
                           className="lowBtn"
                           disabled={!amount}
-                          onClick={() => onClickPayBtn("low")}
+                          onClick={() => onClickPayBtn("LOW")}
                         >
                           <img src={I_lowArwRed} alt="" />
                           <p>LOW</p>
@@ -555,7 +555,7 @@ export default function Demo({ socket }) {
                       <button
                         className="highBtn"
                         disabled={!amount}
-                        onClick={() => onClickPayBtn("high")}
+                        onClick={() => onClickPayBtn("HIGH")}
                       >
                         <span className="defaultBox">
                           <img src={I_highArwGreen} alt="" />
@@ -595,7 +595,7 @@ export default function Demo({ socket }) {
                       <button
                         className="lowBtn"
                         disabled={!amount}
-                        onClick={() => onClickPayBtn("low")}
+                        onClick={() => onClickPayBtn("LOW")}
                       >
                         <span className="defaultBox">
                           <img src={I_lowArwRed} alt="" />

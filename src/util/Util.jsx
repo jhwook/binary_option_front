@@ -122,7 +122,7 @@ export function onClickCopy(str) {
 
 export function setToast({ type, cont, amount }) {
   switch (type) {
-    case "high":
+    case "HIGH":
       toast(
         <div className="customBox">
           <p className="title">Trade order placed</p>
@@ -149,7 +149,7 @@ export function setToast({ type, cont, amount }) {
         }
       );
       break;
-    case "low":
+    case "LOW":
       toast(
         <div className="customBox">
           <p className="title">Trade order placed</p>

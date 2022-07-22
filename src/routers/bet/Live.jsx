@@ -351,11 +351,11 @@ export default function Live() {
 
                         <p className="rate">
                           {`+${getDividFromData({
-                            id: assetInfo.id,
+                            id: assetInfo?.id,
                             _case: "highRate",
                             dataObj: dividObj,
                           })}%  ${getDividFromData({
-                            id: assetInfo.id,
+                            id: assetInfo?.id,
                             _case: "highAmount",
                             dataObj: dividObj,
                           })}`}
@@ -374,11 +374,11 @@ export default function Live() {
 
                         <p className="rate">
                           {`+${getDividFromData({
-                            id: assetInfo.id,
+                            id: assetInfo?.id,
                             _case: "lowRate",
                             dataObj: dividObj,
                           })}%  ${getDividFromData({
-                            id: assetInfo.id,
+                            id: assetInfo?.id,
                             _case: "lowAmount",
                             dataObj: dividObj,
                           })}`}
@@ -599,13 +599,13 @@ export default function Live() {
 
                         <span className="hoverBox">
                           <strong className="percent">{`+${getDividFromData({
-                            id: assetInfo.id,
+                            id: assetInfo?.id,
                             _case: "highRate",
                             dataObj: dividObj,
                           })}%`}</strong>
                           <p className="amount">
                             {getDividFromData({
-                              id: assetInfo.id,
+                              id: assetInfo?.id,
                               _case: "highAmount",
                               dataObj: dividObj,
                             })}
@@ -613,11 +613,11 @@ export default function Live() {
 
                           <p className="hoverPopup" ref={hoverRef1}>
                             {`Dividend rate : +${getDividFromData({
-                              id: assetInfo.id,
+                              id: assetInfo?.id,
                               _case: "highRate",
                               dataObj: dividObj,
                             })}%  ${getDividFromData({
-                              id: assetInfo.id,
+                              id: assetInfo?.id,
                               _case: "highAmount",
                               dataObj: dividObj,
                             })} USD`}
@@ -639,13 +639,13 @@ export default function Live() {
 
                         <span className="hoverBox">
                           <strong className="percent">{`+${getDividFromData({
-                            id: assetInfo.id,
+                            id: assetInfo?.id,
                             _case: "lowRate",
                             dataObj: dividObj,
                           })}%`}</strong>
                           <p className="amount">
                             {getDividFromData({
-                              id: assetInfo.id,
+                              id: assetInfo?.id,
                               _case: "lowAmount",
                               dataObj: dividObj,
                             })}
@@ -653,11 +653,11 @@ export default function Live() {
 
                           <p className="hoverPopup" ref={hoverRef2}>
                             {`Dividend rate : +${getDividFromData({
-                              id: assetInfo.id,
+                              id: assetInfo?.id,
                               _case: "lowRate",
                               dataObj: dividObj,
                             })}%  ${getDividFromData({
-                              id: assetInfo.id,
+                              id: assetInfo?.id,
                               _case: "lowAmount",
                               dataObj: dividObj,
                             })} USD`}
