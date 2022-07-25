@@ -103,9 +103,7 @@ export default function Closed() {
                             </span>
 
                             <p
-                              className={`${1.05 > 0 && "plus"} ${
-                                1.05 < 0 && "minus"
-                              } benefit`}
+                              className={`${getPreResult(detV)} benefit`}
                             >{`$${(
                               (detV.endingPrice - detV.startingPrice) *
                               detV.diffRate
@@ -169,9 +167,8 @@ export default function Closed() {
                                 </li>
                                 <li>
                                   <p className="key">Profit</p>
-                                  <p className="value">{`$${(
-                                    (detV.amount * detV.diffRate) /
-                                    10 ** 6
+                                  <p className="value">{`$${Number(
+                                    detV.profit_amount
                                   ).toFixed(2)}`}</p>
                                 </li>
                               </ul>
@@ -315,9 +312,8 @@ export default function Closed() {
                                 </li>
                                 <li>
                                   <p className="key">Profit</p>
-                                  <p className="value">{`$${(
-                                    (detV.amount * detV.diffRate) /
-                                    10 ** 6
+                                  <p className="value">{`$${Number(
+                                    detV.profit_amount
                                   ).toFixed(2)}`}</p>
                                 </li>
                               </ul>

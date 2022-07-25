@@ -28,11 +28,11 @@ export default function MyPosition() {
               <ul className="balanceList">
                 <li>
                   <p className="key">Total</p>
-                  <strong className="value">60 USD</strong>
+                  <strong className="value">60 USDT</strong>
                 </li>
                 <li>
                   <p className="key">safe balance</p>
-                  <strong className="value">60 USD</strong>
+                  <strong className="value">60 USDT</strong>
                 </li>
               </ul>
             </article>
@@ -121,11 +121,11 @@ export default function MyPosition() {
             <ul className="balanceList">
               <li>
                 <p className="key">Total</p>
-                <strong className="value">60 USD</strong>
+                <strong className="value">60 USDT</strong>
               </li>
               <li>
                 <p className="key">safe balance</p>
-                <strong className="value">60 USD</strong>
+                <strong className="value">60 USDT</strong>
               </li>
             </ul>
           </article>

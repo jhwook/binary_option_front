@@ -620,7 +620,7 @@ export default function Live() {
                               id: assetInfo?.id,
                               _case: "highAmount",
                               dataObj: dividObj,
-                            })} USD`}
+                            })} USDT`}
                           </p>
                         </span>
                       </button>
@@ -660,7 +660,7 @@ export default function Live() {
                               id: assetInfo?.id,
                               _case: "lowAmount",
                               dataObj: dividObj,
-                            })} USD`}
+                            })} USDT`}
                           </p>
                         </span>
                       </button>

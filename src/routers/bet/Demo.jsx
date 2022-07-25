@@ -585,7 +585,7 @@ export default function Demo({ socket }) {
                               id: assetInfo.id,
                               _case: "highAmount",
                               dataObj: dividObj,
-                            })} USD`}
+                            })} USDT`}
                           </p>
                         </span>
                       </button>
@@ -625,7 +625,7 @@ export default function Demo({ socket }) {
                               id: assetInfo.id,
                               _case: "lowAmount",
                               dataObj: dividObj,
-                            })} USD`}
+                            })} USDT`}
                           </p>
                         </span>
                       </button>

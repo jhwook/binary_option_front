@@ -44,7 +44,7 @@ export default function AddPopup({ off }) {
                 placeholder=""
               />
 
-              <p className="unit">USD</p>
+              <p className="unit">USDT</p>
             </div>
           </div>
 
@@ -77,7 +77,7 @@ export default function AddPopup({ off }) {
                 placeholder=""
               />
 
-              <p className="unit">USD</p>
+              <p className="unit">USDT</p>
             </div>
           </div>
 

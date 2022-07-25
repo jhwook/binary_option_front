@@ -115,11 +115,10 @@ export default function Opened({ socket }) {
                           <p>{`$${v.amount / 10 ** 6}`}</p>
                         </span>
 
-                        <p
-                          className={`${1.05 > 0 && "plus"} ${
-                            1.05 < 0 && "minus"
-                          } benefit`}
-                        >{`$${(1.05).toFixed(2)}`}</p>
+                        <p className={`${getPreResult(v)} benefit`}>{`$${(
+                          (v.endingPrice - v.startingPrice) *
+                          v.diffRate
+                        ).toFixed(2)}`}</p>
 
                         <p className="time">
                           {moment(moment.unix(v.expiry).diff(now)).format(
