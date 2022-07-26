@@ -11,7 +11,6 @@ import axios from "axios";
 import { API } from "../../configs/api";
 import { gCliId } from "../../configs/setting";
 import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -109,6 +108,10 @@ export default function Login() {
       .catch((err) => console.error(err));
   }
 
+  function onKeyDown(e) {
+    if (e.key === "Enter") onClickLoginBtn();
+  }
+
   useEffect(() => {
     setUserData(D_joinData);
   }, [category]);
@@ -196,7 +199,7 @@ export default function Login() {
   else
     return (
       <>
-        <PloginBox>
+        <PloginBox onKeyDown={onKeyDown}>
           <section className="innerBox">
             <div className="titleBox">
               <strong className="pgTitle">Betbit Account Login</strong>

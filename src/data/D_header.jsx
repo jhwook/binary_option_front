@@ -37,7 +37,7 @@ export const D_headerList = [
 export const D_moreList = [
   { key: "Twitter" },
   { key: "Medium" },
-  { key: "Doscord" },
+  { key: "Discord" },
 ];
 
 export const D_lngList = [

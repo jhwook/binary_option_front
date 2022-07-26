@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { D_joinData, D_loginCategoryList } from "../../../data/D_auth";
-import Email from "../../../components/auth/Email";
-import Phone from "../../../components/auth/Phone";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import { API } from "../../../configs/api";
@@ -11,7 +8,6 @@ import B_referral from "../../../img/bg/auth/signup/B_referral.svg";
 
 export default function Referral() {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
 
   const isMobile = useSelector((state) => state.common.isMobile);
 

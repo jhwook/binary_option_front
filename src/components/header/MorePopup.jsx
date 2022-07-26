@@ -30,7 +30,7 @@ export default function MorePopup({ off }) {
       <li onClick={() => onClickCont()}>
         <img src={I_discord} alt="" />
 
-        <p>Doscord</p>
+        <p>Discord</p>
       </li>
 
       <li onClick={() => onClickCont(navigate("/qna"))}>

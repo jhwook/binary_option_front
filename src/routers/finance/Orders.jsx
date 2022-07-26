@@ -61,8 +61,7 @@ export default function Orders() {
     });
 
     socket.on("transactions", (res) => {
-      console.log("transactions");
-      console.log(res);
+      console.log("transactions", res);
 
       if (res) {
         setToast({ type: "alarm", cont: "Submission Successful" });
@@ -73,8 +72,7 @@ export default function Orders() {
     });
 
     socket.emit("transactions", { type: "USDT", txId: data.id }, (res) => {
-      console.log("emit");
-      console.log(res);
+      console.log("emit", res);
     });
   }
 
@@ -114,8 +112,6 @@ export default function Orders() {
           })
           .then((resp) => {
             if (resp) {
-              //Success
-
               setToast({ type: "alarm", cont: "Submission Successful" });
               setTimeout(() => {
                 window.location.reload(false);
@@ -147,8 +143,6 @@ export default function Orders() {
       console.error(err);
       return;
     }
-
-    console.log("s");
 
     if (isMobile) moDirectPayment(forex, data, i);
     else directPayment(forex, data, i);

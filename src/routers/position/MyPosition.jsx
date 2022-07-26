@@ -31,7 +31,7 @@ export default function MyPosition() {
                   <strong className="value">60 USDT</strong>
                 </li>
                 <li>
-                  <p className="key">safe balance</p>
+                  <p className="key">Safe Balance</p>
                   <strong className="value">60 USDT</strong>
                 </li>
               </ul>
@@ -124,7 +124,7 @@ export default function MyPosition() {
                 <strong className="value">60 USDT</strong>
               </li>
               <li>
-                <p className="key">safe balance</p>
+                <p className="key">Safe Balance</p>
                 <strong className="value">60 USDT</strong>
               </li>
             </ul>

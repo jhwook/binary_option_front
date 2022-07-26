@@ -5,7 +5,6 @@ import { API } from "../../configs/api";
 import L_loader from "../../img/loader/L_loader.png";
 import I_alarmYellow from "../../img/icon/I_alarmYellow.svg";
 import T_usdt from "../../img/token/T_usdt.png";
-import T_usdc from "../../img/token/T_usdc.png";
 import TokenSelectPopup from "../../components/common/TokenSelectPopup";
 
 import { setToast, strDot } from "../../util/Util";
@@ -44,8 +43,6 @@ export default function WithDrawal() {
           tokentype: token.text,
         })
         .then(async ({ data }) => {
-          console.log(data);
-          console.log(data.payload);
           console.log(data.payload.resp);
           if (data.payload.resp.status == "OK") {
             if (data.payload.resp.message) {

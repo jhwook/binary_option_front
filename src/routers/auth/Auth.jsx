@@ -17,11 +17,11 @@ export default function Auth() {
         <Route path="/" element={<Index />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/signup/referral" element={<Referral />} />
 
         <Route path="/resetpw" element={<ResetPw />} />
         <Route path="/setpw/:code" element={<SetPw />} />
         <Route path="/comppw" element={<CompPw />} />
-        <Route path="/signup/referral" element={<Referral />} />
       </Routes>
     </>
   );

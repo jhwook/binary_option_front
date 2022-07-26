@@ -141,7 +141,6 @@ export default function ProfPopup({ off, offAll, userData }) {
           <img className="tierImg" src={GetTier("gold")} alt="" />
 
           <div className="textBox">
-            {console.log(userData)}
             <p className="id">
               {userData.firstname + ", " + userData.lastname}
             </p>
@@ -393,14 +392,12 @@ const PprofPopupBox = styled.section`
   flex-direction: column;
   width: 380px;
   padding: 24px 30px 34px;
-  background: rgba(255, 255, 255, 0.2);
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: #22262e;
   border-radius: 20px;
-  box-shadow: inset 0px 3px 3px rgba(255, 255, 255, 0.4),
-    0px 10px 40px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
-  top: 60px;
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.8);
+  top: 70px;
   right: 30px;
   bottom: 30px;
   position: fixed;

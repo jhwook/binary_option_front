@@ -1,6 +1,5 @@
 import moment from "moment";
 import styled from "styled-components";
-import { D_openedList } from "../../../data/D_bet";
 import I_highArwGreen from "../../../img/icon/I_highArwGreen.svg";
 import I_lowArwRed from "../../../img/icon/I_lowArwRed.svg";
 import E_Closedchart from "../../../img/example/bet/E_Closedchart.svg";

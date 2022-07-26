@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { D_securityList, D_securityListHeader } from "../../data/D_setting";
+import { D_securityListHeader } from "../../data/D_setting";
 import moment from "moment";
 import I_ltArwWhite from "../../img/icon/I_ltArwWhite.svg";
 import I_rtArwWhite from "../../img/icon/I_rtArwWhite.svg";
@@ -220,7 +220,7 @@ export default function Security() {
 
 const MsecurityBox = styled.main`
   height: 100%;
-  
+
   .innerBox {
     display: flex;
     flex-direction: column;

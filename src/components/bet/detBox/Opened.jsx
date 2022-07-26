@@ -8,7 +8,7 @@ import { setOpenedData } from "../../../reducers/bet";
 import { socketIo } from "../../../util/socket";
 import { getDividFromData } from "../../../util/Util";
 
-export default function Opened({ socket }) {
+export default function Opened() {
   const dispatch = useDispatch();
   const isMobile = useSelector((state) => state.common.isMobile);
   const betFlag = useSelector((state) => state.bet.betFlag);
@@ -150,7 +150,7 @@ export default function Opened({ socket }) {
                           </li>
 
                           <li>
-                            <p className="key">ClosingTime</p>
+                            <p className="key">Closing Time</p>
                             <p className="value">
                               {moment.unix(v.expiry).format("hh:mm:ss")}
                             </p>
@@ -282,7 +282,7 @@ export default function Opened({ socket }) {
                           </li>
 
                           <li>
-                            <p className="key">ClosingTime</p>
+                            <p className="key">Closing Time</p>
                             <p className="value">
                               {moment.unix(v.expiry).format("hh:mm:ss")}
                             </p>

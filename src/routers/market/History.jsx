@@ -11,7 +11,6 @@ import moment from "moment";
 import {
   D_historyListHeader,
   D_historyCategoryList,
-  D_historyList,
 } from "../../data/D_market";
 import renderCustomHeader from "../../util/DatePickerHeader";
 import { useSelector } from "react-redux";

@@ -120,7 +120,7 @@ export function onClickCopy(str) {
   document.body.removeChild(textArea);
 }
 
-export function setToast({ type, cont, amount }) {
+export function setToast({ type, cont, assetInfo, amount }) {
   switch (type) {
     case "HIGH":
       toast(
@@ -129,7 +129,7 @@ export function setToast({ type, cont, amount }) {
 
           <ul className="infoList">
             <li>
-              <strong>Bitcoin</strong>
+              <strong>{assetInfo.name}</strong>
               <img src={I_highArwGreen} alt="" />
             </li>
 
@@ -156,7 +156,7 @@ export function setToast({ type, cont, amount }) {
 
           <ul className="infoList">
             <li>
-              <strong>Bitcoin</strong>
+              <strong>{assetInfo.name}</strong>
               <img src={I_lowArwRed} alt="" />
             </li>
 
@@ -303,6 +303,8 @@ export function getDividFromData({ id, _case, dataObj }) {
 
     case "lowAmount":
       return Math.floor(_targetData.low_side_amount * 100) / 100;
+    case "betCount":
+      return _targetData.bet_count;
 
     default:
       break;

@@ -10,7 +10,6 @@ import TimeOutPopup from "./TimeOutPopup";
 export default function ConfirmCny({ setConfirm, amount, setOk }) {
   const isMobile = useSelector((state) => state.common.isMobile);
   let time = 1800;
-  // let time = 1;
 
   const [limit, setLimit] = useState(time);
   const [confirmationPopup, setConfirmationPopup] = useState(false);

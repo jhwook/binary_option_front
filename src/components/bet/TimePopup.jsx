@@ -39,7 +39,10 @@ export default function TimePopup({ off, duration, setDuration }) {
       <PtimePopupBox>
         <ul className="timeList">
           <li>
-            <button className="plusBtn setBtn" onClick={() => onClickSetBtn(60)}>
+            <button
+              className="plusBtn setBtn"
+              onClick={() => onClickSetBtn(60)}
+            >
               <img src={I_plusWhite} alt="" />
             </button>
 
@@ -129,13 +132,9 @@ const MtimePopupBox = styled.section`
 const PtimePopupBox = styled.section`
   width: 202px;
   padding: 20px 16px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1.4px solid rgba(255, 255, 255, 0.14);
-  border-radius: 20px;
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
-  box-shadow: inset 0px 3px 3px rgba(255, 255, 255, 0.4),
-    0px 10px 40px rgba(0, 0, 0, 0.2);
+  background: #22262e;
+  border-radius: 16px;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.8);
   top: 0;
   right: 170px;
   position: absolute;

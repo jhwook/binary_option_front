@@ -28,10 +28,10 @@ export default function Setting() {
     return (
       <MmarketBox>
         <Routes>
-          <Route path="/prof" element={<MyProfile />} />
-          <Route path="/referral" element={<Referral />} />
-          <Route path="/noti" element={<Notifications />} />
-          <Route path="/security" element={<Security />} />
+          <Route path="/prof" element={<MyProfile userData={userData} />} />
+          <Route path="/referral" element={<Referral userData={userData} />} />
+          <Route path="/noti" element={<Notifications userData={userData} />} />
+          <Route path="/security" element={<Security userData={userData} />} />
         </Routes>
       </MmarketBox>
     );

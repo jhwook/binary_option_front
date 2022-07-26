@@ -113,7 +113,7 @@ export default function Live() {
 
     switch (amountMode) {
       case "int":
-        if (amount <= 0) throw "Not Possible Percent";
+        if (amount <= 0) throw "Not Possible Balance";
 
         if (balance.data.respdata.LIVE.avail / 10 ** 6 < amount) {
           setInsufficientPopup(true);
@@ -149,7 +149,7 @@ export default function Live() {
 
         dispatch(setBetFlag());
 
-        setToast({ type, amount });
+        setToast({ type,assetInfo, amount });
       })
       .catch((err) => console.error(err));
   }

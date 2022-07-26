@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { D_locNumList, D_loginCategoryList } from "../../data/D_auth";
+import { D_loginCategoryList } from "../../data/D_auth";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
 import I_dnPol from "../../img/icon/I_dnPol.svg";
 import { useNavigate } from "react-router";

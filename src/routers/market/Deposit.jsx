@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
 import T_usdt from "../../img/token/T_usdt.png";
-import T_usdc from "../../img/token/T_usdc.png";
 import T_CNY from "../../img/token/T_CNY.png";
 import L_loader from "../../img/loader/L_loader.png";
 import { useSelector } from "react-redux";
@@ -440,7 +439,7 @@ export default function Deposit({ userData }) {
                   </li>
                   <li>
                     <p className="key">Max amount per transaction</p>
-                    <p className="value">0no limits</p>
+                    <p className="value">no limits</p>
                   </li>
                 </ul>
 
