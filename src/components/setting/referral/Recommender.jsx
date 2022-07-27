@@ -357,7 +357,7 @@ const PrecommenderBox = styled.div`
       border-radius: 50%;
 
       &:disabled {
-        opacity: 0.4;
+        opacity: 0.2;
       }
     }
 

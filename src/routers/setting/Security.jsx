@@ -315,7 +315,7 @@ const MsecurityBox = styled.main`
           border-radius: 50%;
 
           &:disabled {
-            opacity: 0.4;
+            opacity: 0.2;
           }
         }
 
@@ -481,7 +481,7 @@ const PsecurityBox = styled.main`
           border-radius: 50%;
 
           &:disabled {
-            opacity: 0.4;
+            opacity: 0.2;
           }
         }
 

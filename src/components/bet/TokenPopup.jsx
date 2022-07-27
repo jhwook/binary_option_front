@@ -51,12 +51,6 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
     axios
       .post(`${API.BOOKMARKS}/assets/${v.id}`)
       .then((res) => {
-        let _data = listData;
-        let targetIndex = listData.findIndex((e) => {
-          console.log(e, v);
-          return e.id === v.id;
-        });
-
         getAssetList();
         getBookMark();
       })
@@ -67,9 +61,9 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
     axios
       .get(`${API.GET_ASSETS}`, { params: { group: category } })
       .then(({ data }) => {
-        console.log(data.respdata);
-        setListData(data.respdata);
-        dispatch(setTokenPopupData(data.respdata));
+        console.log(data.resp);
+        setListData(data.resp);
+        dispatch(setTokenPopupData(data.resp));
       })
       .catch((err) => console.error(err));
   }
@@ -120,55 +114,47 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
 
         <article className="listArea">
           <ul className="tokenList">
-            {listData
-              .filter((v) => v.bookmark)
-              .map((v, i) => (
+            {listData.map((v, i) => {
+              let _percent = getDividFromData({
+                id: v.id,
+                _case: "totalRate",
+                dataObj: dividObj,
+              });
+
+              let _congestion = getDividFromData({
+                id: v.id,
+                _case: "betCount",
+                dataObj: dividObj,
+              });
+
+              return (
                 <li key={i} onClick={() => onClickStock(v)}>
                   <button
                     className="favBtn"
                     onClick={(e) => onClickFavBtn(e, v)}
                   >
-                    <img src={I_starYellowO} alt="" />
+                    <img
+                      src={v.bookmark ? I_starYellowO : I_starYellow}
+                      alt=""
+                    />
                   </button>
 
                   <img className="tknImg" src={v.imgurl} alt="" />
 
-                  <p className="name">{v.name}</p>
+                  <span className="nameBox">
+                    <p className="name">{v.name}</p>
 
-                  <p className="percent">{`${
-                    getDividFromData({
-                      id: v.id,
-                      _case: "totalRate",
-                      dataObj: dividObj,
-                    }) || "-"
-                  }%`}</p>
+                    {category === "crypto" && (
+                      <p className="inital">{v.baseAsset}</p>
+                    )}
+                  </span>
+
+                  <p
+                    className={`${_congestion >= 50 ? "red" : "green"} percent`}
+                  >{`${_percent}%`}</p>
                 </li>
-              ))}
-
-            {listData
-              .filter((v) => !v.bookmark)
-              .map((v, i) => (
-                <li key={i} onClick={() => onClickStock(v)}>
-                  <button
-                    className="favBtn"
-                    onClick={(e) => onClickFavBtn(e, v)}
-                  >
-                    <img src={I_starYellow} alt="" />
-                  </button>
-
-                  <img className="tknImg" src={v.imgurl} alt="" />
-
-                  <p className="name">{v.name}</p>
-
-                  <p className="percent">{`${
-                    getDividFromData({
-                      id: v.id,
-                      _case: "totalRate",
-                      dataObj: dividObj,
-                    }) || "-"
-                  }%`}</p>
-                </li>
-              ))}
+              );
+            })}
           </ul>
         </article>
 
@@ -219,91 +205,47 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
 
         <article className="listArea">
           <ul className="tokenList">
-            {listData
-              .filter((v) => v.bookmark)
-              .map((v, i) => {
-                let _percent = getDividFromData({
-                  id: v.id,
-                  _case: "totalRate",
-                  dataObj: dividObj,
-                });
+            {listData.map((v, i) => {
+              let _percent = getDividFromData({
+                id: v.id,
+                _case: "totalRate",
+                dataObj: dividObj,
+              });
 
-                let _congestion = getDividFromData({
-                  id: v.id,
-                  _case: "betCount",
-                  dataObj: dividObj,
-                });
+              let _congestion = getDividFromData({
+                id: v.id,
+                _case: "betCount",
+                dataObj: dividObj,
+              });
 
-                return (
-                  <li key={i} onClick={() => onClickStock(v)}>
-                    <button
-                      className="favBtn"
-                      onClick={(e) => onClickFavBtn(e, v)}
-                    >
-                      <img src={I_starYellow} alt="" />
-                    </button>
+              return (
+                <li key={i} onClick={() => onClickStock(v)}>
+                  <button
+                    className="favBtn"
+                    onClick={(e) => onClickFavBtn(e, v)}
+                  >
+                    <img
+                      src={v.bookmark ? I_starYellowO : I_starYellow}
+                      alt=""
+                    />
+                  </button>
 
-                    <img className="tknImg" src={v.imgurl} alt="" />
+                  <img className="tknImg" src={v.imgurl} alt="" />
 
-                    <span className="nameBox">
-                      <p className="name">{v.name}</p>
+                  <span className="nameBox">
+                    <p className="name">{v.name}</p>
 
-                      {category === "crypto" && (
-                        <p className="inital">{v.baseAsset}</p>
-                      )}
-                    </span>
+                    {category === "crypto" && (
+                      <p className="inital">{v.baseAsset}</p>
+                    )}
+                  </span>
 
-                    <p
-                      className={`${
-                        _congestion >= 50 ? "red" : "green"
-                      } percent`}
-                    >{`${_percent}%`}</p>
-                  </li>
-                );
-              })}
-
-            {listData
-              .filter((v) => !v.bookmark)
-              .map((v, i) => {
-                let _percent = getDividFromData({
-                  id: v.id,
-                  _case: "totalRate",
-                  dataObj: dividObj,
-                });
-
-                let _congestion = getDividFromData({
-                  id: v.id,
-                  _case: "betCount",
-                  dataObj: dividObj,
-                });
-
-                return (
-                  <li key={i} onClick={() => onClickStock(v)}>
-                    <button
-                      className="favBtn"
-                      onClick={(e) => onClickFavBtn(e, v)}
-                    >
-                      <img src={I_starYellow} alt="" />
-                    </button>
-
-                    <img className="tknImg" src={v.imgurl} alt="" />
-
-                    <span className="nameBox">
-                      <p className="name">{v.name}</p>
-
-                      {category === "crypto" && (
-                        <p className="inital">{v.baseAsset}</p>
-                      )}
-                    </span>
-
-                    <p
-                      className={`${
-                        _congestion >= 50 ? "red" : "green"
-                      } percent`}
-                    >{`${_percent}%`}</p>
-                  </li>
-                );
-              })}
+                  <p
+                    className={`${_congestion >= 50 ? "red" : "green"} percent`}
+                  >{`${_percent}%`}</p>
+                </li>
+              );
+            })}
           </ul>
         </article>
       </PtokenPopupBox>
@@ -425,8 +367,39 @@ const MtokenPopupBox = styled.section`
           height: 34px;
         }
 
-        .name {
+        p {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+
+        .nameBox {
           flex: 1;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+
+          .name {
+          }
+
+          .inital {
+            padding: 4px;
+            font-size: 12px;
+            line-height: 20px;
+            color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+          }
+        }
+
+        .percent {
+          &.red {
+            color: #ff5353;
+          }
+
+          &.green {
+            color: #3fb68b;
+          }
         }
       }
     }

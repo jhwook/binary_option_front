@@ -6,6 +6,7 @@ import { D_financeNavList } from "../../data/D_setting";
 import Data from "./Data";
 import { useSelector } from "react-redux";
 import Orders from "./Orders";
+import CashBack from "./CashBack";
 
 export default function Finance() {
   const isMobile = useSelector((state) => state.common.isMobile);
@@ -15,6 +16,7 @@ export default function Finance() {
       <MfinanceBox>
         <Routes>
           <Route path="/data" element={<Data />} />
+          <Route path="/data/cashback" element={<CashBack />} />
           <Route path="/orders" element={<Orders />} />
         </Routes>
       </MfinanceBox>
@@ -28,6 +30,7 @@ export default function Finance() {
 
         <Routes>
           <Route path="/data" element={<Data />} />
+          <Route path="/data/cashback" element={<CashBack />} />
           <Route path="/orders" element={<Orders />} />
         </Routes>
       </PfinanceBox>

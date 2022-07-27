@@ -1,5 +1,9 @@
 import I_cubeWhite from "../img/icon/I_cubeWhite.svg";
 import I_historyWhite from "../img/icon/I_historyWhite.svg";
+import T_bronze from "../img/tier/T_bronze.svg";
+import T_silver from "../img/tier/T_silver.svg";
+import T_gold from "../img/tier/T_gold.svg";
+import T_dia from "../img/tier/T_dia.svg";
 
 export const D_posNavList = [
   {
@@ -128,5 +132,24 @@ export const D_trandingList = [
     openPrice: 181.124,
     closingPrice: 181.122,
     tradeAmount: 100,
+  },
+];
+
+export const D_rateList = [
+  {
+    img: T_dia,
+    name: "Diamond",
+  },
+  {
+    img: T_gold,
+    name: "Gold",
+  },
+  {
+    img: T_silver,
+    name: "Silver",
+  },
+  {
+    img: T_bronze,
+    name: "Bronze",
   },
 ];

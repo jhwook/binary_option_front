@@ -13,6 +13,7 @@ export const API = {
   USER_BALANCE: URL + "/users/balance", //:type
   USER_PREDEPOSIT: URL + "/users/predeposit",
   USER_BETLOGS: URL + "/users/betlogs", //:type/:offset/:limit
+  USER_DEMO_TOKEN: URL + "/users/demo/token",
 
   GET_ASSETS: URL + "/assets/list",
 

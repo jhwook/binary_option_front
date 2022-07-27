@@ -1,6 +1,8 @@
-import { useEffect } from "react";
+import axios from "axios";
+import { useEffect, useLayoutEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Route, Routes, Navigate } from "react-router";
+import { API } from "../../configs/api";
 import { setDividObj } from "../../reducers/bet";
 import { socketIo, connectSocketIo } from "../../util/socket";
 import Demo from "./Demo";
@@ -8,6 +10,7 @@ import Live from "./Live";
 
 export default function Bet() {
   const dispatch = useDispatch();
+  const token = localStorage.getItem("token");
 
   function getBetSocket() {
     connectSocketIo();
@@ -21,6 +24,27 @@ export default function Bet() {
       console.log("bet", res);
     });
   }
+
+  function getDemoToken() {
+    if (token) return;
+
+    axios
+      .get(`${API.USER_DEMO_TOKEN}`)
+      .then(({ data }) => {
+        console.log(data.token);
+
+        localStorage.setItem("demoToken", data.token);
+      })
+      .catch((err) => console.error(err));
+  }
+
+  useLayoutEffect(() => {
+    getDemoToken();
+
+    return () => {
+      localStorage.removeItem("demoToken");
+    };
+  }, []);
 
   useEffect(() => {
     getBetSocket();

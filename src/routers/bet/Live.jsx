@@ -59,8 +59,8 @@ export default function Live() {
         params: { group: D_tokenCategoryList[1].value },
       })
       .then(({ data }) => {
-        console.log(data.respdata);
-        setAssetInfo(data.respdata[0]);
+        console.log(data.resp);
+        setAssetInfo(data.resp[0]);
       })
       .catch((err) => console.error(err));
   }
@@ -149,7 +149,7 @@ export default function Live() {
 
         dispatch(setBetFlag());
 
-        setToast({ type,assetInfo, amount });
+        setToast({ type, assetInfo, amount });
       })
       .catch((err) => console.error(err));
   }

@@ -33,6 +33,9 @@ export default function Demo({ socket }) {
   const hoverRef1 = useRef();
   const hoverRef2 = useRef();
   const dispatch = useDispatch();
+  const token = localStorage.getItem("token");
+  const demoToken = localStorage.getItem("demoToken");
+
   const isMobile = useSelector((state) => state.common.isMobile);
   const openedData = useSelector((state) => state.bet.openedData);
   const tokenPopupData = useSelector((state) => state.bet.tokenPopupData);
@@ -57,8 +60,8 @@ export default function Demo({ socket }) {
         params: { group: D_tokenCategoryList[1].value },
       })
       .then(({ data }) => {
-        console.log(data.respdata);
-        setAssetInfo(data.respdata[0]);
+        console.log(data.resp);
+        setAssetInfo(data.resp[0]);
       })
       .catch((err) => console.error(err));
   }
@@ -80,9 +83,6 @@ export default function Demo({ socket }) {
   }
 
   async function getBalance() {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
     return axios.get(`${API.USER_BALANCE}`);
   }
 
@@ -121,7 +121,7 @@ export default function Demo({ socket }) {
     }
 
     axios
-      .post(`${API.BETS}/DEMO/${assetInfo.id}/${_amount}/${duration}/${type}`)
+      .post(`${API.BETS}/DEMO/${assetInfo?.id}/${_amount}/${duration}/${type}`)
       .then((res) => {
         console.log(res);
 
@@ -180,6 +180,8 @@ export default function Demo({ socket }) {
   }, []);
 
   useEffect(() => {
+    if (demoToken) axios.defaults.headers.Authorization = demoToken;
+
     getAssetList();
 
     getBookMark();
@@ -214,7 +216,7 @@ export default function Demo({ socket }) {
                 <article className="contArea">
                   <div className="chartBox">
                     <ReactTradingviewWidget
-                      symbol={assetInfo.dispSymbol}
+                      symbol={assetInfo?.dispSymbol}
                       theme={Themes.DARK}
                       locale="kr"
                       autosize
@@ -230,7 +232,7 @@ export default function Demo({ socket }) {
                             className="tokenBtn"
                             onClick={() => setTokenPopup(true)}
                           >
-                            <p>{assetInfo.name}</p>
+                            <p>{assetInfo?.name}</p>
                             <img src={I_dnPolWhite} alt="" />
                           </button>
 
@@ -327,11 +329,11 @@ export default function Demo({ socket }) {
 
                         <p className="rate">
                           {`+${getDividFromData({
-                            id: assetInfo.id,
+                            id: assetInfo?.id,
                             _case: "highRate",
                             dataObj: dividObj,
                           })}%  ${getDividFromData({
-                            id: assetInfo.id,
+                            id: assetInfo?.id,
                             _case: "highAmount",
                             dataObj: dividObj,
                           })}`}
@@ -350,11 +352,11 @@ export default function Demo({ socket }) {
 
                         <p className="rate">
                           {`+${getDividFromData({
-                            id: assetInfo.id,
+                            id: assetInfo?.id,
                             _case: "lowRate",
                             dataObj: dividObj,
                           })}%  ${getDividFromData({
-                            id: assetInfo.id,
+                            id: assetInfo?.id,
                             _case: "lowAmount",
                             dataObj: dividObj,
                           })}`}
@@ -419,7 +421,7 @@ export default function Demo({ socket }) {
                       className="selectBtn"
                       onClick={() => setTokenPopup(true)}
                     >
-                      <p>{assetInfo.name}</p>
+                      <p>{assetInfo?.name}</p>
                       <img src={I_dnPolWhite} alt="" />
                     </button>
 
@@ -455,7 +457,7 @@ export default function Demo({ socket }) {
                     <div className="chart">
                       <ReactTradingviewWidget
                         container_id={"technical-analysis-chart-demo"}
-                        symbol={assetInfo.dispSymbol}
+                        symbol={assetInfo?.dispSymbol}
                         theme={Themes.DARK}
                         locale="kr"
                         autosize
@@ -564,13 +566,13 @@ export default function Demo({ socket }) {
 
                         <span className="hoverBox">
                           <strong className="percent">{`+${getDividFromData({
-                            id: assetInfo.id,
+                            id: assetInfo?.id,
                             _case: "highRate",
                             dataObj: dividObj,
                           })}%`}</strong>
                           <p className="amount">
                             {getDividFromData({
-                              id: assetInfo.id,
+                              id: assetInfo?.id,
                               _case: "highAmount",
                               dataObj: dividObj,
                             })}
@@ -578,11 +580,11 @@ export default function Demo({ socket }) {
 
                           <p className="hoverPopup" ref={hoverRef1}>
                             {`Dividend rate : +${getDividFromData({
-                              id: assetInfo.id,
+                              id: assetInfo?.id,
                               _case: "highRate",
                               dataObj: dividObj,
                             })}%  ${getDividFromData({
-                              id: assetInfo.id,
+                              id: assetInfo?.id,
                               _case: "highAmount",
                               dataObj: dividObj,
                             })} USDT`}
@@ -604,13 +606,13 @@ export default function Demo({ socket }) {
 
                         <span className="hoverBox">
                           <strong className="percent">{`+${getDividFromData({
-                            id: assetInfo.id,
+                            id: assetInfo?.id,
                             _case: "lowRate",
                             dataObj: dividObj,
                           })}%`}</strong>
                           <p className="amount">
                             {getDividFromData({
-                              id: assetInfo.id,
+                              id: assetInfo?.id,
                               _case: "lowAmount",
                               dataObj: dividObj,
                             })}
@@ -618,11 +620,11 @@ export default function Demo({ socket }) {
 
                           <p className="hoverPopup" ref={hoverRef2}>
                             {`Dividend rate : +${getDividFromData({
-                              id: assetInfo.id,
+                              id: assetInfo?.id,
                               _case: "lowRate",
                               dataObj: dividObj,
                             })}%  ${getDividFromData({
-                              id: assetInfo.id,
+                              id: assetInfo?.id,
                               _case: "lowAmount",
                               dataObj: dividObj,
                             })} USDT`}
@@ -918,7 +920,8 @@ const PbetBox = styled.main`
           display: flex;
           justify-content: space-between;
           align-items: center;
-          width: 154px;
+          gap: 16px;
+          min-width: 154px;
           height: 40px;
           padding: 0 24px;
           font-size: 16px;

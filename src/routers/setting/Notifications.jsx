@@ -26,7 +26,7 @@ export default function Notifications() {
               <ul className="optList">
                 <li>
                   <div className="topBar">
-                    <p className="title">Notifications</p>
+                    <p className="title">Position End Notification</p>
 
                     <button
                       className={`${toggleList[0] && "on"} toggleBtn`}
@@ -39,16 +39,13 @@ export default function Notifications() {
                   </div>
 
                   <div className="key">
-                    <p className="explain">
-                      Please select the type of notifications you want to
-                      receive from this account
-                    </p>
+                    <p className="explain">Notification when position closes</p>
                   </div>
                 </li>
 
                 <li>
                   <div className="topBar">
-                    <p className="title">Notifications</p>
+                    <p className="title">Orders request successful</p>
 
                     <button
                       className={`${toggleList[1] && "on"} toggleBtn`}
@@ -61,16 +58,13 @@ export default function Notifications() {
                   </div>
 
                   <div className="key">
-                    <p className="explain">
-                      Please select the type of notifications you want to
-                      receive from this account
-                    </p>
+                    <p className="explain">Confirmation window for orders</p>
                   </div>
                 </li>
 
                 <li>
                   <div className="topBar">
-                    <p className="title">Notifications</p>
+                    <p className="title">Email notifications</p>
 
                     <button
                       className={`${toggleList[2] && "on"} toggleBtn`}
@@ -83,16 +77,13 @@ export default function Notifications() {
                   </div>
 
                   <div className="key">
-                    <p className="explain">
-                      Please select the type of notifications you want to
-                      receive from this account
-                    </p>
+                    <p className="explain">Subscribe to Betbit updates</p>
                   </div>
                 </li>
 
                 <li>
                   <div className="topBar">
-                    <p className="title">Notifications</p>
+                    <p className="title">Latest news</p>
 
                     <button
                       className={`${toggleList[3] && "on"} toggleBtn`}
@@ -106,15 +97,14 @@ export default function Notifications() {
 
                   <div className="key">
                     <p className="explain">
-                      Please select the type of notifications you want to
-                      receive from this account
+                      Promotion: Our latest events, offers and more
                     </p>
                   </div>
                 </li>
 
                 <li>
                   <div className="topBar">
-                    <p className="title">Notifications</p>
+                    <p className="title">Questions</p>
 
                     <button
                       className={`${toggleList[4] && "on"} toggleBtn`}
@@ -128,8 +118,7 @@ export default function Notifications() {
 
                   <div className="key">
                     <p className="explain">
-                      Please select the type of notifications you want to
-                      receive from this account
+                      Notification of answers to support team inquiries
                     </p>
                   </div>
                 </li>
@@ -160,11 +149,8 @@ export default function Notifications() {
               <ul className="optList">
                 <li>
                   <div className="key">
-                    <p className="title">Notifications</p>
-                    <p className="explain">
-                      Please select the type of notifications you want to
-                      receive from this account
-                    </p>
+                    <p className="title">Position End Notification</p>
+                    <p className="explain">Notification when position closes</p>
                   </div>
 
                   <button
@@ -179,11 +165,8 @@ export default function Notifications() {
 
                 <li>
                   <div className="key">
-                    <p className="title">Notifications</p>
-                    <p className="explain">
-                      Please select the type of notifications you want to
-                      receive from this account
-                    </p>
+                    <p className="title">Orders request successful</p>
+                    <p className="explain">Confirmation window for orders</p>
                   </div>
 
                   <button
@@ -198,11 +181,8 @@ export default function Notifications() {
 
                 <li>
                   <div className="key">
-                    <p className="title">Notifications</p>
-                    <p className="explain">
-                      Please select the type of notifications you want to
-                      receive from this account
-                    </p>
+                    <p className="title">Email notifications</p>
+                    <p className="explain">Subscribe to Betbit updates</p>
                   </div>
 
                   <button
@@ -217,10 +197,9 @@ export default function Notifications() {
 
                 <li>
                   <div className="key">
-                    <p className="title">Notifications</p>
+                    <p className="title">Latest news</p>
                     <p className="explain">
-                      Please select the type of notifications you want to
-                      receive from this account
+                      Promotion: Our latest events, offers and more
                     </p>
                   </div>
 
@@ -236,10 +215,9 @@ export default function Notifications() {
 
                 <li>
                   <div className="key">
-                    <p className="title">Notifications</p>
+                    <p className="title">Questions</p>
                     <p className="explain">
-                      Please select the type of notifications you want to
-                      receive from this account
+                      Notification of answers to support team inquiries
                     </p>
                   </div>
 
@@ -371,7 +349,6 @@ const MnotificationsBox = styled.main`
         background: rgba(255, 255, 255, 0.1);
         border: 1.4px solid #fff;
         border-radius: 12px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
       }
     }
   }
@@ -510,10 +487,9 @@ const PnotificationsBox = styled.main`
         height: 56px;
         font-size: 18px;
         font-weight: 700;
-        background: rgba(247, 171, 31, 0.1);
-        border: 1.4px solid #f7ab1f;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1.4px solid #fff;
         border-radius: 12px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
       }
     }
   }

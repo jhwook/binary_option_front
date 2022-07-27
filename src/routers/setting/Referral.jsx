@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import I_cpWhite from "../../img/icon/I_cpWhite.svg";
 import { onClickCopy, setToast } from "../../util/Util";
@@ -7,8 +7,9 @@ import Recommender from "../../components/setting/referral/Recommender";
 import History from "../../components/setting/referral/History";
 import DefaultHeader from "../../components/header/DefaultHeader";
 import { useSelector } from "react-redux";
+import axios from "axios";
 
-export default function Referal({userData}) {
+export default function Referal({ userData }) {
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [category, setCategory] = useState(0);
@@ -17,6 +18,15 @@ export default function Referal({userData}) {
     onClickCopy(str);
     setToast({ type: "alarm", cont: "Copied Successfully" });
   }
+
+  useEffect(() => {
+    axios
+      .get(
+        "http://users.options1.net:30708/users/myreferrals/fee/log/0/10/id/DESC"
+      )
+      .then((res) => console.log(res))
+      .catch(console.error);
+  }, []);
 
   if (isMobile)
     return (
@@ -127,7 +137,8 @@ export default function Referal({userData}) {
                     }
                   >
                     <p className="url">
-                      http://users.options1.net/#/auth/signup?refcode={userData?.referercode}
+                      http://users.options1.net/#/auth/signup?refcode=
+                      {userData?.referercode}
                     </p>
                     <img src={I_cpWhite} alt="" />
                   </button>
