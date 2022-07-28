@@ -187,7 +187,7 @@ export default function Orders() {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [page]);
 
   if (isMobile)
     return (
@@ -307,6 +307,41 @@ export default function Orders() {
                   )}
                 </ul>
               </div>
+
+              <div className="pageBox">
+                <button
+                  className="arwBtn"
+                  disabled={page <= 1}
+                  onClick={onClickPrePageBtn}
+                >
+                  <img src={I_ltArwWhite} alt="" />
+                </button>
+
+                <ul className="pageList">
+                  {new Array(Math.ceil(total / 10)).fill("").map(
+                    (v, i) =>
+                      i > page - 6 &&
+                      i < page + 4 && (
+                        <li
+                          key={i}
+                          className={`${i + 1 === page && "on"}`}
+                          onClick={() => setPage(i + 1)}
+                        >
+                          <strong>{i + 1}</strong>
+                          <span className="onBar" />
+                        </li>
+                      )
+                  )}
+                </ul>
+
+                <button
+                  className="arwBtn"
+                  disabled={page >= Math.ceil(total / 10)}
+                  onClick={onClickNextPageBtn}
+                >
+                  <img src={I_rtArwWhite} alt="" />
+                </button>
+              </div>
             </article>
           </section>
         </MordersBox>
@@ -424,16 +459,20 @@ export default function Orders() {
               </button>
 
               <ul className="pageList">
-                {new Array(Math.ceil(total / 10)).fill("").map((v, i) => (
-                  <li
-                    key={i}
-                    className={`${i + 1 === page && "on"}`}
-                    onClick={() => setPage(i + 1)}
-                  >
-                    <strong>{i + 1}</strong>
-                    <span className="onBar" />
-                  </li>
-                ))}
+                {new Array(Math.ceil(total / 10)).fill("").map(
+                  (v, i) =>
+                    i > page - 6 &&
+                    i < page + 4 && (
+                      <li
+                        key={i}
+                        className={`${i + 1 === page && "on"}`}
+                        onClick={() => setPage(i + 1)}
+                      >
+                        <strong>{i + 1}</strong>
+                        <span className="onBar" />
+                      </li>
+                    )
+                )}
               </ul>
 
               <button
@@ -582,6 +621,56 @@ const MordersBox = styled.main`
             font-size: 14px;
             text-align: center;
             opacity: 0.4;
+          }
+        }
+      }
+
+      .pageBox {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin: 30px 0 0 0;
+
+        .arwBtn {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 40px;
+          height: 40px;
+          border: 2px solid #fff;
+          border-radius: 50%;
+
+          &:disabled {
+            opacity: 0.2;
+          }
+        }
+
+        .pageList {
+          display: flex;
+          align-items: center;
+
+          li {
+            display: flex;
+            justify-content: center;
+            padding: 0 5px;
+            font-size: 18px;
+            position: relative;
+            cursor: pointer;
+
+            &.on {
+              .onBar {
+                background: #f7ab1f;
+              }
+            }
+
+            .onBar {
+              width: 100%;
+              height: 6px;
+              border-radius: 4px;
+              bottom: -6px;
+              position: absolute;
+            }
           }
         }
       }
@@ -791,6 +880,7 @@ const PordersBox = styled.main`
         justify-content: center;
         align-items: center;
         gap: 10px;
+        margin: 30px 0 0 0;
 
         .arwBtn {
           display: flex;

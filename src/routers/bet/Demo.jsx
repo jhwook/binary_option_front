@@ -33,7 +33,6 @@ export default function Demo({ socket }) {
   const hoverRef1 = useRef();
   const hoverRef2 = useRef();
   const dispatch = useDispatch();
-  const token = localStorage.getItem("token");
   const demoToken = localStorage.getItem("demoToken");
 
   const isMobile = useSelector((state) => state.common.isMobile);
@@ -127,7 +126,7 @@ export default function Demo({ socket }) {
 
         dispatch(setBetFlag());
 
-        setToast({ type, amount });
+        setToast({ type, assetInfo, amount });
       })
       .catch((err) => console.error(err));
   }
@@ -205,7 +204,7 @@ export default function Demo({ socket }) {
   if (isMobile)
     return (
       <>
-        <DefaultHeader />
+        <DefaultHeader demoToken={demoToken} />
 
         {loading ? (
           <LoadingBar />
@@ -407,7 +406,7 @@ export default function Demo({ socket }) {
   else
     return (
       <>
-        <DefaultHeader />
+        <DefaultHeader demoToken={demoToken} />
 
         {loading ? (
           <LoadingBar />

@@ -10,30 +10,34 @@ import { API } from "../../configs/api";
 export default function MyBalancePopup({ off, setAddPopup }) {
   const navigate = useNavigate();
   const isMobile = useSelector((state) => state.common.isMobile);
-  const token = localStorage.getItem("token");
   const balanceType = localStorage.getItem("balanceType");
+  const demoToken = localStorage.getItem("demoToken");
 
   const [stateBalanceType, setStateBalanceType] = useState(
     balanceType || "Demo"
   );
   const [balanceData, setBalanceData] = useState("");
 
-  function onClickConfirmBtn(nextProc, isNotNavigate) {
+  function onClickConfirmBtn({ nextProc, isNotNavigate }) {
     off();
+    
+    if (demoToken) {
+      navigate("/auth");
+      return;
+    }
+
     if (isNotNavigate) nextProc(true);
     else navigate("/market/deposit");
   }
 
   function getBalance() {
-    if (token) {
-      axios
-        .get(`${API.USER_BALANCE}`)
-        .then(({ data }) => {
-          console.log(data.respdata);
-          setBalanceData(data.respdata);
-        })
-        .catch((err) => console.error(err));
-    }
+    axios
+      .get(`${API.USER_BALANCE}`)
+      .then(({ data }) => {
+        console.log(data.respdata);
+        setBalanceData(data.respdata);
+      })
+      .catch((err) => console.error(err));
   }
 
   function onClickBalanceType(type) {
@@ -64,8 +68,11 @@ export default function MyBalancePopup({ off, setAddPopup }) {
             <div className="leftBox">
               <p className="type">{`${stateBalanceType} balance`}</p>
               <p className="balance">
-                {stateBalanceType === "Live" && balanceData?.LIVE?.avail/10**6}
-                {stateBalanceType === "Demo" && balanceData?.DEMO?.avail/10**6} USDT
+                {stateBalanceType === "Live" &&
+                  (balanceData?.LIVE?.avail / 10 ** 6 || "0")}
+                {stateBalanceType === "Demo" &&
+                  (balanceData?.DEMO?.avail / 10 ** 6 || "0")}{" "}
+                USDT
               </p>
               <p className="type"></p>
             </div>
@@ -74,7 +81,10 @@ export default function MyBalancePopup({ off, setAddPopup }) {
               <button
                 className="actionBtn"
                 onClick={() =>
-                  onClickConfirmBtn(navigate("/market/deposit"), false)
+                  onClickConfirmBtn({
+                    nextProc: navigate("/market/deposit"),
+                    isNotNavigate: false,
+                  })
                 }
               >
                 Deposit
@@ -84,7 +94,12 @@ export default function MyBalancePopup({ off, setAddPopup }) {
             {stateBalanceType === "Demo" && (
               <button
                 className="actionBtn"
-                onClick={() => onClickConfirmBtn(setAddPopup, true)}
+                onClick={() =>
+                  onClickConfirmBtn({
+                    nextProc: setAddPopup,
+                    isNotNavigate: true,
+                  })
+                }
               >
                 Add
               </button>
@@ -99,7 +114,9 @@ export default function MyBalancePopup({ off, setAddPopup }) {
               <img src={I_chkOrange} alt="" />
               <p className="key">Live balance</p>
 
-              <strong className="value">{`${balanceData?.LIVE?.avail/10**6} USDT`}</strong>
+              <strong className="value">{`${
+                balanceData?.LIVE?.avail / 10 ** 6 || "0"
+              } USDT`}</strong>
             </li>
 
             <li
@@ -109,7 +126,9 @@ export default function MyBalancePopup({ off, setAddPopup }) {
               <img src={I_chkOrange} alt="" />
               <p className="key">Demo balance</p>
 
-              <strong className="value">{`${balanceData?.DEMO?.avail/10**6} USDT`}</strong>
+              <strong className="value">{`${
+                balanceData?.DEMO?.avail / 10 ** 6 || "0"
+              } USDT`}</strong>
             </li>
           </ul>
         </article>
@@ -133,8 +152,11 @@ export default function MyBalancePopup({ off, setAddPopup }) {
             <div className="leftBox">
               <p className="type">{`${stateBalanceType} balance`}</p>
               <p className="balance">
-                {stateBalanceType === "Live" && balanceData?.LIVE?.avail/10**6}
-                {stateBalanceType === "Demo" && balanceData?.DEMO?.avail/10**6} USDT
+                {stateBalanceType === "Live" &&
+                  (balanceData?.LIVE?.avail / 10 ** 6 || "0")}
+                {stateBalanceType === "Demo" &&
+                  (balanceData?.DEMO?.avail / 10 ** 6 || "0")}{" "}
+                USDT
               </p>
               <p className="type"></p>
             </div>
@@ -143,7 +165,10 @@ export default function MyBalancePopup({ off, setAddPopup }) {
               <button
                 className="actionBtn"
                 onClick={() =>
-                  onClickConfirmBtn(navigate("/market/deposit"), false)
+                  onClickConfirmBtn({
+                    nextProc: navigate("/market/deposit"),
+                    isNotNavigate: false,
+                  })
                 }
               >
                 Deposit
@@ -153,7 +178,12 @@ export default function MyBalancePopup({ off, setAddPopup }) {
             {stateBalanceType === "Demo" && (
               <button
                 className="actionBtn"
-                onClick={() => onClickConfirmBtn(setAddPopup, true)}
+                onClick={() =>
+                  onClickConfirmBtn({
+                    nextProc: setAddPopup,
+                    isNotNavigate: true,
+                  })
+                }
               >
                 Add
               </button>
@@ -168,7 +198,9 @@ export default function MyBalancePopup({ off, setAddPopup }) {
               <img src={I_chkOrange} alt="" />
               <p className="key">Live balance</p>
 
-              <strong className="value">{`${balanceData?.LIVE?.avail/10**6} USDT`}</strong>
+              <strong className="value">{`${
+                balanceData?.LIVE?.avail / 10 ** 6 || "0"
+              } USDT`}</strong>
             </li>
 
             <li
@@ -178,7 +210,9 @@ export default function MyBalancePopup({ off, setAddPopup }) {
               <img src={I_chkOrange} alt="" />
               <p className="key">Demo balance</p>
 
-              <strong className="value">{`${balanceData?.DEMO?.avail/10**6} USDT`}</strong>
+              <strong className="value">{`${
+                balanceData?.DEMO?.avail / 10 ** 6 || "0"
+              } USDT`}</strong>
             </li>
           </ul>
         </article>

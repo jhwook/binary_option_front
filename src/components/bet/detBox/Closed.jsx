@@ -120,7 +120,9 @@ export default function Closed() {
                               <li>
                                 <p className="key">Open time</p>
                                 <p className="value">
-                                  {moment(v.starting).format("hh:mm:ss")}
+                                  {moment
+                                    .unix(detV.starting)
+                                    .format("hh:mm:ss")}
                                 </p>
                               </li>
 
@@ -138,7 +140,7 @@ export default function Closed() {
                               <li>
                                 <p className="key">ClosingTime</p>
                                 <p className="value">
-                                  {moment(v.expiry).format("hh:mm:ss")}
+                                  {moment.unix(detV.expiry).format("hh:mm:ss")}
                                 </p>
                               </li>
                             </ul>
@@ -183,11 +185,11 @@ export default function Closed() {
                                   </p>
                                 </li>
                                 <li>
-                                  <p className="key">Current price</p>
+                                  <p className="key">Ending price</p>
 
                                   <p className="value">
-                                    {detV.currentPrice
-                                      ? Number(v.currentPrice).toFixed(2)
+                                    {detV.endingPrice
+                                      ? Number(detV.endingPrice).toFixed(2)
                                       : "-"}
                                   </p>
                                 </li>
@@ -196,10 +198,10 @@ export default function Closed() {
 
                                   <p
                                     className={`${
-                                      (detV.currentPrice - detV.startingPrice >
+                                      (detV.endingPrice - detV.startingPrice >
                                         0 &&
                                         "plus") ||
-                                      (detV.currentPrice - detV.startingPrice <
+                                      (detV.endingPrice - detV.startingPrice <
                                         0 &&
                                         "minus")
                                     } value point`}
@@ -265,7 +267,9 @@ export default function Closed() {
                               <li>
                                 <p className="key">Open time</p>
                                 <p className="value">
-                                  {moment(v.starting).format("hh:mm:ss")}
+                                  {moment
+                                    .unix(detV.starting)
+                                    .format("hh:mm:ss")}
                                 </p>
                               </li>
 
@@ -283,7 +287,7 @@ export default function Closed() {
                               <li>
                                 <p className="key">ClosingTime</p>
                                 <p className="value">
-                                  {moment(v.expiry).format("hh:mm:ss")}
+                                  {moment.unix(detV.expiry).format("hh:mm:ss")}
                                 </p>
                               </li>
                             </ul>
@@ -328,11 +332,11 @@ export default function Closed() {
                                   </p>
                                 </li>
                                 <li>
-                                  <p className="key">Current price</p>
+                                  <p className="key">Ending price</p>
 
                                   <p className="value">
-                                    {detV.currentPrice
-                                      ? Number(v.currentPrice).toFixed(2)
+                                    {detV.endingPrice
+                                      ? Number(detV.endingPrice).toFixed(2)
                                       : "-"}
                                   </p>
                                 </li>
@@ -341,10 +345,10 @@ export default function Closed() {
 
                                   <p
                                     className={`${
-                                      (detV.currentPrice - detV.startingPrice >
+                                      (detV.endingPrice - detV.startingPrice >
                                         0 &&
                                         "plus") ||
-                                      (detV.currentPrice - detV.startingPrice <
+                                      (detV.endingPrice - detV.startingPrice <
                                         0 &&
                                         "minus")
                                     } value point`}
@@ -568,7 +572,13 @@ const MclosedBox = styled.ul`
                       font-size: 12px;
 
                       .point {
-                        color: #ff5353;
+                        &.plus {
+                          color: #3fb68b;
+                        }
+
+                        &.minus {
+                          color: #ff5353;
+                        }
                       }
                     }
                   }
@@ -788,7 +798,13 @@ const PclosedBox = styled.ul`
                       font-size: 12px;
 
                       .point {
-                        color: #ff5353;
+                        &.plus {
+                          color: #3fb68b;
+                        }
+
+                        &.minus {
+                          color: #ff5353;
+                        }
                       }
                     }
                   }

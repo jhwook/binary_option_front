@@ -20,7 +20,7 @@ import { API } from "../../configs/api";
 import MorePopup from "./MorePopup";
 import AddPopup from "./AddPopup";
 
-export default function DefaultHeader({ white, border, title }) {
+export default function DefaultHeader({ white, border, title, demoToken }) {
   const navigate = useNavigate();
   const location = useLocation();
   const { i18n } = useTranslation();
@@ -47,11 +47,12 @@ export default function DefaultHeader({ white, border, title }) {
   }
 
   async function getUserData() {
-    const token = localStorage.getItem("token");
-    if (!token) return;
+    if (!token && !demoToken) return;
 
     await axios
-      .get(`${API.USER_BALANCE}`)
+      .get(`${API.USER_BALANCE}`, {
+        headers: { Authorization: token || demoToken },
+      })
       .then(async ({ data }) => {
         console.log(data);
         setBalance({ ...data.respdata });
@@ -71,6 +72,11 @@ export default function DefaultHeader({ white, border, title }) {
       .catch((err) => {
         console.error(err);
       });
+  }
+
+  function onClickDepositBtn() {
+    if (token) navigate("/market/deposit");
+    else if (demoToken) navigate("/auth");
   }
 
   useEffect(() => {
@@ -189,7 +195,7 @@ export default function DefaultHeader({ white, border, title }) {
 
           {location.pathname.indexOf("auth") === -1 ? (
             <article className="rightArea">
-              {token ? (
+              {token || demoToken ? (
                 <>
                   <span className="accountBox">
                     <button
@@ -213,19 +219,21 @@ export default function DefaultHeader({ white, border, title }) {
                       )}
                     </button>
 
-                    <button
-                      className="depositBtn"
-                      onClick={() => navigate("/market/deposit")}
-                    >
+                    <button className="depositBtn" onClick={onClickDepositBtn}>
                       <img src={I_wallet} alt="" />
 
                       <strong>Deposit</strong>
                     </button>
                   </span>
 
-                  <button className="myBtn" onClick={() => setProfPopup(true)}>
-                    <img src={I_defaultProfImg} alt="" />
-                  </button>
+                  {token && (
+                    <button
+                      className="myBtn"
+                      onClick={() => setProfPopup(true)}
+                    >
+                      <img src={I_defaultProfImg} alt="" />
+                    </button>
+                  )}
                 </>
               ) : (
                 <>
@@ -378,7 +386,6 @@ const PdefaultHeaderBox = styled.header`
   height: 60px;
   padding: 0 30px;
   color: #fff;
-  background: rgba(255, 255, 255, 0.04);
   top: 0;
   right: 0;
   left: 0;
@@ -402,7 +409,6 @@ const PdefaultHeaderBox = styled.header`
 
   &.white {
     color: #2a2a2a;
-    background: #fff;
     border-bottom: none;
 
     .rightArea {

@@ -19,15 +19,6 @@ export default function Referal({ userData }) {
     setToast({ type: "alarm", cont: "Copied Successfully" });
   }
 
-  useEffect(() => {
-    axios
-      .get(
-        "http://users.options1.net:30708/users/myreferrals/fee/log/0/10/id/DESC"
-      )
-      .then((res) => console.log(res))
-      .catch(console.error);
-  }, []);
-
   if (isMobile)
     return (
       <>
@@ -37,9 +28,8 @@ export default function Referal({ userData }) {
           <section className="innerBox">
             <article className="titleArea">
               <p className="explain">
-                Share your referral link! When a new user who accesses this link
-                purchases a product, an additional 2% of the sales amount is
-                paid. Referral rewards are paid in lump sum every month.
+                Share your referral link! Each new user who accesses this link
+                will be paid 1% of their profits for each transaction.
               </p>
             </article>
 
@@ -105,9 +95,8 @@ export default function Referal({ userData }) {
             <article className="titleArea">
               <strong className="title">Referrals</strong>
               <p className="explain">
-                Share your referral link! When a new user who accesses this link
-                purchases a product, an additional 2% of the sales amount is
-                paid. Referral rewards are paid in lump sum every month.
+                Share your referral link! Each new user who accesses this link
+                will be paid 1% of their profits for each transaction.
               </p>
             </article>
 
@@ -271,7 +260,9 @@ const MreferralBox = styled.main`
 
 const PreferralBox = styled.main`
   flex: 1;
-  padding: 70px 140px;
+  height: 100%;
+  padding: 70px 140px 0;
+  overflow-y: scroll;
 
   @media (max-width: 1440px) {
     max-width: 1020px;

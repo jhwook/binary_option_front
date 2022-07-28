@@ -3,7 +3,7 @@ import { URL } from "../configs/api";
 
 const token =
   localStorage.getItem("token") || localStorage.getItem("demoToken");
-  
+
 export const socketIo = io(URL, {
   query: {
     token,

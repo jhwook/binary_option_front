@@ -11,7 +11,7 @@ export const D_marketLeftBarList = [
 export const D_historyCategoryList = ["DEPOSIT", "WITHDRAWAL"];
 
 export const D_historyListHeader = [
-  "ID",
+  "No",
   "Date",
   "Amount",
   "Method",

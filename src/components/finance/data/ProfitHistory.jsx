@@ -16,7 +16,7 @@ import { useSelector } from "react-redux";
 import { getExcelFile } from "../../../util/Util";
 
 export default function ProfitHistory() {
-  const totalPage = 4;
+  const total = 4;
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [startDate, setStartDate] = useState(new Date());
@@ -43,11 +43,11 @@ export default function ProfitHistory() {
   }
 
   function onClickPrePageBtn() {
-    if (page > 1) setPage(page - 1);
+    setPage(page - 1);
   }
 
   function onClickNextPageBtn() {
-    if (page < totalPage) setPage(page + 1);
+    setPage(page + 1);
   }
 
   if (isMobile)
@@ -119,6 +119,41 @@ export default function ProfitHistory() {
               </li>
             ))}
           </ul>
+
+          <div className="pageBox">
+            <button
+              className="arwBtn"
+              disabled={page <= 1}
+              onClick={onClickPrePageBtn}
+            >
+              <img src={I_ltArwWhite} alt="" />
+            </button>
+
+            <ul className="pageList">
+              {new Array(Math.ceil(total / 10)).fill("").map(
+                (v, i) =>
+                  i > page - 6 &&
+                  i < page + 4 && (
+                    <li
+                      key={i}
+                      className={`${i + 1 === page && "on"}`}
+                      onClick={() => setPage(i + 1)}
+                    >
+                      <strong>{i + 1}</strong>
+                      <span className="onBar" />
+                    </li>
+                  )
+              )}
+            </ul>
+
+            <button
+              className="arwBtn"
+              disabled={page >= Math.ceil(total / 10)}
+              onClick={onClickNextPageBtn}
+            >
+              <img src={I_rtArwWhite} alt="" />
+            </button>
+          </div>
         </MprofitHistory>
       </>
     );
@@ -215,21 +250,25 @@ export default function ProfitHistory() {
             </button>
 
             <ul className="pageList">
-              {new Array(totalPage).fill("").map((v, i) => (
-                <li
-                  key={i}
-                  className={`${i + 1 === page && "on"}`}
-                  onClick={() => setPage(i + 1)}
-                >
-                  <strong>{i + 1}</strong>
-                  <span className="onBar" />
-                </li>
-              ))}
+              {new Array(Math.ceil(total / 10)).fill("").map(
+                (v, i) =>
+                  i > page - 6 &&
+                  i < page + 4 && (
+                    <li
+                      key={i}
+                      className={`${i + 1 === page && "on"}`}
+                      onClick={() => setPage(i + 1)}
+                    >
+                      <strong>{i + 1}</strong>
+                      <span className="onBar" />
+                    </li>
+                  )
+              )}
             </ul>
 
             <button
               className="arwBtn"
-              disabled={page >= totalPage}
+              disabled={page >= Math.ceil(total / 10)}
               onClick={onClickNextPageBtn}
             >
               <img src={I_rtArwWhite} alt="" />
@@ -292,6 +331,56 @@ const MprofitHistory = styled.div`
           .price {
             color: #3fb68b;
           }
+        }
+      }
+    }
+  }
+
+  .pageBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 30px 0 0 0;
+
+    .arwBtn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+      border: 2px solid #fff;
+      border-radius: 50%;
+
+      &:disabled {
+        opacity: 0.2;
+      }
+    }
+
+    .pageList {
+      display: flex;
+      align-items: center;
+
+      li {
+        display: flex;
+        justify-content: center;
+        padding: 0 5px;
+        font-size: 18px;
+        position: relative;
+        cursor: pointer;
+
+        &.on {
+          .onBar {
+            background: #f7ab1f;
+          }
+        }
+
+        .onBar {
+          width: 100%;
+          height: 6px;
+          border-radius: 4px;
+          bottom: -6px;
+          position: absolute;
         }
       }
     }
@@ -490,30 +579,52 @@ const PprofitHistory = styled.div`
       }
     }
 
-    .pageList {
+    .pageBox {
       display: flex;
+      justify-content: center;
       align-items: center;
+      gap: 10px;
+      margin: 30px 0 0 0;
 
-      li {
+      .arwBtn {
         display: flex;
         justify-content: center;
-        padding: 0 5px;
-        font-size: 18px;
-        position: relative;
-        cursor: pointer;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        border: 2px solid #fff;
+        border-radius: 50%;
 
-        &.on {
-          .onBar {
-            background: #f7ab1f;
-          }
+        &:disabled {
+          opacity: 0.2;
         }
+      }
 
-        .onBar {
-          width: 100%;
-          height: 6px;
-          border-radius: 4px;
-          bottom: -6px;
-          position: absolute;
+      .pageList {
+        display: flex;
+        align-items: center;
+
+        li {
+          display: flex;
+          justify-content: center;
+          padding: 0 5px;
+          font-size: 18px;
+          position: relative;
+          cursor: pointer;
+
+          &.on {
+            .onBar {
+              background: #f7ab1f;
+            }
+          }
+
+          .onBar {
+            width: 100%;
+            height: 6px;
+            border-radius: 4px;
+            bottom: -6px;
+            position: absolute;
+          }
         }
       }
     }

@@ -17,9 +17,9 @@ import TokenSelectPopup from "../../components/common/TokenSelectPopup";
 import contractaddr from "../../configs/contractaddr";
 import { setToast } from "../../util/Util";
 import { metaMaskLink } from "../../configs/metaMask";
-import DetailPopup from "../../components/market/deposit/DetailPopup";
 import PreDepositWarningPopup from "../../components/market/deposit/PreDepositWarningPopup";
 import io from "socket.io-client";
+import MinimumDepositPopup from "../../components/market/deposit/MinimumDepositPopup";
 
 export default function Deposit({ userData }) {
   const walletAddress = localStorage.getItem("walletAddress");
@@ -29,7 +29,6 @@ export default function Deposit({ userData }) {
   const [amount, setAmount] = useState("");
   const [branchData, setBranchData] = useState("");
   const [confirm, setConfirm] = useState(false);
-  const [detailPopup, setDetailPopup] = useState(true);
   const [securityVerifiPopup, setSecurityVerifiPopup] = useState(false);
   const [cashInPersonPopup, setCashInPersonPopupPopup] = useState(false);
   const [tokenPopup, setTokenPopup] = useState(false);
@@ -37,6 +36,7 @@ export default function Deposit({ userData }) {
   const [tokenList, setTokenList] = useState([{ icon: T_usdt, text: "USDT" }]);
   const [loader, setLoader] = useState("");
   const [preDepositWarningPopup, setPreDepositWarningPopup] = useState(false);
+  const [minDepositPopup, setMinDepositPopup] = useState(false);
 
   function getPreDepositReq() {
     axios
@@ -164,7 +164,8 @@ export default function Deposit({ userData }) {
   }
 
   function onClickDepositBtn() {
-    getPreDepositReq();
+    if (amount < 5) setMinDepositPopup(true);
+    else getPreDepositReq();
   }
 
   useEffect(() => {
@@ -306,13 +307,6 @@ export default function Deposit({ userData }) {
           )}
         </MdepositBox>
 
-        {detailPopup && (
-          <>
-            <DetailPopup off={setDetailPopup} />
-            <PopupBg bg off={setDetailPopup} />
-          </>
-        )}
-
         {securityVerifiPopup && (
           <>
             <SecurityVerifiPopup
@@ -341,6 +335,13 @@ export default function Deposit({ userData }) {
               reqDeposit={reqDeposit}
             />
             <PopupBg off={setPreDepositWarningPopup} />
+          </>
+        )}
+
+        {minDepositPopup && (
+          <>
+            <MinimumDepositPopup off={setMinDepositPopup} />
+            <PopupBg off={setMinDepositPopup} />
           </>
         )}
       </>
@@ -527,6 +528,13 @@ export default function Deposit({ userData }) {
               reqDeposit={reqDeposit}
             />
             <PopupBg off={setPreDepositWarningPopup} />
+          </>
+        )}
+
+        {minDepositPopup && (
+          <>
+            <MinimumDepositPopup off={setMinDepositPopup} />
+            <PopupBg off={setMinDepositPopup} />
           </>
         )}
       </>

@@ -7,30 +7,47 @@ import { contentsPerPage } from "../../../configs/setting";
 import moment from "moment";
 import I_ltArwWhite from "../../../img/icon/I_ltArwWhite.svg";
 import I_rtArwWhite from "../../../img/icon/I_rtArwWhite.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import { API } from "../../../configs/api";
 
 export default function Recommender() {
-  const totalPage = 4;
-
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [page, setPage] = useState(1);
+  const [tbData, setTbData] = useState([]);
+  const [total, setTotal] = useState(0);
 
   function onClickPrePageBtn() {
-    if (page > 1) setPage(page - 1);
+    setPage(page - 1);
   }
 
   function onClickNextPageBtn() {
-    if (page < totalPage) setPage(page + 1);
+    setPage(page + 1);
   }
+
+  function getData() {
+    axios
+      .get(`${API.USER_REFERRAL}/0/10/id/desc`)
+      .then(({ data }) => {
+        console.log(data);
+        setTbData(data.resp.rows);
+        setTotal(data.resp.count);
+      })
+      .catch(console.error);
+  }
+
+  useEffect(() => {
+    getData();
+  }, [page]);
 
   if (isMobile)
     return (
       <MrecommenderBox>
         <div className="listBox">
           <ul className="list">
-            {D_recommenderList.map((v, i) => (
+            {tbData.map((v, i) => (
               <li key={i}>
                 <div>
                   <p className="key">{D_recommenderListHeader[0]}</p>
@@ -49,7 +66,7 @@ export default function Recommender() {
                   <p className="key">{D_recommenderListHeader[1]}</p>
 
                   <span className="value">
-                    <p>{v.account}</p>
+                    <p>{v.referral_user.email}</p>
                   </span>
                 </div>
 
@@ -57,7 +74,7 @@ export default function Recommender() {
                   <p className="key">{D_recommenderListHeader[2]}</p>
 
                   <span className="value">
-                    <p>{`${v.level} Level`}</p>
+                    <p>{`${v.referral_user.level} Level`}</p>
                   </span>
                 </div>
 
@@ -65,7 +82,7 @@ export default function Recommender() {
                   <p className="key">{D_recommenderListHeader[3]}</p>
 
                   <span className="value">
-                    <p>{moment(v.subscriptionDate).format("YYYY-MM-DD")}</p>
+                    <p>{moment(v.createdat).format("YYYY-MM-DD")}</p>
                   </span>
                 </div>
 
@@ -73,7 +90,7 @@ export default function Recommender() {
                   <p className="key">{D_recommenderListHeader[4]}</p>
 
                   <span className="value">
-                    <p>{`$${v.amount}`}</p>
+                    <p>{`$${v.trade_amount}`}</p>
                   </span>
                 </div>
 
@@ -82,7 +99,7 @@ export default function Recommender() {
 
                   <span className="value">
                     <p className="price">{`$${v.profit}`}</p>&nbsp;
-                    <p className="percent">{`(${92}%)`}</p>
+                    <p className="percent">{`(${v.profit_percent}%)`}</p>
                   </span>
                 </div>
 
@@ -97,6 +114,41 @@ export default function Recommender() {
             ))}
           </ul>
         </div>
+
+        <div className="pageBox">
+          <button
+            className="arwBtn"
+            disabled={page <= 1}
+            onClick={onClickPrePageBtn}
+          >
+            <img src={I_ltArwWhite} alt="" />
+          </button>
+
+          <ul className="pageList">
+            {new Array(Math.ceil(total / 10)).fill("").map(
+              (v, i) =>
+                i > page - 6 &&
+                i < page + 4 && (
+                  <li
+                    key={i}
+                    className={`${i + 1 === page && "on"}`}
+                    onClick={() => setPage(i + 1)}
+                  >
+                    <strong>{i + 1}</strong>
+                    <span className="onBar" />
+                  </li>
+                )
+            )}
+          </ul>
+
+          <button
+            className="arwBtn"
+            disabled={page >= Math.ceil(total / 10)}
+            onClick={onClickNextPageBtn}
+          >
+            <img src={I_rtArwWhite} alt="" />
+          </button>
+        </div>
       </MrecommenderBox>
     );
   else
@@ -109,7 +161,7 @@ export default function Recommender() {
             ))}
           </ul>
           <ul className="list">
-            {D_recommenderList.map((v, i) => (
+            {tbData.map((v, i) => (
               <li key={i}>
                 <span>
                   <p>
@@ -121,24 +173,24 @@ export default function Recommender() {
                 </span>
 
                 <span>
-                  <p>{v.account}</p>
+                  <p>{v?.referral_user?.email}</p>
                 </span>
 
                 <span>
-                  <p>{`${v.level} Level`}</p>
+                  <p>{`${v.referral_user.level} Level`}</p>
                 </span>
 
                 <span>
-                  <p>{moment(v.subscriptionDate).format("YYYY-MM-DD")}</p>
+                  <p>{moment(v.createdat).format("YYYY-MM-DD")}</p>
                 </span>
 
                 <span>
-                  <p>{`$${v.amount}`}</p>
+                  <p>{`$${v.trade_amount}`}</p>
                 </span>
 
                 <span>
                   <p className="price">{`$${v.profit}`}</p>&nbsp;
-                  <p className="percent">{`(${92}%)`}</p>
+                  <p className="percent">{`(${v.profit_percent}%)`}</p>
                 </span>
 
                 <span>
@@ -159,21 +211,25 @@ export default function Recommender() {
           </button>
 
           <ul className="pageList">
-            {new Array(totalPage).fill("").map((v, i) => (
-              <li
-                key={i}
-                className={`${i + 1 === page && "on"}`}
-                onClick={() => setPage(i + 1)}
-              >
-                <strong>{i + 1}</strong>
-                <span className="onBar" />
-              </li>
-            ))}
+            {new Array(Math.ceil(total / 10)).fill("").map(
+              (v, i) =>
+                i > page - 6 &&
+                i < page + 4 && (
+                  <li
+                    key={i}
+                    className={`${i + 1 === page && "on"}`}
+                    onClick={() => setPage(i + 1)}
+                  >
+                    <strong>{i + 1}</strong>
+                    <span className="onBar" />
+                  </li>
+                )
+            )}
           </ul>
 
           <button
             className="arwBtn"
-            disabled={page >= totalPage}
+            disabled={page >= Math.ceil(total / 10)}
             onClick={onClickNextPageBtn}
           >
             <img src={I_rtArwWhite} alt="" />
@@ -249,9 +305,61 @@ const MrecommenderBox = styled.div`
       }
     }
   }
+
+  .pageBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 30px 0 0 0;
+
+    .arwBtn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+      border: 2px solid #fff;
+      border-radius: 50%;
+
+      &:disabled {
+        opacity: 0.2;
+      }
+    }
+
+    .pageList {
+      display: flex;
+      align-items: center;
+
+      li {
+        display: flex;
+        justify-content: center;
+        padding: 0 5px;
+        font-size: 18px;
+        position: relative;
+        cursor: pointer;
+
+        &.on {
+          .onBar {
+            background: #f7ab1f;
+          }
+        }
+
+        .onBar {
+          width: 100%;
+          height: 6px;
+          border-radius: 4px;
+          bottom: -6px;
+          position: absolute;
+        }
+      }
+    }
+  }
 `;
 
 const PrecommenderBox = styled.div`
+  padding: 0 0 20px;
+
   .listBox {
     border: 1px solid #3b3e45;
     border-radius: 14px;

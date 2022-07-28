@@ -14,6 +14,8 @@ export const API = {
   USER_PREDEPOSIT: URL + "/users/predeposit",
   USER_BETLOGS: URL + "/users/betlogs", //:type/:offset/:limit
   USER_DEMO_TOKEN: URL + "/users/demo/token",
+  USER_REFERRAL: URL + "/users/myreferrals", //:offset/:limit/id/DESC
+  USER_REFERRAL_HISTORY: URL + "/users/myreferrals/fee/log", //:offset/:limit/id/DESC
 
   GET_ASSETS: URL + "/assets/list",
 

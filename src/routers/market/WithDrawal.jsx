@@ -13,6 +13,7 @@ import PopupBg from "../../components/common/PopupBg";
 import { useSelector } from "react-redux";
 import DefaultHeader from "../../components/header/DefaultHeader";
 import { useNavigate } from "react-router-dom";
+import MinimumWithdrawalPopup from "../../components/market/withdrawal/MinimumWithdrawalPopup";
 
 export default function WithDrawal() {
   const navigate = useNavigate();
@@ -30,8 +31,14 @@ export default function WithDrawal() {
   const [tokenList, setTokenList] = useState([{ icon: T_usdt, text: "USDT" }]);
   const [process, setProcess] = useState(false);
   const [loader, setLoader] = useState("");
+  const [minWithdrawalPopup, setMinWithdrawalPopup] = useState(false);
 
   async function onClickDrawalBtn() {
+    if (amount < 5) {
+      setMinWithdrawalPopup(true);
+      return;
+    }
+
     setLoader("drawalBtn");
     setProcess(true);
     const jtoken = localStorage.getItem("token");
@@ -206,180 +213,197 @@ export default function WithDrawal() {
             )}
           </section>
         </MwithDrawalBox>
+
+        {minWithdrawalPopup && (
+          <>
+            <MinimumWithdrawalPopup off={setMinWithdrawalPopup} />
+            <PopupBg bg off={setMinWithdrawalPopup} />
+          </>
+        )}
       </>
     );
   else
     return (
-      <PwithDrawalBox>
-        <article className="contArea">
-          <div className="key">
-            <span className="count">1</span>
+      <>
+        <PwithDrawalBox>
+          <article className="contArea">
+            <div className="key">
+              <span className="count">1</span>
 
-            <strong className="title">Withdraw</strong>
-          </div>
+              <strong className="title">Withdraw</strong>
+            </div>
 
-          <div className="value">
-            <ul className="inputList">
-              <li className="tokenBox">
-                <p className="key">Asset</p>
+            <div className="value">
+              <ul className="inputList">
+                <li className="tokenBox">
+                  <p className="key">Asset</p>
 
-                <div className="selectBox">
-                  <button
-                    className={`${tokenPopup && "on"} selBtn`}
-                    onClick={() => setTokenPopup(true)}
-                  >
-                    <img className="token" src={token.icon} alt="" />
-                    <strong className="name">{token.text}</strong>
+                  <div className="selectBox">
+                    <button
+                      className={`${tokenPopup && "on"} selBtn`}
+                      onClick={() => setTokenPopup(true)}
+                    >
+                      <img className="token" src={token.icon} alt="" />
+                      <strong className="name">{token.text}</strong>
 
-                    <img className="arw" src={I_dnPolWhite} />
-                  </button>
+                      <img className="arw" src={I_dnPolWhite} />
+                    </button>
 
-                  {tokenPopup && (
-                    <>
-                      <TokenSelectPopup
-                        off={setTokenPopup}
-                        list={tokenList}
-                        setCont={setToken}
-                      />
-                      <PopupBg off={setTokenPopup} />
-                    </>
-                  )}
-                </div>
-              </li>
-
-              <li className="amountBox">
-                <p className="key">Amount</p>
-
-                <div className="valueBox">
-                  <input
-                    type="number"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    placeholder=""
-                  />
-                  <strong className="unit">USDT</strong>
-                </div>
-              </li>
-
-              <li className="addressBox">
-                <p className="key">Withdrawal address</p>
-
-                <div className="valueBox">
-                  <input
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    placeholder=""
-                  />
-                </div>
-              </li>
-            </ul>
-
-            <div className="drawalBox">
-              <ul className="infoList">
-                <li>
-                  <p className="key">Commission</p>
-                  <p className="value">{settings.commision}%</p>
+                    {tokenPopup && (
+                      <>
+                        <TokenSelectPopup
+                          off={setTokenPopup}
+                          list={tokenList}
+                          setCont={setToken}
+                        />
+                        <PopupBg off={setTokenPopup} />
+                      </>
+                    )}
+                  </div>
                 </li>
-                <li>
-                  <p className="key">Minimum withdraw amount</p>
-                  <p className="value">{settings.minWithdraw} USDT</p>
+
+                <li className="amountBox">
+                  <p className="key">Amount</p>
+
+                  <div className="valueBox">
+                    <input
+                      type="number"
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                      placeholder=""
+                    />
+                    <strong className="unit">USDT</strong>
+                  </div>
                 </li>
-                <li>
-                  <p className="key">Max amount per transaction</p>
-                  <p className="value">
-                    {settings.maxTransactions == -1
-                      ? "no limits"
-                      : settings.maxTransactions}
-                  </p>
+
+                <li className="addressBox">
+                  <p className="key">Withdrawal address</p>
+
+                  <div className="valueBox">
+                    <input
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      placeholder=""
+                    />
+                  </div>
                 </li>
               </ul>
 
-              <button
-                className={`${loader === "drawalBtn" && "loading"} drawalBtn`}
-                disabled={!(amount && address)}
-                onClick={onClickDrawalBtn}
-              >
-                <p className="common">Withdrawal</p>
-                <img className="loader" src={L_loader} alt="" />
-              </button>
-            </div>
-          </div>
-        </article>
+              <div className="drawalBox">
+                <ul className="infoList">
+                  <li>
+                    <p className="key">Commission</p>
+                    <p className="value">{settings.commision}%</p>
+                  </li>
+                  <li>
+                    <p className="key">Minimum withdraw amount</p>
+                    <p className="value">{settings.minWithdraw} USDT</p>
+                  </li>
+                  <li>
+                    <p className="key">Max amount per transaction</p>
+                    <p className="value">
+                      {settings.maxTransactions == -1
+                        ? "no limits"
+                        : settings.maxTransactions}
+                    </p>
+                  </li>
+                </ul>
 
-        <article className="detailArea">
-          <div className="key">
-            <span className="count">2</span>
-
-            <strong className="title">Withdrawal Confrimation</strong>
-          </div>
-
-          {process ? (
-            <div className={`onProcess value`}>
-              <div className="titleBox">
-                <strong className="key">You will get</strong>
-                <strong className="value">
-                  {amount} {token.text}
-                </strong>
+                <button
+                  className={`${loader === "drawalBtn" && "loading"} drawalBtn`}
+                  disabled={!(amount && address)}
+                  onClick={onClickDrawalBtn}
+                >
+                  <p className="common">Withdrawal</p>
+                  <img className="loader" src={L_loader} alt="" />
+                </button>
               </div>
+            </div>
+          </article>
 
-              <ul className="infoList">
-                <li>
-                  <p className="key">Withdrawal to</p>
-                  <strong className="value">{strDot(address, 5, 4)}</strong>
-                </li>
+          <article className="detailArea">
+            <div className="key">
+              <span className="count">2</span>
 
-                <li>
-                  <p className="key">Fee</p>
-                  <strong className="value">0 {token.text}</strong>
-                </li>
+              <strong className="title">Withdrawal Confrimation</strong>
+            </div>
 
-                <li>
-                  <p className="key">Withdrawal Amount</p>
+            {process ? (
+              <div className={`onProcess value`}>
+                <div className="titleBox">
+                  <strong className="key">You will get</strong>
                   <strong className="value">
                     {amount} {token.text}
                   </strong>
-                </li>
+                </div>
 
-                <li>
-                  <p className="key">Funds will arrive</p>
-                  <strong className="value">Within 30 mins</strong>
-                </li>
-              </ul>
+                <ul className="infoList">
+                  <li>
+                    <p className="key">Withdrawal to</p>
+                    <strong className="value">{strDot(address, 5, 4)}</strong>
+                  </li>
 
-              <div className="explainBox">
-                <img src={I_alarmYellow} alt="" />
+                  <li>
+                    <p className="key">Fee</p>
+                    <strong className="value">0 {token.text}</strong>
+                  </li>
 
-                <p>
-                  Transfer usually take under 30minutes. Depends on the speed of
-                  your transaction. a delay may occur.
-                </p>
+                  <li>
+                    <p className="key">Withdrawal Amount</p>
+                    <strong className="value">
+                      {amount} {token.text}
+                    </strong>
+                  </li>
+
+                  <li>
+                    <p className="key">Funds will arrive</p>
+                    <strong className="value">Within 30 mins</strong>
+                  </li>
+                </ul>
+
+                <div className="explainBox">
+                  <img src={I_alarmYellow} alt="" />
+
+                  <p>
+                    Transfer usually take under 30minutes. Depends on the speed
+                    of your transaction. a delay may occur.
+                  </p>
+                </div>
               </div>
-            </div>
-          ) : (
-            <div className={`unProcess value`}>
-              <p className="head">Important :</p>
+            ) : (
+              <div className={`unProcess value`}>
+                <p className="head">Important :</p>
 
-              <ul className="bodyList">
-                <li>
-                  Please make sure that only USDT deposit is made via this
-                  address. Otherwise, your deposited funds will not be added to
-                  your available balance — nor will it be refunded.
-                </li>
-                <li>
-                  Please make sure that your Betbit deposit address is correct.
-                  Otherwise, your deposited funds will not be added to your
-                  available balance — nor will it be refunded.
-                </li>
-                <li>
-                  Please note that the current asset does not support deposit
-                  via the smart contract. If used, your deposited funds will not
-                  be added to your available balance — nor will it be refunded.
-                </li>
-              </ul>
-            </div>
-          )}
-        </article>
-      </PwithDrawalBox>
+                <ul className="bodyList">
+                  <li>
+                    Please make sure that only USDT deposit is made via this
+                    address. Otherwise, your deposited funds will not be added
+                    to your available balance — nor will it be refunded.
+                  </li>
+                  <li>
+                    Please make sure that your Betbit deposit address is
+                    correct. Otherwise, your deposited funds will not be added
+                    to your available balance — nor will it be refunded.
+                  </li>
+                  <li>
+                    Please note that the current asset does not support deposit
+                    via the smart contract. If used, your deposited funds will
+                    not be added to your available balance — nor will it be
+                    refunded.
+                  </li>
+                </ul>
+              </div>
+            )}
+          </article>
+        </PwithDrawalBox>
+
+        {minWithdrawalPopup && (
+          <>
+            <MinimumWithdrawalPopup off={setMinWithdrawalPopup} />
+            <PopupBg bg off={setMinWithdrawalPopup} />
+          </>
+        )}
+      </>
     );
 }
 

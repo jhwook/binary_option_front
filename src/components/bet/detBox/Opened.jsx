@@ -1,5 +1,5 @@
 import moment from "moment";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, memo, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import I_highArwGreen from "../../../img/icon/I_highArwGreen.svg";
@@ -70,9 +70,14 @@ export default function Opened() {
     }
   }
 
+  function getClose(){
+
+  }
+
   useEffect(() => {
     let timeInterval = setInterval(() => {
       setNow(new Date());
+      getClose();
     }, 1000);
 
     let logInterval = setInterval(() => {
@@ -121,9 +126,15 @@ export default function Opened() {
                         ).toFixed(2)}`}</p>
 
                         <p className="time">
-                          {moment(moment.unix(v.expiry).diff(now)).format(
-                            "mm:ss"
-                          )}
+                          {`${
+                            moment.unix(v.expiry).diff(now, "hours")
+                              ? `${moment.unix(v.expiry).diff(now, "hours")}:`
+                              : ""
+                          }${`${Math.floor(
+                            moment.unix(v.expiry).diff(now, "minutes") / 60
+                          )}`.padStart(2, "0")}:${`${
+                            moment.unix(v.expiry).diff(now, "seconds") % 60
+                          }`.padStart(2, "0")}`}
                         </p>
                       </div>
                     </summary>
@@ -253,9 +264,15 @@ export default function Opened() {
                         ).toFixed(2)}`}</p>
 
                         <p className="time">
-                          {moment(moment.unix(v.expiry).diff(now)).format(
-                            "mm:ss"
-                          )}
+                          {`${
+                            moment.unix(v.expiry).diff(now, "hours")
+                              ? `${moment.unix(v.expiry).diff(now, "hours")}:`
+                              : ""
+                          }${`${Math.floor(
+                            moment.unix(v.expiry).diff(now, "minutes") / 60
+                          )}`.padStart(2, "0")}:${`${
+                            moment.unix(v.expiry).diff(now, "seconds") % 60
+                          }`.padStart(2, "0")}`}
                         </p>
                       </div>
                     </summary>

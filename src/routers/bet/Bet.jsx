@@ -11,6 +11,7 @@ import Live from "./Live";
 export default function Bet() {
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
+  const demoToken = localStorage.getItem("demoToken");
 
   function getBetSocket() {
     connectSocketIo();
@@ -26,7 +27,7 @@ export default function Bet() {
   }
 
   function getDemoToken() {
-    if (token) return;
+    if (token || demoToken) return;
 
     axios
       .get(`${API.USER_DEMO_TOKEN}`)
@@ -34,6 +35,7 @@ export default function Bet() {
         console.log(data.token);
 
         localStorage.setItem("demoToken", data.token);
+        window.location.reload();
       })
       .catch((err) => console.error(err));
   }

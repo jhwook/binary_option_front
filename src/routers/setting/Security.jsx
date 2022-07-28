@@ -10,28 +10,33 @@ import axios from "axios";
 import { API } from "../../configs/api";
 
 export default function Security() {
-  const totalPage = 4;
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [tblData, setTblData] = useState([]);
 
-  useEffect(() => {
-    axios.get(`${API.USER_QUERY}/loginhistories/0/100`).then(({ data }) => {
-      console.log(data.respdata);
-      setTblData(data.respdata.rows);
-      setTotal(data.respdata.count);
-    });
-  }, []);
+  function getData() {
+    axios
+      .get(`${API.USER_QUERY}/loginhistories/${(page - 1) * 10}/10`)
+      .then(({ data }) => {
+        console.log(data.respdata);
+        setTblData(data.respdata.rows);
+        setTotal(data.respdata.count);
+      });
+  }
 
   function onClickPrePageBtn() {
-    if (page > 1) setPage(page - 1);
+    setPage(page - 1);
   }
 
   function onClickNextPageBtn() {
-    if (page < totalPage) setPage(page + 1);
+    setPage(page + 1);
   }
+  
+  useEffect(() => {
+    getData();
+  }, [page]);
 
   if (isMobile)
     return (
@@ -109,21 +114,25 @@ export default function Security() {
                 </button>
 
                 <ul className="pageList">
-                  {new Array(totalPage).fill("").map((v, i) => (
-                    <li
-                      key={i}
-                      className={`${i + 1 === page && "on"}`}
-                      onClick={() => setPage(i + 1)}
-                    >
-                      <strong>{i + 1}</strong>
-                      <span className="onBar" />
-                    </li>
-                  ))}
+                  {new Array(Math.ceil(total / 10)).fill("").map(
+                    (v, i) =>
+                      i > page - 6 &&
+                      i < page + 4 && (
+                        <li
+                          key={i}
+                          className={`${i + 1 === page && "on"}`}
+                          onClick={() => setPage(i + 1)}
+                        >
+                          <strong>{i + 1}</strong>
+                          <span className="onBar" />
+                        </li>
+                      )
+                  )}
                 </ul>
 
                 <button
                   className="arwBtn"
-                  disabled={page >= totalPage}
+                  disabled={page >= Math.ceil(total / 10)}
                   onClick={onClickNextPageBtn}
                 >
                   <img src={I_rtArwWhite} alt="" />
@@ -191,21 +200,25 @@ export default function Security() {
                 </button>
 
                 <ul className="pageList">
-                  {new Array(totalPage).fill("").map((v, i) => (
-                    <li
-                      key={i}
-                      className={`${i + 1 === page && "on"}`}
-                      onClick={() => setPage(i + 1)}
-                    >
-                      <strong>{i + 1}</strong>
-                      <span className="onBar" />
-                    </li>
-                  ))}
+                  {new Array(Math.ceil(total / 10)).fill("").map(
+                    (v, i) =>
+                      i > page - 6 &&
+                      i < page + 4 && (
+                        <li
+                          key={i}
+                          className={`${i + 1 === page && "on"}`}
+                          onClick={() => setPage(i + 1)}
+                        >
+                          <strong>{i + 1}</strong>
+                          <span className="onBar" />
+                        </li>
+                      )
+                  )}
                 </ul>
 
                 <button
                   className="arwBtn"
-                  disabled={page >= totalPage}
+                  disabled={page >= Math.ceil(total / 10)}
                   onClick={onClickNextPageBtn}
                 >
                   <img src={I_rtArwWhite} alt="" />

@@ -87,10 +87,13 @@ const GlobalStyle = createGlobalStyle`
     }
   }
 
-
   label,
   summary{
     cursor: pointer;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
   }
 
   button{

@@ -30,8 +30,19 @@ export default function TradingHistory() {
   const [endDate, setEndDate] = useState(new Date());
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [totalPage, setTotalPage] = useState(1);
+  const [total, setTotal] = useState(0);
   const [listData, setListData] = useState([]);
+
+  function getData() {
+    axios
+      .get(`${API.USER_BETLOGS}/${category}/${(page - 1) * 10}/10`)
+      .then(({ data }) => {
+        console.log(data.bet_log);
+        setListData(data.bet_log.rows);
+        setTotal(data.bet_log.count);
+      })
+      .catch((err) => console.error(err));
+  }
 
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
     <button className="dateBtn" onClick={onClick} ref={ref}>
@@ -52,22 +63,15 @@ export default function TradingHistory() {
   }
 
   function onClickPrePageBtn() {
-    if (page > 1) setPage(page - 1);
+    setPage(page - 1);
   }
 
   function onClickNextPageBtn() {
-    if (page < totalPage) setPage(page + 1);
+    setPage(page + 1);
   }
 
   useEffect(() => {
-    axios
-      .get(`${API.USER_BETLOGS}/${category}/${(page - 1) * 10}/10`)
-      .then(({ data }) => {
-        console.log(data.bet_log);
-        setListData(data.bet_log.rows);
-        setTotalPage(data.beg_log.count / 10 + (data.beg_log.count % 10 && 1));
-      })
-      .catch((err) => console.error(err));
+    getData();
   }, [category]);
 
   if (isMobile)
@@ -243,21 +247,25 @@ export default function TradingHistory() {
                 </button>
 
                 <ul className="pageList">
-                  {new Array(totalPage).fill("").map((v, i) => (
-                    <li
-                      key={i}
-                      className={`${i + 1 === page && "on"}`}
-                      onClick={() => setPage(i + 1)}
-                    >
-                      <strong>{i + 1}</strong>
-                      <span className="onBar" />
-                    </li>
-                  ))}
+                  {new Array(Math.ceil(total / 10)).fill("").map(
+                    (v, i) =>
+                      i > page - 6 &&
+                      i < page + 4 && (
+                        <li
+                          key={i}
+                          className={`${i + 1 === page && "on"}`}
+                          onClick={() => setPage(i + 1)}
+                        >
+                          <strong>{i + 1}</strong>
+                          <span className="onBar" />
+                        </li>
+                      )
+                  )}
                 </ul>
 
                 <button
                   className="arwBtn"
-                  disabled={page >= totalPage}
+                  disabled={page >= Math.ceil(total / 10)}
                   onClick={onClickNextPageBtn}
                 >
                   <img src={I_rtArwWhite} alt="" />
@@ -401,21 +409,25 @@ export default function TradingHistory() {
               </button>
 
               <ul className="pageList">
-                {new Array(totalPage).fill("").map((v, i) => (
-                  <li
-                    key={i}
-                    className={`${i + 1 === page && "on"}`}
-                    onClick={() => setPage(i + 1)}
-                  >
-                    <strong>{i + 1}</strong>
-                    <span className="onBar" />
-                  </li>
-                ))}
+                {new Array(Math.ceil(total / 10)).fill("").map(
+                  (v, i) =>
+                    i > page - 6 &&
+                    i < page + 4 && (
+                      <li
+                        key={i}
+                        className={`${i + 1 === page && "on"}`}
+                        onClick={() => setPage(i + 1)}
+                      >
+                        <strong>{i + 1}</strong>
+                        <span className="onBar" />
+                      </li>
+                    )
+                )}
               </ul>
 
               <button
                 className="arwBtn"
-                disabled={page >= totalPage}
+                disabled={page >= Math.ceil(total / 10)}
                 onClick={onClickNextPageBtn}
               >
                 <img src={I_rtArwWhite} alt="" />
@@ -577,6 +589,56 @@ const MtradingHistoryBox = styled.main`
               img {
                 width: 12px;
               }
+            }
+          }
+        }
+      }
+
+      .pageBox {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin: 30px 0 0 0;
+
+        .arwBtn {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 40px;
+          height: 40px;
+          border: 2px solid #fff;
+          border-radius: 50%;
+
+          &:disabled {
+            opacity: 0.2;
+          }
+        }
+
+        .pageList {
+          display: flex;
+          align-items: center;
+
+          li {
+            display: flex;
+            justify-content: center;
+            padding: 0 5px;
+            font-size: 18px;
+            position: relative;
+            cursor: pointer;
+
+            &.on {
+              .onBar {
+                background: #f7ab1f;
+              }
+            }
+
+            .onBar {
+              width: 100%;
+              height: 6px;
+              border-radius: 4px;
+              bottom: -6px;
+              position: absolute;
             }
           }
         }
