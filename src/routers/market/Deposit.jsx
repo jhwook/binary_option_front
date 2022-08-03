@@ -64,7 +64,7 @@ export default function Deposit({ userData }) {
     window.open(
       `${metaMaskLink}/${
         contractaddr[token.text]
-      }/transfer?address=${walletAddress}&uint256=${amount}e${token.digit}`
+      }/transfer?address=${walletAddress}&uint256=${amount}e6`
     );
 
     const socket = io(URL, {
@@ -106,7 +106,7 @@ export default function Deposit({ userData }) {
       contractaddress: contractaddr[token.text],
       abikind: "ERC20",
       methodname: "transfer",
-      aargs: [contractaddr["admin"], amount * 10 ** token.digit + ""],
+      aargs: [contractaddr["admin"], amount * 10 ** 6 + ""],
     });
 
     reqTx(
