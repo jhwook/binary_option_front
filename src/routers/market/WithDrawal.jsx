@@ -26,15 +26,14 @@ export default function WithDrawal() {
     minWithdraw: 5,
     maxTransactions: -1,
   });
-  // const [token, setToken] = useState({ icon: T_usdt, text: "USDT" ,digit:6});
-  // const [tokenList, setTokenList] = useState([{ icon: T_usdt, text: "USDT",digit:6 }]);
+  // const [token, setToken] = useState({ icon: T_usdt, text: "USDT" });
+  // const [tokenList, setTokenList] = useState([{ icon: T_usdt, text: "USDT" }]);
   const [token, setToken] = useState({
     icon: T_usdt,
     text: "USDT_BINOPT",
-    digit: 18,
   });
   const [tokenList, setTokenList] = useState([
-    { icon: T_usdt, text: "USDT_BINOPT", digit: 18 },
+    { icon: T_usdt, text: "USDT_BINOPT" },
   ]);
   const [process, setProcess] = useState(false);
   const [loader, setLoader] = useState("");

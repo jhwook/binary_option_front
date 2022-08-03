@@ -32,15 +32,14 @@ export default function Deposit({ userData }) {
   const [securityVerifiPopup, setSecurityVerifiPopup] = useState(false);
   const [cashInPersonPopup, setCashInPersonPopupPopup] = useState(false);
   const [tokenPopup, setTokenPopup] = useState(false);
-  // const [token, setToken] = useState({ icon: T_usdt, text: "USDT" ,digit:6});
-  // const [tokenList, setTokenList] = useState([{ icon: T_usdt, text: "USDT",digit:6 }]);
+  // const [token, setToken] = useState({ icon: T_usdt, text: "USDT" });
+  // const [tokenList, setTokenList] = useState([{ icon: T_usdt, text: "USDT"}]);
   const [token, setToken] = useState({
     icon: T_usdt,
     text: "USDT_BINOPT",
-    digit: 18,
   });
   const [tokenList, setTokenList] = useState([
-    { icon: T_usdt, text: "USDT_BINOPT", digit: 18 },
+    { icon: T_usdt, text: "USDT_BINOPT" },
   ]);
   const [loader, setLoader] = useState("");
   const [preDepositWarningPopup, setPreDepositWarningPopup] = useState(false);
