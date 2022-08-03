@@ -3,8 +3,9 @@ import { useEffect, useLayoutEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Route, Routes, Navigate } from "react-router";
 import { API } from "../../configs/api";
-import { setDividObj } from "../../reducers/bet";
+import { setBetFlag, setClosedFlag, setDividObj } from "../../reducers/bet";
 import { socketIo, connectSocketIo } from "../../util/socket";
+import { setToast } from "../../util/Util";
 import Demo from "./Demo";
 import Live from "./Live";
 
@@ -23,6 +24,18 @@ export default function Bet() {
 
     socketIo.on("bet", (res) => {
       console.log("bet", res);
+    });
+
+    socketIo.on("bet_closed", (res) => {
+      console.log("bet_closed", res);
+      setToast({
+        type: "closed",
+        assetInfo: { name: res.name },
+        amount: res.data.amount / 10 ** 6,
+        profit: res.profit,
+      });
+      dispatch(setClosedFlag());
+      dispatch(setBetFlag());
     });
   }
 

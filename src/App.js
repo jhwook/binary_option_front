@@ -35,7 +35,7 @@ export default function App() {
         position="top-center"
         autoClose={5000}
         hideProgressBar
-        newestOnTop={false}
+        newestOnTop={true}
         closeOnClick
         rtl={false}
         pauseOnFocusLoss
@@ -57,7 +57,7 @@ export default function App() {
           <Route path="/setting/*" element={<Setting />} />
 
           <Route path="/qna" element={<Qna />} />
-          
+
           <Route path="/test" element={<Test />} />
         </Routes>
       </HashRouter>

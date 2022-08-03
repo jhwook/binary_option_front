@@ -11,6 +11,8 @@ export const API = {
   USER_CERTIFICATION_EMAIL: URL + "/users/certification/email",
   USER_QUERY: URL + "/users/query", //tablename/offset/limit
   USER_BALANCE: URL + "/users/balance", //:type
+  USER_BRANCH: URL + "/users/branch", //:offset/:limit/:orderkey/:orderval
+  USER_BRANCH_FEE_LOG: URL + "/users/branch/fee/log", //:offset/:limit/:orderkey/:orderval
   USER_PREDEPOSIT: URL + "/users/predeposit",
   USER_BETLOGS: URL + "/users/betlogs", //:type/:offset/:limit
   USER_DEMO_TOKEN: URL + "/users/demo/token",

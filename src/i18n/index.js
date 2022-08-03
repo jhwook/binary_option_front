@@ -3,18 +3,20 @@ import { initReactI18next } from "react-i18next";
 import en from "./en.json";
 import kr from "./kr.json";
 
+const lng = localStorage.getItem("lng");
+
 const resources = {
   en: {
     translation: en,
   },
-  kr:{
-    translation:kr
-  }
+  kr: {
+    translation: kr,
+  },
 };
 
 i18n.use(initReactI18next).init({
   resources,
-  lng: "en",
+  lng: lng || "en",
 
   interpolation: {
     escapeValue: false,

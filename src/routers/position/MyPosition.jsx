@@ -346,6 +346,7 @@ const MmyPositionBox = styled.main`
 const PmyPositionBox = styled.main`
   flex: 1;
   padding: 70px 140px;
+  overflow-y: scroll;
 
   @media (max-width: 1440px) {
     max-width: 1020px;
@@ -357,7 +358,6 @@ const PmyPositionBox = styled.main`
     flex-direction: column;
     gap: 50px;
     height: 100%;
-    overflow-y: scroll;
 
     .posArea {
       display: flex;

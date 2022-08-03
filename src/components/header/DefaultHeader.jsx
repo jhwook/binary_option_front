@@ -23,7 +23,7 @@ import AddPopup from "./AddPopup";
 export default function DefaultHeader({ white, border, title, demoToken }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
 
   const isMobile = useSelector((state) => state.common.isMobile);
   const betFlag = useSelector((state) => state.bet.betFlag);
@@ -154,48 +154,63 @@ export default function DefaultHeader({ white, border, title, demoToken }) {
             </button>
 
             {!white && (
-              <ul className="navList">
-                {D_headerList.map((v, i) =>
-                  v.key === "Finance" && !userData.isbranch ? (
-                    <Fragment key={i} />
-                  ) : (
-                    <li
-                      key={i}
-                      className={`${
-                        location.pathname.indexOf(
-                          String(v.key).toLocaleLowerCase()
-                        ) !== -1 && "on"
-                      }`}
-                      onClick={() => navigate(v.url)}
-                    >
-                      {v.key}
-                    </li>
-                  )
-                )}
+              <>
+                <ul className="navList">
+                  {D_headerList.map((v, i) =>
+                    v.key === "Finance" && userData.isadmin !== 1 ? (
+                      <Fragment key={i} />
+                    ) : (
+                      <li
+                        key={i}
+                        className={`${
+                          location.pathname.indexOf(
+                            String(v.key).toLocaleLowerCase()
+                          ) !== -1 && "on"
+                        }`}
+                        onClick={() => navigate(v.url)}
+                      >
+                        {t(v.key)}
+                      </li>
+                    )
+                  )}
 
-                <li className={`${morePopup && "on"} moreBox`}>
-                  <button
-                    className="moreBtn"
-                    onClick={() => setMorePopup(true)}
-                  >
-                    <p>More</p>
-                    <img src={I_dnPolWhite} alt="" />
+                  <li className={`${morePopup && "on"} moreBox`}>
+                    <button
+                      className="moreBtn"
+                      onClick={() => setMorePopup(true)}
+                    >
+                      <p>{t("More")}</p>
+                      <img src={I_dnPolWhite} alt="" />
+                    </button>
+
+                    {morePopup && (
+                      <>
+                        <MorePopup off={setMorePopup} />
+                        <PopupBg off={setMorePopup} />
+                      </>
+                    )}
+                  </li>
+                </ul>
+
+                <div className="lngBox">
+                  <button className="lngBtn" onClick={() => setLngPopup(true)}>
+                    {D_lngList.find((e) => e.value === i18n.language).key}
                   </button>
 
-                  {morePopup && (
+                  {lngPopup && (
                     <>
-                      <MorePopup off={setMorePopup} />
-                      <PopupBg off={setMorePopup} />
+                      <SelLngPopup off={setLngPopup} />
+                      <PopupBg off={setLngPopup} />
                     </>
                   )}
-                </li>
-              </ul>
+                </div>
+              </>
             )}
           </article>
 
-          {location.pathname.indexOf("auth") === -1 ? (
-            <article className="rightArea">
-              {token || demoToken ? (
+          <article className="rightArea">
+            {location.pathname.indexOf("auth") === -1 ? (
+              token || demoToken ? (
                 <>
                   <span className="accountBox">
                     <button
@@ -204,14 +219,14 @@ export default function DefaultHeader({ white, border, title, demoToken }) {
                     >
                       {balanceType === "Demo" ? (
                         <>
-                          <strong className="key">Demo</strong>
+                          <strong className="key">{t("Demo")}</strong>
                           <strong className="value">{`$${Number(
                             balance?.DEMO?.avail / 10 ** 6 || 0
                           ).toFixed(2)}`}</strong>
                         </>
                       ) : (
                         <>
-                          <strong className="key">Live</strong>
+                          <strong className="key">{t("Live")}</strong>
                           <strong className="value">{`$${Number(
                             balance?.LIVE?.avail / 10 ** 6 || 0
                           ).toFixed(2)}`}</strong>
@@ -222,7 +237,7 @@ export default function DefaultHeader({ white, border, title, demoToken }) {
                     <button className="depositBtn" onClick={onClickDepositBtn}>
                       <img src={I_wallet} alt="" />
 
-                      <strong>Deposit</strong>
+                      <strong>{t("Deposit")}</strong>
                     </button>
                   </span>
 
@@ -236,46 +251,25 @@ export default function DefaultHeader({ white, border, title, demoToken }) {
                   )}
                 </>
               ) : (
-                <>
-                  <div className="lngBox">
-                    <button
-                      className="lngBtn"
-                      onClick={() => setLngPopup(true)}
-                    >
-                      {D_lngList.find((e) => e.value === i18n.language).key}
-                    </button>
+                <button className="loginBtn" onClick={() => navigate("/auth")}>
+                  {t("LOGIN")}
+                </button>
+              )
+            ) : (
+              <div className="lngBox">
+                <button className="lngBtn" onClick={() => setLngPopup(true)}>
+                  {D_lngList.find((e) => e.value === i18n.language).key}
+                </button>
 
-                    {lngPopup && (
-                      <>
-                        <SelLngPopup off={setLngPopup} />
-                        <PopupBg off={setLngPopup} />
-                      </>
-                    )}
-                  </div>
-
-                  <button
-                    className="loginBtn"
-                    onClick={() => navigate("/auth")}
-                  >
-                    LOGIN
-                  </button>
-                </>
-              )}
-            </article>
-          ) : (
-            <div className="lngBox">
-              <button className="lngBtn" onClick={() => setLngPopup(true)}>
-                {D_lngList.find((e) => e.value === i18n.language).key}
-              </button>
-
-              {lngPopup && (
-                <>
-                  <SelLngPopup off={setLngPopup} />
-                  <PopupBg off={setLngPopup} />
-                </>
-              )}
-            </div>
-          )}
+                {lngPopup && (
+                  <>
+                    <SelLngPopup off={setLngPopup} />
+                    <PopupBg off={setLngPopup} />
+                  </>
+                )}
+              </div>
+            )}
+          </article>
         </PdefaultHeaderBox>
 
         {myBalancePopup && (
@@ -420,6 +414,16 @@ const PdefaultHeaderBox = styled.header`
       }
 
       .lngBox {
+        .selectPopup {
+          background: #fff;
+          box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.2);
+
+          li {
+            &.on {
+              color: #f7ab1f;
+            }
+          }
+        }
       }
 
       .loginBtn {
@@ -432,7 +436,7 @@ const PdefaultHeaderBox = styled.header`
   .leftArea {
     display: flex;
     align-items: center;
-    gap: 32px;
+    gap: 24px;
 
     .logoBtn {
       display: flex;
@@ -451,6 +455,7 @@ const PdefaultHeaderBox = styled.header`
         align-items: center;
         height: 30px;
         padding: 0 12px;
+        font-size: 14px;
         border-radius: 6px;
         cursor: pointer;
 
@@ -491,17 +496,6 @@ const PdefaultHeaderBox = styled.header`
 
       &:hover {
         background: rgba(255, 255, 255, 0.1);
-      }
-    }
-
-    .selectPopup {
-      background: #fff;
-      box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.2);
-
-      li {
-        &.on {
-          color: #f7ab1f;
-        }
       }
     }
   }

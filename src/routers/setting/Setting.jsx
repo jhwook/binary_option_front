@@ -38,7 +38,7 @@ export default function Setting() {
   else
     return (
       <PmarketBox>
-        <DefaultHeader />
+        <DefaultHeader border />
 
         <LeftNav list={D_settingNavList} baseUrl={"setting"} />
 

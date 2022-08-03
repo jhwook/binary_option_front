@@ -32,9 +32,9 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
         params: { searchkey: search },
       })
       .then(({ data }) => {
-        console.log(data.respdata);
-        setListData(data.respdata);
-        dispatch(setTokenPopupData(data.respdata));
+        console.log(data);
+        setListData(data.resp);
+        dispatch(setTokenPopupData(data.resp));
       })
       .catch((err) => console.error(err));
   }
@@ -62,7 +62,7 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
       .get(`${API.GET_ASSETS}`, { params: { group: category } })
       .then(({ data }) => {
         console.log(data.resp);
-        setListData(data.resp);
+        setListData(data.resp || []);
         dispatch(setTokenPopupData(data.resp));
       })
       .catch((err) => console.error(err));
@@ -205,7 +205,7 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
 
         <article className="listArea">
           <ul className="tokenList">
-            {listData.map((v, i) => {
+            {listData.filter(e=>e.active).map((v, i) => {
               let _percent = getDividFromData({
                 id: v.id,
                 _case: "totalRate",

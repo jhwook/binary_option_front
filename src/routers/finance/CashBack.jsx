@@ -314,6 +314,7 @@ const McashBackBox = styled.main`
 const PcashBackBox = styled.main`
   flex: 1;
   padding: 70px 140px;
+  overflow-y: scroll;
 
   @media (max-width: 1440px) {
     max-width: 1020px;
@@ -326,7 +327,6 @@ const PcashBackBox = styled.main`
     gap: 36px;
     height: 100%;
     color: #fff;
-    overflow-y: scroll;
 
     .titleArea {
       display: flex;

@@ -13,7 +13,7 @@ export const D_featureList = [
   },
   {
     icon: I_speakOrange,
-    text: "Transparent pricing. When you trade against Drift’s DAMM, you know exactly the price you transact at.",
+    text: "Transparent pricing. When you trade with Betbit, you know exactly what price you are trading at.",
   },
 ];
 
@@ -32,6 +32,6 @@ export const D_futureList = [
   },
   {
     title: "What is the minimum deposit amount?",
-    cont: "You can start trading by investing a small amount of money. The minimum deposit is 10 US dollars.",
+    cont: "You can start trading by investing a small amount of money. The minimum deposit is 10 USDT.",
   },
 ];

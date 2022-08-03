@@ -32,8 +32,16 @@ export default function Deposit({ userData }) {
   const [securityVerifiPopup, setSecurityVerifiPopup] = useState(false);
   const [cashInPersonPopup, setCashInPersonPopupPopup] = useState(false);
   const [tokenPopup, setTokenPopup] = useState(false);
-  const [token, setToken] = useState({ icon: T_usdt, text: "USDT" });
-  const [tokenList, setTokenList] = useState([{ icon: T_usdt, text: "USDT" }]);
+  // const [token, setToken] = useState({ icon: T_usdt, text: "USDT" ,digit:6});
+  // const [tokenList, setTokenList] = useState([{ icon: T_usdt, text: "USDT",digit:6 }]);
+  const [token, setToken] = useState({
+    icon: T_usdt,
+    text: "USDT_BINOPT",
+    digit: 18,
+  });
+  const [tokenList, setTokenList] = useState([
+    { icon: T_usdt, text: "USDT_BINOPT", digit: 18 },
+  ]);
   const [loader, setLoader] = useState("");
   const [preDepositWarningPopup, setPreDepositWarningPopup] = useState(false);
   const [minDepositPopup, setMinDepositPopup] = useState(false);
@@ -56,7 +64,7 @@ export default function Deposit({ userData }) {
     window.open(
       `${metaMaskLink}/${
         contractaddr[token.text]
-      }/transfer?address=${walletAddress}&uint256=${amount}e6`
+      }/transfer?address=${walletAddress}&uint256=${amount}e${token.digit}`
     );
 
     const socket = io(URL, {
@@ -77,7 +85,7 @@ export default function Deposit({ userData }) {
       }
     });
 
-    socket.emit("transactions", { type: "USDT" }, (res) => {
+    socket.emit("transactions", { type: token.text }, (res) => {
       console.log("emit");
       console.log(res);
     });
@@ -98,7 +106,7 @@ export default function Deposit({ userData }) {
       contractaddress: contractaddr[token.text],
       abikind: "ERC20",
       methodname: "transfer",
-      aargs: [contractaddr["admin"], amount * 10 ** 6 + ""],
+      aargs: [contractaddr["admin"], amount * 10 ** token.digit + ""],
     });
 
     reqTx(
@@ -166,6 +174,7 @@ export default function Deposit({ userData }) {
   function onClickDepositBtn() {
     if (amount < 5) setMinDepositPopup(true);
     else getPreDepositReq();
+    // console.log(Web3.utils.toWei(String(amount)));
   }
 
   useEffect(() => {
@@ -178,7 +187,7 @@ export default function Deposit({ userData }) {
     if (isbranch) {
       setTokenList([{ icon: T_CNY, text: "CNY" }]);
     } else {
-      setTokenList([{ icon: T_usdt, text: "USDT" }]);
+      setTokenList([{ icon: T_usdt, text: "USDT_BINOPT" }]);
     }
   }, [userData]);
 

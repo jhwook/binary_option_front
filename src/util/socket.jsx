@@ -5,6 +5,7 @@ const token =
   localStorage.getItem("token") || localStorage.getItem("demoToken");
 
 export const socketIo = io(URL, {
+  transports: ["websocket"],
   query: {
     token,
   },

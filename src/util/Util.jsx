@@ -120,7 +120,7 @@ export function onClickCopy(str) {
   document.body.removeChild(textArea);
 }
 
-export function setToast({ type, cont, assetInfo, amount }) {
+export function setToast({ type, cont, assetInfo, amount, profit }) {
   switch (type) {
     case "HIGH":
       toast(
@@ -183,18 +183,18 @@ export function setToast({ type, cont, assetInfo, amount }) {
 
           <ul className="infoList">
             <li>
-              <strong>Bitcoin</strong>
+              <strong>{assetInfo.name}</strong>
               <img src={I_highArwGreen} alt="" />
             </li>
 
             <li>
               <p className="key">Payout</p>
-              <p className="value">$0.00</p>
+              <p className="value">${amount}</p>
             </li>
 
             <li>
               <p className="key">Profit</p>
-              <p className="value">$0</p>
+              <p className="value">${profit}</p>
             </li>
           </ul>
         </div>,
@@ -285,6 +285,12 @@ export function getDividFromData({ id, _case, dataObj }) {
   let dividendrate = _targetData.dividendrate;
 
   switch (_case) {
+    case "HIGH":
+      return Math.floor(dividendrate.high_side_dividendrate * 100) / 100;
+
+    case "LOW":
+      return Math.floor(_targetData.low_side_amount * 100) / 100;
+
     case "totalRate":
       if (
         dividendrate.high_side_dividendrate < dividendrate.low_side_dividendrate
@@ -306,6 +312,21 @@ export function getDividFromData({ id, _case, dataObj }) {
     case "betCount":
       return _targetData.bet_count;
 
+    default:
+      break;
+  }
+}
+
+export function getTier(level) {
+  switch (level) {
+    case 0:
+      return "Diamond";
+    case 1:
+      return "Gold";
+    case 2:
+      return "Silver";
+    case 3:
+      return "Bronze";
     default:
       break;
   }

@@ -271,7 +271,6 @@ const PreferralBox = styled.main`
 
   .innerBox {
     height: 100%;
-    overflow-y: scroll;
 
     .titleArea {
       display: flex;

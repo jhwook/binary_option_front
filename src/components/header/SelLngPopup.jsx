@@ -9,6 +9,7 @@ export default function SelLngPopup({ white, off }) {
 
   function onClickCont(v) {
     i18n.changeLanguage(v.value);
+    localStorage.setItem("lng", v.value);
     if (off) off();
   }
 
@@ -92,7 +93,8 @@ const PselLangPopupBox = styled.ul`
   gap: 10px;
   width: 100px;
   padding: 10px 16px;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
   border-radius: 6px;
   box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.2);
   top: 40px;
@@ -107,7 +109,7 @@ const PselLangPopupBox = styled.ul`
 
     &.on {
       font-weight: 700;
-      color: #f7ab1f;
+      color: #fff;
     }
   }
 `;

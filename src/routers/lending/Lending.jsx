@@ -16,8 +16,11 @@ import I_thunderGrad from "../../img/icon/I_thunderGrad.svg";
 import I_rtArw3White from "../../img/icon/I_rtArw3White.svg";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 export default function Lending() {
+  const { t } = useTranslation();
+
   const isMobile = useSelector((state) => state.common.isMobile);
 
   if (isMobile)
@@ -135,7 +138,9 @@ export default function Lending() {
               <div className="contBox">
                 <img className="icon" src={I_thunderGrad} alt="" />
 
-                <strong className="cont">Start trading on Betbit today.</strong>
+                <strong className="cont">
+                  {t("Start trading on Betbit today.")}
+                </strong>
               </div>
 
               <div className="btnBox">
@@ -151,17 +156,17 @@ export default function Lending() {
 
             <article className="textArea">
               <strong className="explain">
-                THE RIGHT PLACE
-                <br /> FOR ONLINE TRADING ON FINANCIAL MARKETS
+                {t("THE RIGHT PLACE")}
+                <br /> {t("FOR ONLINE TRADING ON FINANCIAL MARKETS")}
               </strong>
 
               <strong className="do">
-                Place Your Trades On Best Conditions
+                {t("Place Your Trades On Best Conditions")}
               </strong>
             </article>
 
             <button className="tradeBtn" onClick={() => {}}>
-              Trade Now
+              {t("Trade Now")}
             </button>
           </section>
 
@@ -194,31 +199,31 @@ export default function Lending() {
                     </div>
                   </span>
 
-                  <p>{v.text}</p>
+                  <p>{t(v.text)}</p>
                 </li>
               ))}
             </ul>
           </section>
 
           <section className="rollSec">
-            <p>Lightntig quick Mobile friendly</p>
-            <p>Lightntig quick Mobile friendly</p>
+            <p>{t("Lightning quick/Mobile friendly/Fast withdrawals")}</p>
+            <p>{t("Lightning quick/Mobile friendly/Fast withdrawals")}</p>
           </section>
 
           <section className="futureSec">
             <div className="titleBox">
-              <strong className="title">Start trading on BETBIT</strong>
+              <strong className="title">{t("Start trading on BETBIT")}</strong>
 
               <strong className="explain">
-                Enjoy incredible accessibility to crypto futures
+                {t("Enjoy incredible accessibility to crypto futures")}
               </strong>
             </div>
 
             <ul className="futureList">
               {D_futureList.map((v, i) => (
                 <li key={i}>
-                  <strong className="key">{v.title}</strong>
-                  <p className="value">{v.cont}</p>
+                  <strong className="key">{t(v.title)}</strong>
+                  <p className="value">{t(v.cont)}</p>
                 </li>
               ))}
             </ul>

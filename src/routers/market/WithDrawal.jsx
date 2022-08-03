@@ -6,7 +6,6 @@ import L_loader from "../../img/loader/L_loader.png";
 import I_alarmYellow from "../../img/icon/I_alarmYellow.svg";
 import T_usdt from "../../img/token/T_usdt.png";
 import TokenSelectPopup from "../../components/common/TokenSelectPopup";
-
 import { setToast, strDot } from "../../util/Util";
 import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
 import PopupBg from "../../components/common/PopupBg";
@@ -22,13 +21,21 @@ export default function WithDrawal() {
   const [amount, setAmount] = useState("");
   const [address, setAddress] = useState("");
   const [tokenPopup, setTokenPopup] = useState(false);
-  const [token, setToken] = useState({ icon: T_usdt, text: "USDT" });
   const [settings, setSettings] = useState({
     commision: 0,
     minWithdraw: 5,
     maxTransactions: -1,
   });
-  const [tokenList, setTokenList] = useState([{ icon: T_usdt, text: "USDT" }]);
+  // const [token, setToken] = useState({ icon: T_usdt, text: "USDT" ,digit:6});
+  // const [tokenList, setTokenList] = useState([{ icon: T_usdt, text: "USDT",digit:6 }]);
+  const [token, setToken] = useState({
+    icon: T_usdt,
+    text: "USDT_BINOPT",
+    digit: 18,
+  });
+  const [tokenList, setTokenList] = useState([
+    { icon: T_usdt, text: "USDT_BINOPT", digit: 18 },
+  ]);
   const [process, setProcess] = useState(false);
   const [loader, setLoader] = useState("");
   const [minWithdrawalPopup, setMinWithdrawalPopup] = useState(false);

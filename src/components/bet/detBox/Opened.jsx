@@ -6,7 +6,7 @@ import I_highArwGreen from "../../../img/icon/I_highArwGreen.svg";
 import I_lowArwRed from "../../../img/icon/I_lowArwRed.svg";
 import { setOpenedData } from "../../../reducers/bet";
 import { socketIo } from "../../../util/socket";
-import { getDividFromData } from "../../../util/Util";
+import { getDividFromData, setToast } from "../../../util/Util";
 
 export default function Opened() {
   const dispatch = useDispatch();
@@ -36,6 +36,27 @@ export default function Opened() {
     }
   }
 
+  function getInitBenefit(v) {
+    let _amount = v.amount / 10 ** 6;
+    switch (v.side) {
+      case "HIGH":
+        if (v.currentPrice - v.startingPrice > 0) {
+          return (_amount * v.diffRate) / 100;
+        } else {
+          return _amount * -1;
+        }
+
+      case "LOW":
+        if (v.currentPrice - v.startingPrice < 0) {
+          return (_amount * v.diffRate) / 100;
+        } else {
+          return _amount * -1;
+        }
+      default:
+        break;
+    }
+  }
+
   function getPreResult(v) {
     let result;
 
@@ -54,7 +75,14 @@ export default function Opened() {
         break;
     }
 
-    if (v.diffRate === 0) result = null;
+    if (
+      getDividFromData({
+        id: v.assetId,
+        _case: v.side,
+        dataObj: dividObj,
+      }) === 0
+    )
+      result = null;
 
     return result;
   }
@@ -70,14 +98,9 @@ export default function Opened() {
     }
   }
 
-  function getClose(){
-
-  }
-
   useEffect(() => {
     let timeInterval = setInterval(() => {
       setNow(new Date());
-      getClose();
     }, 1000);
 
     let logInterval = setInterval(() => {
@@ -107,11 +130,7 @@ export default function Opened() {
                       <div className="contBox">
                         <p className="token">{v.asset.name}</p>
 
-                        <p className="percent">{`${getDividFromData({
-                          id: v.assetId,
-                          _case: "totalRate",
-                          dataObj: dividObj,
-                        })}%`}</p>
+                        <p className="percent">{`${v.diffRate || 0}%`}</p>
                       </div>
 
                       <div className="contBox">
@@ -120,10 +139,9 @@ export default function Opened() {
                           <p>{`$${v.amount / 10 ** 6}`}</p>
                         </span>
 
-                        <p className={`${getPreResult(v)} benefit`}>{`$${(
-                          (v.endingPrice - v.startingPrice) *
-                          v.diffRate
-                        ).toFixed(2)}`}</p>
+                        <p
+                          className={`${getPreResult(v)} benefit`}
+                        >{`$${getInitBenefit(v).toFixed(2)}`}</p>
 
                         <p className="time">
                           {`${
@@ -131,7 +149,7 @@ export default function Opened() {
                               ? `${moment.unix(v.expiry).diff(now, "hours")}:`
                               : ""
                           }${`${Math.floor(
-                            moment.unix(v.expiry).diff(now, "minutes") / 60
+                            moment.unix(v.expiry).diff(now, "minutes") % 60
                           )}`.padStart(2, "0")}:${`${
                             moment.unix(v.expiry).diff(now, "seconds") % 60
                           }`.padStart(2, "0")}`}
@@ -196,7 +214,7 @@ export default function Opened() {
                               <p className="key">Profit</p>
                               <p className="value">{`$${(
                                 (v.amount * v.diffRate) /
-                                10 ** 6
+                                10 ** 8
                               ).toFixed(2)}`}</p>
                             </li>
                           </ul>
@@ -214,12 +232,25 @@ export default function Opened() {
                             <li>
                               <p className="key">Current price</p>
 
-                              <p className="value">{29746}</p>
+                              <p className="value">
+                                {v.currentPrice
+                                  ? Number(v.currentPrice).toFixed(2)
+                                  : "-"}
+                              </p>
                             </li>
                             <li>
                               <p className="key">Difference</p>
 
-                              <p className="value point">{`${-1} points`}</p>
+                              <p
+                                className={`${
+                                  (v.currentPrice - v.startingPrice > 0 &&
+                                    "plus") ||
+                                  (v.currentPrice - v.startingPrice < 0 &&
+                                    "minus")
+                                } value point`}
+                              >{`${Number(
+                                v.currentPrice - v.startingPrice
+                              ).toFixed(2)} points`}</p>
                             </li>
                           </ul>
                         </div>
@@ -245,11 +276,7 @@ export default function Opened() {
                       <div className="contBox">
                         <p className="token">{v?.asset?.name}</p>
 
-                        <p className="percent">{`${getDividFromData({
-                          id: v.assetId,
-                          _case: "totalRate",
-                          dataObj: dividObj,
-                        })}%`}</p>
+                        <p className="percent">{`${v.diffRate || 0}%`}</p>
                       </div>
 
                       <div className="contBox">
@@ -258,10 +285,9 @@ export default function Opened() {
                           <p>{`$${v.amount / 10 ** 6}`}</p>
                         </span>
 
-                        <p className={`${getPreResult(v)} benefit`}>{`$${(
-                          (v.currentPrice - v.startingPrice) *
-                          v.diffRate
-                        ).toFixed(2)}`}</p>
+                        <p
+                          className={`${getPreResult(v)} benefit`}
+                        >{`$${getInitBenefit(v).toFixed(2)}`}</p>
 
                         <p className="time">
                           {`${
@@ -269,7 +295,7 @@ export default function Opened() {
                               ? `${moment.unix(v.expiry).diff(now, "hours")}:`
                               : ""
                           }${`${Math.floor(
-                            moment.unix(v.expiry).diff(now, "minutes") / 60
+                            moment.unix(v.expiry).diff(now, "minutes") % 60
                           )}`.padStart(2, "0")}:${`${
                             moment.unix(v.expiry).diff(now, "seconds") % 60
                           }`.padStart(2, "0")}`}
@@ -343,7 +369,7 @@ export default function Opened() {
                               <p className="key">Profit</p>
                               <p className="value">{`$${(
                                 (v.amount * v.diffRate) /
-                                10 ** 6
+                                10 ** 8
                               ).toFixed(2)}`}</p>
                             </li>
                           </ul>

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import DatePicker from "react-datepicker";
 import "../../../util/react-datepicker.css";
-import { forwardRef, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import I_calender from "../../../img/icon/I_calender.svg";
 import I_exportWhite from "../../../img/icon/I_exportWhite.svg";
 import I_ltArwWhite from "../../../img/icon/I_ltArwWhite.svg";
@@ -12,16 +12,19 @@ import {
 } from "../../../data/D_finance";
 import moment from "moment";
 import { useSelector } from "react-redux";
-import { getExcelFile } from "../../../util/Util";
+import { getExcelFile, getTier } from "../../../util/Util";
+import axios from "axios";
+import { API } from "../../../configs/api";
 
 export default function Recommender() {
-  const total = 8;
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [listData, setListData] = useState([]);
 
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
     <button className="dateBtn" onClick={onClick} ref={ref}>
@@ -31,7 +34,7 @@ export default function Recommender() {
   ));
 
   function onClickExcelBtn() {
-    getExcelFile(D_recommenderList, "Finance");
+    getExcelFile(listData, "Finance");
   }
 
   function dateChange(dates) {
@@ -49,18 +52,33 @@ export default function Recommender() {
     setPage(page + 1);
   }
 
+  function getData() {
+    axios
+      .get(`${API.USER_BRANCH}/${(page - 1) * 10}/10/id/DESC`)
+      .then(({ data }) => {
+        console.log(data);
+        setTotal(data.resp.count);
+        setListData(data.resp.rows);
+      })
+      .catch(console.error);
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   if (isMobile)
     return (
       <>
         <MrecommenderBox>
           <ul className="list">
-            {D_recommenderList.map((v, i) => (
+            {listData.map((v, i) => (
               <li key={i}>
                 <div>
                   <p className="key">{D_recommenderListHeader[0]}</p>
 
                   <span className="value">
-                    <p>{`${v.no}`.padStart(2, "0")}</p>
+                    <p>{`${v.id}`.padStart(2, "0")}</p>
                   </span>
                 </div>
 
@@ -68,7 +86,7 @@ export default function Recommender() {
                   <p className="key">{D_recommenderListHeader[1]}</p>
 
                   <span className="value">
-                    <p>{v.account}</p>
+                    <p>{v.referral_user.email}</p>
                   </span>
                 </div>
 
@@ -76,7 +94,7 @@ export default function Recommender() {
                   <p className="key">{D_recommenderListHeader[2]}</p>
 
                   <span className="value">
-                    <p>{v.recommender}</p>
+                    <p>{v.referral_user.referercode}</p>
                   </span>
                 </div>
 
@@ -84,7 +102,7 @@ export default function Recommender() {
                   <p className="key">{D_recommenderListHeader[3]}</p>
 
                   <span className="value">
-                    <p>{v.level}</p>
+                    <p>{getTier(v.referral_user.level)}</p>
                   </span>
                 </div>
 
@@ -92,7 +110,7 @@ export default function Recommender() {
                   <p className="key">{D_recommenderListHeader[4]}</p>
 
                   <span className="value">
-                    <p>{v.deposit}</p>
+                    <p>{v.total_deposit_amount}</p>
                   </span>
                 </div>
 
@@ -100,7 +118,7 @@ export default function Recommender() {
                   <p className="key">{D_recommenderListHeader[5]}</p>
 
                   <span className="value">
-                    <p>{v.withdrawal}</p>
+                    <p>{v.total_withdraw_amount}</p>
                   </span>
                 </div>
 
@@ -108,7 +126,7 @@ export default function Recommender() {
                   <p className="key">{D_recommenderListHeader[6]}</p>
 
                   <span className="value">
-                    <p>{v.prossess}</p>
+                    <p>{v.possess}</p>
                   </span>
                 </div>
 
@@ -116,7 +134,7 @@ export default function Recommender() {
                   <p className="key">{D_recommenderListHeader[7]}</p>
 
                   <span className="value">
-                    <p>{v.tradeAmount}</p>
+                    <p>{v.trade_amount}</p>
                   </span>
                 </div>
 
@@ -124,7 +142,7 @@ export default function Recommender() {
                   <p className="key">{D_recommenderListHeader[8]}</p>
 
                   <span className="value">
-                    <p>{moment(v.subscriptionDate).format("YYYY-MM-DD")}</p>
+                    <p>{moment(v.createdat).format("YYYY-MM-DD")}</p>
                   </span>
                 </div>
               </li>
@@ -213,42 +231,42 @@ export default function Recommender() {
             </ul>
 
             <ul className="list">
-              {D_recommenderList.map((v, i) => (
+              {listData.map((v, i) => (
                 <li key={i}>
                   <span>
-                    <p>{`${v.no}`.padStart(2, "0")}</p>
+                    <p>{`${v.id}`.padStart(2, "0")}</p>
                   </span>
 
                   <span>
-                    <p>{v.account}</p>
+                    <p>{v.referral_user.email}</p>
                   </span>
 
                   <span>
-                    <p>{v.recommender}</p>
+                    <p>{v.referral_user.referercode}</p>
                   </span>
 
                   <span>
-                    <p>{v.level}</p>
+                    <p>{getTier(v.referral_user.level)}</p>
                   </span>
 
                   <span>
-                    <p>{v.deposit}</p>
+                    <p>{v.total_deposit_amount}</p>
                   </span>
 
                   <span>
-                    <p>{v.withdrawal}</p>
+                    <p>{v.total_withdraw_amount}</p>
                   </span>
 
                   <span>
-                    <p>{v.prossess}</p>
+                    <p>{v.possess}</p>
                   </span>
 
                   <span>
-                    <p>{v.tradeAmount}</p>
+                    <p>{v.trade_amount}</p>
                   </span>
 
                   <span>
-                    <p>{moment(v.subscriptionDate).format("YYYY-MM-DD")}</p>
+                    <p>{moment(v.createdat).format("YYYY-MM-DD")}</p>
                   </span>
                 </li>
               ))}

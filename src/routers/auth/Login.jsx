@@ -72,6 +72,14 @@ export default function Login() {
           });
           return;
         }
+        
+        if (data.message === "ACCESS-NOT-ALLOWED") {
+          setUserData({
+            ...userData,
+            emailAlarm: "The account not allowed",
+          });
+          return;
+        }
 
         if (data.message === "PHONE-NUMBER-DOESNT-EXIST") {
           setUserData({

@@ -29,6 +29,8 @@ import { D_amountTypeList, D_tokenCategoryList } from "../../data/D_bet";
 import { getDividFromData, setToast } from "../../util/Util";
 import { setBetFlag } from "../../reducers/bet";
 import { socketIo } from "../../util/socket";
+import BetChart from "../../components/bet/BetChart";
+import { toast } from "react-toastify";
 
 export default function Live() {
   const hoverRef1 = useRef();
@@ -59,7 +61,7 @@ export default function Live() {
         params: { group: D_tokenCategoryList[1].value },
       })
       .then(({ data }) => {
-        console.log(data.resp);
+        console.log("asset", data.resp);
         setAssetInfo(data.resp[0]);
       })
       .catch((err) => console.error(err));
@@ -197,6 +199,17 @@ export default function Live() {
     );
   }
 
+  function getClosed() {
+    socketIo.emit(
+      "closed",
+      {},
+      (res) => {
+        console.log("closed", res);
+      },
+      (err) => console.error("closed", err)
+    );
+  }
+
   useLayoutEffect(() => {
     localStorage.setItem("balanceType", "Live");
   }, []);
@@ -215,12 +228,13 @@ export default function Live() {
     if (!socketIo) return;
     getDivRate();
 
-    let divRateInterval = setInterval(() => {
+    let socketInterval = setInterval(() => {
       getDivRate();
+      getClosed();
     }, 5000);
 
     return () => {
-      clearInterval(divRateInterval);
+      clearInterval(socketInterval);
     };
   }, [socketIo, assetInfo, bookMark, tokenPopupData, openedData]);
 
@@ -390,7 +404,9 @@ export default function Live() {
               </section>
             </MbetBox>
 
-            {detMode && <DetBox mode={detMode} off={setDetMode} />}
+            {detMode && (
+              <DetBox mode={detMode} page={"live"} off={setDetMode} />
+            )}
 
             {liveTradePopup && (
               <>
@@ -488,6 +504,7 @@ export default function Live() {
 
                 <article className="contArea">
                   <div className="chartBox">
+                    {/* <BetChart symbol={assetInfo.APISymbol} /> */}
                     <div className="chart">
                       <ReactTradingviewWidget
                         container_id={"technical-analysis-chart-demo"}
@@ -667,7 +684,7 @@ export default function Live() {
                     </span>
                   </div>
 
-                  <DetBox mode={detMode} off={setDetMode} />
+                  <DetBox mode={detMode} page={"live"} off={setDetMode} />
 
                   <button
                     className={`${detMode && "on"} plusBtn`}
@@ -873,7 +890,9 @@ const MbetBox = styled.main`
               }
 
               img {
+                width: 20px;
                 height: 20px;
+                object-fit: contain;
               }
             }
           }
@@ -1128,7 +1147,9 @@ const PbetBox = styled.main`
             }
 
             img {
+              width: 20px;
               height: 20px;
+              object-fit: contain;
             }
           }
         }

@@ -168,6 +168,7 @@ const MdataBox = styled.main`
 const PdataBox = styled.main`
   flex: 1;
   padding: 70px 140px 0;
+  overflow-y: scroll;
 
   @media (max-width: 1440px) {
     max-width: 1020px;
@@ -179,7 +180,6 @@ const PdataBox = styled.main`
     flex-direction: column;
     gap: 80px;
     height: 100%;
-    overflow-y: scroll;
 
     .titleArea {
       display: flex;

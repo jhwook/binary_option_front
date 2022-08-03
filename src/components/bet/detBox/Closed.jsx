@@ -7,12 +7,15 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { API } from "../../../configs/api";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import ClosedChartBox from "./ClosedChart";
 
-export default function Closed() {
+export default function Closed({ page }) {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const isMobile = useSelector((state) => state.common.isMobile);
+  const closedFlag = useSelector((state) => state.bet.closedFlag);
 
   const [data, setData] = useState([]);
 
@@ -42,13 +45,13 @@ export default function Closed() {
 
     switch (v.side) {
       case "HIGH":
-        if (v.currentPrice - v.startingPrice > 0) result = "plus";
-        else if (v.currentPrice - v.startingPrice < 0) result = "minus";
+        if (v.endingPrice - v.startingPrice > 0) result = "plus";
+        else if (v.endingPrice - v.startingPrice < 0) result = "minus";
         break;
 
       case "LOW":
-        if (v.currentPrice - v.startingPrice > 0) result = "minus";
-        else if (v.currentPrice - v.startingPrice < 0) result = "plus";
+        if (v.endingPrice - v.startingPrice > 0) result = "minus";
+        else if (v.endingPrice - v.startingPrice < 0) result = "plus";
         break;
 
       default:
@@ -73,11 +76,18 @@ export default function Closed() {
 
   useEffect(() => {
     getMyBets();
-  }, []);
+  }, [closedFlag]);
 
   if (isMobile)
     return (
       <MclosedBox className="detContList">
+        <button
+          className="viewDemoBtn"
+          onClick={() => navigate("/position/history")}
+        >
+          View history of {page} trades
+        </button>
+
         <ul className="dataList">
           {data &&
             data.map((v, i) => (
@@ -103,13 +113,10 @@ export default function Closed() {
 
                             <p
                               className={`${getPreResult(detV)} benefit`}
-                            >{`$${(
-                              (detV.endingPrice - detV.startingPrice) *
-                              detV.diffRate
-                            ).toFixed(2)}`}</p>
+                            >{`$${Number(detV.profit_amount).toFixed(2)}`}</p>
 
                             <p className="time">
-                              {moment(detV.starting).format("mm:ss")}
+                              {moment.unix(detV.starting).format("HH:mm:ss")}
                             </p>
                           </div>
                         </summary>
@@ -146,8 +153,10 @@ export default function Closed() {
                             </ul>
                           </div>
 
-                          <div className="chartBox">
-                            <img src={E_Closedchart} alt="" />
+                          <div className="chartCont">
+                            <ClosedChartBox
+                              price={Number(detV.startingPrice)}
+                            />
                           </div>
 
                           <div className="resBox">
@@ -225,6 +234,13 @@ export default function Closed() {
   else
     return (
       <PclosedBox className="detContList">
+        <button
+          className="viewDemoBtn"
+          onClick={() => navigate("/position/history")}
+        >
+          View history of {page} trades
+        </button>
+
         <ul className="dataList">
           {data &&
             data.map((v, i) => (
@@ -250,13 +266,10 @@ export default function Closed() {
 
                             <p
                               className={`${getPreResult(detV)} benefit`}
-                            >{`$${(
-                              (detV.endingPrice - detV.startingPrice) *
-                              detV.diffRate
-                            ).toFixed(2)}`}</p>
+                            >{`$${Number(detV.profit_amount).toFixed(2)}`}</p>
 
                             <p className="time">
-                              {moment(detV.starting).format("mm:ss")}
+                              {moment.unix(detV.starting).format("HH:mm:ss")}
                             </p>
                           </div>
                         </summary>
@@ -293,8 +306,10 @@ export default function Closed() {
                             </ul>
                           </div>
 
-                          <div className="chartBox">
-                            <img src={E_Closedchart} alt="" />
+                          <div className="chartCont">
+                            <ClosedChartBox
+                              price={Number(detV.startingPrice)}
+                            />
                           </div>
 
                           <div className="resBox">
@@ -519,19 +534,14 @@ const MclosedBox = styled.ul`
                 }
               }
 
-              .chartBox {
+              .chartCont {
                 display: flex;
                 justify-content: center;
                 align-items: flex-end;
                 height: 116px;
                 min-height: 116px;
-                padding: 0 16px;
                 background: #111722;
                 border-radius: 6px;
-
-                img {
-                  width: 100%;
-                }
               }
 
               .resBox {
@@ -751,13 +761,14 @@ const PclosedBox = styled.ul`
                 }
               }
 
-              .chartBox {
+              .chartCont {
                 display: flex;
                 justify-content: center;
                 align-items: flex-end;
-                height: 114px;
-                min-height: 114px;
-                padding: 0 10px;
+                height: 116px;
+                min-height: 116px;
+                background: #111722;
+                border-radius: 6px;
               }
 
               .resBox {

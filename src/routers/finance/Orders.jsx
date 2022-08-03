@@ -121,9 +121,9 @@ export default function Orders() {
           .catch((err) => {
             console.error(err);
           })
-          .finally(() => setLoader());
+          .finally(() => setLoader(""));
       },
-      setLoader
+      setLoader("")
     );
   }
 
@@ -681,6 +681,7 @@ const MordersBox = styled.main`
 const PordersBox = styled.main`
   flex: 1;
   padding: 70px 140px 0;
+  overflow-y: scroll;
 
   @media (max-width: 1440px) {
     max-width: 1020px;
@@ -692,7 +693,6 @@ const PordersBox = styled.main`
     flex-direction: column;
     gap: 40px;
     height: 100%;
-    overflow-y: scroll;
 
     .pageTitle {
       height: 36px;

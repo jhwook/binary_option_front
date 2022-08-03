@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import DatePicker from "react-datepicker";
 import "../../../util/react-datepicker.css";
-import { forwardRef, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import I_calender from "../../../img/icon/I_calender.svg";
 import I_exportWhite from "../../../img/icon/I_exportWhite.svg";
 import I_ltArwWhite from "../../../img/icon/I_ltArwWhite.svg";
@@ -13,16 +13,19 @@ import {
 } from "../../../data/D_finance";
 import moment from "moment";
 import { useSelector } from "react-redux";
-import { getExcelFile } from "../../../util/Util";
+import { getExcelFile, getTier } from "../../../util/Util";
+import axios from "axios";
+import { API } from "../../../configs/api";
 
 export default function ProfitHistory() {
-  const total = 4;
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [listData, setListData] = useState([]);
 
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
     <button className="dateBtn" onClick={onClick} ref={ref}>
@@ -32,7 +35,7 @@ export default function ProfitHistory() {
   ));
 
   function onClickExcelBtn() {
-    getExcelFile(D_profitHistoryList, "Finance");
+    getExcelFile(listData, "Finance");
   }
 
   function dateChange(dates) {
@@ -50,18 +53,33 @@ export default function ProfitHistory() {
     setPage(page + 1);
   }
 
+  function getData() {
+    axios
+      .get(`${API.USER_BRANCH_FEE_LOG}/${(page - 1) * 10}/10/id/DESC`)
+      .then(({ data }) => {
+        console.log(data);
+        setTotal(data.resp.count);
+        setListData(data.resp.rows);
+      })
+      .catch(console.error);
+  }
+
+  useEffect(() => {
+    getData();
+  }, [page]);
+
   if (isMobile)
     return (
       <>
         <MprofitHistory>
           <ul className="list">
-            {D_profitHistoryList.map((v, i) => (
+            {listData.map((v, i) => (
               <li key={i}>
                 <div>
                   <p className="key">{D_profitHistoryListHeader[0]}</p>
 
                   <span className="value">
-                    <p>{v.account}</p>
+                    <p>{v.referral_user.email}</p>
                   </span>
                 </div>
 
@@ -69,7 +87,7 @@ export default function ProfitHistory() {
                   <p className="key">{D_profitHistoryListHeader[1]}</p>
 
                   <span className="value">
-                    <p>{v.level}</p>
+                    <p>{getTier(v.referral_user.level)}</p>
                   </span>
                 </div>
 
@@ -77,7 +95,7 @@ export default function ProfitHistory() {
                   <p className="key">{D_profitHistoryListHeader[2]}</p>
 
                   <span className="value">
-                    <p>{moment(v.date).format("YYYY-MM-DD")}</p>
+                    <p>{moment(v.createdat).format("YYYY-MM-DD")}</p>
                   </span>
                 </div>
 
@@ -85,7 +103,7 @@ export default function ProfitHistory() {
                   <p className="key">{D_profitHistoryListHeader[3]}</p>
 
                   <span className="value">
-                    <p>{v.asset}</p>
+                    <p>{v.betamount / 10 ** 6}</p>
                   </span>
                 </div>
 
@@ -93,7 +111,11 @@ export default function ProfitHistory() {
                   <p className="key">{D_profitHistoryListHeader[4]}</p>
 
                   <span className="value">
-                    <p>{v.amount}</p>
+                    <p>
+                      <span className="price">${v.received_amount}</span>
+                      &nbsp;
+                      {`(${v.received_percent}%)`}
+                    </p>
                   </span>
                 </div>
 
@@ -101,11 +123,7 @@ export default function ProfitHistory() {
                   <p className="key">{D_profitHistoryListHeader[5]}</p>
 
                   <span className="value">
-                    <p>
-                      <span className="price">${v.profitAmount}</span>
-                      &nbsp;
-                      {`(${v.profitPercent}%)`}
-                    </p>
+                    <p>{v.received_amount}USDT</p>
                   </span>
                 </div>
 
@@ -113,7 +131,7 @@ export default function ProfitHistory() {
                   <p className="key">{D_profitHistoryListHeader[6]}</p>
 
                   <span className="value">
-                    <p>{v.received}USDT</p>
+                    <p>{v.using}USDT</p>
                   </span>
                 </div>
               </li>
@@ -202,38 +220,38 @@ export default function ProfitHistory() {
             </ul>
 
             <ul className="list">
-              {D_profitHistoryList.map((v, i) => (
+              {listData.map((v, i) => (
                 <li key={i}>
                   <span>
-                    <p>{v.account}</p>
+                    <p>{v.referral_user.email}</p>
                   </span>
 
                   <span>
-                    <p>{v.level}</p>
+                    <p>{getTier(v.referral_user.level)}</p>
                   </span>
 
                   <span>
-                    <p>{moment(v.date).format("YYYY-MM-DD")}</p>
+                    <p>{moment(v.createdat).format("YYYY-MM-DD")}</p>
                   </span>
 
                   <span>
-                    <p>{v.asset}</p>
-                  </span>
-
-                  <span>
-                    <p>{v.amount}</p>
+                    <p>{v.betamount / 10 ** 6}</p>
                   </span>
 
                   <span>
                     <p>
-                      <span className="price">${v.profitAmount}</span>
+                      <span className="price">${v.received_amount}</span>
                       &nbsp;
-                      {`(${v.profitPercent}%)`}
+                      {`(${v.received_percent}%)`}
                     </p>
                   </span>
 
                   <span>
-                    <p>{v.received}USDT</p>
+                    <p>{v.received_amount}USDT</p>
+                  </span>
+
+                  <span>
+                    <p>{v.using}USDT</p>
                   </span>
                 </li>
               ))}
@@ -555,6 +573,7 @@ const PprofitHistory = styled.div`
       &:nth-of-type(7) {
         width: 146px;
         min-width: 146px;
+        flex: 1;
       }
     }
   }
@@ -564,6 +583,7 @@ const PprofitHistory = styled.div`
     justify-content: center;
     align-items: center;
     gap: 10px;
+    margin: 30px 0 0 0;
 
     .arwBtn {
       display: flex;
@@ -579,52 +599,30 @@ const PprofitHistory = styled.div`
       }
     }
 
-    .pageBox {
+    .pageList {
       display: flex;
-      justify-content: center;
       align-items: center;
-      gap: 10px;
-      margin: 30px 0 0 0;
 
-      .arwBtn {
+      li {
         display: flex;
         justify-content: center;
-        align-items: center;
-        width: 40px;
-        height: 40px;
-        border: 2px solid #fff;
-        border-radius: 50%;
+        padding: 0 5px;
+        font-size: 18px;
+        position: relative;
+        cursor: pointer;
 
-        &:disabled {
-          opacity: 0.2;
-        }
-      }
-
-      .pageList {
-        display: flex;
-        align-items: center;
-
-        li {
-          display: flex;
-          justify-content: center;
-          padding: 0 5px;
-          font-size: 18px;
-          position: relative;
-          cursor: pointer;
-
-          &.on {
-            .onBar {
-              background: #f7ab1f;
-            }
-          }
-
+        &.on {
           .onBar {
-            width: 100%;
-            height: 6px;
-            border-radius: 4px;
-            bottom: -6px;
-            position: absolute;
+            background: #f7ab1f;
           }
+        }
+
+        .onBar {
+          width: 100%;
+          height: 6px;
+          border-radius: 4px;
+          bottom: -6px;
+          position: absolute;
         }
       }
     }

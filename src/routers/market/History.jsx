@@ -576,6 +576,7 @@ const MhistoryBox = styled.main`
 const PhistoryBox = styled.main`
   flex: 1;
   padding: 70px 140px;
+  overflow-y: scroll;
 
   @media (max-width: 1440px) {
     max-width: 1020px;
@@ -587,7 +588,6 @@ const PhistoryBox = styled.main`
     flex-direction: column;
     gap: 40px;
     height: 100%;
-    overflow-y: scroll;
 
     .categoryList {
       display: flex;

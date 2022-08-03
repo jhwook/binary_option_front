@@ -368,7 +368,7 @@ export default function Demo({ socket }) {
             </MbetBox>
 
             {detMode && (
-              <DetBox mode={detMode} off={setDetMode} socket={socket} />
+              <DetBox mode={detMode} page={"live"} off={setDetMode} />
             )}
 
             {insufficientPopup && (
@@ -633,7 +633,7 @@ export default function Demo({ socket }) {
                     </span>
                   </div>
 
-                  <DetBox mode={detMode} socket={socket} />
+                  <DetBox mode={detMode} page={"live"} socket={socket} />
 
                   <button
                     className={`${detMode && "on"} plusBtn`}

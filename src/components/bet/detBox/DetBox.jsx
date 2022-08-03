@@ -6,7 +6,7 @@ import Closed from "./Closed";
 import Opened from "./Opened";
 import I_xWhite from "../../../img/icon/I_xWhite.svg";
 
-export default function DetBox({ off, mode }) {
+export default function DetBox({ off, mode, page }) {
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [detCategory, setDetCategory] = useState(D_detCategoryList[0]);
@@ -27,7 +27,7 @@ export default function DetBox({ off, mode }) {
         </ul>
 
         {detCategory === "Opened" && <Opened />}
-        {detCategory === "Closed" && <Closed />}
+        {detCategory === "Closed" && <Closed page={page} />}
 
         <footer>
           <button className="exitBtn" onClick={() => off()}>
@@ -54,7 +54,7 @@ export default function DetBox({ off, mode }) {
         </ul>
 
         {detCategory === "Opened" && <Opened />}
-        {detCategory === "Closed" && <Closed />}
+        {detCategory === "Closed" && <Closed page={page} />}
       </PdetBoxCont>
     );
 }

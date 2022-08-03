@@ -52,7 +52,7 @@ export default function TradingHistory() {
   ));
 
   function onClickExcelBtn() {
-    getExcelFile(D_trandingList, `Trading history ${category}`);
+    getExcelFile(listData, `Trading history ${category}`);
   }
 
   function dateChange(dates) {
@@ -650,6 +650,7 @@ const MtradingHistoryBox = styled.main`
 const PtradingHistoryBox = styled.main`
   flex: 1;
   padding: 70px 140px;
+  overflow-y: scroll;
 
   @media (max-width: 1440px) {
     max-width: 1020px;
@@ -661,7 +662,6 @@ const PtradingHistoryBox = styled.main`
     flex-direction: column;
     gap: 40px;
     height: 100%;
-    overflow-y: scroll;
 
     .categoryList {
       display: flex;
@@ -751,14 +751,14 @@ const PtradingHistoryBox = styled.main`
         .exportBtn {
           display: flex;
           justify-content: center;
+          align-items: center;
           width: 40px;
           height: 40px;
-          padding: 10px 13px 13px;
           border: 1px solid #3b3e45;
           border-radius: 50%;
 
           img {
-            width: 14px;
+            width: 20px;
           }
         }
       }
@@ -872,6 +872,7 @@ const PtradingHistoryBox = styled.main`
           }
 
           &:nth-of-type(10) {
+            flex: 1;
             width: 124px;
             min-width: 124px;
           }
