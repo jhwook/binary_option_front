@@ -42,7 +42,13 @@
   --customColor: #f7ab1f;
 }
 
-#CustomToastBet {
+.Toastify .Toastify__toast-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.Toastify .Toastify__toast-container .Toastify__toast {
   display: flex;
   align-items: center;
   gap: 40px;
@@ -50,6 +56,7 @@
   height: 40px;
   min-height: 40px;
   max-height: 40px;
+  padding: 0 16px;
   margin: 0 auto;
   font-size: 14px;
   color: #fff;
@@ -60,89 +67,88 @@
   -webkit-backdrop-filter: blur(40px);
 }
 
-#CustomToastBet .Toastify__toast-body {
-  padding: 0;
-}
-
-#CustomToastBet p {
+.Toastify .Toastify__toast-container .Toastify__toast p {
   white-space: nowrap;
 }
 
-#CustomToastBet .Toastify__close-button {
+.Toastify .Toastify__toast-container .Toastify__toast .Toastify__close-button {
   color: #fff;
   opacity: 0.4;
+  align-self: unset;
 }
 
-#CustomToastBet .customBox {
+.Toastify
+  .Toastify__toast-container
+  .Toastify__toast.CustomToastBet
+  .customBox {
   display: flex;
   align-items: center;
   gap: 40px;
 }
 
-#CustomToastBet .customBox .title {
+.Toastify
+  .Toastify__toast-container
+  .Toastify__toast.CustomToastBet
+  .customBox
+  .title {
   color: var(--customColor);
 }
 
-#CustomToastBet .customBox .infoList {
+.Toastify
+  .Toastify__toast-container
+  .Toastify__toast.CustomToastBet
+  .customBox
+  .infoList {
   display: flex;
   align-items: center;
   gap: 24px;
 }
 
-#CustomToastBet .customBox .infoList li {
+.Toastify
+  .Toastify__toast-container
+  .Toastify__toast.CustomToastBet
+  .customBox
+  .infoList
+  li {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-#CustomToastBet .customBox .infoList li img {
+.Toastify
+  .Toastify__toast-container
+  .Toastify__toast.CustomToastBet
+  .customBox
+  .infoList
+  li
+  img {
   height: 8px;
 }
 
-#CustomToastBet .customBox .infoList li .key {
+.Toastify
+  .Toastify__toast-container
+  .Toastify__toast.CustomToastBet
+  .customBox
+  .infoList
+  li
+  .key {
   color: rgba(255, 255, 255, 0.4);
 }
 
-#CustomToastAlarm {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 480px;
-  max-width: 88.88vw;
-  min-height: 40px;
-  height: 40px;
-  max-height: 40px;
-  padding: 0 24px;
-  margin: 0 auto;
-  font-size: 14px;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid #fff;
-  border-radius: 20px;
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
-}
-
-#CustomToastAlarm .Toastify__toast-body {
-  padding: 0;
-}
-
-#CustomToastAlarm p {
-  white-space: nowrap;
-}
-
-#CustomToastAlarm .Toastify__close-button {
-  color: #fff;
-  opacity: 0.4;
-}
-
-#CustomToastAlarm .customBox {
+.Toastify
+  .Toastify__toast-container
+  .Toastify__toast.CustomToastAlarm
+  .customBox {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-#CustomToastAlarm .customBox .iconBox {
+.Toastify
+  .Toastify__toast-container
+  .Toastify__toast.CustomToastAlarm
+  .customBox
+  .iconBox {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -152,62 +158,22 @@
   border-radius: 50%;
 }
 
-#CustomToastAlarm .customBox .iconBox img {
+.Toastify
+  .Toastify__toast-container
+  .Toastify__toast.CustomToastAlarm
+  .customBox
+  .iconBox
+  img {
   width: 10px;
 }
 
-#CustomToastAlarmBlack {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 480px;
-  max-width: 88.88vw;
-  min-height: 40px;
-  height: 40px;
-  max-height: 40px;
-  padding: 0 24px;
-  margin: 0 auto;
-  font-size: 14px;
+.Toastify .Toastify__toast-container .Toastify__toast.CustomToastAlarm.black {
   color: #000;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid #fff;
-  border-radius: 20px;
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
 }
 
-#CustomToastAlarmBlack .Toastify__toast-body {
-  padding: 0;
-}
-
-#CustomToastAlarmBlack p {
-  white-space: nowrap;
-}
-
-#CustomToastAlarmBlack .Toastify__close-button {
-  color: #000;
-  opacity: 0.4;
-}
-
-#CustomToastAlarmBlack .customBox {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-#CustomToastAlarmBlack .customBox .iconBox {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 16px;
-  height: 16px;
-  border: 1.2px solid #f7ab1f;
-  border-radius: 50%;
-}
-
-#CustomToastAlarmBlack .customBox .iconBox img {
-  width: 10px;
-}
+/*  */
 
 .Toastify__toast-container {
   z-index: var(--toastify-z-index);

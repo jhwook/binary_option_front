@@ -1,7 +1,9 @@
 import axios from "axios";
 import { useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
+import { toast } from "react-toastify";
 import styled from "styled-components";
+import { setToast } from "./util/Util";
 
 export default function ClosedChart() {
   function getData() {
@@ -17,7 +19,7 @@ export default function ClosedChart() {
   useEffect(() => {
     getData();
     let _dataInterval = setInterval(() => {
-      getData();
+      // getData();
     }, 1000);
 
     return () => {
@@ -26,22 +28,51 @@ export default function ClosedChart() {
   }, []);
 
   return (
-    <ClosedChartBox>
-      <div id="chart">
-        <div id="chart-timeline">
-          <ReactApexChart
-            options={options}
-            series={series}
-            type="area"
-            height={114}
-          />
+    <>
+      <ClosedChartBox>
+        <div id="chart">
+          <div id="chart-timeline">
+            <ReactApexChart
+              options={options}
+              series={series}
+              type="area"
+              height={114}
+            />
+          </div>
         </div>
-      </div>
-    </ClosedChartBox>
+
+        <button
+          className="btn"
+          onClick={
+            () =>
+              // setToast({ type: "alarm", cont: "Submission Successful" })
+              setToast({
+                type: "HIGH",
+                assetInfo: { name: "BTC" },
+                amount: 100,
+              })
+            // toast("aaa", { toastId: "s a" })
+          }
+        >
+          btn
+        </button>
+      </ClosedChartBox>
+    </>
   );
 }
 
-const ClosedChartBox = styled.div``;
+const ClosedChartBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  background: #000;
+
+  .btn {
+    width: 100%;
+    height: 400px;
+    color: #fff;
+    background: #ccc;
+  }
+`;
 
 const options = {
   chart: {

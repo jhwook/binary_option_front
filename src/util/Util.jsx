@@ -145,7 +145,7 @@ export function setToast({ type, cont, assetInfo, amount, profit }) {
           </ul>
         </div>,
         {
-          toastId: "CustomToastBet",
+          className: "CustomToastBet",
         }
       );
       break;
@@ -172,7 +172,7 @@ export function setToast({ type, cont, assetInfo, amount, profit }) {
           </ul>
         </div>,
         {
-          toastId: "CustomToastBet",
+          className: "CustomToastBet",
         }
       );
       break;
@@ -199,7 +199,7 @@ export function setToast({ type, cont, assetInfo, amount, profit }) {
           </ul>
         </div>,
         {
-          toastId: "CustomToastBet",
+          className: "CustomToastBet",
         }
       );
       break;
@@ -213,7 +213,7 @@ export function setToast({ type, cont, assetInfo, amount, profit }) {
           <p className="cont">{cont}</p>
         </div>,
         {
-          toastId: "CustomToastAlarm",
+          className: "CustomToastAlarm",
         }
       );
       break;
@@ -227,7 +227,7 @@ export function setToast({ type, cont, assetInfo, amount, profit }) {
           <p className="cont">{cont}</p>
         </div>,
         {
-          toastId: "CustomToastAlarmBlack",
+          className: "CustomToastAlarm black",
         }
       );
       break;

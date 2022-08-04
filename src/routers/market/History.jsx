@@ -168,14 +168,8 @@ export default function History() {
                           <div className="value">
                             <p>{`${
                               v?.amount
-                                ? (v?.amount / 10 ** 6)?.toLocaleString(
-                                    "eu",
-                                    "US"
-                                  )
-                                : (v?.localeAmount / 10 ** 6)?.toLocaleString(
-                                    "cn",
-                                    "CN"
-                                  )
+                                ? v?.amount?.toLocaleString("eu", "US")
+                                : v?.localeAmount?.toLocaleString("cn", "CN")
                             } ${v.localeUnit || v.unit}`}</p>
                           </div>
                         </div>
@@ -317,11 +311,8 @@ export default function History() {
                     <span>
                       <p>{`${
                         v?.amount
-                          ? (v?.amount / 10 ** 6)?.toLocaleString("eu", "US")
-                          : (v?.localeAmount / 10 ** 6)?.toLocaleString(
-                              "cn",
-                              "CN"
-                            )
+                          ? v?.amount?.toLocaleString("eu", "US")
+                          : v?.localeAmount?.toLocaleString("cn", "CN")
                       } ${v.localeUnit || v.unit}`}</p>
                     </span>
 

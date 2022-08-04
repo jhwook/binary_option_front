@@ -13,6 +13,7 @@ import Qna from "./routers/qna/Qna";
 import Setting from "./routers/setting/Setting";
 import Test from "./Test";
 import "./util/ReactToastify.css";
+// import "react-toastify/dist/ReactToastify.css";
 
 export default function App() {
   return (
@@ -35,9 +36,7 @@ export default function App() {
         position="top-center"
         autoClose={5000}
         hideProgressBar
-        newestOnTop={true}
         closeOnClick
-        rtl={false}
         pauseOnFocusLoss
         draggable
         pauseOnHover

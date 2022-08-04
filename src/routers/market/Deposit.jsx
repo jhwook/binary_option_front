@@ -32,14 +32,15 @@ export default function Deposit({ userData }) {
   const [securityVerifiPopup, setSecurityVerifiPopup] = useState(false);
   const [cashInPersonPopup, setCashInPersonPopupPopup] = useState(false);
   const [tokenPopup, setTokenPopup] = useState(false);
-  // const [token, setToken] = useState({ icon: T_usdt, text: "USDT" });
-  // const [tokenList, setTokenList] = useState([{ icon: T_usdt, text: "USDT"}]);
+  // const [token, setToken] = useState({ icon: T_usdt, type: "USDT" ,text: "USDT"});
+  // const [tokenList, setTokenList] = useState([{ icon: T_usdt, type: "USDT",text: "USDT"}]);
   const [token, setToken] = useState({
     icon: T_usdt,
-    text: "USDT_BINOPT",
+    type: "USDT_BINOPT",
+    text: "USDT",
   });
   const [tokenList, setTokenList] = useState([
-    { icon: T_usdt, text: "USDT_BINOPT" },
+    { icon: T_usdt, type: "USDT_BINOPT", text: "USDT" },
   ]);
   const [loader, setLoader] = useState("");
   const [preDepositWarningPopup, setPreDepositWarningPopup] = useState(false);
@@ -62,7 +63,7 @@ export default function Deposit({ userData }) {
 
     window.open(
       `${metaMaskLink}/${
-        contractaddr[token.text]
+        contractaddr[token.type]
       }/transfer?address=${walletAddress}&uint256=${amount}e6`
     );
 
@@ -84,7 +85,7 @@ export default function Deposit({ userData }) {
       }
     });
 
-    socket.emit("transactions", { type: token.text }, (res) => {
+    socket.emit("transactions", { type: token.type }, (res) => {
       console.log("emit");
       console.log(res);
     });
@@ -102,7 +103,7 @@ export default function Deposit({ userData }) {
     }
 
     let abistr = getabistr_forfunction({
-      contractaddress: contractaddr[token.text],
+      contractaddress: contractaddr[token.type],
       abikind: "ERC20",
       methodname: "transfer",
       aargs: [contractaddr["admin"], amount * 10 ** 6 + ""],
@@ -111,14 +112,14 @@ export default function Deposit({ userData }) {
     reqTx(
       {
         from: address[0],
-        to: contractaddr[token.text],
+        to: contractaddr[token.type],
         data: abistr,
         gas: 3000000,
       },
       (txHash) => {
         axios
           .patch(`${API.TRANS_DEPOSIT}/${amount}`, {
-            tokentype: token.text,
+            tokentype: token.type,
             txhash: txHash,
             senderaddr: address[0],
           })
@@ -148,7 +149,7 @@ export default function Deposit({ userData }) {
 
     axios
       .patch(`${API.TRANS_DEPOSIT}/${amount}`, {
-        tokentype: token.text,
+        tokentype: token.type,
         ...branchData,
       })
       .then((_) => {
@@ -184,9 +185,9 @@ export default function Deposit({ userData }) {
     setIsBranch(isbranch);
 
     if (isbranch) {
-      setTokenList([{ icon: T_CNY, text: "CNY" }]);
+      setTokenList([{ icon: T_CNY, type: "CNY", text: "CNY" }]);
     } else {
-      setTokenList([{ icon: T_usdt, text: "USDT_BINOPT" }]);
+      setTokenList([{ icon: T_usdt, type: "USDT_BINOPT", text: "USDT" }]);
     }
   }, [userData]);
 

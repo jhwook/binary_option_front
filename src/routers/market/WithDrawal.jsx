@@ -30,10 +30,11 @@ export default function WithDrawal() {
   // const [tokenList, setTokenList] = useState([{ icon: T_usdt, text: "USDT" }]);
   const [token, setToken] = useState({
     icon: T_usdt,
-    text: "USDT_BINOPT",
+    type: "USDT_BINOPT",
+    text: "USDT",
   });
   const [tokenList, setTokenList] = useState([
-    { icon: T_usdt, text: "USDT_BINOPT" },
+    { icon: T_usdt, type: "USDT_BINOPT", text: "USDT" },
   ]);
   const [process, setProcess] = useState(false);
   const [loader, setLoader] = useState("");
@@ -53,7 +54,7 @@ export default function WithDrawal() {
       axios
         .patch(`${API.TRANS_WITHDRAW}/${amount}`, {
           rxaddr: address,
-          tokentype: token.text,
+          tokentype: token.type,
         })
         .then(async ({ data }) => {
           console.log(data.payload.resp);

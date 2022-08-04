@@ -44,11 +44,9 @@ export default function Orders() {
   async function moDirectPayment(forex, data, i) {
     setLoader(i);
 
-    console.log(walletAddress);
-
     window.open(
       `${metaMaskLink}/${
-        contractaddr.USDT
+        contractaddr.USDT_BINOPT
       }/transfer?address=${walletAddress}&uint256=${
         data.localeAmount * forex
       }e6`
@@ -71,9 +69,13 @@ export default function Orders() {
       }
     });
 
-    socket.emit("transactions", { type: "USDT", txId: data.id }, (res) => {
-      console.log("emit", res);
-    });
+    socket.emit(
+      "transactions",
+      { type: "USDT_BINOPT", txId: data.id },
+      (res) => {
+        console.log("emit", res);
+      }
+    );
   }
 
   async function directPayment(forex, data, i) {
@@ -89,7 +91,7 @@ export default function Orders() {
     }
 
     let abistr = getabistr_forfunction({
-      contractaddress: contractaddr.USDT,
+      contractaddress: contractaddr.USDT_BINOPT,
       abikind: "ERC20",
       methodname: "transfer",
       aargs: [walletAddress, data.localeAmount * forex + ""],
@@ -98,7 +100,7 @@ export default function Orders() {
     reqTx(
       {
         from: address[0],
-        to: contractaddr.USDT,
+        to: contractaddr.USDT_BINOPT,
         data: abistr,
         gas: 3000000,
       },
@@ -106,7 +108,7 @@ export default function Orders() {
         axios
           .patch(`${API.TRANSACTION_BRANCH_TRANSFER}`, {
             amount: (data.localeAmount * forex) / 10 ** 6,
-            tokentype: "USDT",
+            tokentype: "USDT_BINOPT",
             txhash: txHash,
             txId: data.id,
           })
@@ -255,7 +257,7 @@ export default function Orders() {
                           <p className="key">{D_ordersListHeader[3]}</p>
                           <div className="value">
                             <p>
-                              {`¥${(v?.localeAmount / 10 ** 6)?.toLocaleString(
+                              {`¥${v?.localeAmount?.toLocaleString(
                                 "cn",
                                 "CN"
                               )}`}
@@ -267,10 +269,10 @@ export default function Orders() {
                           <p className="key">{D_ordersListHeader[4]}</p>
                           <div className="value">
                             <p>
-                              {`¥${(
-                                v?.user?.transaction?.cumulAmount /
-                                10 ** 6
-                              )?.toLocaleString("cn", "CN")}`}
+                              {`¥${v?.user?.transaction?.cumulAmount?.toLocaleString(
+                                "cn",
+                                "CN"
+                              )}`}
                             </p>
                           </div>
                         </div>
@@ -412,20 +414,15 @@ export default function Orders() {
                     </span>
 
                     <span>
-                      <p>
-                        {`¥${(v?.localeAmount / 10 ** 6)?.toLocaleString(
-                          "cn",
-                          "CN"
-                        )}`}
-                      </p>
+                      <p>{`¥${v?.localeAmount?.toLocaleString("cn", "CN")}`}</p>
                     </span>
 
                     <span>
                       <p>
-                        {`¥${(
-                          v?.user?.transaction?.cumulAmount /
-                          10 ** 6
-                        )?.toLocaleString("cn", "CN")}`}
+                        {`¥${v?.cumulAmount?.toLocaleString(
+                          "cn",
+                          "CN"
+                        )}`}
                       </p>
                     </span>
 

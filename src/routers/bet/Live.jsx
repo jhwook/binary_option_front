@@ -30,7 +30,6 @@ import { getDividFromData, setToast } from "../../util/Util";
 import { setBetFlag } from "../../reducers/bet";
 import { socketIo } from "../../util/socket";
 import BetChart from "../../components/bet/BetChart";
-import { toast } from "react-toastify";
 
 export default function Live() {
   const hoverRef1 = useRef();
