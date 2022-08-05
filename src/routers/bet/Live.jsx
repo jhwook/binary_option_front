@@ -53,7 +53,6 @@ export default function Live() {
   const [amount, setAmount] = useState("");
   const [amountMode, setAmountMode] = useState(D_amountTypeList[0]);
   const [bookMark, setBookMark] = useState([]);
-  const [chartWidth, setChartWidth] = useState(window.innerWidth * 2);
 
   function getAssetList() {
     axios
@@ -210,17 +209,6 @@ export default function Live() {
     );
   }
 
-  function onWheelChart(e) {
-    e.stopPropagation();
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (e.deltaY < 0 && chartWidth > window.innerWidth)
-      setChartWidth(chartWidth - window.innerWidth * 0.1);
-    else if (e.deltaY > 0 && chartWidth < window.innerWidth * 3)
-      setChartWidth(chartWidth + window.innerWidth * 0.1);
-  }
-
   useLayoutEffect(() => {
     localStorage.setItem("balanceType", "Live");
   }, []);
@@ -261,15 +249,16 @@ export default function Live() {
             <MbetBox>
               <section className="innerBox">
                 <article className="contArea">
-                  <div className="chartCont">
-                    <div className="chartBox">
-                      <div className="chart" style={{ width: chartWidth }}>
-                        <BetChart
-                          symbol={assetInfo.APISymbol}
-                          chartWidth={chartWidth}
-                        />
-                      </div>
-                    </div>
+                  <div className="chartBox">
+                    <ReactTradingviewWidget
+                      symbol={assetInfo.dispSymbol}
+                      theme={Themes.DARK}
+                      locale="kr"
+                      autosize
+                      interval="1"
+                      timezone="Asia/Seoul"
+                      allow_symbol_change={false}
+                    />
 
                     <span className="utilBox">
                       <ul className="btnList">
@@ -513,11 +502,18 @@ export default function Live() {
                 </article>
 
                 <article className="contArea">
-                  <div className="chartBox" onWheel={onWheelChart}>
-                    <div className="chart" style={{ width: chartWidth }}>
-                      <BetChart
-                        symbol={assetInfo.APISymbol}
-                        chartWidth={chartWidth}
+                  <div className="chartBox">
+                    {/* <BetChart symbol={assetInfo.APISymbol} /> */}
+                    <div className="chart">
+                      <ReactTradingviewWidget
+                        container_id={"technical-analysis-chart-demo"}
+                        symbol={assetInfo?.dispSymbol}
+                        theme={Themes.DARK}
+                        locale="kr"
+                        autosize
+                        interval="1"
+                        timezone="Asia/Seoul"
+                        allow_symbol_change={false}
                       />
                     </div>
                   </div>
@@ -767,22 +763,11 @@ const MbetBox = styled.main`
       display: flex;
       flex-direction: column;
 
-      .chartCont {
+      .chartBox {
         flex: 1;
-        padding: 62px 0 0;
         background: #181c25;
         position: relative;
-
-        .chartBox {
-          height: 100%;
-          overflow-x: scroll;
-          position: relative;
-
-          .chart {
-            height: 100%;
-            overflow: hidden;
-          }
-        }
+        padding: 62px 0 0;
 
         .utilBox {
           display: flex;
@@ -1064,14 +1049,17 @@ const PbetBox = styled.main`
 
       .chartBox {
         flex: 1;
-        overflow-x: scroll;
         background: #181c25;
         border-radius: 12px;
+        overflow: hidden;
         position: relative;
 
         .chart {
-          height: 100%;
-          overflow: hidden;
+          position: absolute;
+          width: calc(100% + 2px);
+          height: calc(100% + 2px);
+          top: -1px;
+          left: -1px;
         }
       }
 
