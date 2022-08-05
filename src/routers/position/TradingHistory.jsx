@@ -72,7 +72,7 @@ export default function TradingHistory() {
 
   useEffect(() => {
     getData();
-  }, [category]);
+  }, [page, category]);
 
   if (isMobile)
     return (
@@ -768,6 +768,20 @@ const PtradingHistoryBox = styled.main`
         border-radius: 14px;
         overflow-x: scroll;
 
+        &::-webkit-scrollbar {
+          height: 8px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          height: 8px;
+          background: #888;
+          border-radius: 10px;
+
+          &:hover {
+            background: #fff;
+          }
+        }
+
         .listHeader {
           display: flex;
           align-items: center;
@@ -842,8 +856,8 @@ const PtradingHistoryBox = styled.main`
           }
 
           &:nth-of-type(4) {
-            width: 312px;
-            min-width: 312px;
+            width: 210px;
+            min-width: 210px;
           }
 
           &:nth-of-type(5) {

@@ -40,4 +40,7 @@ export const API = {
   BOOKMARKS_MY: URL + "/bookmarks/my",
 
   QUERIES_FOREX: URL + "/queries/forex", //:type
+
+  ADMIN_LEVEL_FEE: URL + "/admins/level/fee",
+  ADMIN_FEE_SETTING: URL + "/admins/fee/setting", //:level
 };

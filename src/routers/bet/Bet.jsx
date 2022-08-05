@@ -58,11 +58,30 @@ export default function Bet() {
 
     return () => {
       localStorage.removeItem("demoToken");
+
+      socketIo.disconnect("dividendrate");
+      socketIo.disconnect("bet");
+      socketIo.disconnect("bet_closed");
     };
   }, []);
 
   useEffect(() => {
+    let socketInterval = setInterval(() => {
+      getBetSocket();
+
+      if (socketIo.connected) {
+        console.log(socketIo.connected);
+        clearInterval(socketInterval);
+      } else {
+        console.log(socketIo.connected);
+      }
+    }, 1000);
+
     getBetSocket();
+
+    return () => {
+      clearInterval(socketInterval);
+    };
   }, [socketIo]);
 
   return (

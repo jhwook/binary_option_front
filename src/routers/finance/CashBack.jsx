@@ -4,24 +4,50 @@ import DefaultHeader from "../../components/header/DefaultHeader";
 import T_dia from "../../img/tier/T_dia.svg";
 import I_upPolGreen from "../../img/icon/I_upPolGreen.svg";
 import { D_rateList } from "../../data/D_position";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { setToast } from "../../util/Util";
+import axios from "axios";
+import { API } from "../../configs/api";
 
 export default function CashBack() {
   const isMobile = useSelector((state) => state.common.isMobile);
 
-  const [settingList, setSettingList] = useState(new Array(D_rateList.length));
+  const [listData, setListData] = useState([]);
 
   function onChangeSettingList(e, i) {
-    let _settingList = settingList;
-    _settingList[i] = e.target.value;
+    let _listData = listData;
+    _listData[_listData.length - i - 1].fee = e.target.value;
 
-    setSettingList([..._settingList]);
+    setListData([..._listData]);
   }
 
-  function onClickSaveBtn() {
-    setToast({ type: "alarm", cont: "Your changes have been saved." });
+  function onClickSaveBtn(i) {
+    console.log(listData[listData.length - i - 1].fee);
+    axios
+      .patch(`${API.ADMIN_FEE_SETTING}/${listData.length - i - 1}`, {
+        value: listData[listData.length - i - 1].fee,
+      })
+      .then((res) => {
+        console.log(res);
+        getData();
+        setToast({ type: "alarm", cont: "Your changes have been saved." });
+      })
+      .catch(console.error);
   }
+
+  function getData() {
+    axios
+      .get(API.ADMIN_LEVEL_FEE)
+      .then(({ data }) => {
+        console.log(data);
+        setListData(data.resp);
+      })
+      .catch(console.error);
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   if (isMobile)
     return (
@@ -131,12 +157,12 @@ export default function CashBack() {
           </article>
 
           <ul className="rateList">
-            {D_rateList.map((v, i) => (
+            {[...listData].reverse().map((v, i) => (
               <li key={i}>
                 <div className="imgBox">
-                  <img src={v.img} alt="" />
+                  <img src={v.imgurl} alt="" />
 
-                  <span className="name">{v.name}</span>
+                  <span className="name">{v.levelstr_disp}</span>
                 </div>
 
                 <div className="andBar">
@@ -148,13 +174,16 @@ export default function CashBack() {
                 <div className="setBox">
                   <div className="inputBox">
                     <input
-                      value={settingList[i]}
+                      value={v.fee}
                       onChange={(e) => onChangeSettingList(e, i)}
                     />
 
                     <strong className="unit">%</strong>
 
-                    <button className="saveBtn" onClick={onClickSaveBtn}>
+                    <button
+                      className="saveBtn"
+                      onClick={() => onClickSaveBtn(i)}
+                    >
                       Save
                     </button>
                   </div>

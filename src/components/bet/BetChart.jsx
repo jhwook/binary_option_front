@@ -3,7 +3,7 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { socketIo } from "../../util/socket";
 
-export default function BetChart({ symbol }) {
+export default function BetChart({ symbol,chartWidth }) {
   const [apiData, setApiData] = useState([]);
   const [reload, setReload] = useState(false);
   const [yNoti, setYnoti] = useState([]);
@@ -24,6 +24,7 @@ export default function BetChart({ symbol }) {
           symbol,
           interval: "1min",
           apikey: "c092ff5093bf4eef83897889e96b3ba7",
+          outputsize: 50,
         },
       })
       .then(({ data }) => {
@@ -80,8 +81,8 @@ export default function BetChart({ symbol }) {
           _apiData.push(pushData);
         }
 
-        _apiData.slice(-30);
-
+        _apiData.slice(-50);
+        console.log(_apiData);
         setApiData([..._apiData]);
         setTimeout(() => setReload(false), 1);
       })
@@ -268,9 +269,9 @@ export default function BetChart({ symbol }) {
   ) : (
     <ReactApexChart
       options={options}
-      series={[{ data: apiData }]}
+      series={[{ data: reload? '': apiData }]}
       type="candlestick"
-      // width={4000}
+      width={chartWidth}
       height={"100%"}
     />
   );

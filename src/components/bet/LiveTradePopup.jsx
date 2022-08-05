@@ -82,21 +82,8 @@ const MliveTradePopupBox = styled.section`
       height: 56px;
       font-size: 18px;
       font-weight: 700;
+      color: #f7ab1f;
       border-radius: 12px;
-
-      &:nth-of-type(1) {
-        color: #4e3200;
-        background: linear-gradient(99.16deg, #604719 3.95%, #f7ab1f 52.09%);
-      }
-
-      &:nth-of-type(n + 2) {
-        color: #f7ab1f;
-        border: 2px solid #f7ab1f;
-
-        &:hover {
-          background: rgba(247, 171, 31, 0.14);
-        }
-      }
     }
   }
 `;
