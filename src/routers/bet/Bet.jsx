@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Route, Routes, Navigate } from "react-router";
 import { API } from "../../configs/api";
@@ -13,6 +13,8 @@ export default function Bet() {
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
   const demoToken = localStorage.getItem("demoToken");
+
+  const [closedList, setClosedList] = useState([]);
 
   function getBetSocket() {
     connectSocketIo();
@@ -34,6 +36,8 @@ export default function Bet() {
         amount: res.data.amount / 10 ** 6,
         profit: res.profit,
       });
+
+      setClosedList([...closedList, res]);
       dispatch(setClosedFlag());
       dispatch(setBetFlag());
     });
@@ -66,23 +70,20 @@ export default function Bet() {
   }, []);
 
   useEffect(() => {
-    let socketInterval = setInterval(() => {
-      getBetSocket();
+    getBetSocket();
+  }, [socketIo]);
 
-      if (socketIo.connected) {
-        console.log(socketIo.connected);
-        clearInterval(socketInterval);
-      } else {
-        console.log(socketIo.connected);
-      }
+  useEffect(() => {
+    // if (!closedList[0]) return;
+
+    let _closedInterval = setInterval(() => {
+      console.log("closd interval", closedList);
     }, 1000);
 
-    getBetSocket();
-
     return () => {
-      clearInterval(socketInterval);
+      clearInterval(_closedInterval);
     };
-  }, [socketIo]);
+  }, [closedList]);
 
   return (
     <Routes>

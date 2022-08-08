@@ -23,7 +23,7 @@ export default function CashInPersonPopup({ off, setConfirm, setData }) {
         <article className="topArea">
           <span className="blank" />
 
-          <p className="title">Cash in Person</p>
+          <p className="title">Complete Identity Verification</p>
 
           <button className="exitBtn" onClick={() => off()}>
             <img src={I_xWhite} alt="" />
@@ -95,7 +95,7 @@ export default function CashInPersonPopup({ off, setConfirm, setData }) {
         <article className="topArea">
           <span className="blank" />
 
-          <p className="title">Cash in Person</p>
+          <p className="title">Complete Identity Verification</p>
 
           <button className="exitBtn" onClick={() => off()}>
             <img src={I_xWhite} alt="" />

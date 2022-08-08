@@ -121,12 +121,12 @@ export default function Referal({ userData }) {
                     className="value"
                     onClick={() =>
                       onClickCopyBtn(
-                        "http://users.options1.net/#/auth/signup?refcode={userData?.referercode}"
+                        "https://users.options1.net/#/auth/signup?refcode={userData?.referercode}"
                       )
                     }
                   >
                     <p className="url">
-                      http://users.options1.net/#/auth/signup?refcode=
+                      https://users.options1.net/#/auth/signup?refcode=
                       {userData?.referercode}
                     </p>
                     <img src={I_cpWhite} alt="" />

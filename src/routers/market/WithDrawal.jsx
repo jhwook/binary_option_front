@@ -383,20 +383,16 @@ export default function WithDrawal() {
 
                 <ul className="bodyList">
                   <li>
-                    Please make sure that only USDT deposit is made via this
-                    address. Otherwise, your deposited funds will not be added
-                    to your available balance — nor will it be refunded.
+                    Attention! Please note that the address the system gave you
+                    for this payment is unique and can only be used once. Each
+                    payment needs to be initiated anew.
                   </li>
                   <li>
-                    Please make sure that your Betbit deposit address is
-                    correct. Otherwise, your deposited funds will not be added
-                    to your available balance — nor will it be refunded.
+                    The funds will be credited as soon as we get 18
+                    confirmations from the Polygon network.
                   </li>
                   <li>
-                    Please note that the current asset does not support deposit
-                    via the smart contract. If used, your deposited funds will
-                    not be added to your available balance — nor will it be
-                    refunded.
+                    Crypto deposits are monitored according to our AML program.Cash in Person	
                   </li>
                 </ul>
               </div>

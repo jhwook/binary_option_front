@@ -88,7 +88,7 @@ const PselectPopupBox = styled.ul`
     align-items: center;
     gap: 10px;
     height: 56px;
-    padding: 0 18px;
+    padding: 0 22px;
     font-size: 20px;
     font-weight: 700;
     opacity: 0.4;
@@ -100,8 +100,9 @@ const PselectPopupBox = styled.ul`
 
     .icon {
       width: 38px;
-      aspect-ratio: 1;
+      height: 38px;
       object-fit: contain;
+      box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.4);
     }
   }
 `;

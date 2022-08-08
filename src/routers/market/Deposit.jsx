@@ -20,6 +20,7 @@ import { metaMaskLink } from "../../configs/metaMask";
 import PreDepositWarningPopup from "../../components/market/deposit/PreDepositWarningPopup";
 import io from "socket.io-client";
 import MinimumDepositPopup from "../../components/market/deposit/MinimumDepositPopup";
+import { D_branchTokenList, D_unBranchTokenList } from "../../data/D_market";
 
 export default function Deposit({ userData }) {
   const walletAddress = localStorage.getItem("walletAddress");
@@ -34,14 +35,7 @@ export default function Deposit({ userData }) {
   const [tokenPopup, setTokenPopup] = useState(false);
   // const [token, setToken] = useState({ icon: T_usdt, type: "USDT" ,text: "USDT"});
   // const [tokenList, setTokenList] = useState([{ icon: T_usdt, type: "USDT",text: "USDT"}]);
-  const [token, setToken] = useState({
-    icon: T_usdt,
-    type: "USDT_BINOPT",
-    text: "USDT",
-  });
-  const [tokenList, setTokenList] = useState([
-    { icon: T_usdt, type: "USDT_BINOPT", text: "USDT" },
-  ]);
+  const [token, setToken] = useState(D_unBranchTokenList[0]);
   const [loader, setLoader] = useState("");
   const [preDepositWarningPopup, setPreDepositWarningPopup] = useState(false);
   const [minDepositPopup, setMinDepositPopup] = useState(false);
@@ -184,16 +178,8 @@ export default function Deposit({ userData }) {
 
     setIsBranch(isbranch);
 
-    if (isbranch) {
-      setTokenList([{ icon: T_CNY, type: "CNY", text: "CNY" }]);
-    } else {
-      setTokenList([{ icon: T_usdt, type: "USDT_BINOPT", text: "USDT" }]);
-    }
+    if (isbranch) setToken(D_branchTokenList[0]);
   }, [userData]);
-
-  useEffect(() => {
-    if (tokenList) setToken(tokenList[0]);
-  }, [tokenList]);
 
   useEffect(() => {
     return () => io(URL).disconnect();
@@ -234,7 +220,9 @@ export default function Deposit({ userData }) {
                       <>
                         <TokenSelectPopup
                           off={setTokenPopup}
-                          list={tokenList}
+                          list={
+                            isBranch ? D_branchTokenList : D_unBranchTokenList
+                          }
                           setCont={setToken}
                         />
                         <PopupBg off={setTokenPopup} />
@@ -386,7 +374,9 @@ export default function Deposit({ userData }) {
                       <>
                         <TokenSelectPopup
                           off={setTokenPopup}
-                          list={tokenList}
+                          list={
+                            isBranch ? D_branchTokenList : D_unBranchTokenList
+                          }
                           setCont={setToken}
                         />
                         <PopupBg off={setTokenPopup} />
@@ -486,24 +476,43 @@ export default function Deposit({ userData }) {
               <div className="value">
                 <p className="head">Important :</p>
 
-                <ul className="bodyList">
-                  <li>
-                    Please make sure that only USDT deposit is made via this
-                    address. Otherwise, your deposited funds will not be added
-                    to your available balance — nor will it be refunded.
-                  </li>
-                  <li>
-                    Please make sure that your Betbit deposit address is
-                    correct. Otherwise, your deposited funds will not be added
-                    to your available balance — nor will it be refunded.
-                  </li>
-                  <li>
-                    Please note that the current asset does not support deposit
-                    via the smart contract. If used, your deposited funds will
-                    not be added to your available balance — nor will it be
-                    refunded.
-                  </li>
-                </ul>
+                {isBranch ? (
+                  <ul className="bodyList">
+                    <li>
+                      Please make sure that only CNY deposit is made via this
+                      address. Otherwise, your deposited funds will not be added
+                      to your available balance — nor will it be refunded.
+                    </li>
+                    <li>
+                      Please make sure to complete the payment within 15
+                      minutes, and click on the "Payment Completed" button to
+                      confirm your payment. If you fail to click on the button
+                      within the timeout period, your order will be
+                      automatically canceled and your payment may not be
+                      retrievable.
+                    </li>
+                    <li>
+                      Please note that the current asset does not support
+                      deposit via the smart contract.
+                    </li>
+                  </ul>
+                ) : (
+                  <ul className="bodyList">
+                    <li>
+                      Attention! Please note that the address the system gave
+                      you for this payment is unique and can only be used once.
+                      Each payment needs to be initiated anew.
+                    </li>
+                    <li>
+                      The funds will be credited as soon as we get 18
+                      confirmations from the Polygon network.
+                    </li>
+                    <li>
+                      Crypto deposits are monitored according to our AML
+                      program.
+                    </li>
+                  </ul>
+                )}
               </div>
             )}
           </article>
@@ -595,6 +604,7 @@ const MdepositBox = styled.main`
               .token {
                 width: 30px;
                 aspect-ratio: 1;
+                box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.4);
               }
 
               .name {
@@ -787,7 +797,7 @@ const PdepositBox = styled.main`
                   .token {
                     width: 38px;
                     aspect-ratio: 1;
-                    filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));
+                    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.4);
                   }
 
                   .name {

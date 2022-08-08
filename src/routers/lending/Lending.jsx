@@ -17,9 +17,11 @@ import I_rtArw3White from "../../img/icon/I_rtArw3White.svg";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 export default function Lending() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const isMobile = useSelector((state) => state.common.isMobile);
 
@@ -58,7 +60,7 @@ export default function Lending() {
               </strong>
             </article>
 
-            <button className="tradeBtn" onClick={() => {}}>
+            <button className="tradeBtn" onClick={() => navigate("/bet/live")}>
               Trade Now
             </button>
           </section>
@@ -165,7 +167,7 @@ export default function Lending() {
               </strong>
             </article>
 
-            <button className="tradeBtn" onClick={() => {}}>
+            <button className="tradeBtn" onClick={() => navigate("/bet/live")}>
               {t("Trade Now")}
             </button>
           </section>

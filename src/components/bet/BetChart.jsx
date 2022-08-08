@@ -3,17 +3,16 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { socketIo } from "../../util/socket";
 
-export default function BetChart({ symbol,chartWidth }) {
+export default function BetChart({ symbol, chartWidth }) {
   const [apiData, setApiData] = useState([]);
   const [reload, setReload] = useState(false);
   const [yNoti, setYnoti] = useState([]);
 
   function getNoti() {
-    socketIo.emit("bet", {}, (res) => {
-      // console.log("bet", res);
-      let yNoti = res.map((e) => e.startingPrice);
+    socketIo.on("bet", (res) => {
+      console.log("bet", res);
 
-      setYnoti([...yNoti]);
+      setYnoti([...res]);
     });
   }
 
@@ -28,10 +27,20 @@ export default function BetChart({ symbol,chartWidth }) {
         },
       })
       .then(({ data }) => {
-        console.log(data.values);
+        // console.log(data.values);
         let _data = data.values.map((e) => {
+          console.log(
+            new Date(
+              new Date(e.datetime).getTime() -
+                new Date().getTimezoneOffset() * 60 * 1000
+            ).getTime()
+          );
+
           return {
-            x: new Date(e.datetime),
+            x: new Date(
+              new Date(e.datetime).getTime() -
+                new Date().getTimezoneOffset() * 60 * 1000
+            ),
             y: [Number(e.close), Number(e.high), Number(e.low), Number(e.open)],
           };
         });
@@ -53,7 +62,9 @@ export default function BetChart({ symbol,chartWidth }) {
         let pushData;
         let _apiData = apiData;
         let _lastIndex = _apiData[_apiData.length - 1];
-        // console.log(data);
+        console.log(data);
+
+        console.log(new Date());
 
         if (
           _lastIndex &&
@@ -82,7 +93,7 @@ export default function BetChart({ symbol,chartWidth }) {
         }
 
         _apiData.slice(-50);
-        console.log(_apiData);
+        // console.log(_apiData);
         setApiData([..._apiData]);
         setTimeout(() => setReload(false), 1);
       })
@@ -137,87 +148,104 @@ export default function BetChart({ symbol,chartWidth }) {
     annotations: {
       // yaxis: yNoti.map((e) => {
       //   return {
-      //     y: Number(e),
-      //     borderColor: "#00E396",
-      //     label: {
-      //       show: true,
-      //       text: `$${Number(e).toFixed(2)}`,
-      //       borderRadius: 10,
-      //       offsetY: 0,
-      //       borderWidth: 0,
-      //       // textAnchor: "start",
-      //       // textAnchor: "middle",
-      //       // textAnchor: "",
-      //       style: {
-      //         borderColor: "#000",
-      //         borderWidth: 0,
-      //         color: "#fff",
-      //         background: "#3fb68b66",
-      //         fontSize: 10,
-      //         cssClass: "apexcharts-yaxis-annotation-label",
-      //         padding: {
-      //           left: 8,
-      //           right: 40,
-      //           top: 4,
-      //           bottom: 4,
-      //         },
-      //       },
-      //     },
-      //   };
+      xaxis: [
+        {
+          x: new Date(1659941880000),
+          strokeDashArray: 0,
+          borderColor: "#775DD0",
+          label: {
+            borderColor: "#775DD0",
+            style: {
+              color: "#fff",
+              background: "#775DD0",
+            },
+            text: "X Axis Anno Vertical",
+          },
+        },
+      ],
+      points: [
+        {
+          x: new Date(1659941880000),
+          y: 23780.5,
+          marker: {
+            size: 6,
+            fillColor: "#fff",
+            strokeColor: "#2698FF",
+            radius: 2,
+          },
+          label: {
+            borderColor: "#FF4560",
+            offsetY: 0,
+            style: {
+              color: "#fff",
+              background: "#FF4560",
+            },
+
+            text: "Point Annotation (XY)",
+          },
+        },
+      ],
+      yaxis: [
+        {
+          // y: Number(e),
+          y: 23780.5,
+          borderColor: "#00E396",
+          label: {
+            show: true,
+            text: `$${(23780).toFixed(2)}`,
+            // text: `$${Number(e).toFixed(2)}`,
+            borderRadius: 10,
+            offsetY: 0,
+            borderWidth: 0,
+            // textAnchor: "start",
+            // textAnchor: "middle",
+            // textAnchor: "",
+            style: {
+              borderColor: "#000",
+              borderWidth: 0,
+              color: "#fff",
+              background: "#3fb68b66",
+              fontSize: 10,
+              cssClass: "apexcharts-yaxis-annotation-label",
+              padding: {
+                left: 8,
+                right: 40,
+                top: 4,
+                bottom: 4,
+              },
+            },
+          },
+        },
+      ],
+      // };
       // }),
-      // points: [
-      //   {
-      //     x: 0,
-      //     y: 22809,
-      //     yAxisIndex: 0,
-      //     seriesIndex: 0,
-      //     mouseEnter: undefined,
-      //     mouseLeave: undefined,
-      //     marker: {
-      //       size: 0,
-      //       fillColor: "#fff",
-      //       strokeColor: "#333",
-      //       strokeWidth: 3,
-      //       shape: "circle",
-      //       radius: 2,
-      //       OffsetX: 0,
-      //       OffsetY: 0,
-      //       cssClass: "",
-      //     },
-      //     label: {
-      //       borderColor: "#c2c2c2",
-      //       borderWidth: 1,
-      //       borderRadius: 2,
-      //       text: undefined,
-      //       textAnchor: "middle",
-      //       offsetX: 0,
-      //       offsetY: -15,
-      //       mouseEnter: undefined,
-      //       mouseLeave: undefined,
-      //       style: {
-      //         background: "#fff",
-      //         color: "#777",
-      //         fontSize: "12px",
-      //         fontWeight: 400,
-      //         fontFamily: undefined,
-      //         cssClass: "apexcharts-point-annotation-label",
-      //         padding: {
-      //           left: 5,
-      //           right: 5,
-      //           top: 0,
-      //           bottom: 2,
-      //         },
-      //       },
-      //     },
-      //     image: {
-      //       path: undefined,
-      //       width: 20,
-      //       height: 20,
-      //       offsetX: 0,
-      //       offsetY: 0,
-      //     },
-      //   },
-      // ],
+      points: [
+        {
+          x: new Date().getTime(),
+          y: 23780.5,
+          yAxisIndex: 0,
+          seriesIndex: 0,
+          mouseEnter: undefined,
+          mouseLeave: undefined,
+          marker: {
+            size: 8,
+            fillColor: "#fff",
+            strokeColor: "red",
+            radius: 2,
+            cssClass: "apexcharts-custom-class",
+          },
+          label: {
+            borderColor: "#FF4560",
+            offsetY: 0,
+            style: {
+              color: "#fff",
+              background: "#FF4560",
+            },
+
+            text: "Point Annotation",
+          },
+        },
+      ],
     },
     dataLabels: {
       enabled: false,
@@ -269,7 +297,7 @@ export default function BetChart({ symbol,chartWidth }) {
   ) : (
     <ReactApexChart
       options={options}
-      series={[{ data: reload? '': apiData }]}
+      series={[{ data: reload ? "" : apiData }]}
       type="candlestick"
       width={chartWidth}
       height={"100%"}

@@ -12,6 +12,8 @@ export const socketIo = io(URL, {
 });
 
 export const connectSocketIo = () => {
+  console.trace();
+
   socketIo.on("connect", (res) => {
     console.log("connect");
   });

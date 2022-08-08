@@ -314,7 +314,7 @@ export default function ResetPw() {
                   <QRCode
                     size={220}
                     style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-                    value={"http://users.options1.net/#/auth/login"}
+                    value={"https://users.options1.net/#/auth/login"}
                     viewBox={`0 0 220 220`}
                   />
                 </div>
