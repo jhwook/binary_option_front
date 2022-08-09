@@ -73,17 +73,17 @@ export default function Bet() {
     getBetSocket();
   }, [socketIo]);
 
-  useEffect(() => {
-    // if (!closedList[0]) return;
+  // useEffect(() => {
+  //   if (!closedList[0]) return;
 
-    let _closedInterval = setInterval(() => {
-      console.log("closd interval", closedList);
-    }, 1000);
+  //   let _closedInterval = setInterval(() => {
+  //     console.log("closed interval", closedList);
+  //   }, 1000);
 
-    return () => {
-      clearInterval(_closedInterval);
-    };
-  }, [closedList]);
+  //   return () => {
+  //     clearInterval(_closedInterval);
+  //   };
+  // }, [closedList]);
 
   return (
     <Routes>

@@ -1,9 +1,10 @@
 import axios from "axios";
+import moment from "moment";
 import { useEffect, useLayoutEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { socketIo } from "../../util/socket";
 
-export default function BetChart({ symbol, chartWidth }) {
+export default function BetChart({ symbol, chartWidth, openedData }) {
   const [apiData, setApiData] = useState([]);
   const [reload, setReload] = useState(false);
   const [yNoti, setYnoti] = useState([]);
@@ -22,20 +23,13 @@ export default function BetChart({ symbol, chartWidth }) {
         params: {
           symbol,
           interval: "1min",
-          apikey: "c092ff5093bf4eef83897889e96b3ba7",
-          outputsize: 50,
+          apikey: process.env.REACT_APP_TWELVEDATA_KEY,
+          outputsize: 100,
         },
       })
       .then(({ data }) => {
         // console.log(data.values);
-        let _data = data.values.map((e) => {
-          console.log(
-            new Date(
-              new Date(e.datetime).getTime() -
-                new Date().getTimezoneOffset() * 60 * 1000
-            ).getTime()
-          );
-
+        let _data = data.values.reverse().map((e) => {
           return {
             x: new Date(
               new Date(e.datetime).getTime() -
@@ -55,7 +49,7 @@ export default function BetChart({ symbol, chartWidth }) {
       .get(`https://api.twelvedata.com/price`, {
         params: {
           symbol,
-          apikey: "c092ff5093bf4eef83897889e96b3ba7",
+          apikey: process.env.REACT_APP_TWELVEDATA_KEY,
         },
       })
       .then(({ data }) => {
@@ -63,8 +57,6 @@ export default function BetChart({ symbol, chartWidth }) {
         let _apiData = apiData;
         let _lastIndex = _apiData[_apiData.length - 1];
         console.log(data);
-
-        console.log(new Date());
 
         if (
           _lastIndex &&
@@ -80,7 +72,7 @@ export default function BetChart({ symbol, chartWidth }) {
           _apiData[_apiData.length - 1] = _lastIndex;
         } else {
           pushData = {
-            x: new Date(),
+            x: new Date().setSeconds(0),
             y: [
               Number(data.price),
               Number(data.price),
@@ -92,8 +84,8 @@ export default function BetChart({ symbol, chartWidth }) {
           _apiData.push(pushData);
         }
 
-        _apiData.slice(-50);
-        // console.log(_apiData);
+        _apiData.slice(-100);
+        console.log(_apiData);
         setApiData([..._apiData]);
         setTimeout(() => setReload(false), 1);
       })
@@ -135,6 +127,11 @@ export default function BetChart({ symbol, chartWidth }) {
       toolbar: {
         show: false,
       },
+      events: {
+        dataPointMouseEnter: (e, cont, config) => {
+          console.log(cont, config);
+        },
+      },
     },
 
     plotOptions: {
@@ -146,106 +143,89 @@ export default function BetChart({ symbol, chartWidth }) {
       },
     },
     annotations: {
-      // yaxis: yNoti.map((e) => {
-      //   return {
       xaxis: [
         {
-          x: new Date(1659941880000),
-          strokeDashArray: 0,
-          borderColor: "#775DD0",
+          x: 1660023780000,
+          borderColor: "#FEB019",
           label: {
-            borderColor: "#775DD0",
+            borderColor: "#FEB019",
             style: {
               color: "#fff",
-              background: "#775DD0",
+              background: "#FEB019",
             },
-            text: "X Axis Anno Vertical",
+            orientation: "horizontal",
+            text: "X Axis Anno Horizonal",
           },
         },
       ],
-      points: [
-        {
-          x: new Date(1659941880000),
-          y: 23780.5,
-          marker: {
-            size: 6,
-            fillColor: "#fff",
-            strokeColor: "#2698FF",
-            radius: 2,
-          },
-          label: {
-            borderColor: "#FF4560",
-            offsetY: 0,
-            style: {
-              color: "#fff",
-              background: "#FF4560",
-            },
 
-            text: "Point Annotation (XY)",
+      points: openedData.map((e) => {
+        console.log(e);
+
+        let color;
+
+        if (e.side === "HIGH") color = "#3fb68b";
+        else if (e.side === "LOW") color = "#FF5353";
+
+        return {
+          x: Number(moment.unix(e.starting).seconds(0).format("x")),
+          y: Number(e.startingPrice).toFixed(2),
+          marker: {
+            size: 10,
+            strokeColor: color,
+            fillColor: "#181c25",
           },
-        },
-      ],
-      yaxis: [
-        {
-          // y: Number(e),
-          y: 23780.5,
-          borderColor: "#00E396",
           label: {
-            show: true,
-            text: `$${(23780).toFixed(2)}`,
-            // text: `$${Number(e).toFixed(2)}`,
-            borderRadius: 10,
-            offsetY: 0,
-            borderWidth: 0,
-            // textAnchor: "start",
-            // textAnchor: "middle",
-            // textAnchor: "",
+            borderColor: color,
+            borderRadius: 4,
             style: {
-              borderColor: "#000",
-              borderWidth: 0,
+              fontSize: 12,
               color: "#fff",
-              background: "#3fb68b66",
-              fontSize: 10,
-              cssClass: "apexcharts-yaxis-annotation-label",
-              padding: {
-                left: 8,
-                right: 40,
-                top: 4,
-                bottom: 4,
-              },
+              background: color,
             },
+            text: `${
+              (e.side === "HIGH" && "▲") || (e.side === "LOW" && "▼")
+            } $${e.amount / 10 ** 6}`,
           },
-        },
-      ],
+        };
+      }),
+
+      // yaxis: yNoti.map((e) => {
+      //   return {
+      // yaxis: [
+      //   {
+      //     // y: Number(e),
+      //     y: 23780.5,
+      //     borderColor: "#00E396",
+      //     label: {
+      //       show: true,
+      //       text: `$${(23780).toFixed(2)}`,
+      //       // text: `$${Number(e).toFixed(2)}`,
+      //       borderRadius: 10,
+      //       offsetY: 0,
+      //       borderWidth: 0,
+      //       // textAnchor: "start",
+      //       // textAnchor: "middle",
+      //       // textAnchor: "",
+      //       style: {
+      //         borderColor: "#000",
+      //         borderWidth: 0,
+      //         color: "#fff",
+      //         background: "#3fb68b66",
+      //         fontSize: 10,
+      //         cssClass: "apexcharts-yaxis-annotation-label",
+      //         padding: {
+      //           left: 8,
+      //           right: 40,
+      //           top: 4,
+      //           bottom: 4,
+      //         },
+      //       },
+      //     },
+      //   },
+      // ],
       // };
       // }),
-      points: [
-        {
-          x: new Date().getTime(),
-          y: 23780.5,
-          yAxisIndex: 0,
-          seriesIndex: 0,
-          mouseEnter: undefined,
-          mouseLeave: undefined,
-          marker: {
-            size: 8,
-            fillColor: "#fff",
-            strokeColor: "red",
-            radius: 2,
-            cssClass: "apexcharts-custom-class",
-          },
-          label: {
-            borderColor: "#FF4560",
-            offsetY: 0,
-            style: {
-              color: "#fff",
-              background: "#FF4560",
-            },
-
-            text: "Point Annotation",
-          },
-        },
-      ],
     },
     dataLabels: {
       enabled: false,
@@ -254,6 +234,7 @@ export default function BetChart({ symbol, chartWidth }) {
       size: 0,
     },
     xaxis: {
+      type: "datetime",
       show: false,
       labels: {
         show: false,
@@ -284,11 +265,7 @@ export default function BetChart({ symbol, chartWidth }) {
       show: false,
     },
     grid: {
-      yaxis: {
-        lines: {
-          show: false,
-        },
-      },
+      borderColor: "rgba(0,0,0,0)",
     },
   };
 
@@ -299,6 +276,7 @@ export default function BetChart({ symbol, chartWidth }) {
       options={options}
       series={[{ data: reload ? "" : apiData }]}
       type="candlestick"
+      // type="candlestick"
       width={chartWidth}
       height={"100%"}
     />

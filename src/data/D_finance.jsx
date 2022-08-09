@@ -201,7 +201,7 @@ export const D_ordersListHeader = [
   "User Level",
   "Date",
   "Deposit amount",
-  "Cumulative deposits",
+  "Cumulative USDT",
   "Deposit account",
   "Using",
 ];

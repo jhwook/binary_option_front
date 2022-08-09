@@ -107,7 +107,7 @@ export default function Orders() {
       (txHash) => {
         axios
           .patch(`${API.TRANSACTION_BRANCH_TRANSFER}`, {
-            amount: (data.localeAmount * forex) / 10 ** 6,
+            amount: data.localeAmount * forex * 10 ** 6,
             tokentype: "USDT_BINOPT",
             txhash: txHash,
             txId: data.id,
@@ -129,17 +129,19 @@ export default function Orders() {
     );
   }
 
-  function getForex() {
+  function getForex(type) {
     return axios
-      .get(`${API.QUERIES_FOREX}/CNYUSD`)
+      .get(`${API.QUERIES_FOREX}`, { params: { type } })
       .catch((err) => console.error(err));
   }
 
   async function onClickDepositBtn(data, i) {
     let forex;
+
+    console.log(data);
     try {
-      const forexRes = await getForex();
-      forex = forexRes.data.CNYUSD;
+      const forexRes = await getForex(`${data.localeUnit}/${data.unit}`);
+      forex = forexRes.data.price;
       console.log(forex);
     } catch (err) {
       console.error(err);
@@ -269,10 +271,10 @@ export default function Orders() {
                           <p className="key">{D_ordersListHeader[4]}</p>
                           <div className="value">
                             <p>
-                              {`¥${v?.user?.transaction?.cumulAmount?.toLocaleString(
-                                "cn",
-                                "CN"
-                              )}`}
+                              {`${v?.cumulAmount?.toLocaleString(
+                                "eu",
+                                "US"
+                              )}USDT`}
                             </p>
                           </div>
                         </div>
@@ -418,12 +420,10 @@ export default function Orders() {
                     </span>
 
                     <span>
-                      <p>
-                        {`¥${v?.cumulAmount?.toLocaleString(
-                          "cn",
-                          "CN"
-                        )}`}
-                      </p>
+                      <p>{`${v?.cumulAmount?.toLocaleString(
+                        "eu",
+                        "US"
+                      )}USDT`}</p>
                     </span>
 
                     <span>
