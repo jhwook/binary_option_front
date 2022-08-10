@@ -74,13 +74,19 @@ const spin = keyframes`
 `;
 
 const MverificationPopupBox = styled.section`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 91.11vw;
+  min-height: 220px;
   color: #fff;
 
   .topArea {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
     height: 60px;
     padding: 0 30px;
 
@@ -96,6 +102,7 @@ const MverificationPopupBox = styled.section`
   }
 
   .spinner {
+    display: block;
     width: 74px;
     animation: ${spin} 1.4s infinite linear;
   }

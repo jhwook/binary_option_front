@@ -236,7 +236,7 @@ export default function MyProfile({ userData }) {
                       placeholder=""
                     />
 
-                    {profData.email_certification ? (
+                    {emailVerify ? (
                       <p className="verified">Verified</p>
                     ) : (
                       <button
@@ -248,6 +248,35 @@ export default function MyProfile({ userData }) {
                     )}
                   </div>
                 </li>
+
+                {!emailVerify && emailSend && (
+                  <li>
+                    <p className="key">Email Code*</p>
+                    <div className={`${emailCodeAlarm && "alarmBox"} value`}>
+                      <input
+                        type="text"
+                        value={emailCode}
+                        onChange={(e) => setEmailCode(e.target.value)}
+                        placeholder=""
+                      />
+
+                      {emailCode ? (
+                        <button
+                          className="checkBtn"
+                          onClick={onClickCheckEmailCodeBtn}
+                        >
+                          Check
+                        </button>
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+
+                    {emailCodeAlarm && (
+                      <p className="alarm">{emailCodeAlarm}</p>
+                    )}
+                  </li>
+                )}
 
                 <li>
                   <p className="key">Phone</p>
@@ -283,7 +312,7 @@ export default function MyProfile({ userData }) {
                       onBlur={onBlurPhone}
                     />
 
-                    {profData.phone_certification ? (
+                    {phoneVerify ? (
                       <p className="verified">Verified</p>
                     ) : (
                       <button
@@ -295,6 +324,34 @@ export default function MyProfile({ userData }) {
                     )}
                   </div>
                 </li>
+
+                {!phoneVerify && phoneSend && (
+                  <li>
+                    <p className="key">Phone Code*</p>
+                    <div className={`${phoneCodeAlarm && "alarmBox"} value`}>
+                      <input
+                        type="text"
+                        value={phoneCode}
+                        onChange={(e) => setPhoneCode(e.target.value)}
+                        placeholder=""
+                      />
+
+                      {phoneCode ? (
+                        <button
+                          className="checkBtn"
+                          onClick={onClickCheckPhoneCodeBtn}
+                        >
+                          Check
+                        </button>
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                    {phoneCodeAlarm && (
+                      <p className="alarm">{phoneCodeAlarm}</p>
+                    )}
+                  </li>
+                )}
               </ul>
 
               <button
@@ -445,7 +502,7 @@ export default function MyProfile({ userData }) {
                   </div>
                 </li>
 
-                {emailSend && (
+                {!emailVerify && emailSend && (
                   <li>
                     <p className="key">Email Code*</p>
                     <div className="value">
@@ -525,7 +582,7 @@ export default function MyProfile({ userData }) {
                   </div>
                 </li>
 
-                {phoneSend && (
+                {!phoneVerify && phoneSend && (
                   <li>
                     <p className="key">Phone Code*</p>
                     <div className="value">
