@@ -1545,24 +1545,24 @@ export const D_volumeChartList = [
 export const D_screenList = ["M10", "M30", "H1", "H4", "D1", "D7", "D14"];
 
 export const D_chartTypeList = [
-  { icon: I_lIneChartWhite, text: "Line" },
-  { icon: I_candleChartWhite, text: "Candles" },
-  { icon: I_heikenChartWhite, text: "Heiken Ashi" },
+  { icon: I_lIneChartWhite, type: "area", typeStr: "Line" },
+  { icon: I_candleChartWhite, type: "candlestick", typeStr: "Candles" },
+  { icon: I_heikenChartWhite, type: "line", typeStr: "Heiken Ashi" },
 ];
 
 export const D_timeList = [
-  "5s",
-  "10s",
-  "15s",
-  "30s",
-  "1m",
-  "3m",
-  "5m",
-  "10m",
-  "30m",
-  "1h",
-  "4h",
-  "1d",
+  { key: "5s", value: 5000 },
+  { key: "10s", value: 10000 },
+  { key: "15s", value: 15000 },
+  { key: "30s", value: 30000 },
+  { key: "1m", value: 60000 },
+  { key: "3m", value: 180000 },
+  { key: "5m", value: 30000 },
+  { key: "10m", value: 60000 },
+  { key: "30m", value: 180000 },
+  { key: "1h", value: 360000 },
+  { key: "4h", value: 1440000 },
+  { key: "1d", value: 8440000 },
 ];
 
 export const D_tokenCategoryList = [

@@ -259,7 +259,7 @@ export default function Orders() {
                           <p className="key">{D_ordersListHeader[3]}</p>
                           <div className="value">
                             <p>
-                              {`¥${v?.localeAmount?.toLocaleString(
+                              {`¥${(v?.localeAmount / 10 ** 6)?.toLocaleString(
                                 "cn",
                                 "CN"
                               )}`}
@@ -416,7 +416,10 @@ export default function Orders() {
                     </span>
 
                     <span>
-                      <p>{`¥${v?.localeAmount?.toLocaleString("cn", "CN")}`}</p>
+                      {`¥${(v?.localeAmount / 10 ** 6)?.toLocaleString(
+                        "cn",
+                        "CN"
+                      )}`}
                     </span>
 
                     <span>

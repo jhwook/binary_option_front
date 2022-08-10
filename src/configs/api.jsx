@@ -9,7 +9,8 @@ export const API = {
   REFRESH: URL + "/users/refresh",
   EDIT_REF: URL + "/users/edit/ref",
   USER_PROFILE: URL + "/users/profile",
-  USER_CERTIFICATION_EMAIL: URL + "/users/certification/email",
+  USER_SEND_CERTIFICATION: URL + "/users/send/verification", //:type
+  USER_VERIFY: URL + "/users/verify", //:type/:code
   USER_QUERY: URL + "/users/query", //tablename/offset/limit
   USER_BALANCE: URL + "/users/balance", //:type
   USER_BRANCH: URL + "/users/branch", //:offset/:limit/:orderkey/:orderval

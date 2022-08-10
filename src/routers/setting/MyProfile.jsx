@@ -15,8 +15,6 @@ export default function MyProfile({ userData }) {
 
   const [profData, setProfData] = useState("");
   const [uid, setUid] = useState("");
-  const [email, setEmail] = useState("");
-  const [emailSend, setEmailSend] = useState(false);
   const [pw, setPw] = useState("");
   const [changePw, setChangePw] = useState(false);
   const [pwChk, setPwChk] = useState("");
@@ -25,7 +23,16 @@ export default function MyProfile({ userData }) {
   const [lastName, setLastName] = useState("");
   const [countryNum, setCountryNum] = useState("");
   const [selLocPopup, setSelLocPopup] = useState(false);
+  const [email, setEmail] = useState("");
+  const [emailSend, setEmailSend] = useState(false);
+  const [emailCode, setEmailCode] = useState("");
+  const [emailCodeAlarm, setEmailCodeAlarm] = useState("");
+  const [emailVerify, setEmailVerify] = useState(false);
   const [phone, setPhone] = useState("");
+  const [phoneSend, setPhoneSend] = useState(false);
+  const [phoneCode, setPhoneCode] = useState("");
+  const [phoneCodeAlarm, setPhoneCodeAlarm] = useState("");
+  const [phoneVerify, setPhoneVerify] = useState(false);
   const [verificationPopup, setVerificationPopup] = useState(false);
 
   function validatePw(str) {
@@ -33,29 +40,11 @@ export default function MyProfile({ userData }) {
     return regex.test(str);
   }
 
-  // function getProfData() {
-  //   axios
-  //     .get(`${API.AUTH}`
-  //     )
-  //     .then(async ({ data }) => {
-  //       console.log(data);
-  //       userData.id && setUid(userData.id);
-  //       userData.email && setEmail(userData.email);
-  //       userData.phone && setPhone(userData.phone);
-
-  //       userData.firstname && setFirstName(userData.firstname);
-  //       userData.lastname && setLastName(userData.lastname);
-  //       userData.countryNum && setCountryNum(userData.countryNum);
-
-  //       setProfData(data);
-  //     });
-  // }
-
   function onClickVeriEmailBtn() {
-    setVerificationPopup("email");
+    setEmailSend(true);
 
     axios
-      .post(API.USER_CERTIFICATION_EMAIL, { email })
+      .post(`${API.USER_SEND_CERTIFICATION}/email`, { email })
       .then((res) => {
         console.log(res);
         setVerificationPopup("email");
@@ -63,8 +52,38 @@ export default function MyProfile({ userData }) {
       .then((err) => console.error(err));
   }
 
+  function onClickCheckEmailCodeBtn() {
+    axios
+      .post(`${API.USER_VERIFY}/email/${emailCode}`)
+      .then(({ data }) => {
+        console.log(data);
+        if (data.status === "OK") setEmailVerify(true);
+        else if (data.status === "ERR") setEmailCodeAlarm("invalid Code");
+      })
+      .catch(console.error);
+  }
+
   function onClickVeriPhoneBtn() {
-    setVerificationPopup("phone");
+    setPhoneSend(true);
+
+    axios
+      .post(`${API.USER_SEND_CERTIFICATION}/phone`, { countryNum, phone })
+      .then((res) => {
+        console.log(res);
+        setVerificationPopup("phone");
+      })
+      .catch(console.error);
+  }
+
+  function onClickCheckPhoneCodeBtn() {
+    axios
+      .post(`${API.USER_VERIFY}/phone/${phoneCode}`)
+      .then(({ data }) => {
+        console.log(data);
+        if (data.status === "OK") setPhoneVerify(true);
+        else if (data.status === "ERR") setPhoneCodeAlarm("invalid Code");
+      })
+      .catch(console.error);
   }
 
   function onclickSaveBtn() {
@@ -88,16 +107,6 @@ export default function MyProfile({ userData }) {
 
     setToast({ type: "alarm", cont: "Your changes have been saved." });
   }
-
-  // useEffect(() => {
-  //   getProfData();
-
-  //   window.addEventListener("focus", getProfData);
-
-  //   return () => {
-  //     window.removeEventListener("focus", getProfData);
-  //   };
-  // }, []);
 
   useEffect(() => {
     if (!(pw && pwChk)) return;
@@ -131,7 +140,17 @@ export default function MyProfile({ userData }) {
     userData.firstname && setFirstName(userData.firstname);
     userData.lastname && setLastName(userData.lastname);
     userData.countryNum && setCountryNum(userData.countryNum);
+    userData.mailVerified && setEmailVerify(userData.mailVerified);
+    userData.phoneVerified && setPhoneVerify(userData.phoneVerified);
   }, [userData]);
+
+  useEffect(() => {
+    setEmailCodeAlarm("");
+  }, [emailCode]);
+
+  useEffect(() => {
+    setPhoneCodeAlarm("");
+  }, [phoneCode]);
 
   if (isMobile)
     return (
@@ -412,7 +431,7 @@ export default function MyProfile({ userData }) {
                         placeholder=""
                       />
 
-                      {profData.email_certification ? (
+                      {emailVerify ? (
                         <p className="verified">Verified</p>
                       ) : (
                         <button
@@ -425,6 +444,38 @@ export default function MyProfile({ userData }) {
                     </div>
                   </div>
                 </li>
+
+                {emailSend && (
+                  <li>
+                    <p className="key">Email Code*</p>
+                    <div className="value">
+                      <div
+                        className={`${emailCodeAlarm && "alarmBox"} inputBox`}
+                      >
+                        <input
+                          type="text"
+                          value={emailCode}
+                          onChange={(e) => setEmailCode(e.target.value)}
+                          placeholder=""
+                        />
+
+                        {emailCode ? (
+                          <button
+                            className="checkBtn"
+                            onClick={onClickCheckEmailCodeBtn}
+                          >
+                            Check
+                          </button>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    </div>
+                    {emailCodeAlarm && (
+                      <p className="alarm">{emailCodeAlarm}</p>
+                    )}
+                  </li>
+                )}
 
                 <li>
                   <p className="key">Phone</p>
@@ -460,19 +511,51 @@ export default function MyProfile({ userData }) {
                         onBlur={onBlurPhone}
                       />
 
-                      {profData.phone_certification ? (
+                      {phoneVerify ? (
                         <p className="verified">Verified</p>
                       ) : (
                         <button
-                          className={`${!emailSend && "init"} sendBtn`}
+                          className={`${!phoneSend && "init"} sendBtn`}
                           onClick={onClickVeriPhoneBtn}
                         >
-                          {emailSend ? "Resend" : "Unverified"}
+                          {phoneSend ? "Resend" : "Unverified"}
                         </button>
                       )}
                     </div>
                   </div>
                 </li>
+
+                {phoneSend && (
+                  <li>
+                    <p className="key">Phone Code*</p>
+                    <div className="value">
+                      <div
+                        className={`${phoneCodeAlarm && "alarmBox"} inputBox`}
+                      >
+                        <input
+                          type="text"
+                          value={phoneCode}
+                          onChange={(e) => setPhoneCode(e.target.value)}
+                          placeholder=""
+                        />
+
+                        {phoneCode ? (
+                          <button
+                            className="checkBtn"
+                            onClick={onClickCheckPhoneCodeBtn}
+                          >
+                            Check
+                          </button>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    </div>
+                    {phoneCodeAlarm && (
+                      <p className="alarm">{phoneCodeAlarm}</p>
+                    )}
+                  </li>
+                )}
               </ul>
 
               <button

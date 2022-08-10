@@ -3,12 +3,25 @@ import { useState } from "react";
 import { D_chartTypeList, D_timeList } from "../../data/D_bet";
 import { useSelector } from "react-redux";
 
-export default function ChartPopup({ off }) {
+export default function ChartPopup({ off, chartOpt, setChartOpt }) {
   const isMobile = useSelector((state) => state.common.isMobile);
 
-  const [type, setType] = useState(D_chartTypeList[0].text);
-  const [time, setTime] = useState(D_timeList[0]);
   const [toggleList, setToggleList] = useState(new Array(2).fill(false));
+
+  function onClickTypeBtn(v) {
+    let _chartOpt = chartOpt;
+
+    _chartOpt.type = v.type;
+    _chartOpt.typeStr = v.typeStr;
+    setChartOpt({ ..._chartOpt });
+  }
+
+  function onClickTimeBtn(v) {
+    let _chartOpt = chartOpt;
+
+    _chartOpt.duration = v.value;
+    setChartOpt({ ..._chartOpt });
+  }
 
   function onClickToggleBtn(i) {
     let dataList = toggleList;
@@ -26,11 +39,11 @@ export default function ChartPopup({ off }) {
             {D_chartTypeList.map((v, i) => (
               <li
                 key={i}
-                className={`${type === v.text && "on"}`}
-                onClick={() => setType(v.text)}
+                className={`${chartOpt.typeStr === v.typeStr && "on"}`}
+                onClick={() => onClickTypeBtn(v)}
               >
                 <img src={v.icon} alt="" />
-                <p>{v.text}</p>
+                <p>{v.typeStr}</p>
               </li>
             ))}
           </ul>
@@ -43,10 +56,10 @@ export default function ChartPopup({ off }) {
             {D_timeList.map((v, i) => (
               <li
                 key={i}
-                className={`${time === v && "on"}`}
-                onClick={() => setTime(v)}
+                className={`${chartOpt.duration === v.value && "on"}`}
+                onClick={() => onClickTimeBtn(v)}
               >
-                <strong>{v}</strong>
+                <strong>{v.key}</strong>
               </li>
             ))}
           </ul>
@@ -56,7 +69,7 @@ export default function ChartPopup({ off }) {
           <p className="key">Settings</p>
 
           <ul className="value">
-            {type === "Line" && (
+            {chartOpt.typeStr === "Line" && (
               <>
                 <li>
                   <button
@@ -75,7 +88,7 @@ export default function ChartPopup({ off }) {
               </>
             )}
 
-            {type === "Candles" && (
+            {chartOpt.typeStr === "Candles" && (
               <>
                 <li>
                   <button
@@ -104,7 +117,7 @@ export default function ChartPopup({ off }) {
               </>
             )}
 
-            {type === "Heiken Ashi" && (
+            {chartOpt.typeStr === "Heiken Ashi" && (
               <>
                 <li>
                   <button
@@ -145,11 +158,11 @@ export default function ChartPopup({ off }) {
             {D_chartTypeList.map((v, i) => (
               <li
                 key={i}
-                className={`${type === v.text && "on"}`}
-                onClick={() => setType(v.text)}
+                className={`${chartOpt.typeStr === v.typeStr && "on"}`}
+                onClick={() => onClickTypeBtn(v)}
               >
                 <img src={v.icon} alt="" />
-                <p>{v.text}</p>
+                <p>{v.typeStr}</p>
               </li>
             ))}
           </ul>
@@ -162,10 +175,10 @@ export default function ChartPopup({ off }) {
             {D_timeList.map((v, i) => (
               <li
                 key={i}
-                className={`${time === v && "on"}`}
-                onClick={() => setTime(v)}
+                className={`${chartOpt.duration === v.value && "on"}`}
+                onClick={() => onClickTimeBtn(v)}
               >
-                <strong>{v}</strong>
+                <strong>{v.key}</strong>
               </li>
             ))}
           </ul>
@@ -175,11 +188,18 @@ export default function ChartPopup({ off }) {
           <p className="key">Settings</p>
 
           <ul className="value">
-            {type === "Line" && (
+            {chartOpt.typeStr === "Line" && (
               <li>
                 <button
-                  className={`${toggleList[0] && "on"} toggleBtn`}
-                  onClick={() => onClickToggleBtn(0)}
+                  className={`${chartOpt.line.area && "on"} toggleBtn`}
+                  onClick={() =>
+                    setChartOpt({
+                      ...chartOpt,
+                      line: {
+                        area: !chartOpt.line.area,
+                      },
+                    })
+                  }
                 >
                   <p className="on">on</p>
                   <span />
@@ -190,7 +210,7 @@ export default function ChartPopup({ off }) {
               </li>
             )}
 
-            {type === "Candles" && (
+            {chartOpt.typeStr === "Candles" && (
               <>
                 <li>
                   <button
@@ -219,7 +239,7 @@ export default function ChartPopup({ off }) {
               </>
             )}
 
-            {type === "Heiken Ashi" && (
+            {chartOpt.typeStr === "Heiken Ashi" && (
               <>
                 <li>
                   <button
@@ -467,6 +487,7 @@ const PchartPopupBox = styled.section`
           border-radius: 8px;
           cursor: pointer;
 
+          &:hover,
           &.on {
             color: #fff;
             background: rgba(255, 255, 255, 0.1);

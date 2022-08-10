@@ -11,7 +11,6 @@ import I_lowArwRed from "../../img/icon/I_lowArwRed.svg";
 import I_plusWhite from "../../img/icon/I_plusWhite.svg";
 import I_timeWhite from "../../img/icon/I_timeWhite.svg";
 import I_barChartWhite from "../../img/icon/I_barChartWhite.svg";
-import I_candleChartWhite from "../../img/icon/I_candleChartWhite.svg";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import LiveTradePopup from "../../components/bet/LiveTradePopup";
 import PopupBg from "../../components/common/PopupBg";
@@ -22,6 +21,7 @@ import DetBox from "../../components/bet/detBox/DetBox";
 import InsufficientPopup from "../../components/bet/InsufficientPopup";
 import MyBalancePopup from "../../components/header/MyBalancePopup";
 import AddPopup from "../../components/header/AddPopup";
+import ReactTradingviewWidget, { Themes } from "react-tradingview-widget";
 import axios from "axios";
 import { API } from "../../configs/api";
 import LoadingBar from "../../components/common/LoadingBar";
@@ -30,7 +30,6 @@ import { getDividFromData, setToast } from "../../util/Util";
 import { setBetFlag } from "../../reducers/bet";
 import { socketIo } from "../../util/socket";
 import BetChart from "../../components/bet/BetChart";
-import ChartPopup from "../../components/bet/ChartPopup";
 
 export default function Live() {
   const hoverRef1 = useRef();
@@ -57,16 +56,6 @@ export default function Live() {
   const [bookMark, setBookMark] = useState([]);
   const [chartWidth, setChartWidth] = useState(window.innerWidth * 2);
   const [dragX, setDragX] = useState("");
-  const [chartPopup, setChartPopup] = useState(false);
-  const [chartOpt, setChartOpt] = useState({
-    width: window.innerWidth * 2,
-    type: "candlestick",
-    typeStr: "Candles",
-    duration: 5000,
-    line: {
-      area: false,
-    },
-  });
 
   function getAssetList() {
     axios
@@ -225,6 +214,7 @@ export default function Live() {
 
   function onWheelChart(e) {
     e.stopPropagation();
+    e.stopPropagation();
 
     if (e.deltaY < 0 && chartWidth > window.innerWidth)
       setChartWidth(chartWidth - window.innerWidth * 0.1);
@@ -290,15 +280,10 @@ export default function Live() {
                 <article className="contArea">
                   <div className="chartCont">
                     <div className="chartBox">
-                      <div
-                        id="Chart"
-                        className="chart"
-                        style={{ width: chartWidth }}
-                      >
+                      <div className="chart" style={{ width: chartWidth }}>
                         <BetChart
                           symbol={assetInfo.APISymbol}
                           chartWidth={chartWidth}
-                          chartOpt={chartOpt}
                           openedData={openedData}
                         />
                       </div>
@@ -546,52 +531,19 @@ export default function Live() {
                 </article>
 
                 <article className="contArea">
-                  <div className="chartCont">
-                    <div className="utilBox">
-                      <ul className="btnList">
-                        <li>
-                          <button
-                            className="chartBtn utilBtn"
-                            onClick={() => setChartPopup(true)}
-                          >
-                            <img src={I_candleChartWhite} alt="" />
-                          </button>
-
-                          {chartPopup && (
-                            <>
-                              <ChartPopup
-                                off={setChartPopup}
-                                chartOpt={chartOpt}
-                                setChartOpt={setChartOpt}
-                              />
-                              <PopupBg off={setChartPopup} />
-                            </>
-                          )}
-                        </li>
-                      </ul>
-
-                      <div className="typeBox">{`Chart type : ${chartOpt.typeStr}`}</div>
-                    </div>
-
-                    <div
-                      className="chartBox"
-                      ref={chartRef}
-                      onMouseDown={(e) => setDragX(e.clientX)}
-                      onMouseMove={onDragChartBox}
-                      onWheel={onWheelChart}
-                    >
-                      <div
-                        id="Chart"
-                        className="chart"
-                        style={{ width: chartWidth }}
-                      >
-                        <BetChart
-                          symbol={assetInfo.APISymbol}
-                          chartWidth={chartWidth}
-                          chartOpt={chartOpt}
-                          openedData={openedData}
-                        />
-                      </div>
+                  <div
+                    className="chartBox"
+                    ref={chartRef}
+                    onMouseDown={(e) => setDragX(e.clientX)}
+                    onMouseMove={onDragChartBox}
+                    onWheel={onWheelChart}
+                  >
+                    <div className="chart" style={{ width: chartWidth }}>
+                      <BetChart
+                        symbol={assetInfo.APISymbol}
+                        chartWidth={chartWidth}
+                        openedData={openedData}
+                      />
                     </div>
                   </div>
 
@@ -1135,68 +1087,17 @@ const PbetBox = styled.main`
       display: flex;
       overflow: hidden;
 
-      .chartCont {
+      .chartBox {
         flex: 1;
-        height: 100%;
-        overflow: hidden;
+        overflow-x: scroll;
         background: #181c25;
         border-radius: 12px;
         position: relative;
+        cursor: pointer;
 
-        .utilBox {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-          position: absolute;
-          top: 24px;
-          left: 24px;
-          z-index: 1;
-
-          .btnList {
-            position: relative;
-
-            li {
-              .utilBtn {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                width: 38px;
-                height: 36px;
-                background: rgba(246, 246, 246, 0.1);
-                border-radius: 6px;
-
-                &.chartBtn {
-                  img {
-                    width: 23px;
-                  }
-                }
-              }
-            }
-          }
-
-          .typeBox {
-            height: 34px;
-            padding: 0 12px;
-            font-size: 12px;
-            line-height: 34px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-          }
-        }
-
-        .chartBox {
-          width: 100%;
+        .chart {
           height: 100%;
-          overflow-x: scroll;
-          position: relative;
-          cursor: pointer;
-
-          .chart {
-            height: 100%;
-            overflow: hidden;
-          }
+          overflow: hidden;
         }
       }
 

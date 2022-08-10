@@ -2,11 +2,20 @@ import axios from "axios";
 import moment from "moment";
 import { useEffect, useLayoutEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
+import { socketIo } from "../../util/socket";
 
 export default function BetChart({ symbol, chartWidth, chartOpt, openedData }) {
   const [apiData, setApiData] = useState([]);
   const [reload, setReload] = useState(false);
-  const [updateFlag, setUpdateFlag] = useState(false);
+  const [yNoti, setYnoti] = useState([]);
+
+  function getNoti() {
+    socketIo.on("bet", (res) => {
+      console.log("bet", res);
+
+      setYnoti([...res]);
+    });
+  }
 
   function getPreData() {
     axios
@@ -62,6 +71,8 @@ export default function BetChart({ symbol, chartWidth, chartOpt, openedData }) {
         let pushData;
         let _apiData = apiData;
         let _lastIndex = _apiData[_apiData.length - 1];
+        console.log(data);
+        console.log(chartOpt.type);
 
         if (chartOpt.type === "area") {
           if (new Date(_lastIndex.x).getMinutes() === new Date().getMinutes()) {
@@ -86,13 +97,14 @@ export default function BetChart({ symbol, chartWidth, chartOpt, openedData }) {
             _lastIndex.y[3] = Number(data.price);
 
             _apiData[_apiData.length - 1] = _lastIndex;
+            console.log(new Date(_lastIndex.x).toString());
           } else {
             pushData = {
               x: new Date(new Date().setSeconds(0)).setMilliseconds(0),
               y: [
                 Number(data.price),
-                Number(data.price),
-                Number(data.price),
+                Number(data.price) + 0.003,
+                Number(data.price) - 0.003,
                 Number(data.price),
               ],
             };
@@ -105,7 +117,6 @@ export default function BetChart({ symbol, chartWidth, chartOpt, openedData }) {
         console.log(_apiData);
         setApiData([..._apiData]);
         setTimeout(() => setReload(false), 1);
-        setUpdateFlag(!updateFlag);
       })
       .catch(console.error);
   }
@@ -116,9 +127,19 @@ export default function BetChart({ symbol, chartWidth, chartOpt, openedData }) {
   }, [symbol, chartOpt]);
 
   useEffect(() => {
+    let notiInterval = setInterval(() => {
+      getNoti();
+    }, 10000);
+
+    return () => {
+      clearInterval(notiInterval);
+    };
+  }, []);
+
+  useEffect(() => {
     if (!apiData[0]) return;
 
-    let _dataInterval = setTimeout(getData, 1000);
+    let _dataInterval = setTimeout(getData, chartOpt.duration);
     return () => {
       clearInterval(_dataInterval);
     };
@@ -139,11 +160,11 @@ export default function BetChart({ symbol, chartWidth, chartOpt, openedData }) {
         },
       },
     },
-    fill:  {
+    fill: {
       type: "gradient",
       gradient: {
         shadeIntensity: 1,
-        opacityFrom: chartOpt.line.area ? 0.7 :0,
+        opacityFrom: 0.7,
         opacityTo: 0,
         stops: [0, 90, 100],
       },
@@ -378,7 +399,7 @@ export default function BetChart({ symbol, chartWidth, chartOpt, openedData }) {
         (chartOpt.type === "area" && areaOpt) ||
         (chartOpt.type === "candlestick" && candleOpt)
       }
-      series={[{ data: reload ? "" : [...apiData], flag: updateFlag }]}
+      series={[{ data: reload ? "" : [...apiData] }]}
       type={chartOpt.type}
       width={chartWidth}
       height={"100%"}
