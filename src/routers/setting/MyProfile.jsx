@@ -42,14 +42,14 @@ export default function MyProfile({ userData }) {
 
   function onClickVeriEmailBtn() {
     setEmailSend(true);
+    setVerificationPopup("email");
 
     axios
       .post(`${API.USER_SEND_CERTIFICATION}/email`, { email })
       .then((res) => {
         console.log(res);
-        setVerificationPopup("email");
       })
-      .then((err) => console.error(err));
+      .catch((err) => console.error(err));
   }
 
   function onClickCheckEmailCodeBtn() {
@@ -57,20 +57,22 @@ export default function MyProfile({ userData }) {
       .post(`${API.USER_VERIFY}/email/${emailCode}`)
       .then(({ data }) => {
         console.log(data);
-        if (data.status === "OK") setEmailVerify(true);
-        else if (data.status === "ERR") setEmailCodeAlarm("invalid Code");
+        if (data.status === "OK") {
+          setEmailVerify(true);
+          localStorage.setItem("token", data.result.tokenId);
+        } else if (data.status === "ERR") setEmailCodeAlarm("invalid Code");
       })
       .catch(console.error);
   }
 
   function onClickVeriPhoneBtn() {
     setPhoneSend(true);
+    setVerificationPopup("phone");
 
     axios
       .post(`${API.USER_SEND_CERTIFICATION}/phone`, { countryNum, phone })
       .then((res) => {
         console.log(res);
-        setVerificationPopup("phone");
       })
       .catch(console.error);
   }
@@ -80,8 +82,11 @@ export default function MyProfile({ userData }) {
       .post(`${API.USER_VERIFY}/phone/${phoneCode}`)
       .then(({ data }) => {
         console.log(data);
-        if (data.status === "OK") setPhoneVerify(true);
-        else if (data.status === "ERR") setPhoneCodeAlarm("invalid Code");
+
+        if (data.status === "OK") {
+          setPhoneVerify(true);
+          localStorage.setItem("token", data.result.tokenId);
+        } else if (data.status === "ERR") setPhoneCodeAlarm("invalid Code");
       })
       .catch(console.error);
   }
@@ -488,7 +493,8 @@ export default function MyProfile({ userData }) {
                         placeholder=""
                       />
 
-                      {emailVerify ? (
+                      {/* {emailVerify ? ( */}
+                      {0 ? (
                         <p className="verified">Verified</p>
                       ) : (
                         <button
@@ -502,7 +508,8 @@ export default function MyProfile({ userData }) {
                   </div>
                 </li>
 
-                {!emailVerify && emailSend && (
+                {/* {!emailVerify && emailSend && ( */}
+                {1 && (
                   <li>
                     <p className="key">Email Code*</p>
                     <div className="value">

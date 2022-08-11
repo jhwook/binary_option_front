@@ -1547,7 +1547,7 @@ export const D_screenList = ["M10", "M30", "H1", "H4", "D1", "D7", "D14"];
 export const D_chartTypeList = [
   { icon: I_lIneChartWhite, type: "area", typeStr: "Line" },
   { icon: I_candleChartWhite, type: "candlestick", typeStr: "Candles" },
-  { icon: I_heikenChartWhite, type: "line", typeStr: "Heiken Ashi" },
+  { icon: I_heikenChartWhite, type: "candlestick", typeStr: "Heiken Ashi" },
 ];
 
 export const D_timeList = [
@@ -1556,13 +1556,13 @@ export const D_timeList = [
   { key: "15s", value: 15000 },
   { key: "30s", value: 30000 },
   { key: "1m", value: 60000 },
-  { key: "3m", value: 180000 },
-  { key: "5m", value: 30000 },
-  { key: "10m", value: 60000 },
-  { key: "30m", value: 180000 },
-  { key: "1h", value: 360000 },
-  { key: "4h", value: 1440000 },
-  { key: "1d", value: 8440000 },
+  { key: "5m", value: 300000 },
+  { key: "15m", value: 900000 },
+  { key: "30m", value: 1800000 },
+  { key: "45m", value: 2700000 },
+  { key: "1h", value: 3600000 },
+  { key: "4h", value: 14400000 },
+  { key: "1d", value: 84400000 },
 ];
 
 export const D_tokenCategoryList = [

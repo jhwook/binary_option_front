@@ -55,7 +55,10 @@ export default function Live() {
   const [amount, setAmount] = useState("");
   const [amountMode, setAmountMode] = useState(D_amountTypeList[0]);
   const [bookMark, setBookMark] = useState([]);
-  const [chartWidth, setChartWidth] = useState(window.innerWidth * 2);
+  const [chartWidth, setChartWidth] = useState({
+    width: window.innerWidth * 2,
+    per: 1,
+  });
   const [dragX, setDragX] = useState("");
   const [chartPopup, setChartPopup] = useState(false);
   const [chartOpt, setChartOpt] = useState({
@@ -226,10 +229,10 @@ export default function Live() {
   function onWheelChart(e) {
     e.stopPropagation();
 
-    if (e.deltaY < 0 && chartWidth > window.innerWidth)
-      setChartWidth(chartWidth - window.innerWidth * 0.1);
-    else if (e.deltaY > 0 && chartWidth < window.innerWidth * 3)
-      setChartWidth(chartWidth + window.innerWidth * 0.1);
+    if (e.deltaY < 0 && chartWidth.width > window.innerWidth)
+      setChartWidth({ ...chartWidth, per: chartWidth.per - 0.01 });
+    else if (e.deltaY > 0 && chartWidth.width < window.innerWidth * 3)
+      setChartWidth({ ...chartWidth, per: chartWidth.per + 0.01 });
   }
 
   function onDragChartBox(e) {
@@ -239,7 +242,7 @@ export default function Live() {
 
     if (
       chartRef.current.scrollLeft - diffX > 0 &&
-      chartRef.current.scrollLeft - diffX < chartWidth
+      chartRef.current.scrollLeft - diffX < chartWidth.width * chartWidth.per
     ) {
       chartRef.current.scrollTo({
         left: chartRef.current.scrollLeft - diffX,
@@ -261,6 +264,15 @@ export default function Live() {
 
     chkMinimumBalance();
   }, []);
+
+  useEffect(() => {
+    if (!chartRef.current) return;
+
+    chartRef.current.scrollTo({
+      left: 99999,
+      behavior: "smooth",
+    });
+  }, [chartRef.current]);
 
   useEffect(() => {
     if (!socketIo) return;
@@ -293,11 +305,14 @@ export default function Live() {
                       <div
                         id="Chart"
                         className="chart"
-                        style={{ width: chartWidth }}
+                        style={{
+                          width: chartWidth.width * chartWidth.per,
+                        }}
                       >
                         <BetChart
                           symbol={assetInfo.APISymbol}
                           chartWidth={chartWidth}
+                          setChartWidth={setChartWidth}
                           chartOpt={chartOpt}
                           openedData={openedData}
                         />
@@ -583,11 +598,14 @@ export default function Live() {
                       <div
                         id="Chart"
                         className="chart"
-                        style={{ width: chartWidth }}
+                        style={{
+                          width: chartWidth.width * chartWidth.per,
+                        }}
                       >
                         <BetChart
                           symbol={assetInfo.APISymbol}
                           chartWidth={chartWidth}
+                          setChartWidth={setChartWidth}
                           chartOpt={chartOpt}
                           openedData={openedData}
                         />
@@ -850,6 +868,7 @@ const MbetBox = styled.main`
           height: 100%;
           overflow-x: scroll;
           position: relative;
+          padding: 0 ${window.innerWidth * 0.2}px 0 0;
 
           .chart {
             height: 100%;
@@ -1189,6 +1208,7 @@ const PbetBox = styled.main`
         .chartBox {
           width: 100%;
           height: 100%;
+          padding: 0 ${window.innerWidth * 0.2}px 0 0;
           overflow-x: scroll;
           position: relative;
           cursor: pointer;
