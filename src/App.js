@@ -11,7 +11,6 @@ import Market from "./routers/market/Market";
 import Position from "./routers/position/Position";
 import Qna from "./routers/qna/Qna";
 import Setting from "./routers/setting/Setting";
-import Test from "./Test";
 import "./util/ReactToastify.css";
 // import "react-toastify/dist/ReactToastify.css";
 
@@ -56,8 +55,6 @@ export default function App() {
           <Route path="/setting/*" element={<Setting />} />
 
           <Route path="/qna" element={<Qna />} />
-
-          <Route path="/test" element={<Test />} />
         </Routes>
       </HashRouter>
     </AppBox>

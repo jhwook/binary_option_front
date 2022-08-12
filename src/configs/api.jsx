@@ -22,6 +22,7 @@ export const API = {
   USER_REFERRAL_HISTORY: URL + "/users/myreferrals/fee/log", //:offset/:limit/id/DESC
 
   GET_ASSETS: URL + "/assets/list",
+  GET_ASSETS_TICKER_PRICE: URL + "/assets/ticker/price", //:symbol
 
   PHONE_COUNTRY_CODE: URL + "/queries/v1/rows/country_code", //:offset/:limit
 

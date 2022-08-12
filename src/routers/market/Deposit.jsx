@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
-import T_usdt from "../../img/token/T_usdt.png";
-import T_CNY from "../../img/token/T_CNY.png";
 import L_loader from "../../img/loader/L_loader.png";
 import { useSelector } from "react-redux";
 import DefaultHeader from "../../components/header/DefaultHeader";
@@ -33,8 +31,6 @@ export default function Deposit({ userData }) {
   const [securityVerifiPopup, setSecurityVerifiPopup] = useState(false);
   const [cashInPersonPopup, setCashInPersonPopupPopup] = useState(false);
   const [tokenPopup, setTokenPopup] = useState(false);
-  // const [token, setToken] = useState({ icon: T_usdt, type: "USDT" ,text: "USDT"});
-  // const [tokenList, setTokenList] = useState([{ icon: T_usdt, type: "USDT",text: "USDT"}]);
   const [token, setToken] = useState(D_unBranchTokenList[0]);
   const [loader, setLoader] = useState("");
   const [preDepositWarningPopup, setPreDepositWarningPopup] = useState(false);
@@ -137,9 +133,7 @@ export default function Deposit({ userData }) {
   }
 
   function postLocale() {
-    if (!branchData) {
-      return;
-    }
+    if (!branchData) return;
 
     axios
       .patch(`${API.TRANS_DEPOSIT}/${amount}`, {
@@ -168,7 +162,6 @@ export default function Deposit({ userData }) {
   function onClickDepositBtn() {
     if (amount < 5) setMinDepositPopup(true);
     else getPreDepositReq();
-    // console.log(Web3.utils.toWei(String(amount)));
   }
 
   useEffect(() => {
@@ -195,6 +188,7 @@ export default function Deposit({ userData }) {
             <ConfirmCny
               setConfirm={setConfirm}
               amount={amount}
+              token={token}
               setOk={(e) => {
                 e && postLocale();
               }}
@@ -249,25 +243,25 @@ export default function Deposit({ userData }) {
                       className={`${amount === 100 && "on"} optBtn`}
                       onClick={() => setAmount(100)}
                     >
-                      {isBranch ? "¥" : "$"}100
+                      {isBranch ? token.unit : "$"}100
                     </button>
                     <button
                       className={`${amount === 200 && "on"} optBtn`}
                       onClick={() => setAmount(200)}
                     >
-                      {isBranch ? "¥" : "$"}200
+                      {isBranch ? token.unit : "$"}200
                     </button>
                     <button
                       className={`${amount === 300 && "on"} optBtn`}
                       onClick={() => setAmount(300)}
                     >
-                      {isBranch ? "¥" : "$"}300
+                      {isBranch ? token.unit : "$"}300
                     </button>
                     <button
                       className={`${amount === 400 && "on"} optBtn`}
                       onClick={() => setAmount(400)}
                     >
-                      {isBranch ? "¥" : "$"}400
+                      {isBranch ? token.unit : "$"}400
                     </button>
                   </ul>
                 </li>
@@ -403,25 +397,25 @@ export default function Deposit({ userData }) {
                       className={`${amount === 100 && "on"} optBtn`}
                       onClick={() => setAmount(100)}
                     >
-                      {isBranch ? "¥" : "$"}100
+                      {isBranch ? token.unit : "$"}100
                     </button>
                     <button
                       className={`${amount === 200 && "on"} optBtn`}
                       onClick={() => setAmount(200)}
                     >
-                      {isBranch ? "¥" : "$"}200
+                      {isBranch ? token.unit : "$"}200
                     </button>
                     <button
                       className={`${amount === 300 && "on"} optBtn`}
                       onClick={() => setAmount(300)}
                     >
-                      {isBranch ? "¥" : "$"}300
+                      {isBranch ? token.unit : "$"}300
                     </button>
                     <button
                       className={`${amount === 400 && "on"} optBtn`}
                       onClick={() => setAmount(400)}
                     >
-                      {isBranch ? "¥" : "$"}400
+                      {isBranch ? token.unit : "$"}400
                     </button>
                   </ul>
                 </li>
@@ -464,10 +458,12 @@ export default function Deposit({ userData }) {
               <strong className="title">Confirm deposit details</strong>
             </div>
 
-            {confirm ? (
+            {/* {confirm ? ( */}
+            {1 ? (
               <ConfirmCny
                 setConfirm={setConfirm}
                 amount={amount}
+                token={token}
                 setOk={(e) => {
                   e && postLocale();
                 }}
@@ -479,9 +475,10 @@ export default function Deposit({ userData }) {
                 {isBranch ? (
                   <ul className="bodyList">
                     <li>
-                      Please make sure that only CNY deposit is made via this
-                      address. Otherwise, your deposited funds will not be added
-                      to your available balance — nor will it be refunded.
+                      Please make sure that only {token.text} deposit is made
+                      via this address. Otherwise, your deposited funds will not
+                      be added to your available balance — nor will it be
+                      refunded.
                     </li>
                     <li>
                       Please make sure to complete the payment within 15

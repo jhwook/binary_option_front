@@ -2,9 +2,10 @@ import axios from "axios";
 import moment from "moment";
 import { useEffect, useLayoutEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
+import { API } from "../../configs/api";
 
 export default function BetChart({
-  symbol,
+  assetInfo,
   chartWidth,
   setChartWidth,
   chartOpt,
@@ -15,19 +16,17 @@ export default function BetChart({
   const [updateFlag, setUpdateFlag] = useState(false);
 
   function getPreOpt() {
-    switch (chartOpt.duration) {
-      case 5000:
+    switch (chartOpt.barSize) {
       case 10000:
-      case 15000:
       case 30000:
       case 60000:
         return "1min";
       case 300000:
         return "5min";
       case 900000:
+        return "15m";
+      case 1800000:
         return "30m";
-      case 2700000:
-        return "45m";
       case 3600000:
         return "1h";
       case 14400000:
@@ -41,19 +40,17 @@ export default function BetChart({
   }
 
   function indexCondition(lastTime) {
-    switch (chartOpt.duration) {
-      case 5000:
+    switch (chartOpt.barSize) {
       case 10000:
-      case 15000:
       case 30000:
       case 60000:
         return new Date(lastTime).getMinutes() === new Date().getMinutes();
       case 300000:
         return new Date(lastTime).getMinutes() + 4 >= new Date().getMinutes();
       case 900000:
+        return new Date(lastTime).getMinutes() + 14 >= new Date().getMinutes();
+      case 1800000:
         return new Date(lastTime).getMinutes() + 29 >= new Date().getMinutes();
-      case 2700000:
-        return new Date(lastTime).getMinutes() + 44 >= new Date().getMinutes();
       case 3600000:
         return new Date(lastTime).getHours() === new Date().getHours();
       case 14400000:
@@ -68,9 +65,49 @@ export default function BetChart({
 
   function getPreData() {
     axios
+      .get(`${API.GET_ASSETS_TICKER_PRICE}/${assetInfo.socketAPISymbol}`)
+      .then(({ data }) => {
+        const { resp } = data;
+
+        console.log(resp);
+        let chartIndex = -1;
+        let _data = [];
+
+        resp.map((e, i) => {
+          if (i % (chartOpt.barSize / 1000) === chartIndex) {
+            if (chartOpt.typeStr === "Line")
+              _data[chartIndex].y = Number(e.price);
+              
+          } else {
+            _data.push({
+              x: new Date(e.createdat).setHours(
+                new Date(e.createdat).getHours() + 9
+              ),
+              y:
+                (chartOpt.typeStr === "Line" && Number(e.price)) ||
+                (chartOpt.typeStr === "Candles" &&
+                  new Array(4).fill(Number(e.price))) ||
+                (chartOpt.typeStr === "Heiken Ashi" &&
+                  chartIndex >= 0 && [
+                    (_data[chartIndex][0] + _data[chartIndex][3]) / 2 || 0,
+                    Number(e.price),
+                    Number(e.price),
+                    Number(e.price),
+                  ]),
+            });
+
+            chartIndex++;
+          }
+
+          return {};
+        });
+      })
+      .catch(console.error);
+
+    axios
       .get(`https://api.twelvedata.com/time_series`, {
         params: {
-          symbol,
+          symbol: assetInfo.APISymbol,
           interval: getPreOpt(),
           apikey: process.env.REACT_APP_TWELVEDATA_KEY,
           outputsize: 100,
@@ -106,30 +143,24 @@ export default function BetChart({
                 new Date(e.datetime).getHours() + 9
               ),
               y: [
+                Number(
+                  (Number(_data[i - 1].open) + Number(_data[i - 1].close)) / 2
+                ),
                 Number(e.high),
                 Number(e.low),
-                Number(e.close),
-                Number(e.open),
+                (Number(e.open) +
+                  Number(e.high) +
+                  Number(e.low) +
+                  Number(e.close)) /
+                  4,
               ],
             };
-            // return {
-            //   x: new Date(e.datetime).setHours(
-            //     new Date(e.datetime).getHours() + 9
-            //   ),
-            //   y: [
-            //     // Number((_data[i - 1].open + _data[i - 1].close) / 2),
-            //     Number(e.high),
-            //     Number(e.high),
-            //     Number(e.low),
-            //     Number((e.close + e.high + e.low + e.open) / 4),
-            //   ],
-            // };
           }
         });
 
         if (chartOpt.typeStr === "Heiken Ashi") _data.shift();
 
-        console.log("_data", _data);
+        // console.log("_data", _data);
         setApiData([..._data]);
       })
       .catch(console.error);
@@ -139,7 +170,7 @@ export default function BetChart({
     axios
       .get(`https://api.twelvedata.com/price`, {
         params: {
-          symbol,
+          symbol: assetInfo.APISymbol,
           apikey: process.env.REACT_APP_TWELVEDATA_KEY,
         },
       })
@@ -184,56 +215,40 @@ export default function BetChart({
 
             _apiData.push(pushData);
           }
+        } else if (chartOpt.typeStr === "Heiken Ashi") {
+          if (indexCondition(_lastIndex.x)) {
+            if (Number(data.price) > _lastIndex.y[1])
+              _lastIndex.y[1] = Number(data.price);
+            else if (Number(data.price) < _lastIndex.y[2])
+              _lastIndex.y[2] = Number(data.price);
+
+            _lastIndex.y[3] =
+              (_lastIndex.y[0] +
+                _lastIndex.y[1] +
+                _lastIndex.y[2] +
+                Number(data.price)) /
+              4;
+
+            _apiData[_apiData.length - 1] = _lastIndex;
+          } else {
+            pushData = {
+              x: new Date(new Date().setSeconds(0)).setMilliseconds(0),
+              y: [
+                (_apiData[_apiData.length - 2].y[0] +
+                  _apiData[_apiData.length - 2].y[3]) /
+                  2,
+                Number(data.price),
+                Number(data.price),
+                Number(data.price),
+              ],
+            };
+
+            console.log("pushData", pushData);
+
+            _apiData.push(pushData);
+          }
         }
-        //  else if (chartOpt.typeStr === "Heiken Ashi") {
-        //   if (indexCondition(_lastIndex.x)) {
-        //     if (Number(data.price) > _lastIndex.y[1])
-        //       _lastIndex.y[1] = Number(data.price);
-        //     else if (Number(data.price) < _lastIndex.y[2])
-        //       _lastIndex.y[2] = Number(data.price);
 
-        //     _lastIndex.y[3] = Number(data.price);
-
-        //     _apiData[_apiData.length - 1] = _lastIndex;
-        //   } else {
-        //     pushData = {
-        //       x: new Date(new Date().setSeconds(0)).setMilliseconds(0),
-        //       y: [
-        //         Number(data.price),
-        //         Number(data.price),
-        //         Number(data.price),
-        //         Number(data.price),
-        //       ],
-        //     };
-
-        //     _apiData.push(pushData);
-        //   }
-        // }
-        // else if (chartOpt.typeStr === "Heiken Ashi") {
-        //   if (indexCondition(_lastIndex.x)) {
-        //     if (Number(data.price) > _lastIndex.y[1])
-        //       _lastIndex.y[1] = Number(data.price);
-        //     else if (Number(data.price) < _lastIndex.y[2])
-        //       _lastIndex.y[2] = Number(data.price);
-
-        //     _lastIndex.y[3] = Number(data.price);
-
-        //     _apiData[_apiData.length - 1] = _lastIndex;
-        //   } else {
-        //     pushData = {
-        //       x: new Date(new Date().setSeconds(0)).setMilliseconds(0),
-        //       y: [
-        //         Number((_lastIndex.open + _lastIndex.close) / 2),
-        //         Number(data.price),
-        //         Number(data.price),
-        //         Number(data.price),
-        //       ],
-        //     };
-
-        //     _apiData.push(pushData);
-        //   }
-
-        // }
         // console.log(_apiData);
         setChartWidth({ ...chartWidth, width: _apiData.length * 20 });
         setApiData([..._apiData]);
@@ -246,7 +261,7 @@ export default function BetChart({
   useLayoutEffect(() => {
     setReload(true);
     getPreData();
-  }, [symbol, chartOpt]);
+  }, [assetInfo.APISymbol, chartOpt]);
 
   useEffect(() => {
     if (!apiData[0]) return;
@@ -255,7 +270,7 @@ export default function BetChart({
       getData();
     }, 1000);
     return () => {
-      setTimeout(_dataInterval);
+      clearTimeout(_dataInterval);
     };
   }, [apiData, chartOpt]);
 
@@ -278,7 +293,7 @@ export default function BetChart({
       type: "gradient",
       gradient: {
         shadeIntensity: 1,
-        opacityFrom: chartOpt.line.area ? 0.7 : 0,
+        opacityFrom: 0.7,
         opacityTo: 0,
         stops: [0, 90, 100],
       },

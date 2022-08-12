@@ -1,21 +1,36 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { API } from "../../../configs/api";
 import I_alarmYellow from "../../../img/icon/I_alarmYellow.svg";
 import I_xCircleYellow from "../../../img/icon/I_xCircleYellow.svg";
 import PopupBg from "../../common/PopupBg";
 import ConfirmationPopup from "./ConfirmationPopup";
 import TimeOutPopup from "./TimeOutPopup";
 
-export default function ConfirmCny({ setConfirm, amount, setOk }) {
+export default function ConfirmCny({ setConfirm, amount, token, setOk }) {
   const isMobile = useSelector((state) => state.common.isMobile);
   let time = 1800;
 
   const [limit, setLimit] = useState(time);
   const [confirmationPopup, setConfirmationPopup] = useState(false);
+  const [rate, setRate] = useState(0);
   const [timeOutPopup, setTimeOutPopup] = useState(false);
 
+  function getRate() {
+    axios
+      .get(`${API.QUERIES_FOREX}`, { params: { type: `${token.text}/USD` } })
+      .then(({ data }) => {
+        console.log(data);
+        setRate(Number(data.price));
+      })
+      .catch((err) => console.error(err));
+  }
+
   useEffect(() => {
+    getRate();
+
     let intervalId = setInterval(() => {
       time--;
       setLimit(time);
@@ -59,7 +74,7 @@ export default function ConfirmCny({ setConfirm, amount, setOk }) {
 
                   <li>
                     <p className="key">Receive</p>
-                    <p className="value">1.267427 USDT</p>
+                    <p className="value">{amount * rate} USDT</p>
                   </li>
                 </ul>
               </div>
@@ -96,8 +111,9 @@ export default function ConfirmCny({ setConfirm, amount, setOk }) {
                   <img src={I_alarmYellow} alt="" />
 
                   <p>
-                    Please complete the payment within 15 minute(s). The coins
-                    you've bought will be credited to your Funding Account.
+                    Please complete the payment within {time / 60} minute(s).
+                    The coins you've bought will be credited to your Funding
+                    Account.
                   </p>
                 </div>
 
@@ -173,7 +189,7 @@ export default function ConfirmCny({ setConfirm, amount, setOk }) {
 
                   <li>
                     <p className="key">Receive</p>
-                    <p className="value">1.267427 USDT</p>
+                    <p className="value">{amount * rate} USDT</p>
                   </li>
                 </ul>
               </div>
@@ -210,8 +226,9 @@ export default function ConfirmCny({ setConfirm, amount, setOk }) {
                   <img src={I_alarmYellow} alt="" />
 
                   <p>
-                    Please complete the payment within 15 minute(s). The coins
-                    you've bought will be credited to your Funding Account.
+                    Please complete the payment within {time / 60} minute(s).
+                    The coins you've bought will be credited to your Funding
+                    Account.
                   </p>
                 </div>
 

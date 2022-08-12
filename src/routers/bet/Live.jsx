@@ -25,12 +25,18 @@ import AddPopup from "../../components/header/AddPopup";
 import axios from "axios";
 import { API } from "../../configs/api";
 import LoadingBar from "../../components/common/LoadingBar";
-import { D_amountTypeList, D_tokenCategoryList } from "../../data/D_bet";
+import {
+  D_amountTypeList,
+  D_timeList,
+  D_tokenCategoryList,
+} from "../../data/D_bet";
 import { getDividFromData, setToast } from "../../util/Util";
 import { setBetFlag } from "../../reducers/bet";
 import { socketIo } from "../../util/socket";
 import BetChart from "../../components/bet/BetChart";
-import ChartPopup from "../../components/bet/ChartPopup";
+import ChartTypePopup from "../../components/bet/ChartTypePopup";
+import BarSizePopup from "../../components/bet/BarSizePopup";
+import ChartOptPopup from "../../components/bet/ChartOptPopup";
 
 export default function Live() {
   const hoverRef1 = useRef();
@@ -41,7 +47,7 @@ export default function Live() {
   const openedData = useSelector((state) => state.bet.openedData);
   const tokenPopupData = useSelector((state) => state.bet.tokenPopupData);
   const dividObj = useSelector((state) => state.bet.dividObj);
-
+  
   const [assetInfo, setAssetInfo] = useState();
   const [loading, setLoading] = useState(true);
   const [liveTradePopup, setLiveTradePopup] = useState(false);
@@ -60,15 +66,15 @@ export default function Live() {
     per: 1,
   });
   const [dragX, setDragX] = useState("");
-  const [chartPopup, setChartPopup] = useState(false);
+  const [chartOptPopup, setChartOptPopup] = useState(false);
+  const [chartTypePopup, setChartTypePopup] = useState(false);
+  const [barSizePopup, setBarSizePopup] = useState(false);
   const [chartOpt, setChartOpt] = useState({
     width: window.innerWidth * 2,
     type: "candlestick",
     typeStr: "Candles",
-    duration: 5000,
-    line: {
-      area: false,
-    },
+    barSize: D_timeList[0].value,
+    barSizeStr: D_timeList[0].key,
   });
 
   function getAssetList() {
@@ -310,7 +316,7 @@ export default function Live() {
                         }}
                       >
                         <BetChart
-                          symbol={assetInfo.APISymbol}
+                          assetInfo={assetInfo}
                           chartWidth={chartWidth}
                           setChartWidth={setChartWidth}
                           chartOpt={chartOpt}
@@ -338,6 +344,26 @@ export default function Live() {
                                 getBookMark={getBookMark}
                               />
                               <PopupBg off={setTokenPopup} />
+                            </>
+                          )}
+                        </li>
+
+                        <li>
+                          <button
+                            className="chartOptBtn"
+                            onClick={() => setChartOptPopup(true)}
+                          >
+                            <img src={I_candleChartWhite} alt="" />
+                          </button>
+
+                          {chartOptPopup && (
+                            <>
+                              <ChartOptPopup
+                                off={setChartOptPopup}
+                                chartOpt={chartOpt}
+                                setChartOpt={setChartOpt}
+                              />
+                              <PopupBg off={setChartOptPopup} />
                             </>
                           )}
                         </li>
@@ -566,26 +592,48 @@ export default function Live() {
                       <ul className="btnList">
                         <li>
                           <button
-                            className="chartBtn utilBtn"
-                            onClick={() => setChartPopup(true)}
+                            className="utilBtn"
+                            onClick={() => setBarSizePopup(true)}
+                          >
+                            <p>{chartOpt.barSizeStr}</p>
+                          </button>
+
+                          <p className="info">{`Time frames : ${chartOpt.barSizeStr}`}</p>
+                        </li>
+
+                        {barSizePopup && (
+                          <>
+                            <BarSizePopup
+                              off={setBarSizePopup}
+                              chartOpt={chartOpt}
+                              setChartOpt={setChartOpt}
+                            />
+                            <PopupBg off={setBarSizePopup} />
+                          </>
+                        )}
+
+                        <li>
+                          <button
+                            className="utilBtn"
+                            onClick={() => setChartTypePopup(true)}
                           >
                             <img src={I_candleChartWhite} alt="" />
                           </button>
 
-                          {chartPopup && (
-                            <>
-                              <ChartPopup
-                                off={setChartPopup}
-                                chartOpt={chartOpt}
-                                setChartOpt={setChartOpt}
-                              />
-                              <PopupBg off={setChartPopup} />
-                            </>
-                          )}
+                          <p className="info">{`Chart type : ${chartOpt.typeStr}`}</p>
                         </li>
-                      </ul>
 
-                      <div className="typeBox">{`Chart type : ${chartOpt.typeStr}`}</div>
+                        {chartTypePopup && (
+                          <>
+                            <ChartTypePopup
+                              off={setChartTypePopup}
+                              chartOpt={chartOpt}
+                              setChartOpt={setChartOpt}
+                            />
+                            <PopupBg off={setChartTypePopup} />
+                          </>
+                        )}
+                      </ul>
                     </div>
 
                     <div
@@ -603,7 +651,7 @@ export default function Live() {
                         }}
                       >
                         <BetChart
-                          symbol={assetInfo.APISymbol}
+                          assetInfo={assetInfo}
                           chartWidth={chartWidth}
                           setChartWidth={setChartWidth}
                           chartOpt={chartOpt}
@@ -910,7 +958,7 @@ const MbetBox = styled.main`
                 }
               }
 
-              .chartBtn {
+              .chartOptBtn {
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -931,8 +979,8 @@ const MbetBox = styled.main`
             justify-content: center;
             align-items: center;
             width: 34px;
-            aspect-ratio: 1;
-            border: 1px solid #fff;
+            height: 34px;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
 
             img {
@@ -1171,37 +1219,59 @@ const PbetBox = styled.main`
           left: 24px;
           z-index: 1;
 
+          &:hover {
+            .typeList {
+              display: flex;
+            }
+          }
+
           .btnList {
+            display: flex;
+            gap: 8px;
             position: relative;
 
             li {
+              &:hover {
+                .info {
+                  display: inline-block;
+                }
+              }
+
               .utilBtn {
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 width: 38px;
                 height: 36px;
+                font-size: 16px;
+                font-weight: 700;
                 background: rgba(246, 246, 246, 0.1);
                 border-radius: 6px;
 
-                &.chartBtn {
-                  img {
-                    width: 23px;
-                  }
+                &:hover {
+                  background: rgba(246, 246, 246, 0.2);
+                }
+
+                img {
+                  width: 23px;
                 }
               }
-            }
-          }
 
-          .typeBox {
-            height: 34px;
-            padding: 0 12px;
-            font-size: 12px;
-            line-height: 34px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+              .info {
+                display: none;
+                height: 34px;
+                padding: 0 12px;
+                font-size: 12px;
+                white-space: nowrap;
+                line-height: 34px;
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 4px;
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                top: 44px;
+                position: absolute;
+              }
+            }
           }
         }
 
