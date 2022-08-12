@@ -74,7 +74,7 @@ export default function ConfirmCny({ setConfirm, amount, token, setOk }) {
 
                   <li>
                     <p className="key">Receive</p>
-                    <p className="value">{amount * rate} USDT</p>
+                    <p className="value">{(amount * rate).toFixed(4)} USDT</p>
                   </li>
                 </ul>
               </div>

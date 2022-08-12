@@ -458,8 +458,7 @@ export default function Deposit({ userData }) {
               <strong className="title">Confirm deposit details</strong>
             </div>
 
-            {/* {confirm ? ( */}
-            {1 ? (
+            {confirm ? (
               <ConfirmCny
                 setConfirm={setConfirm}
                 amount={amount}
