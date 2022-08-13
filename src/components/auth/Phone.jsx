@@ -4,14 +4,13 @@ import PopupBg from "../common/PopupBg";
 import I_dnPol from "../../img/icon/I_dnPol.svg";
 import { useSelector } from "react-redux";
 import SelectPhoneLocPopup from "./SelectPhoneLocPopup";
-import axios from "axios";
-import { API } from "../../configs/api";
+import { useTranslation } from "react-i18next";
 
 export default function Phone({ userData, setUserData }) {
+  const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [selLocPopup, setSelLocPopup] = useState(false);
-  const [locList, setLocList] = useState([]);
 
   function onBlurPhone() {
     if (userData.phone[0] === "0")
@@ -22,16 +21,6 @@ export default function Phone({ userData, setUserData }) {
     const regex = /(?=.*\d)(?=.*[A-Z]).{8,}/;
     return regex.test(str);
   }
-
-  useEffect(() => {
-    axios
-      .get(`${API.PHONE_COUNTRY_CODE}`)
-      .then(({ data }) => {
-        console.log(data);
-        setLocList(data);
-      })
-      .catch((err) => console.error(err));
-  }, []);
 
   useEffect(() => {
     if (userData.pw && !validatePw(userData.pw))
@@ -48,7 +37,7 @@ export default function Phone({ userData, setUserData }) {
       <>
         <MphoneBox>
           <li className="phoneNumBox">
-            <p className="key">Phone Number</p>
+            <p className="key">{t("Phone Number")}</p>
             <div className="value">
               <div className="selectBox local">
                 <button
@@ -86,11 +75,15 @@ export default function Phone({ userData, setUserData }) {
                   placeholder=""
                 />
               </div>
+
+              {userData.phoneAlarm && (
+                <p className="alarm">{t(userData.phoneAlarm)}</p>
+              )}
             </div>
           </li>
 
           <li>
-            <p className="key">Password</p>
+            <p className="key">{t("Password")}</p>
             <div className="value">
               <div className={`${userData.pwAlarm && "alarm"} inputBox`}>
                 <input
@@ -103,7 +96,9 @@ export default function Phone({ userData, setUserData }) {
                 />
               </div>
 
-              {userData.pwAlarm && <p className="alarm">{userData.pwAlarm}</p>}
+              {userData.pwAlarm && (
+                <p className="alarm">{t(userData.pwAlarm)}</p>
+              )}
             </div>
           </li>
         </MphoneBox>
@@ -114,7 +109,7 @@ export default function Phone({ userData, setUserData }) {
       <>
         <PphoneBox>
           <li className="phoneNumBox">
-            <p className="key">Phone Number</p>
+            <p className="key">{t("Phone Number")}</p>
             <div className="value">
               <div className="inputCont">
                 <div className="selectBox local">
@@ -157,13 +152,13 @@ export default function Phone({ userData, setUserData }) {
               </div>
 
               {userData.phoneAlarm && (
-                <p className="alarm">{userData.phoneAlarm}</p>
+                <p className="alarm">{t(userData.phoneAlarm)}</p>
               )}
             </div>
           </li>
 
           <li>
-            <p className="key">Password</p>
+            <p className="key">{t("Password")}</p>
             <div className="value">
               <div className={`${userData.pwAlarm && "alarm"} inputBox`}>
                 <input
@@ -176,7 +171,9 @@ export default function Phone({ userData, setUserData }) {
                 />
               </div>
 
-              {userData.pwAlarm && <p className="alarm">{userData.pwAlarm}</p>}
+              {userData.pwAlarm && (
+                <p className="alarm">{t(userData.pwAlarm)}</p>
+              )}
             </div>
           </li>
         </PphoneBox>

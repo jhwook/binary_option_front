@@ -1,9 +1,10 @@
 import styled from "styled-components";
-import { useState } from "react";
-import { D_chartTypeList, D_timeList } from "../../data/D_bet";
+import { D_chartTypeList } from "../../data/D_bet";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 export default function ChartTypePopup({ off, chartOpt, setChartOpt }) {
+  const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
 
   function onClickTypeBtn(v) {
@@ -18,7 +19,7 @@ export default function ChartTypePopup({ off, chartOpt, setChartOpt }) {
   else
     return (
       <PchartTypePopupBox>
-        <p className="key">Chart types</p>
+        <p className="key">{t("Chart types")}</p>
         <ul className="value">
           {D_chartTypeList.map((v, i) => (
             <li
@@ -27,7 +28,7 @@ export default function ChartTypePopup({ off, chartOpt, setChartOpt }) {
               onClick={() => onClickTypeBtn(v)}
             >
               <img src={v.icon} alt="" />
-              <p>{v.typeStr}</p>
+              <p>{t(v.typeStr)}</p>
             </li>
           ))}
         </ul>

@@ -1,7 +1,9 @@
+import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router";
 import styled from "styled-components";
 
 export default function LeftNav({ list, baseUrl }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -22,7 +24,7 @@ export default function LeftNav({ list, baseUrl }) {
                 <img src={v.icon} alt="" />
               </span>
             )}
-            <p>{v.key}</p>
+            <p>{t(v.key)}</p>
           </li>
         ))}
       </ul>

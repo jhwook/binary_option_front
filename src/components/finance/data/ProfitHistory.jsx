@@ -16,8 +16,10 @@ import { useSelector } from "react-redux";
 import { getExcelFile, getTier } from "../../../util/Util";
 import axios from "axios";
 import { API } from "../../../configs/api";
+import { useTranslation } from "react-i18next";
 
 export default function ProfitHistory() {
+  const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [startDate, setStartDate] = useState(new Date());
@@ -76,7 +78,7 @@ export default function ProfitHistory() {
             {listData.map((v, i) => (
               <li key={i}>
                 <div>
-                  <p className="key">{D_profitHistoryListHeader[0]}</p>
+                  <p className="key">{t(D_profitHistoryListHeader[0])}</p>
 
                   <span className="value">
                     <p>{v.referral_user.email}</p>
@@ -84,15 +86,15 @@ export default function ProfitHistory() {
                 </div>
 
                 <div>
-                  <p className="key">{D_profitHistoryListHeader[1]}</p>
+                  <p className="key">{t(D_profitHistoryListHeader[1])}</p>
 
                   <span className="value">
-                    <p>{getTier(v.referral_user.level)}</p>
+                    <p>{t(getTier(v.referral_user.level))}</p>
                   </span>
                 </div>
 
                 <div>
-                  <p className="key">{D_profitHistoryListHeader[2]}</p>
+                  <p className="key">{t(D_profitHistoryListHeader[2])}</p>
 
                   <span className="value">
                     <p>{moment(v.createdat).format("YYYY-MM-DD")}</p>
@@ -100,7 +102,7 @@ export default function ProfitHistory() {
                 </div>
 
                 <div>
-                  <p className="key">{D_profitHistoryListHeader[3]}</p>
+                  <p className="key">{t(D_profitHistoryListHeader[3])}</p>
 
                   <span className="value">
                     <p>{v.betamount / 10 ** 6}</p>
@@ -108,7 +110,7 @@ export default function ProfitHistory() {
                 </div>
 
                 <div>
-                  <p className="key">{D_profitHistoryListHeader[4]}</p>
+                  <p className="key">{t(D_profitHistoryListHeader[4])}</p>
 
                   <span className="value">
                     <p>
@@ -120,7 +122,7 @@ export default function ProfitHistory() {
                 </div>
 
                 <div>
-                  <p className="key">{D_profitHistoryListHeader[5]}</p>
+                  <p className="key">{t(D_profitHistoryListHeader[5])}</p>
 
                   <span className="value">
                     <p>{v.received_amount}USDT</p>
@@ -128,7 +130,7 @@ export default function ProfitHistory() {
                 </div>
 
                 <div>
-                  <p className="key">{D_profitHistoryListHeader[6]}</p>
+                  <p className="key">{t(D_profitHistoryListHeader[6])}</p>
 
                   <span className="value">
                     <p>{v.using}USDT</p>
@@ -196,12 +198,12 @@ export default function ProfitHistory() {
                 <input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Order"
+                  placeholder={t("Order")}
                 />
               </span>
 
               <button className="applyBtn" onClick={() => {}}>
-                Apply
+                {t("Apply")}
               </button>
             </div>
 
@@ -214,7 +216,7 @@ export default function ProfitHistory() {
             <ul className="listHeader">
               {D_profitHistoryListHeader.map((v, i) => (
                 <li key={i}>
-                  <p>{v}</p>
+                  <p>{t(v)}</p>
                 </li>
               ))}
             </ul>
@@ -227,7 +229,7 @@ export default function ProfitHistory() {
                   </span>
 
                   <span>
-                    <p>{getTier(v.referral_user.level)}</p>
+                    <p>{t(getTier(v.referral_user.level))}</p>
                   </span>
 
                   <span>

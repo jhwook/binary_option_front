@@ -2,8 +2,10 @@ import styled from "styled-components";
 import { useState } from "react";
 import { D_chartTypeList, D_timeList } from "../../data/D_bet";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 export default function ChartOptPopup({ off, chartOpt, setChartOpt }) {
+  const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [toggleList, setToggleList] = useState(new Array(2).fill(false));
@@ -28,7 +30,7 @@ export default function ChartOptPopup({ off, chartOpt, setChartOpt }) {
     return (
       <MchartOptPopupBox>
         <article className="typeArea">
-          <p className="key">Chart types</p>
+          <p className="key">{t("Chart types")}</p>
           <ul className="value">
             {D_chartTypeList.map((v, i) => (
               <li
@@ -37,14 +39,14 @@ export default function ChartOptPopup({ off, chartOpt, setChartOpt }) {
                 onClick={() => onClickTypeBtn(v)}
               >
                 <img src={v.icon} alt="" />
-                <p>{v.typeStr}</p>
+                <p>{t(v.typeStr)}</p>
               </li>
             ))}
           </ul>
         </article>
 
         <article className="timeArea">
-          <p className="key">Time frames</p>
+          <p className="key">{t("Time frames")}</p>
 
           <ul className="value">
             {D_timeList.map((v, i) => (

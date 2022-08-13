@@ -11,8 +11,10 @@ import axios from "axios";
 import { API } from "../../../configs/api";
 import { useSelector } from "react-redux";
 import { setToast } from "../../../util/Util";
+import { useTranslation } from "react-i18next";
 
 export default function Signup() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const isMobile = useSelector((state) => state.common.isMobile);
@@ -44,7 +46,7 @@ export default function Signup() {
         console.log(data);
 
         if (data.status === "ERR") {
-          setToast({ type: "alarm_black", cont: data.message });
+          setToast({ type: "alarm_black", cont: t(data.message) });
         }
 
         if (data.message === "TOKEN_CREATED") {
@@ -61,7 +63,7 @@ export default function Signup() {
         <MsignupBox>
           <section className="innerBox">
             <div className="titleBox">
-              <strong className="pgTitle">Create Betbit Account</strong>
+              <strong className="pgTitle">{t("Create Betbit Account")}</strong>
             </div>
 
             <article className="contArea">
@@ -88,7 +90,9 @@ export default function Signup() {
 
                   <details className="referralDet">
                     <summary>
-                      <p>Referral ID (Optional)</p>
+                      <p>
+                        {t("Referral ID")} ({t("Optional")})
+                      </p>
                       <img src={I_dnPol} alt="" />
                     </summary>
 
@@ -127,9 +131,11 @@ export default function Signup() {
                     </button>
 
                     <span className="agreeBox">
-                      <p className="agree">I have read and agree to Betbit’s</p>
+                      <p className="agree">
+                        {t("I have read and agree to Betbit’s")}
+                      </p>
                       <button className="termBtn" onClick={() => {}}>
-                        Terms of Service
+                        {t("Terms of Service")}
                       </button>
                     </span>
                   </div>
@@ -145,18 +151,18 @@ export default function Signup() {
                     }
                     onClick={onClickSignup}
                   >
-                    Next
+                    {t("Next")}
                   </button>
                 </div>
 
                 <div className="utilBox">
                   <span className="loginBox">
-                    <p className="login">Already registered?</p>&nbsp;
+                    <p className="login">{t("Already registered?")}</p>&nbsp;
                     <button
                       className="loginBtn"
                       onClick={() => navigate("/auth/login")}
                     >
-                      LogIn
+                      {t("LogIn")}
                     </button>
                   </span>
                 </div>
@@ -174,8 +180,10 @@ export default function Signup() {
         <PsignupBox>
           <section className="innerBox">
             <div className="titleBox">
-              <strong className="pgTitle">Create Betbit Account</strong>
-              <p className="explain">Register with your email or mobile</p>
+              <strong className="pgTitle">{t("Create Betbit Account")}</strong>
+              <p className="explain">
+                {t("Register with your email or mobile")}
+              </p>
             </div>
 
             <article className="contArea">
@@ -202,7 +210,9 @@ export default function Signup() {
 
                   <details className="referralDet">
                     <summary>
-                      <p>Referral ID (Optional)</p>
+                      <p>
+                        {t("Referral ID")} ({t("Optional")})
+                      </p>
                       <img src={I_dnPol} alt="" />
                     </summary>
 
@@ -241,10 +251,12 @@ export default function Signup() {
                     </button>
 
                     <span className="agreeBox">
-                      <p className="agree">I have read and agree to Betbit’s</p>
+                      <p className="agree">
+                        {t("I have read and agree to Betbit’s")}
+                      </p>
                       &nbsp;
                       <button className="termBtn" onClick={() => {}}>
-                        Terms of Service
+                        {t("Terms of Service")}
                       </button>
                     </span>
                   </div>
@@ -260,18 +272,18 @@ export default function Signup() {
                     }
                     onClick={onClickSignup}
                   >
-                    Next
+                    {t("Next")}
                   </button>
                 </div>
 
                 <div className="utilBox">
                   <span className="loginBox">
-                    <p className="login">Already registered?</p>&nbsp;
+                    <p className="login">{t("Already registered?")}</p>&nbsp;
                     <button
                       className="loginBtn"
                       onClick={() => navigate("/auth/login")}
                     >
-                      LogIn
+                      {t("LogIn")}
                     </button>
                   </span>
                 </div>
@@ -288,10 +300,12 @@ export default function Signup() {
                 </div>
 
                 <div className="textBox">
-                  <strong className="title">Mobile with QR code</strong>
+                  <strong className="title">{t("Mobile with QR code")}</strong>
 
                   <p className="explain">
-                    Scan this code and you will be taken to your mobile login.
+                    {t(
+                      "Scan this code and you will be taken to your mobile login."
+                    )}
                   </p>
                 </div>
               </div>

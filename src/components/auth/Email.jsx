@@ -1,9 +1,11 @@
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
 
 export default function Email({ userData, setUserData }) {
+  const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
 
   function validateEmail(str) {
@@ -41,7 +43,7 @@ export default function Email({ userData, setUserData }) {
       <>
         <MemailBox>
           <li>
-            <p className="key">Email</p>
+            <p className="key">{t("Email")}</p>
             <div className="value">
               <div className={`${userData.emailAlarm && "alarm"} inputBox`}>
                 <input
@@ -67,13 +69,13 @@ export default function Email({ userData, setUserData }) {
               </div>
 
               {userData.emailAlarm && (
-                <p className="alarm">{userData.emailAlarm}</p>
+                <p className="alarm">{t(userData.emailAlarm)}</p>
               )}
             </div>
           </li>
 
           <li>
-            <p className="key">Password</p>
+            <p className="key">{t("Password")}</p>
             <div className="value">
               <div className={`${userData.pwAlarm && "alarm"} inputBox`}>
                 <input
@@ -86,7 +88,9 @@ export default function Email({ userData, setUserData }) {
                 />
               </div>
 
-              {userData.pwAlarm && <p className="alarm">{userData.pwAlarm}</p>}
+              {userData.pwAlarm && (
+                <p className="alarm">{t(userData.pwAlarm)}</p>
+              )}
             </div>
           </li>
         </MemailBox>
@@ -97,7 +101,7 @@ export default function Email({ userData, setUserData }) {
       <>
         <PemailBox>
           <li>
-            <p className="key">Email</p>
+            <p className="key">{t("Email")}</p>
             <div className="value">
               <div className={`${userData.emailAlarm && "alarm"} inputBox`}>
                 <input
@@ -123,13 +127,13 @@ export default function Email({ userData, setUserData }) {
               </div>
 
               {userData.emailAlarm && (
-                <p className="alarm">{userData.emailAlarm}</p>
+                <p className="alarm">{t(userData.emailAlarm)}</p>
               )}
             </div>
           </li>
 
           <li>
-            <p className="key">Password</p>
+            <p className="key">{t("Password")}</p>
             <div className="value">
               <div className={`${userData.pwAlarm && "alarm"} inputBox`}>
                 <input
@@ -142,7 +146,9 @@ export default function Email({ userData, setUserData }) {
                 />
               </div>
 
-              {userData.pwAlarm && <p className="alarm">{userData.pwAlarm}</p>}
+              {userData.pwAlarm && (
+                <p className="alarm">{t(userData.pwAlarm)}</p>
+              )}
             </div>
           </li>
         </PemailBox>

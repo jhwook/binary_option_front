@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import I_xWhite from "../../../img/icon/I_xWhite.svg";
 
 export default function CashInPersonPopup({ off, setConfirm, setData }) {
+  const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [name, setName] = useState("");
@@ -23,7 +25,7 @@ export default function CashInPersonPopup({ off, setConfirm, setData }) {
         <article className="topArea">
           <span className="blank" />
 
-          <p className="title">Complete Identity Verification</p>
+          <p className="title">{t("Complete Identity Verification")}</p>
 
           <button className="exitBtn" onClick={() => off()}>
             <img src={I_xWhite} alt="" />
@@ -33,49 +35,49 @@ export default function CashInPersonPopup({ off, setConfirm, setData }) {
         <article className="contArea">
           <ul className="inputList">
             <li>
-              <p className="key">*Name</p>
+              <p className="key">*{t("Name")}</p>
 
               <div className="inputBox">
                 <input
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Enter Name"
+                  placeholder={t("Enter Name")}
                 />
               </div>
             </li>
 
             <li>
-              <p className="key">*Card No</p>
+              <p className="key">*{t("Card No")}</p>
 
               <div className="inputBox">
                 <input
                   value={card}
                   onChange={(e) => setCard(e.target.value)}
-                  placeholder="Please enter your bank card no"
+                  placeholder={t("Please enter your bank card no")}
                 />
               </div>
             </li>
 
             <li>
-              <p className="key">Bank Code</p>
+              <p className="key">{t("Bank Code")}</p>
 
               <div className="inputBox">
                 <input
                   value={bankCode}
                   onChange={(e) => setBankCode(e.target.value)}
-                  placeholder="Enter Bank Code"
+                  placeholder={t("Enter Bank Code")}
                 />
               </div>
             </li>
 
             <li>
-              <p className="key">Bank Name</p>
+              <p className="key">{t("Bank Name")}</p>
 
               <div className="inputBox">
                 <input
                   value={bankName}
                   onChange={(e) => setBankName(e.target.value)}
-                  placeholder="Enter Bank Name"
+                  placeholder={t("Enter Bank Name")}
                 />
               </div>
             </li>
@@ -83,7 +85,7 @@ export default function CashInPersonPopup({ off, setConfirm, setData }) {
 
           <div className="btnBox">
             <button className="confirmBtn" onClick={onClickConfirmBtn}>
-              Confirm
+              {t("Confirm")}
             </button>
           </div>
         </article>
@@ -95,7 +97,7 @@ export default function CashInPersonPopup({ off, setConfirm, setData }) {
         <article className="topArea">
           <span className="blank" />
 
-          <p className="title">Complete Identity Verification</p>
+          <p className="title">{t("Complete Identity Verification")}</p>
 
           <button className="exitBtn" onClick={() => off()}>
             <img src={I_xWhite} alt="" />
@@ -105,49 +107,49 @@ export default function CashInPersonPopup({ off, setConfirm, setData }) {
         <article className="contArea">
           <ul className="inputList">
             <li>
-              <p className="key">*Name</p>
+              <p className="key">*{t("Name")}</p>
 
               <div className="inputBox">
                 <input
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Enter Name"
+                  placeholder={t("Enter Name")}
                 />
               </div>
             </li>
 
             <li>
-              <p className="key">*Card No</p>
+              <p className="key">*{t("Card No")}</p>
 
               <div className="inputBox">
                 <input
                   value={card}
                   onChange={(e) => setCard(e.target.value)}
-                  placeholder="Please enter your bank card no"
+                  placeholder={t("Please enter your bank card no")}
                 />
               </div>
             </li>
 
             <li>
-              <p className="key">Bank Code</p>
+              <p className="key">{t("Bank Code")}</p>
 
               <div className="inputBox">
                 <input
                   value={bankCode}
                   onChange={(e) => setBankCode(e.target.value)}
-                  placeholder="Enter Bank Code"
+                  placeholder={t("Enter Bank Code")}
                 />
               </div>
             </li>
 
             <li>
-              <p className="key">Bank Name</p>
+              <p className="key">{t("Bank Name")}</p>
 
               <div className="inputBox">
                 <input
                   value={bankName}
                   onChange={(e) => setBankName(e.target.value)}
-                  placeholder="Enter Bank Name"
+                  placeholder={t("Enter Bank Name")}
                 />
               </div>
             </li>
@@ -155,11 +157,11 @@ export default function CashInPersonPopup({ off, setConfirm, setData }) {
 
           <div className="btnBox">
             <button className="confirmBtn" onClick={onClickConfirmBtn}>
-              Confirm
+              {t("Confirm")}
             </button>
 
             <button className="cancelBtn" onClick={() => off()}>
-              Cancel
+              {t("Cancel")}
             </button>
           </div>
         </article>

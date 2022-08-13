@@ -18,8 +18,11 @@ import DefaultHeader from "../../components/header/DefaultHeader";
 import axios from "axios";
 import { API } from "../../configs/api";
 import { getExcelFile } from "../../util/Util";
+import { useTranslation } from "react-i18next";
 
 export default function History() {
+  const { t } = useTranslation();
+
   const statusSTR = {
     0: "Pending",
     1: "Confirmed",
@@ -109,7 +112,7 @@ export default function History() {
                   className={`${category === i && "on"}`}
                   onClick={() => setCategory(i)}
                 >
-                  {v}
+                  {t(v)}
                 </li>
               ))}
             </ul>
@@ -135,7 +138,7 @@ export default function History() {
                     className="applyBtn"
                     onClick={() => getData({ filter: true })}
                   >
-                    Apply
+                    {t("Apply")}
                   </button>
                 </div>
               </div>
@@ -146,14 +149,14 @@ export default function History() {
                     tblData.map((v, i) => (
                       <li key={i}>
                         <div>
-                          <p className="key">{D_historyListHeader[0]}</p>
+                          <p className="key">{t(D_historyListHeader[0])}</p>
                           <div className="value">
                             <p>{v.id}</p>
                           </div>
                         </div>
 
                         <div>
-                          <p className="key">{D_historyListHeader[1]}</p>
+                          <p className="key">{t(D_historyListHeader[1])}</p>
                           <div className="value">
                             <p>
                               {moment(v.createdat).format(
@@ -164,7 +167,7 @@ export default function History() {
                         </div>
 
                         <div>
-                          <p className="key">{D_historyListHeader[2]}</p>
+                          <p className="key">{t(D_historyListHeader[2])}</p>
                           <div className="value">
                             <p>{`${
                               v?.amount
@@ -175,7 +178,7 @@ export default function History() {
                         </div>
 
                         <div>
-                          <p className="key">{D_historyListHeader[3]}</p>
+                          <p className="key">{t(D_historyListHeader[3])}</p>
                           <div className="value">
                             <p>
                               {v.type == 2 ? "Bank Transfer" : "Blockchain"}
@@ -184,14 +187,14 @@ export default function History() {
                         </div>
 
                         <div>
-                          <p className="key">{D_historyListHeader[4]}</p>
+                          <p className="key">{t(D_historyListHeader[4])}</p>
                           <div className="value">
                             <p>{v.typestr}</p>
                           </div>
                         </div>
 
                         <div>
-                          <p className="key">{D_historyListHeader[5]}</p>
+                          <p className="key">{t(D_historyListHeader[5])}</p>
                           <div className="value">
                             <p>{statusSTR[v.status]}</p>
                           </div>
@@ -200,7 +203,7 @@ export default function History() {
                     ))
                   ) : (
                     <p className="notFound">
-                      Nothing found or not yet calculated
+                      {t("Nothing found or not yet calculated")}
                     </p>
                   )}
                 </ul>
@@ -256,7 +259,7 @@ export default function History() {
                 className={`${category === i && "on"}`}
                 onClick={() => setCategory(i)}
               >
-                {v}
+                {t(v)}
               </li>
             ))}
           </ul>
@@ -281,7 +284,7 @@ export default function History() {
                   className="applyBtn"
                   onClick={() => getData({ filter: true })}
                 >
-                  Apply
+                  {t("Apply")}
                 </button>
               </div>
 
@@ -294,7 +297,7 @@ export default function History() {
               <ul className="listHeader">
                 {D_historyListHeader.map((v, i) => (
                   <li key={i}>
-                    <p>{v}</p>
+                    <p>{t(v)}</p>
                   </li>
                 ))}
               </ul>

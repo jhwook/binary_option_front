@@ -1,14 +1,16 @@
 import moment from "moment";
 import { Fragment, memo, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import I_highArwGreen from "../../../img/icon/I_highArwGreen.svg";
 import I_lowArwRed from "../../../img/icon/I_lowArwRed.svg";
 import { setOpenedData } from "../../../reducers/bet";
 import { socketIo } from "../../../util/socket";
-import { getDividFromData, setToast } from "../../../util/Util";
+import { getDividFromData } from "../../../util/Util";
 
 export default function Opened() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const isMobile = useSelector((state) => state.common.isMobile);
   const betFlag = useSelector((state) => state.bet.betFlag);
@@ -161,7 +163,7 @@ export default function Opened() {
                       <div className="timeBox">
                         <ul className="timeList">
                           <li>
-                            <p className="key">Open time</p>
+                            <p className="key">{t("Open time")}</p>
                             <p className="value">
                               {moment.unix(v.starting).format("hh:mm:ss")}
                             </p>
@@ -169,7 +171,7 @@ export default function Opened() {
 
                           <li>
                             <p>
-                              M
+                              {t("M")}
                               {moment(
                                 moment
                                   .unix(v.expiry)
@@ -179,7 +181,7 @@ export default function Opened() {
                           </li>
 
                           <li>
-                            <p className="key">Closing Time</p>
+                            <p className="key">{t("Closing Time")}</p>
                             <p className="value">
                               {moment.unix(v.expiry).format("hh:mm:ss")}
                             </p>
@@ -191,7 +193,7 @@ export default function Opened() {
                             <div />
                           </div>
 
-                          <p className="left">{`Time left : ${moment(
+                          <p className="left">{`${t("Time left")} : ${moment(
                             moment.unix(v.expiry).diff(now)
                           ).format("mm:ss")}`}</p>
                         </div>
@@ -201,17 +203,17 @@ export default function Opened() {
                         <div className="detResBox">
                           <ul className="forcastList">
                             <li>
-                              <p className="key">Your forecast</p>
+                              <p className="key">{t("Your forecast")}</p>
                               <p className="value">{getForcast(v.side)}</p>
                             </li>
                             <li>
-                              <p className="key">Payout</p>
+                              <p className="key">{t("Payout")}</p>
                               <p className="value">{`$${
                                 v.amount && (v.amount / 10 ** 6).toFixed(2)
                               }`}</p>
                             </li>
                             <li>
-                              <p className="key">Profit</p>
+                              <p className="key">{t("Profit")}</p>
                               <p className="value">{`$${(
                                 (v.amount * v.diffRate) /
                                 10 ** 8
@@ -221,7 +223,7 @@ export default function Opened() {
 
                           <ul className="priceList">
                             <li>
-                              <p className="key">Open price</p>
+                              <p className="key">{t("Open price")}</p>
 
                               <p className="value">
                                 {v.startingPrice
@@ -230,7 +232,7 @@ export default function Opened() {
                               </p>
                             </li>
                             <li>
-                              <p className="key">Current price</p>
+                              <p className="key">{t("Current price")}</p>
 
                               <p className="value">
                                 {v.currentPrice
@@ -239,7 +241,7 @@ export default function Opened() {
                               </p>
                             </li>
                             <li>
-                              <p className="key">Difference</p>
+                              <p className="key">{t("Difference")}</p>
 
                               <p
                                 className={`${
@@ -250,7 +252,7 @@ export default function Opened() {
                                 } value point`}
                               >{`${Number(
                                 v.currentPrice - v.startingPrice
-                              ).toFixed(2)} points`}</p>
+                              ).toFixed(2)} ${t("points")}`}</p>
                             </li>
                           </ul>
                         </div>
@@ -307,7 +309,7 @@ export default function Opened() {
                       <div className="timeBox">
                         <ul className="timeList">
                           <li>
-                            <p className="key">Open time</p>
+                            <p className="key">{t("Open time")}</p>
                             <p className="value">
                               {moment.unix(v.starting).format("hh:mm:ss")}
                             </p>
@@ -315,7 +317,7 @@ export default function Opened() {
 
                           <li>
                             <p>
-                              M
+                              {t("M")}
                               {moment(
                                 moment
                                   .unix(v.expiry)
@@ -325,7 +327,7 @@ export default function Opened() {
                           </li>
 
                           <li>
-                            <p className="key">Closing Time</p>
+                            <p className="key">{t("Closing Time")}</p>
                             <p className="value">
                               {moment.unix(v.expiry).format("hh:mm:ss")}
                             </p>
@@ -346,7 +348,7 @@ export default function Opened() {
                             />
                           </div>
 
-                          <p className="left">{`Time left : ${moment(
+                          <p className="left">{`${t("Time left")} : ${moment(
                             moment.unix(v.expiry).diff(now)
                           ).format("mm:ss")}`}</p>
                         </div>
@@ -356,17 +358,17 @@ export default function Opened() {
                         <div className="detResBox">
                           <ul className="forcastList">
                             <li>
-                              <p className="key">Your forecast</p>
-                              <p className="value">{getForcast(v.side)}</p>
+                              <p className="key">{t("Your forecast")}</p>
+                              <p className="value">{t(getForcast(v.side))}</p>
                             </li>
                             <li>
-                              <p className="key">Payout</p>
+                              <p className="key">{t("Payout")}</p>
                               <p className="value">{`$${
                                 v.amount && (v.amount / 10 ** 6).toFixed(2)
                               }`}</p>
                             </li>
                             <li>
-                              <p className="key">Profit</p>
+                              <p className="key">{t("Profit")}</p>
                               <p className="value">{`$${(
                                 (v.amount * v.diffRate) /
                                 10 ** 8
@@ -376,7 +378,7 @@ export default function Opened() {
 
                           <ul className="priceList">
                             <li>
-                              <p className="key">Open price</p>
+                              <p className="key">{t("Open price")}</p>
 
                               <p className="value">
                                 {v.startingPrice
@@ -385,7 +387,7 @@ export default function Opened() {
                               </p>
                             </li>
                             <li>
-                              <p className="key">Current price</p>
+                              <p className="key">{t("Current price")}</p>
 
                               <p className="value">
                                 {v.currentPrice
@@ -394,7 +396,7 @@ export default function Opened() {
                               </p>
                             </li>
                             <li>
-                              <p className="key">Difference</p>
+                              <p className="key">{t("Difference")}</p>
 
                               <p
                                 className={`${
@@ -405,7 +407,7 @@ export default function Opened() {
                                 } value point`}
                               >{`${Number(
                                 v.currentPrice - v.startingPrice
-                              ).toFixed(2)} points`}</p>
+                              ).toFixed(2)} ${t("points")}`}</p>
                             </li>
                           </ul>
                         </div>

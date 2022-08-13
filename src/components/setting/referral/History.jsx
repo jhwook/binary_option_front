@@ -8,8 +8,10 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { API } from "../../../configs/api";
+import { useTranslation } from "react-i18next";
 
 export default function History() {
+  const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [page, setPage] = useState(1);
@@ -47,7 +49,7 @@ export default function History() {
             {tbData.map((v, i) => (
               <li key={i}>
                 <div>
-                  <p className="key">{D_historyListHeader[0]}</p>
+                  <p className="key">{t(D_historyListHeader[0])}</p>
 
                   <span className="value">
                     <p>
@@ -60,7 +62,7 @@ export default function History() {
                 </div>
 
                 <div>
-                  <p className="key">{D_historyListHeader[1]}</p>
+                  <p className="key">{t(D_historyListHeader[1])}</p>
 
                   <span className="value">
                     <p>{v.payer_info.email}</p>
@@ -68,7 +70,7 @@ export default function History() {
                 </div>
 
                 <div>
-                  <p className="key">{D_historyListHeader[2]}</p>
+                  <p className="key">{t(D_historyListHeader[2])}</p>
 
                   <span className="value">
                     <p>{`$${v.feeamount}`}</p>
@@ -76,7 +78,7 @@ export default function History() {
                 </div>
 
                 <div>
-                  <p className="key">{D_historyListHeader[3]}</p>
+                  <p className="key">{t(D_historyListHeader[3])}</p>
 
                   <span className="value">
                     <p>{`${v.cashback_percent}%`}</p>
@@ -84,7 +86,7 @@ export default function History() {
                 </div>
 
                 <div>
-                  <p className="key">{D_historyListHeader[4]}</p>
+                  <p className="key">{t(D_historyListHeader[4])}</p>
 
                   <span className="value">
                     <p>{`$${v.betamount}`}</p>
@@ -92,7 +94,7 @@ export default function History() {
                 </div>
 
                 <div>
-                  <p className="key">{D_historyListHeader[5]}</p>
+                  <p className="key">{t(D_historyListHeader[5])}</p>
 
                   <span className="value">
                     <p>{moment(v.createdat).format("YYYY-MM-DD")}</p>
@@ -145,7 +147,7 @@ export default function History() {
         <div className="listBox">
           <ul className="listHeader">
             {D_historyListHeader.map((v, i) => (
-              <li key={i}>{v}</li>
+              <li key={i}>{t(v)}</li>
             ))}
           </ul>
           <ul className="list">

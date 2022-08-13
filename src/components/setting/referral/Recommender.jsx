@@ -1,8 +1,5 @@
 import styled from "styled-components";
-import {
-  D_recommenderList,
-  D_recommenderListHeader,
-} from "../../../data/D_setting";
+import { D_recommenderListHeader } from "../../../data/D_setting";
 import { contentsPerPage } from "../../../configs/setting";
 import moment from "moment";
 import I_ltArwWhite from "../../../img/icon/I_ltArwWhite.svg";
@@ -11,8 +8,10 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { API } from "../../../configs/api";
+import { useTranslation } from "react-i18next";
 
 export default function Recommender() {
+  const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [page, setPage] = useState(1);
@@ -50,7 +49,7 @@ export default function Recommender() {
             {tbData.map((v, i) => (
               <li key={i}>
                 <div>
-                  <p className="key">{D_recommenderListHeader[0]}</p>
+                  <p className="key">{t(D_recommenderListHeader[0])}</p>
 
                   <span className="value">
                     <p>
@@ -63,7 +62,7 @@ export default function Recommender() {
                 </div>
 
                 <div>
-                  <p className="key">{D_recommenderListHeader[1]}</p>
+                  <p className="key">{t(D_recommenderListHeader[1])}</p>
 
                   <span className="value">
                     <p>{v.referral_user.email}</p>
@@ -71,15 +70,15 @@ export default function Recommender() {
                 </div>
 
                 <div>
-                  <p className="key">{D_recommenderListHeader[2]}</p>
+                  <p className="key">{t(D_recommenderListHeader[2])}</p>
 
                   <span className="value">
-                    <p>{`${v.referral_user.level} Level`}</p>
+                    <p>{`${v.referral_user.level} ${t("Level")}`}</p>
                   </span>
                 </div>
 
                 <div>
-                  <p className="key">{D_recommenderListHeader[3]}</p>
+                  <p className="key">{t(D_recommenderListHeader[3])}</p>
 
                   <span className="value">
                     <p>{moment(v.createdat).format("YYYY-MM-DD")}</p>
@@ -87,7 +86,7 @@ export default function Recommender() {
                 </div>
 
                 <div>
-                  <p className="key">{D_recommenderListHeader[4]}</p>
+                  <p className="key">{t(D_recommenderListHeader[4])}</p>
 
                   <span className="value">
                     <p>{`$${v.trade_amount}`}</p>
@@ -95,7 +94,7 @@ export default function Recommender() {
                 </div>
 
                 <div>
-                  <p className="key">{D_recommenderListHeader[5]}</p>
+                  <p className="key">{t(D_recommenderListHeader[5])}</p>
 
                   <span className="value">
                     <p className="price">{`$${v.profit}`}</p>&nbsp;
@@ -104,7 +103,7 @@ export default function Recommender() {
                 </div>
 
                 <div>
-                  <p className="key">{D_recommenderListHeader[6]}</p>
+                  <p className="key">{t(D_recommenderListHeader[6])}</p>
 
                   <span className="value">
                     <p>{`${v.received} USDT`}</p>
@@ -157,7 +156,7 @@ export default function Recommender() {
         <div className="listBox">
           <ul className="listHeader">
             {D_recommenderListHeader.map((v, i) => (
-              <li key={i}>{v}</li>
+              <li key={i}>{t(v)}</li>
             ))}
           </ul>
           <ul className="list">
@@ -177,7 +176,7 @@ export default function Recommender() {
                 </span>
 
                 <span>
-                  <p>{`${v.referral_user.level} Level`}</p>
+                  <p>{`${v.referral_user.level} ${t("Level")}`}</p>
                 </span>
 
                 <span>

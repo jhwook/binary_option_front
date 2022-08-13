@@ -5,8 +5,11 @@ import axios from "axios";
 import { API } from "../../../configs/api";
 import { useSelector } from "react-redux";
 import B_referral from "../../../img/bg/auth/signup/B_referral.svg";
+import { useTranslation } from "react-i18next";
+import { setToast } from "../../../util/Util";
 
 export default function Referral() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const isMobile = useSelector((state) => state.common.isMobile);
@@ -23,7 +26,11 @@ export default function Referral() {
         console.log(data);
 
         if (data.message === "REFERER-NOT-FOUND") {
-          setAlarm("The password you have entered does not coincide");
+          setToast({
+            type: "alarm_black",
+            cont: t("The referral ID doesn't exist."),
+          });
+
           return;
         }
 
@@ -58,8 +65,8 @@ export default function Referral() {
               <img src={B_referral} />
 
               <div className="titleBox">
-                <strong className="title">Got a promo code?</strong>
-                <p className="sub">Enter your code to redeem it.</p>
+                <strong className="title">{t("Got a promo code?")}</strong>
+                <p className="sub">{t("Enter your code to redeem it.")}</p>
               </div>
             </div>
 
@@ -78,11 +85,11 @@ export default function Referral() {
               </div>
 
               <button className="loginBtn" onClick={onClickLoginBtn}>
-                Redeem
+                {t("Redeem")}
               </button>
 
               <button className="noCode" onClick={onClickNoCode}>
-                No, there is no promo code.
+                {t("No, there is no promo code.")}
               </button>
             </article>
           </section>
@@ -100,8 +107,8 @@ export default function Referral() {
               <img src={B_referral} />
 
               <div className="titleBox">
-                <strong className="title">Got a promo code?</strong>
-                <p className="sub">Enter your code to redeem it.</p>
+                <strong className="title">{t("Got a promo code?")}</strong>
+                <p className="sub">{t("Enter your code to redeem it.")}</p>
               </div>
             </div>
 
@@ -113,18 +120,18 @@ export default function Referral() {
                   onChange={(e) => {
                     setRefCode(e.target.value);
                   }}
-                  placeholder="Enter the code."
+                  placeholder={t("Enter the code.")}
                 />
 
                 <p className="alarm">{alarm}</p>
               </div>
 
               <button className="loginBtn" onClick={onClickLoginBtn}>
-                Redeem
+                {t("Redeem")}
               </button>
 
               <button className="noCode" onClick={onClickNoCode}>
-                No, there is no promo code.
+                {t("No, there is no promo code.")}
               </button>
             </article>
           </section>
@@ -235,7 +242,7 @@ const PreferralBox = styled.main`
     flex-direction: column;
     gap: 40px;
     padding: 80px 0;
-    width: 384px;
+    width: 400px;
 
     .titleCont {
       display: flex;
@@ -255,7 +262,7 @@ const PreferralBox = styled.main`
         color: #2a2a2a;
 
         .title {
-          font-size: 28px;
+          font-size: 26px;
         }
 
         .sub {

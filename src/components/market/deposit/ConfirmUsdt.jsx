@@ -1,9 +1,11 @@
+import { useTranslation } from "react-i18next";
 import QRCode from "react-qr-code";
 import styled from "styled-components";
 import I_cpWhite from "../../../img/icon/I_cpWhite.svg";
 import { onClickCopy, setToast } from "../../../util/Util";
 
 export default function ConfirmUsdt() {
+  const { t } = useTranslation();
   function onClickCopyBtn(str) {
     onClickCopy(str);
     setToast({ type: "alarm", cont: "Copied Successfully" });
@@ -11,7 +13,7 @@ export default function ConfirmUsdt() {
 
   return (
     <PconfirmUsdtBox className="value on">
-      <strong className="head">Deposit address</strong>
+      <strong className="head">{t("Deposit address")}</strong>
 
       <span className="qrBox">
         <QRCode

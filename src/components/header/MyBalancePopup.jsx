@@ -6,8 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { API } from "../../configs/api";
+import { useTranslation } from "react-i18next";
 
 export default function MyBalancePopup({ off, setAddPopup }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const isMobile = useSelector((state) => state.common.isMobile);
   const balanceType = localStorage.getItem("balanceType");
@@ -20,7 +22,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
 
   function onClickConfirmBtn({ nextProc, isNotNavigate }) {
     off();
-    
+
     if (demoToken) {
       navigate("/auth");
       return;
@@ -56,7 +58,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
         <article className="topArea">
           <span className="blank" />
 
-          <p className="title">My balance</p>
+          <p className="title">{t("My balance")}</p>
 
           <button className="exitBtn" onClick={() => off()}>
             <img src={I_xWhite} alt="" />
@@ -66,7 +68,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
         <article className="contArea">
           <div className="targetBox">
             <div className="leftBox">
-              <p className="type">{`${stateBalanceType} balance`}</p>
+              <p className="type">{t(`${stateBalanceType} balance`)}</p>
               <p className="balance">
                 {stateBalanceType === "Live" &&
                   (balanceData?.LIVE?.avail / 10 ** 6 || "0")}
@@ -87,7 +89,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
                   })
                 }
               >
-                Deposit
+                {t("Deposit")}
               </button>
             )}
 
@@ -101,7 +103,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
                   })
                 }
               >
-                Add
+                {t("Add")}
               </button>
             )}
           </div>
@@ -112,7 +114,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
               onClick={() => onClickBalanceType("Live")}
             >
               <img src={I_chkOrange} alt="" />
-              <p className="key">Live balance</p>
+              <p className="key">{t("Live balance")}</p>
 
               <strong className="value">{`${
                 balanceData?.LIVE?.avail / 10 ** 6 || "0"
@@ -124,7 +126,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
               onClick={() => onClickBalanceType("Demo")}
             >
               <img src={I_chkOrange} alt="" />
-              <p className="key">Demo balance</p>
+              <p className="key">{t("Demo balance")}</p>
 
               <strong className="value">{`${
                 balanceData?.DEMO?.avail / 10 ** 6 || "0"
@@ -140,7 +142,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
         <article className="topArea">
           <span className="blank" />
 
-          <p className="title">My balance</p>
+          <p className="title">{t("My balance")}</p>
 
           <button className="exitBtn" onClick={() => off()}>
             <img src={I_xWhite} alt="" />
@@ -150,7 +152,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
         <article className="contArea">
           <div className="targetBox">
             <div className="leftBox">
-              <p className="type">{`${stateBalanceType} balance`}</p>
+              <p className="type">{t(`${stateBalanceType} balance`)}</p>
               <p className="balance">
                 {stateBalanceType === "Live" &&
                   (balanceData?.LIVE?.avail / 10 ** 6 || "0")}
@@ -171,7 +173,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
                   })
                 }
               >
-                Deposit
+                {t("Deposit")}
               </button>
             )}
 
@@ -185,7 +187,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
                   })
                 }
               >
-                Add
+                {t("Add")}
               </button>
             )}
           </div>
@@ -196,7 +198,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
               onClick={() => onClickBalanceType("Live")}
             >
               <img src={I_chkOrange} alt="" />
-              <p className="key">Live balance</p>
+              <p className="key">{t("Live balance")}</p>
 
               <strong className="value">{`${
                 balanceData?.LIVE?.avail / 10 ** 6 || "0"
@@ -208,7 +210,7 @@ export default function MyBalancePopup({ off, setAddPopup }) {
               onClick={() => onClickBalanceType("Demo")}
             >
               <img src={I_chkOrange} alt="" />
-              <p className="key">Demo balance</p>
+              <p className="key">{t("Demo balance")}</p>
 
               <strong className="value">{`${
                 balanceData?.DEMO?.avail / 10 ** 6 || "0"
@@ -317,10 +319,13 @@ const MmyBalancePopup = styled.section`
         }
 
         .key {
-          flex: 1;
         }
 
         .value {
+          flex: 1;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
       }
     }

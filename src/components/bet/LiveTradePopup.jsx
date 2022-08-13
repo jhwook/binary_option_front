@@ -1,8 +1,10 @@
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 export default function LiveTradePopup({ off }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const isMobile = useSelector((state) => state.common.isMobile);
@@ -21,16 +23,18 @@ export default function LiveTradePopup({ off }) {
     return (
       <MliveTradePopupBox className="defaultPopup">
         <p className="explain">
-          Please first top up the balance to start Live Trading.
+          {t(
+            "Please first top up the balance to start Live Trading. (Minimum investment amount is $5)"
+          )}
         </p>
 
         <div className="buttonBox">
           <button className="depositBtn" onClick={onClickDepositBtn}>
-            Deposit now
+            {t("Deposit now")}
           </button>
 
           <button className="demoBtn" onClick={onClickDemoBtn}>
-            Demo trading
+            {t("Demo trading")}
           </button>
         </div>
       </MliveTradePopupBox>
@@ -39,17 +43,18 @@ export default function LiveTradePopup({ off }) {
     return (
       <PliveTradePopupBox className="defaultPopup">
         <p className="explain">
-          Please first top up the balance to start Live Trading. (Minimum
-          investment amount is $5)
+          {t(
+            "Please first top up the balance to start Live Trading. (Minimum investment amount is $5)"
+          )}
         </p>
 
         <div className="buttonBox">
           <button className="depositBtn" onClick={onClickDepositBtn}>
-            Deposit now
+            {t("Deposit now")}
           </button>
 
           <button className="demoBtn" onClick={onClickDemoBtn}>
-            Demo trading
+            {t("Demo trading")}
           </button>
         </div>
       </PliveTradePopupBox>

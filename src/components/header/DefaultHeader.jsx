@@ -91,7 +91,7 @@ export default function DefaultHeader({ white, border, title, demoToken }) {
         >
           <article className="leftArea">
             {title ? (
-              <p className="title">{title}</p>
+              <p className="title">{t(title)}</p>
             ) : token && location.pathname.indexOf("auth") === -1 ? (
               <button
                 className="accountBtn"

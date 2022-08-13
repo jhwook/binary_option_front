@@ -101,7 +101,7 @@ export default function Live() {
       })
       .catch((err) => {
         console.error(err);
-        localStorage.clear();
+        localStorage.removeItem('token');
       });
   }
 

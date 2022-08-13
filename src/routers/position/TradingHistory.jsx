@@ -21,8 +21,10 @@ import DefaultHeader from "../../components/header/DefaultHeader";
 import { getExcelFile } from "../../util/Util";
 import axios from "axios";
 import { API } from "../../configs/api";
+import { useTranslation } from "react-i18next";
 
 export default function TradingHistory() {
+  const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [category, setCategory] = useState(D_historyCategoryList[0]);
@@ -88,7 +90,7 @@ export default function TradingHistory() {
                   className={`${category === v && "on"}`}
                   onClick={() => setCategory(v)}
                 >
-                  {v}
+                  {t(v)}
                 </li>
               ))}
             </ul>
@@ -119,7 +121,7 @@ export default function TradingHistory() {
                   </span> */}
 
                   <button className="applyBtn" onClick={() => {}}>
-                    Apply
+                    {t("Apply")}
                   </button>
                 </div>
               </div>
@@ -129,7 +131,7 @@ export default function TradingHistory() {
                   {listData.map((v, i) => (
                     <li key={i}>
                       <div>
-                        <p className="key">{D_trandingListHeader[0]}</p>
+                        <p className="key">{t(D_trandingListHeader[0])}</p>
 
                         <span className="value">
                           <img className="timeImg" src={I_timeWhite} alt="" />
@@ -137,7 +139,7 @@ export default function TradingHistory() {
                       </div>
 
                       <div className="order">
-                        <p className="key">{D_trandingListHeader[1]}</p>
+                        <p className="key">{t(D_trandingListHeader[1])}</p>
 
                         <span className="value">
                           <img
@@ -154,15 +156,17 @@ export default function TradingHistory() {
                       </div>
 
                       <div>
-                        <p className="key">{D_trandingListHeader[2]}</p>
+                        <p className="key">{t(D_trandingListHeader[2])}</p>
 
                         <span className="value">
-                          <p>{moment(v.starting).diff(moment(v.expiry))}</p>
+                          <p>{`${t("M")}${
+                            moment(v.expiry).diff(moment(v.starting)) / 60
+                          }`}</p>
                         </span>
                       </div>
 
                       <div>
-                        <p className="key">{D_trandingListHeader[3]}</p>
+                        <p className="key">{t(D_trandingListHeader[3])}</p>
 
                         <span className="value">
                           <p>#{v.name}</p>
@@ -170,7 +174,7 @@ export default function TradingHistory() {
                       </div>
 
                       <div>
-                        <p className="key">{D_trandingListHeader[4]}</p>
+                        <p className="key">{t(D_trandingListHeader[4])}</p>
 
                         <span className="value">
                           <p>
@@ -182,7 +186,7 @@ export default function TradingHistory() {
                       </div>
 
                       <div>
-                        <p className="key">{D_trandingListHeader[5]}</p>
+                        <p className="key">{t(D_trandingListHeader[5])}</p>
 
                         <span className="value">
                           <p>
@@ -194,7 +198,7 @@ export default function TradingHistory() {
                       </div>
 
                       <div>
-                        <p className="key">{D_trandingListHeader[6]}</p>
+                        <p className="key">{t(D_trandingListHeader[6])}</p>
 
                         <span className="value">
                           <p>{v.startingPrice}</p>
@@ -202,7 +206,7 @@ export default function TradingHistory() {
                       </div>
 
                       <div>
-                        <p className="key">{D_trandingListHeader[7]}</p>
+                        <p className="key">{t(D_trandingListHeader[7])}</p>
 
                         <span className="value">
                           <p>{v.endingPrice}</p>
@@ -210,7 +214,7 @@ export default function TradingHistory() {
                       </div>
 
                       <div>
-                        <p className="key">{D_trandingListHeader[8]}</p>
+                        <p className="key">{t(D_trandingListHeader[8])}</p>
 
                         <span className="value">
                           <p>
@@ -220,7 +224,7 @@ export default function TradingHistory() {
                       </div>
 
                       <div>
-                        <p className="key">{D_trandingListHeader[9]}</p>
+                        <p className="key">{t(D_trandingListHeader[9])}</p>
 
                         <span className="value">
                           <p className="price">{`$${
@@ -311,12 +315,12 @@ export default function TradingHistory() {
                   <input
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Order"
+                    placeholder={t("Order")}
                   />
                 </span>
 
                 <button className="applyBtn" onClick={() => {}}>
-                  Apply
+                  {t("Apply")}
                 </button>
               </div>
 
@@ -329,7 +333,7 @@ export default function TradingHistory() {
               <ul className="listHeader">
                 {D_trandingListHeader.map((v, i) => (
                   <li key={i}>
-                    <p>{v}</p>
+                    <p>{t(v)}</p>
                   </li>
                 ))}
               </ul>
@@ -354,7 +358,7 @@ export default function TradingHistory() {
                     </span>
 
                     <span>
-                      <p>{`M${
+                      <p>{`${t("M")}${
                         moment(v.expiry).diff(moment(v.starting)) / 60
                       }`}</p>
                     </span>

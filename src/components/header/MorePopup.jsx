@@ -4,8 +4,10 @@ import I_medium from "../../img/icon/I_medium.svg";
 import I_discord from "../../img/icon/I_discord.png";
 import I_quesCircleWhite from "../../img/icon/I_quesCircleWhite.svg";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function MorePopup({ off }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   function onClickCont(func) {
@@ -18,25 +20,25 @@ export default function MorePopup({ off }) {
       <li onClick={() => onClickCont()}>
         <img src={I_twitter} alt="" />
 
-        <p>Twitter</p>
+        <p>{t("Twitter")}</p>
       </li>
 
       <li onClick={() => onClickCont()}>
         <img src={I_medium} alt="" />
 
-        <p>Medium</p>
+        <p>{t("Medium")}</p>
       </li>
 
       <li onClick={() => onClickCont()}>
         <img src={I_discord} alt="" />
 
-        <p>Discord</p>
+        <p>{t("Discord")}</p>
       </li>
 
       <li onClick={() => onClickCont(navigate("/qna"))}>
         <img src={I_quesCircleWhite} alt="" />
 
-        <p>Help</p>
+        <p>{t("Help")}</p>
       </li>
     </MorePopupBox>
   );

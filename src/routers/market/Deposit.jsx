@@ -19,8 +19,10 @@ import PreDepositWarningPopup from "../../components/market/deposit/PreDepositWa
 import io from "socket.io-client";
 import MinimumDepositPopup from "../../components/market/deposit/MinimumDepositPopup";
 import { D_branchTokenList, D_unBranchTokenList } from "../../data/D_market";
+import { useTranslation } from "react-i18next";
 
 export default function Deposit({ userData }) {
+  const { t } = useTranslation();
   const walletAddress = localStorage.getItem("walletAddress");
   const isMobile = useSelector((state) => state.common.isMobile);
 
@@ -197,7 +199,7 @@ export default function Deposit({ userData }) {
             <section className="innerBox ">
               <ul className="inputList">
                 <li className="tokenBox">
-                  <p className="key">Asset</p>
+                  <p className="key">{t("Asset")}</p>
 
                   <div className="selectBox">
                     <button
@@ -226,7 +228,7 @@ export default function Deposit({ userData }) {
                 </li>
 
                 <li className="amountBox">
-                  <p className="key">Amount</p>
+                  <p className="key">{t("Amount")}</p>
 
                   <div className="valueBox">
                     <input
@@ -270,16 +272,16 @@ export default function Deposit({ userData }) {
               <article className="depositArea">
                 <ul className="infoList">
                   <li>
-                    <p className="key">Commission</p>
+                    <p className="key">{t("Commission")}</p>
                     <p className="value">0%</p>
                   </li>
                   <li>
-                    <p className="key">Minimum deposit amount</p>
+                    <p className="key">{t("Minimum deposit amount")}</p>
                     <p className="value">5 {token.text}</p>
                   </li>
                   <li>
-                    <p className="key">Max amount per transaction</p>
-                    <p className="value">0no limits</p>
+                    <p className="key">{t("Max amount per transaction")}</p>
+                    <p className="value">{t("no limits")}</p>
                   </li>
                 </ul>
 
@@ -290,7 +292,7 @@ export default function Deposit({ userData }) {
                   disabled={!amount}
                   onClick={onClickDepositBtn}
                 >
-                  <p className="common">Deposit</p>
+                  <p className="common">{t("Deposit")}</p>
                   <img className="loader" src={L_loader} alt="" />
                 </button>
               </article>
@@ -345,13 +347,13 @@ export default function Deposit({ userData }) {
             <div className="key">
               <span className="count">1</span>
 
-              <strong className="title">Deposit</strong>
+              <strong className="title">{t("Deposit")}</strong>
             </div>
 
             <div className="value">
               <ul className="inputList">
                 <li className="tokenBox">
-                  <p className="key">Asset</p>
+                  <p className="key">{t("Asset")}</p>
 
                   <div className="selectBox">
                     <button
@@ -380,7 +382,7 @@ export default function Deposit({ userData }) {
                 </li>
 
                 <li className="amountBox">
-                  <p className="key">Amount</p>
+                  <p className="key">{t("Amount")}</p>
 
                   <div className="valueBox">
                     <input
@@ -424,16 +426,16 @@ export default function Deposit({ userData }) {
               <div className="depositBox">
                 <ul className="infoList">
                   <li>
-                    <p className="key">Commission</p>
+                    <p className="key">{t("Commission")}</p>
                     <p className="value">0%</p>
                   </li>
                   <li>
-                    <p className="key">Minimum deposit amount</p>
+                    <p className="key">{t("Minimum deposit amount")}</p>
                     <p className="value">5 {token.text}</p>
                   </li>
                   <li>
-                    <p className="key">Max amount per transaction</p>
-                    <p className="value">no limits</p>
+                    <p className="key">{t("Max amount per transaction")}</p>
+                    <p className="value">{t("no limits")}</p>
                   </li>
                 </ul>
 
@@ -444,7 +446,7 @@ export default function Deposit({ userData }) {
                   disabled={!amount}
                   onClick={onClickDepositBtn}
                 >
-                  <p className="common">Deposit</p>
+                  <p className="common">{t("Deposit")}</p>
                   <img className="loader" src={L_loader} alt="" />
                 </button>
               </div>
@@ -455,7 +457,7 @@ export default function Deposit({ userData }) {
             <div className="key">
               <span className="count">2</span>
 
-              <strong className="title">Confirm deposit details</strong>
+              <strong className="title">{t("Confirm deposit details")}</strong>
             </div>
 
             {confirm ? (
@@ -469,43 +471,40 @@ export default function Deposit({ userData }) {
               />
             ) : (
               <div className="value">
-                <p className="head">Important :</p>
+                <p className="head">{t("Important")} :</p>
 
                 {isBranch ? (
                   <ul className="bodyList">
                     <li>
-                      Please make sure that only {token.text} deposit is made
-                      via this address. Otherwise, your deposited funds will not
-                      be added to your available balance — nor will it be
-                      refunded.
+                      {t(
+                        `Please make sure that only ${token.text} deposit is made via this address. Otherwise, your deposited funds will not be added to your available balance — nor will it be refunded.`
+                      )}
                     </li>
                     <li>
-                      Please make sure to complete the payment within 15
-                      minutes, and click on the "Payment Completed" button to
-                      confirm your payment. If you fail to click on the button
-                      within the timeout period, your order will be
-                      automatically canceled and your payment may not be
-                      retrievable.
+                      {t(
+                        'Please make sure to complete the payment within 15 minutes, and click on the "Payment Completed" button to confirm your payment. If you fail to click on the button within the timeout period, your order will be automatically canceled and your payment may not be retrievable.'
+                      )}
                     </li>
                     <li>
-                      Please note that the current asset does not support
-                      deposit via the smart contract.
+                      {t("Please note that the current asset does not support deposit via the smart contract.")}
                     </li>
                   </ul>
                 ) : (
                   <ul className="bodyList">
                     <li>
-                      Attention! Please note that the address the system gave
-                      you for this payment is unique and can only be used once.
-                      Each payment needs to be initiated anew.
+                      {t(
+                        "Attention! Please note that the address the system gave you for this payment is unique and can only be used once. Each payment needs to be initiated anew."
+                      )}
                     </li>
                     <li>
-                      The funds will be credited as soon as we get 18
-                      confirmations from the Polygon network.
+                      {t(
+                        "The funds will be credited as soon as we get 18 confirmations from the Polygon network."
+                      )}
                     </li>
                     <li>
-                      Crypto deposits are monitored according to our AML
-                      program.
+                      {t(
+                        "Crypto deposits are monitored according to our AML program."
+                      )}
                     </li>
                   </ul>
                 )}

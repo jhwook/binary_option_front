@@ -1,9 +1,11 @@
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import I_x from "../../../img/icon/I_x.svg";
 import I_xWhite from "../../../img/icon/I_xWhite.svg";
 
 export default function MinimumWithdrawalPopup({ off }) {
+  const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
 
   function onClickConfirmBtn() {
@@ -16,7 +18,7 @@ export default function MinimumWithdrawalPopup({ off }) {
         <article className="topArea">
           <span className="blank" />
 
-          <p className="title">Confirmation</p>
+          <p className="title">{t("Confirmation")}</p>
 
           <button className="exitBtn" onClick={() => off()}>
             <img src={I_xWhite} alt="" />
@@ -24,11 +26,11 @@ export default function MinimumWithdrawalPopup({ off }) {
         </article>
 
         <article className="contArea">
-          <p className="explain">Minimum withdrawal is not enough</p>
+          <p className="explain">{t("Minimum withdrawal is not enough")}</p>
 
           <div className="btnBox">
             <button className="confirmBtn" onClick={onClickConfirmBtn}>
-              Acknowledge
+              {t("Acknowledge")}
             </button>
           </div>
         </article>
@@ -40,7 +42,7 @@ export default function MinimumWithdrawalPopup({ off }) {
         <article className="topArea">
           <span className="blank" />
 
-          <p className="title">Confirmation</p>
+          <p className="title">{t("Confirmation")}</p>
 
           <button className="exitBtn" onClick={() => off()}>
             <img src={I_x} alt="" />
@@ -48,11 +50,11 @@ export default function MinimumWithdrawalPopup({ off }) {
         </article>
 
         <article className="contArea">
-          <p className="explain">Minimum withdrawal is not enough</p>
+          <p className="explain">{t("Minimum withdrawal is not enough")}</p>
 
           <div className="btnBox">
             <button className="confirmBtn" onClick={onClickConfirmBtn}>
-              Acknowledge
+              {t("Acknowledge")}
             </button>
           </div>
         </article>

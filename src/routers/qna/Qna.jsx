@@ -6,8 +6,10 @@ import { useState } from "react";
 import PopupBg from "../../components/common/PopupBg";
 import ReqeustPopup from "../../components/qna/RequestPopup";
 import DefaultHeader from "../../components/header/DefaultHeader";
+import { useTranslation } from "react-i18next";
 
 export default function Qna() {
+  const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [requestPopup, setRequestPopup] = useState(false);
@@ -20,7 +22,9 @@ export default function Qna() {
         <MqnaBox>
           <header>
             <section className="innerBox">
-              <strong className="title">Frequently Asked Questions</strong>
+              <strong className="title">
+                {t("Frequently Asked Questions")}
+              </strong>
             </section>
           </header>
 
@@ -28,14 +32,14 @@ export default function Qna() {
             <article className="innerBox">
               <div className="listBox">
                 <ul className="platformList">
-                  <strong className="title">Trading Platform</strong>
+                  <strong className="title">{t("Trading Platform")}</strong>
 
                   <li>
                     <details>
                       <summary>
                         <img src={I_dnArw} alt="" />
 
-                        <p>What are digital options?</p>
+                        <p>{t("What are digital options?")}</p>
                       </summary>
 
                       <div className="answerBox">
@@ -49,7 +53,7 @@ export default function Qna() {
                       <summary>
                         <img src={I_dnArw} alt="" />
 
-                        <p>What is the expiration period of a tra de?</p>
+                        <p>{t("What is the expiration period of a tra de?")}</p>
                       </summary>
 
                       <div className="answerBox">
@@ -60,7 +64,7 @@ export default function Qna() {
                 </ul>
 
                 <ul className="paymentList">
-                  <strong className="title">Payment</strong>
+                  <strong className="title">{t("Payment")}</strong>
 
                   <li>
                     <details>
@@ -68,8 +72,9 @@ export default function Qna() {
                         <img src={I_dnArw} alt="" />
 
                         <p>
-                          Is there a minimum amount that I can deposit to my
-                          account at registration?
+                          {t(
+                            "Is there a minimum amount that I can deposit to my account at registration?"
+                          )}
                         </p>
                       </summary>
 
@@ -84,7 +89,7 @@ export default function Qna() {
                       <summary>
                         <img src={I_dnArw} alt="" />
 
-                        <p>How can I deposit?</p>
+                        <p>{t("How can I deposit?")}</p>
                       </summary>
 
                       <div className="answerBox">
@@ -99,8 +104,9 @@ export default function Qna() {
                         <img src={I_dnArw} alt="" />
 
                         <p>
-                          Do I need to deposit the account of the trading
-                          platform and how often do I need to do this?
+                          {t(
+                            "Do I need to deposit the account of the trading platform and how often do I need to do this?"
+                          )}
                         </p>
                       </summary>
 
@@ -115,7 +121,7 @@ export default function Qna() {
                       <summary>
                         <img src={I_dnArw} alt="" />
 
-                        <p>What is the minimum deposit amount?</p>
+                        <p>{t("What is the minimum deposit amount?")}</p>
                       </summary>
 
                       <div className="answerBox">
@@ -126,14 +132,14 @@ export default function Qna() {
                 </ul>
 
                 <ul className="payoutList">
-                  <strong className="title">Payouts</strong>
+                  <strong className="title">{t("Payouts")}</strong>
 
                   <li>
                     <details>
                       <summary>
                         <img src={I_dnArw} alt="" />
 
-                        <p>How to withdraw money from the account?</p>
+                        <p>{t("How to withdraw money from the account?")}</p>
                       </summary>
 
                       <div className="answerBox">
@@ -147,7 +153,7 @@ export default function Qna() {
                       <summary>
                         <img src={I_dnArw} alt="" />
 
-                        <p>What is the minimum withdrawal amount?</p>
+                        <p>{t("What is the minimum withdrawal amount?")}</p>
                       </summary>
 
                       <div className="answerBox">
@@ -162,8 +168,9 @@ export default function Qna() {
                         <img src={I_dnArw} alt="" />
 
                         <p>
-                          Do I need to provide any documents to make a
-                          withdrawal?
+                          {t(
+                            "Do I need to provide any documents to make a withdrawal?"
+                          )}
                         </p>
                       </summary>
 
@@ -178,7 +185,7 @@ export default function Qna() {
                       <summary>
                         <img src={I_dnArw} alt="" />
 
-                        <p>How long does it take to withdraw funds?</p>
+                        <p>{t("How long does it take to withdraw funds?")}</p>
                       </summary>
 
                       <div className="answerBox">
@@ -193,8 +200,9 @@ export default function Qna() {
                         <img src={I_dnArw} alt="" />
 
                         <p>
-                          Is there any fee for depositing or withdrawing funds
-                          from the account?
+                          {t(
+                            "Is there any fee for depositing or withdrawing funds from the account?"
+                          )}
                         </p>
                       </summary>
 
@@ -209,7 +217,7 @@ export default function Qna() {
               <button className="sendBtn" onClick={() => setRequestPopup(true)}>
                 <img src={I_sendWhite} alt="" />
 
-                <strong>Send us a message</strong>
+                <strong>{t("Send us a message")}</strong>
               </button>
             </article>
           </section>
@@ -231,7 +239,9 @@ export default function Qna() {
         <PqnaBox>
           <header>
             <section className="innerBox">
-              <strong className="title">Frequently Asked Questions</strong>
+              <strong className="title">
+                {t("Frequently Asked Questions")}
+              </strong>
             </section>
           </header>
 
@@ -239,14 +249,14 @@ export default function Qna() {
             <article className="innerBox">
               <div className="listBox">
                 <ul className="platformList">
-                  <strong className="title">Trading Platform</strong>
+                  <strong className="title">{t("Trading Platform")}</strong>
 
                   <li>
                     <details>
                       <summary>
                         <img src={I_dnArw} alt="" />
 
-                        <p>What are digital options?</p>
+                        <p>{t("What are digital options?")}</p>
                       </summary>
 
                       <div className="answerBox">
@@ -260,7 +270,7 @@ export default function Qna() {
                       <summary>
                         <img src={I_dnArw} alt="" />
 
-                        <p>What is the expiration period of a tra de?</p>
+                        <p>{t("What is the expiration period of a tra de?")}</p>
                       </summary>
 
                       <div className="answerBox">
@@ -271,7 +281,7 @@ export default function Qna() {
                 </ul>
 
                 <ul className="paymentList">
-                  <strong className="title">Payment</strong>
+                  <strong className="title">{t("Payment")}</strong>
 
                   <li>
                     <details>
@@ -279,8 +289,9 @@ export default function Qna() {
                         <img src={I_dnArw} alt="" />
 
                         <p>
-                          Is there a minimum amount that I can deposit to my
-                          account at registration?
+                          {t(
+                            "Is there a minimum amount that I can deposit to my account at registration?"
+                          )}
                         </p>
                       </summary>
 
@@ -295,7 +306,7 @@ export default function Qna() {
                       <summary>
                         <img src={I_dnArw} alt="" />
 
-                        <p>How can I deposit?</p>
+                        <p>{t("How can I deposit?")}</p>
                       </summary>
 
                       <div className="answerBox">
@@ -310,8 +321,9 @@ export default function Qna() {
                         <img src={I_dnArw} alt="" />
 
                         <p>
-                          Do I need to deposit the account of the trading
-                          platform and how often do I need to do this?
+                          {t(
+                            "Do I need to deposit the account of the trading platform and how often do I need to do this?"
+                          )}
                         </p>
                       </summary>
 
@@ -326,7 +338,7 @@ export default function Qna() {
                       <summary>
                         <img src={I_dnArw} alt="" />
 
-                        <p>What is the minimum deposit amount?</p>
+                        <p>{t("What is the minimum deposit amount?")}</p>
                       </summary>
 
                       <div className="answerBox">
@@ -337,14 +349,14 @@ export default function Qna() {
                 </ul>
 
                 <ul className="payoutList">
-                  <strong className="title">Payouts</strong>
+                  <strong className="title">{t("Payouts")}</strong>
 
                   <li>
                     <details>
                       <summary>
                         <img src={I_dnArw} alt="" />
 
-                        <p>How to withdraw money from the account?</p>
+                        <p>{t("How to withdraw money from the account?")}</p>
                       </summary>
 
                       <div className="answerBox">
@@ -358,7 +370,7 @@ export default function Qna() {
                       <summary>
                         <img src={I_dnArw} alt="" />
 
-                        <p>What is the minimum withdrawal amount?</p>
+                        <p>{t("What is the minimum withdrawal amount?")}</p>
                       </summary>
 
                       <div className="answerBox">
@@ -373,8 +385,9 @@ export default function Qna() {
                         <img src={I_dnArw} alt="" />
 
                         <p>
-                          Do I need to provide any documents to make a
-                          withdrawal?
+                          {t(
+                            "Do I need to provide any documents to make a withdrawal?"
+                          )}
                         </p>
                       </summary>
 
@@ -389,7 +402,7 @@ export default function Qna() {
                       <summary>
                         <img src={I_dnArw} alt="" />
 
-                        <p>How long does it take to withdraw funds?</p>
+                        <p>{t("How long does it take to withdraw funds?")}</p>
                       </summary>
 
                       <div className="answerBox">
@@ -404,8 +417,9 @@ export default function Qna() {
                         <img src={I_dnArw} alt="" />
 
                         <p>
-                          Is there any fee for depositing or withdrawing funds
-                          from the account?
+                          {t(
+                            "Is there any fee for depositing or withdrawing funds from the account?"
+                          )}
                         </p>
                       </summary>
 
@@ -418,7 +432,9 @@ export default function Qna() {
               </div>
 
               <div className="sendBox">
-                <p className="key">Didn't find an answer to your question?</p>
+                <p className="key">
+                  {t("Didn't find an answer to your question?")}
+                </p>
 
                 <button
                   className="sendBtn"
@@ -426,7 +442,7 @@ export default function Qna() {
                 >
                   <img src={I_sendWhite} alt="" />
 
-                  <strong>Send us a message</strong>
+                  <strong>{t("Send us a message")}</strong>
                 </button>
               </div>
             </article>

@@ -6,8 +6,10 @@ import L_yellow from "../../img/logo/L_yellow.svg";
 import PopupBg from "../common/PopupBg";
 import SelLngPopup from "./SelLngPopup";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function AuthPopup({ off }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const [lngPopup, setLngPopup] = useState(false);
@@ -33,14 +35,14 @@ export default function AuthPopup({ off }) {
         <article className="contArea">
           <div className="btnBox">
             <button className="loginBtn" onClick={() => onclickNavBtn("/auth")}>
-              Login
+              {t("Login")}
             </button>
 
             <button
               className="registerBtn"
               onClick={() => onclickNavBtn("/auth/signup")}
             >
-              Register
+              {t("Register")}
             </button>
           </div>
 

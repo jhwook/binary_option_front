@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { keyframes } from "styled-components";
@@ -6,6 +7,7 @@ import I_spinnerYellow from "../../../img/icon/I_spinnerYellow.svg";
 import I_xWhite from "../../../img/icon/I_xWhite.svg";
 
 export default function VerificationPopup({ title, explain, off }) {
+  const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [loading, setLoading] = useState(true);
@@ -37,7 +39,7 @@ export default function VerificationPopup({ title, explain, off }) {
               <p className="explain">{explain}</p>
 
               <button className="confirmBtn" onClick={() => off()}>
-                Confirm
+                {t("Confirm")}
               </button>
             </article>
           </>
@@ -56,7 +58,7 @@ export default function VerificationPopup({ title, explain, off }) {
             <p className="explain">{explain}</p>
 
             <button className="confirmBtn" onClick={() => off()}>
-              Confirm
+              {t("Confirm")}
             </button>
           </>
         )}

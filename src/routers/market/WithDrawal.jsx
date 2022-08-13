@@ -13,8 +13,10 @@ import { useSelector } from "react-redux";
 import DefaultHeader from "../../components/header/DefaultHeader";
 import { useNavigate } from "react-router-dom";
 import MinimumWithdrawalPopup from "../../components/market/withdrawal/MinimumWithdrawalPopup";
+import { useTranslation } from "react-i18next";
 
 export default function WithDrawal() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const isMobile = useSelector((state) => state.common.isMobile);
 
@@ -26,8 +28,6 @@ export default function WithDrawal() {
     minWithdraw: 5,
     maxTransactions: -1,
   });
-  // const [token, setToken] = useState({ icon: T_usdt, text: "USDT" });
-  // const [tokenList, setTokenList] = useState([{ icon: T_usdt, text: "USDT" }]);
   const [token, setToken] = useState({
     icon: T_usdt,
     type: "USDT_BINOPT",
@@ -84,7 +84,7 @@ export default function WithDrawal() {
             {process ? (
               <article className="onProcess">
                 <div className="titleBox">
-                  <strong className="key">You will get</strong>
+                  <strong className="key">{t("You will get")}</strong>
                   <strong className="value">
                     {amount} {token.text}
                   </strong>
@@ -92,39 +92,40 @@ export default function WithDrawal() {
 
                 <ul className="infoList">
                   <li>
-                    <p className="key">Withdrawal to</p>
+                    <p className="key">{t("Withdrawal to")}</p>
                     <strong className="value">{strDot(address, 5, 4)}</strong>
                   </li>
 
                   <li>
-                    <p className="key">Fee</p>
+                    <p className="key">{t("Fee")}</p>
                     <strong className="value">0 {token.text}</strong>
                   </li>
 
                   <li>
-                    <p className="key">Withdrawal Amount</p>
+                    <p className="key">{t("Withdrawal Amount")}</p>
                     <strong className="value">
                       {amount} {token.text}
                     </strong>
                   </li>
 
                   <li>
-                    <p className="key">Funds will arrive</p>
-                    <strong className="value">Within 30 mins</strong>
+                    <p className="key">{t("Funds will arrive")}</p>
+                    <strong className="value">{t("Within 30 mins")}</strong>
                   </li>
                 </ul>
 
                 <div className="explainBox">
                   <p className="explain">
-                    Transfer usually take under 30minutes. Depends on the speed
-                    of your transaction. a delay may occur.
+                    {t(
+                      "Transfer usually take under 30minutes. Depends on the speed of your transaction. a delay may occur."
+                    )}
                   </p>
 
                   <button
                     className="viewBtn"
                     onClick={() => navigate("/market/history")}
                   >
-                    View history
+                    {t("View history")}
                   </button>
                 </div>
               </article>
@@ -132,7 +133,7 @@ export default function WithDrawal() {
               <article className="unProcess">
                 <ul className="inputList">
                   <li className="tokenBox">
-                    <p className="key">Asset</p>
+                    <p className="key">{t("Asset")}</p>
 
                     <div className="selectBox">
                       <button
@@ -159,7 +160,7 @@ export default function WithDrawal() {
                   </li>
 
                   <li className="amountBox">
-                    <p className="key">Amount</p>
+                    <p className="key">{t("Amount")}</p>
 
                     <div className="valueBox">
                       <input
@@ -173,7 +174,7 @@ export default function WithDrawal() {
                   </li>
 
                   <li className="addressBox">
-                    <p className="key">Withdrawal address</p>
+                    <p className="key">{t("Withdrawal address")}</p>
 
                     <div className="valueBox">
                       <input
@@ -188,15 +189,15 @@ export default function WithDrawal() {
                 <div className="drawalBox">
                   <ul className="infoList">
                     <li>
-                      <p className="key">Commission</p>
+                      <p className="key">{t("Commission")}</p>
                       <p className="value">{settings.commision}%</p>
                     </li>
                     <li>
-                      <p className="key">Minimum withdraw amount</p>
+                      <p className="key">{t("Minimum withdraw amount")}</p>
                       <p className="value">{settings.minWithdraw} USDT</p>
                     </li>
                     <li>
-                      <p className="key">Max amount per transaction</p>
+                      <p className="key">{t("Max amount per transaction")}</p>
                       <p className="value">
                         {settings.maxTransactions == -1
                           ? "no limits"
@@ -212,7 +213,7 @@ export default function WithDrawal() {
                     disabled={!(amount && address)}
                     onClick={onClickDrawalBtn}
                   >
-                    <p className="common">Withdrawal</p>
+                    <p className="common">{t("Withdrawal")}</p>
                     <img className="loader" src={L_loader} alt="" />
                   </button>
                 </div>
@@ -237,13 +238,13 @@ export default function WithDrawal() {
             <div className="key">
               <span className="count">1</span>
 
-              <strong className="title">Withdraw</strong>
+              <strong className="title">{t("Withdraw")}</strong>
             </div>
 
             <div className="value">
               <ul className="inputList">
                 <li className="tokenBox">
-                  <p className="key">Asset</p>
+                  <p className="key">{t("Asset")}</p>
 
                   <div className="selectBox">
                     <button
@@ -270,7 +271,7 @@ export default function WithDrawal() {
                 </li>
 
                 <li className="amountBox">
-                  <p className="key">Amount</p>
+                  <p className="key">{t("Amount")}</p>
 
                   <div className="valueBox">
                     <input
@@ -284,7 +285,7 @@ export default function WithDrawal() {
                 </li>
 
                 <li className="addressBox">
-                  <p className="key">Withdrawal address</p>
+                  <p className="key">{t("Withdrawal address")}</p>
 
                   <div className="valueBox">
                     <input
@@ -299,15 +300,15 @@ export default function WithDrawal() {
               <div className="drawalBox">
                 <ul className="infoList">
                   <li>
-                    <p className="key">Commission</p>
+                    <p className="key">{t("Commission")}</p>
                     <p className="value">{settings.commision}%</p>
                   </li>
                   <li>
-                    <p className="key">Minimum withdraw amount</p>
+                    <p className="key">{t("Minimum withdraw amount")}</p>
                     <p className="value">{settings.minWithdraw} USDT</p>
                   </li>
                   <li>
-                    <p className="key">Max amount per transaction</p>
+                    <p className="key">{t("Max amount per transaction")}</p>
                     <p className="value">
                       {settings.maxTransactions == -1
                         ? "no limits"
@@ -321,7 +322,7 @@ export default function WithDrawal() {
                   disabled={!(amount && address)}
                   onClick={onClickDrawalBtn}
                 >
-                  <p className="common">Withdrawal</p>
+                  <p className="common">{t("Withdrawal")}</p>
                   <img className="loader" src={L_loader} alt="" />
                 </button>
               </div>
@@ -332,13 +333,13 @@ export default function WithDrawal() {
             <div className="key">
               <span className="count">2</span>
 
-              <strong className="title">Withdrawal Confrimation</strong>
+              <strong className="title">{t("Withdrawal Confrimation")}</strong>
             </div>
 
             {process ? (
               <div className={`onProcess value`}>
                 <div className="titleBox">
-                  <strong className="key">You will get</strong>
+                  <strong className="key">{t("You will get")}</strong>
                   <strong className="value">
                     {amount} {token.text}
                   </strong>
@@ -346,25 +347,25 @@ export default function WithDrawal() {
 
                 <ul className="infoList">
                   <li>
-                    <p className="key">Withdrawal to</p>
+                    <p className="key">{t("Withdrawal to")}</p>
                     <strong className="value">{strDot(address, 5, 4)}</strong>
                   </li>
 
                   <li>
-                    <p className="key">Fee</p>
+                    <p className="key">{t("Fee")}</p>
                     <strong className="value">0 {token.text}</strong>
                   </li>
 
                   <li>
-                    <p className="key">Withdrawal Amount</p>
+                    <p className="key">{t("Withdrawal Amount")}</p>
                     <strong className="value">
                       {amount} {token.text}
                     </strong>
                   </li>
 
                   <li>
-                    <p className="key">Funds will arrive</p>
-                    <strong className="value">Within 30 mins</strong>
+                    <p className="key">{t("Funds will arrive")}</p>
+                    <strong className="value">{t("Within 30 mins")}</strong>
                   </li>
                 </ul>
 
@@ -372,27 +373,31 @@ export default function WithDrawal() {
                   <img src={I_alarmYellow} alt="" />
 
                   <p>
-                    Transfer usually take under 30minutes. Depends on the speed
-                    of your transaction. a delay may occur.
+                    {t(
+                      "Transfer usually take under 30minutes. Depends on the speed of your transaction. a delay may occur."
+                    )}
                   </p>
                 </div>
               </div>
             ) : (
               <div className={`unProcess value`}>
-                <p className="head">Important :</p>
+                <p className="head">{t("Important")} :</p>
 
                 <ul className="bodyList">
                   <li>
-                    Attention! Please note that the address the system gave you
-                    for this payment is unique and can only be used once. Each
-                    payment needs to be initiated anew.
+                    {t(
+                      "Attention! Please note that the address the system gave you for this payment is unique and can only be used once. Each payment needs to be initiated anew."
+                    )}
                   </li>
                   <li>
-                    The funds will be credited as soon as we get 18
-                    confirmations from the Polygon network.
+                    {t(
+                      "The funds will be credited as soon as we get 18 confirmations from the Polygon network."
+                    )}
                   </li>
                   <li>
-                    Crypto deposits are monitored according to our AML program.Cash in Person	
+                    {t(
+                      "Crypto deposits are monitored according to our AML program."
+                    )}
                   </li>
                 </ul>
               </div>

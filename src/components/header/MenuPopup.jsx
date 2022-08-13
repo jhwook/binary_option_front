@@ -13,8 +13,10 @@ import I_quesCircleWhite from "../../img/icon/I_quesCircleWhite.svg";
 import I_defaultProfImg from "../../img/icon/I_defaultProfImg.svg";
 import { useNavigate } from "react-router-dom";
 import SelLngPopup from "./SelLngPopup";
+import { useTranslation } from "react-i18next";
 
 export default function MenuPopup({ off, userData }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
@@ -79,7 +81,7 @@ export default function MenuPopup({ off, userData }) {
               <span />
 
               <button className="loginBtn" onClick={() => navigate("/auth")}>
-                LOGIN
+                {t("LOGIN")}
               </button>
             </>
           )}
@@ -94,14 +96,14 @@ export default function MenuPopup({ off, userData }) {
                 <li key={i}>
                   <details>
                     <summary>
-                      <strong className="title">{v.key}</strong>
+                      <strong className="title">{t(v.key)}</strong>
                       <img src={I_dnPolWhite} alt="" />
                     </summary>
 
                     <ul className="detNavList">
                       {v.det.map((detV, i) => (
                         <li key={i} onClick={() => onClickNav(detV.url)}>
-                          {detV.key}
+                          {t(detV.key)}
                         </li>
                       ))}
                     </ul>
@@ -113,20 +115,20 @@ export default function MenuPopup({ off, userData }) {
                   className="navBtn"
                   onClick={() => navigate(v.url)}
                 >
-                  <strong className="title">{v.key}</strong>
+                  <strong className="title">{t(v.key)}</strong>
                 </button>
               )
             )}
 
             <details>
               <summary>
-                <strong className="title">More</strong>
+                <strong className="title">{t("More")}</strong>
                 <img src={I_dnPolWhite} alt="" />
               </summary>
 
               <ul className="detNavList">
                 {D_moreList.map((v, i) => (
-                  <li key={i}>{v.key}</li>
+                  <li key={i}>{t(v.key)}</li>
                 ))}
               </ul>
             </details>
@@ -150,7 +152,7 @@ export default function MenuPopup({ off, userData }) {
             <img src={I_xWhite} alt="" />
           </button>
 
-          <strong className="explain">Menu</strong>
+          <strong className="explain">{t("Menu")}</strong>
         </footer>
       </MenuPopupBox>
 

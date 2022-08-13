@@ -1,9 +1,12 @@
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import I_x from "../../../img/icon/I_x.svg";
 import I_xWhite from "../../../img/icon/I_xWhite.svg";
 
 export default function SecurityVerifiPopup({ off, setBalancePopup }) {
+  const { t } = useTranslation();
+
   const isMobile = useSelector((state) => state.common.isMobile);
 
   function onClickConfirmBtn() {
@@ -15,7 +18,7 @@ export default function SecurityVerifiPopup({ off, setBalancePopup }) {
     return (
       <MsecurityVerifiPopupBox className="defaultPopup">
         <article className="topArea">
-          <p className="title">Security Verification</p>
+        <p className="title">{t("Security Verification")}</p>
 
           <button className="exitBtn" onClick={() => off()}>
             <img src={I_xWhite} alt="" />
@@ -24,12 +27,13 @@ export default function SecurityVerifiPopup({ off, setBalancePopup }) {
 
         <article className="contArea">
           <p className="explain">
-            Please enter the following conditions for this action to verify your
-            account.
+            {t(
+              "Please enter the following conditions for this action to verify your account."
+            )}
           </p>
 
           <button className="confirmBtn" onClick={onClickConfirmBtn}>
-            Confirm
+          {t("Confirm")}
           </button>
         </article>
       </MsecurityVerifiPopupBox>
@@ -40,7 +44,7 @@ export default function SecurityVerifiPopup({ off, setBalancePopup }) {
         <article className="topArea">
           <span className="blank" />
 
-          <p className="title">Security Verification</p>
+          <p className="title">{t("Security Verification")}</p>
 
           <button className="exitBtn" onClick={() => off()}>
             <img src={I_x} alt="" />
@@ -49,12 +53,13 @@ export default function SecurityVerifiPopup({ off, setBalancePopup }) {
 
         <article className="contArea">
           <p className="explain">
-            Please enter the following conditions for this action to verify your
-            account.
+            {t(
+              "Please enter the following conditions for this action to verify your account."
+            )}
           </p>
 
           <button className="confirmBtn" onClick={onClickConfirmBtn}>
-            Confirm
+            {t("Confirm")}
           </button>
         </article>
       </PsecurityVerifiPopupBox>

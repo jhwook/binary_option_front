@@ -3,9 +3,15 @@ import styled from "styled-components";
 import DefaultHeader from "../../components/header/DefaultHeader";
 import T_dia from "../../img/tier/T_dia.svg";
 import I_upPolGreen from "../../img/icon/I_upPolGreen.svg";
+import { useTranslation } from "react-i18next";
+import { GetTierByLevel } from "../../util/Util";
 
 export default function MyPosition() {
+  const { t } = useTranslation();
+
   const isMobile = useSelector((state) => state.common.isMobile);
+
+  function userData() {}
 
   if (isMobile)
     return (
@@ -16,10 +22,10 @@ export default function MyPosition() {
           <section className="innerBox">
             <article className="posArea">
               <span className="posBox">
-                <img src={T_dia} alt="" />
+                <img src={GetTierByLevel(0).img} alt="" />
 
                 <div className="textBox">
-                  <strong className="pos">Diamond</strong>
+                  <strong className="pos">{t(GetTierByLevel(0).text)}</strong>
 
                   <p className="cashBack">{`Cashback 0%`}</p>
                 </div>
@@ -27,11 +33,11 @@ export default function MyPosition() {
 
               <ul className="balanceList">
                 <li>
-                  <p className="key">Total</p>
+                  <p className="key">{t("Total")}</p>
                   <strong className="value">60 USDT</strong>
                 </li>
                 <li>
-                  <p className="key">Safe Balance</p>
+                  <p className="key">{t("Safe Balance")}</p>
                   <strong className="value">60 USDT</strong>
                 </li>
               </ul>
@@ -40,7 +46,7 @@ export default function MyPosition() {
             <article className="detArea">
               <div className="detBox">
                 <div className="posBox">
-                  <p className="key">Positions</p>
+                  <p className="key">{t("Positions")}</p>
 
                   <div className="value">
                     <strong className="price">${(0).toFixed(2)}</strong>
@@ -50,7 +56,7 @@ export default function MyPosition() {
 
                       <span className="text">
                         <p className="change">$0.00 (0.00%)</p>&nbsp;
-                        <p className="time">Today</p>
+                        <p className="time">{t("Today")}</p>
                       </span>
                     </div>
                   </div>
@@ -58,41 +64,41 @@ export default function MyPosition() {
 
                 <div className="detPriceList">
                   <li>
-                    <p className="key">Deals:</p>
+                    <p className="key">{t("Deals")}</p>
                     <p className="value">0</p>
                   </li>
                   <li>
-                    <p className="key">Trading profit</p>
+                    <p className="key">{t("Trading profit")}</p>
                     <p className="value">$0</p>
                   </li>
                   <li>
-                    <p className="key">Profitable deals:</p>
+                    <p className="key">{t("Profitable deals")}</p>
                     <p className="value">0%</p>
                   </li>
 
                   <li>
-                    <p className="key">Average profit:</p>
+                    <p className="key">{t("Average profit")}</p>
                     <p className="value">$0</p>
                   </li>
                   <li>
-                    <p className="key">Net turnover:</p>
+                    <p className="key">{t("Net turnover")}</p>
                     <p className="value">$0</p>
                   </li>
                   <li>
-                    <p className="key">Hedged trades:</p>
+                    <p className="key">{t("Hedged trades")}</p>
                     <p className="value">$0</p>
                   </li>
 
                   <li>
-                    <p className="key">Min trade amount:</p>
+                    <p className="key">{t("Min trade amount")}</p>
                     <p className="value">$0</p>
                   </li>
                   <li>
-                    <p className="key">Max trade amount:</p>
+                    <p className="key">{t("Max trade amount")}</p>
                     <p className="value">$0</p>
                   </li>
                   <li>
-                    <p className="key">Max trade profit:</p>
+                    <p className="key">{t("Max trade profit")}</p>
                     <p className="value">$0</p>
                   </li>
                 </div>
@@ -109,10 +115,10 @@ export default function MyPosition() {
         <section className="innerBox">
           <article className="posArea">
             <span className="posBox">
-              <img src={T_dia} alt="" />
+              <img src={GetTierByLevel(0).img} alt="" />
 
               <div className="textBox">
-                <strong className="pos">Diamond</strong>
+                <strong className="pos">{t(GetTierByLevel(0).text)}</strong>
 
                 <p className="cashBack">{`Cashback 0%`}</p>
               </div>
@@ -120,11 +126,11 @@ export default function MyPosition() {
 
             <ul className="balanceList">
               <li>
-                <p className="key">Total</p>
+                <p className="key">{t("Total")}</p>
                 <strong className="value">60 USDT</strong>
               </li>
               <li>
-                <p className="key">Safe Balance</p>
+                <p className="key">{t("Safe Balance")}</p>
                 <strong className="value">60 USDT</strong>
               </li>
             </ul>
@@ -133,7 +139,7 @@ export default function MyPosition() {
           <article className="detArea">
             <div className="detBox">
               <div className="posBox">
-                <p className="key">Positions</p>
+                <p className="key">{t("Positions")}</p>
 
                 <div className="value">
                   <strong className="price">${(0).toFixed(2)}</strong>
@@ -143,7 +149,7 @@ export default function MyPosition() {
 
                     <span className="text">
                       <p className="change">$0.00 (0.00%)</p>&nbsp;
-                      <p className="time">Today</p>
+                      <p className="time">{t("Today")}</p>
                     </span>
                   </div>
                 </div>
@@ -152,43 +158,43 @@ export default function MyPosition() {
               <div className="detPriceList">
                 <li>
                   <div>
-                    <p className="key">Deals:</p>
+                    <p className="key">{t("Deals")}</p>
                     <p className="value">0</p>
                   </div>
                   <div>
-                    <p className="key">Trading profit</p>
+                    <p className="key">{t("Trading profit")}</p>
                     <p className="value">$0</p>
                   </div>
                   <div>
-                    <p className="key">Profitable deals:</p>
+                    <p className="key">{t("Profitable deals")}</p>
                     <p className="value">0%</p>
                   </div>
                 </li>
                 <li>
                   <div>
-                    <p className="key">Average profit:</p>
+                    <p className="key">{t("Average profit")}</p>
                     <p className="value">$0</p>
                   </div>
                   <div>
-                    <p className="key">Net turnover:</p>
+                    <p className="key">{t("Net turnover")}</p>
                     <p className="value">$0</p>
                   </div>
                   <div>
-                    <p className="key">Hedged trades:</p>
+                    <p className="key">{t("Hedged trades")}</p>
                     <p className="value">$0</p>
                   </div>
                 </li>
                 <li>
                   <div>
-                    <p className="key">Min trade amount:</p>
+                    <p className="key">{t("Min trade amount")}</p>
                     <p className="value">$0</p>
                   </div>
                   <div>
-                    <p className="key">Max trade amount:</p>
+                    <p className="key">{t("Max trade amount")}</p>
                     <p className="value">$0</p>
                   </div>
                   <div>
-                    <p className="key">Max trade profit:</p>
+                    <p className="key">{t("Max trade profit")}</p>
                     <p className="value">$0</p>
                   </div>
                 </li>

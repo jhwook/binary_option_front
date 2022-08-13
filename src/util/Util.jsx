@@ -236,6 +236,20 @@ export function setToast({ type, cont, assetInfo, amount, profit }) {
   }
 }
 
+export function GetTierByLevel(v) {
+  switch (v) {
+    case 0:
+      return { text: "Bronze", img: T_bronze };
+    case 1:
+      return { text: "Silver", img: T_silver };
+    case 2:
+      return { text: "Gold", img: T_gold };
+    case 3:
+      return { text: "Diamond", img: T_dia };
+    default:
+      return null;
+  }
+}
 export function GetTier(v) {
   switch (v) {
     case "bronze":

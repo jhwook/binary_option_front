@@ -7,8 +7,10 @@ import { gCliId } from "../../configs/setting";
 import axios from "axios";
 import { API } from "../../configs/api";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 export default function Index() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const isMobile = useSelector((state) => state.common.isMobile);
@@ -21,7 +23,6 @@ export default function Index() {
         let { isFirstSocial } = data;
 
         localStorage.setItem("token", data.result.tokenId);
-
 
         if (isFirstSocial) navigate("/auth/signup/referral");
         else navigate("/");
@@ -40,7 +41,7 @@ export default function Index() {
 
             <article className="contArea">
               <div className="titleBox">
-                <strong className="pgTitle">Welcome to Betbit</strong>
+                <strong className="pgTitle">{t("Welcome to Betbit")}</strong>
               </div>
 
               <div className="btnBox">
@@ -48,10 +49,10 @@ export default function Index() {
                   className="signUpBtn"
                   onClick={() => navigate("/auth/signup")}
                 >
-                  Sign up with phone or email
+                  {t("Sign up with phone or email")}
                 </button>
 
-                <p className="or">or</p>
+                <p className="or">{t("or")}</p>
 
                 <GoogleLogin
                   clientId={gCliId}
@@ -61,7 +62,7 @@ export default function Index() {
                   render={(renderProps) => (
                     <button className="googleBtn" onClick={renderProps.onClick}>
                       <img src={L_google} alt="" />
-                      <p>Continue with Google</p>
+                      <p>{t("Continue with Google")}</p>
                     </button>
                   )}
                 />
@@ -69,12 +70,12 @@ export default function Index() {
 
               <div className="utilBox">
                 <span className="loginBox">
-                  <p className="login">Already registered?</p>&nbsp;
+                  <p className="login">{t("Already registered?")}</p>&nbsp;
                   <button
                     className="loginBtn"
                     onClick={() => navigate("/auth/login")}
                   >
-                    LogIn
+                    {t("LogIn")}
                   </button>
                 </span>
               </div>
@@ -92,10 +93,11 @@ export default function Index() {
           <section className="innerBox">
             <article className="contArea">
               <div className="titleBox">
-                <strong className="pgTitle">Welcome to Betbit</strong>
+                <strong className="pgTitle">{t("Welcome to Betbit")}</strong>
                 <p className="explain">
-                  By creating an account you agree to our Terms and Conditions
-                  and Data Protection Guidelines.
+                  {t(
+                    "By creating an account you agree to our Terms and Conditions and Data Protection Guidelines."
+                  )}
                 </p>
               </div>
 
@@ -104,10 +106,10 @@ export default function Index() {
                   className="signUpBtn"
                   onClick={() => navigate("/auth/signup")}
                 >
-                  Sign up with phone or email
+                  {t("Sign up with phone or email")}
                 </button>
 
-                <p className="or">or</p>
+                <p className="or">{t("or")}</p>
 
                 <GoogleLogin
                   clientId={gCliId}
@@ -117,7 +119,7 @@ export default function Index() {
                   render={(renderProps) => (
                     <button className="googleBtn" onClick={renderProps.onClick}>
                       <img src={L_google} alt="" />
-                      <p>Continue with Google</p>
+                      <p>{t("Continue with Google")}</p>
                     </button>
                   )}
                 />
@@ -125,12 +127,12 @@ export default function Index() {
 
               <div className="utilBox">
                 <span className="loginBox">
-                  <p className="login">Already registered?</p>&nbsp;
+                  <p className="login">{t("Already registered?")}</p>&nbsp;
                   <button
                     className="loginBtn"
                     onClick={() => navigate("/auth/login")}
                   >
-                    LogIn
+                    {t("LogIn")}
                   </button>
                 </span>
               </div>

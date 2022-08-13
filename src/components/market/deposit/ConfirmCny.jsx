@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { API } from "../../../configs/api";
@@ -10,6 +11,7 @@ import ConfirmationPopup from "./ConfirmationPopup";
 import TimeOutPopup from "./TimeOutPopup";
 
 export default function ConfirmCny({ setConfirm, amount, token, setOk }) {
+  const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
   let time = 1800;
 
@@ -49,7 +51,9 @@ export default function ConfirmCny({ setConfirm, amount, token, setOk }) {
       <>
         <MconfirmCnyBox className="value on">
           <div className="headArea">
-            <strong className="head">Complete Your Payment Within</strong>
+            <strong className="head">
+              {t("Complete Your Payment Within")}
+            </strong>
 
             {limit > 0 && (
               <div className="timerBox">
@@ -64,43 +68,43 @@ export default function ConfirmCny({ setConfirm, amount, token, setOk }) {
           <div className="contArea">
             <div className="listCont">
               <div className="listBox">
-                <strong className="title">Order Info</strong>
+                <strong className="title">{t("Order Info")}</strong>
 
                 <ul>
                   <li>
-                    <p className="key">Pay</p>
+                    <p className="key">{t("Pay")}</p>
                     <p className="value">{amount} CNY</p>
                   </li>
 
                   <li>
-                    <p className="key">Receive</p>
+                    <p className="key">{t("Receive")}</p>
                     <p className="value">{(amount * rate).toFixed(4)} USDT</p>
                   </li>
                 </ul>
               </div>
 
               <div className="listBox">
-                <strong className="title">Bank details</strong>
+                <strong className="title">{t("Bank details")}</strong>
 
                 {limit > 0 ? (
                   <ul>
                     <li>
-                      <p className="key">BIC</p>
+                      <p className="key">{t("BIC")}</p>
                       <p className="value">CLJUGB21</p>
                     </li>
 
                     <li>
-                      <p className="key">Bank Name</p>
+                      <p className="key">{t("Bank Name")}</p>
                       <p className="value">Clear Junction Limited</p>
                     </li>
 
                     <li>
-                      <p className="key">Bank Address</p>
+                      <p className="key">{t("Bank Address")}</p>
                       <p className="value">15 Kingsway London Wc2b 6un, UK</p>
                     </li>
                   </ul>
                 ) : (
-                  <p className="cancel">Your order has been canceled.</p>
+                  <p className="cancel">{t("Your order has been canceled.")}</p>
                 )}
               </div>
             </div>
@@ -111,9 +115,11 @@ export default function ConfirmCny({ setConfirm, amount, token, setOk }) {
                   <img src={I_alarmYellow} alt="" />
 
                   <p>
-                    Please complete the payment within {time / 60} minute(s).
-                    The coins you've bought will be credited to your Funding
-                    Account.
+                    {t(
+                      `Please complete the payment within ${
+                        time / 60
+                      } minute(s). The coins you've bought will be credited to your Funding Account.`
+                    )}
                   </p>
                 </div>
 
@@ -121,7 +127,7 @@ export default function ConfirmCny({ setConfirm, amount, token, setOk }) {
                   className="confirmBtn"
                   onClick={() => setConfirmationPopup(true)}
                 >
-                  Confirm
+                  {t("Confirm")}
                 </button>
               </div>
             ) : (
@@ -131,8 +137,9 @@ export default function ConfirmCny({ setConfirm, amount, token, setOk }) {
                 </button>
 
                 <p>
-                  Unable to retrieve the payment method! The order has already
-                  been canceled.
+                  {t(
+                    "Unable to retrieve the payment method! The order has already been canceled."
+                  )}
                 </p>
               </div>
             )}
@@ -164,7 +171,9 @@ export default function ConfirmCny({ setConfirm, amount, token, setOk }) {
       <>
         <PconfirmCnyBox className="value on">
           <div className="headArea">
-            <strong className="head">Complete Your Payment Within</strong>
+            <strong className="head">
+              {t("Complete Your Payment Within")}
+            </strong>
 
             {limit > 0 && (
               <div className="timerBox">
@@ -179,43 +188,43 @@ export default function ConfirmCny({ setConfirm, amount, token, setOk }) {
           <div className="contArea">
             <div className="listCont">
               <div className="listBox">
-                <strong className="title">Order Info</strong>
+                <strong className="title">{t("Order Info")}</strong>
 
                 <ul>
                   <li>
-                    <p className="key">Pay</p>
+                    <p className="key">{t("Pay")}</p>
                     <p className="value">{amount} CNY</p>
                   </li>
 
                   <li>
-                    <p className="key">Receive</p>
-                    <p className="value">{amount * rate} USDT</p>
+                    <p className="key">{t("Receive")}</p>
+                    <p className="value">{(amount * rate).toFixed(4)} USDT</p>
                   </li>
                 </ul>
               </div>
 
               <div className="listBox">
-                <strong className="title">Bank details</strong>
+                <strong className="title">{t("Bank details")}</strong>
 
                 {limit > 0 ? (
                   <ul>
                     <li>
-                      <p className="key">BIC</p>
+                      <p className="key">{t("BIC")}</p>
                       <p className="value">CLJUGB21</p>
                     </li>
 
                     <li>
-                      <p className="key">Bank Name</p>
+                      <p className="key">{t("Bank Name")}</p>
                       <p className="value">Clear Junction Limited</p>
                     </li>
 
                     <li>
-                      <p className="key">Bank Address</p>
+                      <p className="key">{t("Bank Address")}</p>
                       <p className="value">15 Kingsway London Wc2b 6un, UK</p>
                     </li>
                   </ul>
                 ) : (
-                  <p className="cancel">Your order has been canceled.</p>
+                  <p className="cancel">{t("Your order has been canceled.")}</p>
                 )}
               </div>
             </div>
@@ -226,9 +235,11 @@ export default function ConfirmCny({ setConfirm, amount, token, setOk }) {
                   <img src={I_alarmYellow} alt="" />
 
                   <p>
-                    Please complete the payment within {time / 60} minute(s).
-                    The coins you've bought will be credited to your Funding
-                    Account.
+                    {t(
+                      `Please complete the payment within ${
+                        time / 60
+                      } minute(s). The coins you've bought will be credited to your Funding Account.`
+                    )}
                   </p>
                 </div>
 
@@ -236,7 +247,7 @@ export default function ConfirmCny({ setConfirm, amount, token, setOk }) {
                   className="confirmBtn"
                   onClick={() => setConfirmationPopup(true)}
                 >
-                  Confirm
+                  {t("Confirm")}
                 </button>
               </div>
             ) : (
@@ -246,8 +257,9 @@ export default function ConfirmCny({ setConfirm, amount, token, setOk }) {
                 </button>
 
                 <p>
-                  Unable to retrieve the payment method! The order has already
-                  been canceled.
+                  {t(
+                    "Unable to retrieve the payment method! The order has already been canceled."
+                  )}
                 </p>
               </div>
             )}

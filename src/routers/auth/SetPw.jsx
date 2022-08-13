@@ -2,8 +2,11 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
+import { setToast } from "../../util/Util";
+import { useTranslation } from "react-i18next";
 
 export default function SetPw() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const isMobile = useSelector((state) => state.common.isMobile);
@@ -23,11 +26,14 @@ export default function SetPw() {
   }
 
   useEffect(() => {
-    if (pw && !validatePw(pw))
-      setPwAlarm(
-        "Password must be at least 8 characters with 1 upper case letter and 1 number."
-      );
-    else setPwAlarm("");
+    if (pw && !validatePw(pw)) {
+      setToast({
+        type: "alarm_black",
+        cont: t(
+          "Password must be at least 8 characters with 1 upper case letter and 1 number."
+        ),
+      });
+    } else setPwAlarm("");
   }, [pw]);
 
   useEffect(() => {
@@ -43,7 +49,7 @@ export default function SetPw() {
         <MsetPwBox>
           <section className="innerBox">
             <div className="titleBox">
-              <strong className="pgTitle">Reset Your Password</strong>
+              <strong className="pgTitle">{t("Reset Your Password")}</strong>
             </div>
 
             <article className="contArea">
@@ -51,7 +57,7 @@ export default function SetPw() {
                 <div className="contBox">
                   <ul className="inputList">
                     <li>
-                      <p className="key">New Password</p>
+                      <p className="key">{t("New Password")}</p>
                       <div className="value">
                         <div className={`${pwAlarm && "alarm"} inputBox`}>
                           <input
@@ -67,7 +73,7 @@ export default function SetPw() {
                     </li>
 
                     <li>
-                      <p className="key">Confirm Password</p>
+                      <p className="key">{t("Confirm Password")}</p>
 
                       <div className="value">
                         <div
@@ -82,7 +88,7 @@ export default function SetPw() {
                         </div>
 
                         {confirmPwAlarm && (
-                          <p className="alarm">{confirmPwAlarm}</p>
+                          <p className="alarm">{t(confirmPwAlarm)}</p>
                         )}
                       </div>
                     </li>
@@ -95,7 +101,7 @@ export default function SetPw() {
                     disabled={!(pw && confirmPw) || pwAlarm || confirmPwAlarm}
                     onClick={onClickContBtn}
                   >
-                    Continue
+                    {t("Continue")}
                   </button>
                 </div>
               </div>
@@ -112,7 +118,7 @@ export default function SetPw() {
         <PsetPwBox>
           <section className="innerBox">
             <div className="titleBox">
-              <strong className="pgTitle">Reset Your Password</strong>
+              <strong className="pgTitle">{t("Reset Your Password")}</strong>
             </div>
 
             <article className="contArea">
@@ -120,7 +126,7 @@ export default function SetPw() {
                 <div className="contBox">
                   <ul className="inputList">
                     <li>
-                      <p className="key">New Password</p>
+                      <p className="key">{t("New Password")}</p>
                       <div className="value">
                         <div className={`${pwAlarm && "alarm"} inputBox`}>
                           <input
@@ -136,7 +142,7 @@ export default function SetPw() {
                     </li>
 
                     <li>
-                      <p className="key">Confirm Password</p>
+                      <p className="key">{t("Confirm Password")}</p>
 
                       <div className="value">
                         <div
@@ -151,7 +157,7 @@ export default function SetPw() {
                         </div>
 
                         {confirmPwAlarm && (
-                          <p className="alarm">{confirmPwAlarm}</p>
+                          <p className="alarm">{t(confirmPwAlarm)}</p>
                         )}
                       </div>
                     </li>
@@ -164,7 +170,7 @@ export default function SetPw() {
                     disabled={!(pw && confirmPw) || pwAlarm || confirmPwAlarm}
                     onClick={onClickContBtn}
                   >
-                    Continue
+                    {t("Continue")}
                   </button>
                 </div>
               </div>

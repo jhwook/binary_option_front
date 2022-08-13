@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import I_cpWhite from "../../img/icon/I_cpWhite.svg";
 import { onClickCopy, setToast } from "../../util/Util";
@@ -8,8 +8,10 @@ import History from "../../components/setting/referral/History";
 import DefaultHeader from "../../components/header/DefaultHeader";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 export default function Referal({ userData }) {
+  const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [category, setCategory] = useState(0);
@@ -22,23 +24,24 @@ export default function Referal({ userData }) {
   if (isMobile)
     return (
       <>
-        <DefaultHeader title="Referals" />
+        <DefaultHeader title="Referrals" />
 
         <MreferralBox>
           <section className="innerBox">
             <article className="titleArea">
               <p className="explain">
-                Share your referral link! Each new user who accesses this link
-                will be paid 1% of their profits for each transaction.
+                {t(
+                  "Share your referral link! Each new user who accesses this link will be paid 1% of their profits for each transaction."
+                )}
               </p>
             </article>
 
             <article className="recommendArea">
-              <strong className="title">Recommend</strong>
+              <strong className="title">{t("Recommend")}</strong>
 
               <ul className="dataList">
                 <li>
-                  <p className="key">Code</p>
+                  <p className="key">{t("Code")}</p>
                   <button
                     className="value"
                     onClick={() => onClickCopyBtn(userData?.referercode)}
@@ -49,7 +52,7 @@ export default function Referal({ userData }) {
                 </li>
 
                 <li>
-                  <p className="key">Link</p>
+                  <p className="key">{t("Link")}</p>
                   <button
                     className="value"
                     onClick={() =>
@@ -75,7 +78,7 @@ export default function Referal({ userData }) {
                     className={`${category === i && "on"}`}
                     onClick={() => setCategory(i)}
                   >
-                    {v}
+                    {t(v)}
                   </li>
                 ))}
               </ul>
@@ -93,19 +96,20 @@ export default function Referal({ userData }) {
         <PreferralBox>
           <section className="innerBox">
             <article className="titleArea">
-              <strong className="title">Referrals</strong>
+              <strong className="title">{t("Referrals")}</strong>
               <p className="explain">
-                Share your referral link! Each new user who accesses this link
-                will be paid 1% of their profits for each transaction.
+                {t(
+                  "Share your referral link! Each new user who accesses this link will be paid 1% of their profits for each transaction."
+                )}
               </p>
             </article>
 
             <article className="recommendArea">
-              <strong className="title">Recommend</strong>
+              <strong className="title">{t("Recommend")}</strong>
 
               <ul className="dataList">
                 <li>
-                  <p className="key">Code</p>
+                  <p className="key">{t("Code")}</p>
                   <button
                     className="value"
                     onClick={() => onClickCopyBtn(userData?.referercode)}
@@ -116,7 +120,7 @@ export default function Referal({ userData }) {
                 </li>
 
                 <li>
-                  <p className="key">Link</p>
+                  <p className="key">{t("Link")}</p>
                   <button
                     className="value"
                     onClick={() =>
@@ -143,7 +147,7 @@ export default function Referal({ userData }) {
                     className={`${category === i && "on"}`}
                     onClick={() => setCategory(i)}
                   >
-                    {v}
+                    {t(v)}
                   </li>
                 ))}
               </ul>

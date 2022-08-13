@@ -5,8 +5,10 @@ import I_twitter from "../../img/icon/I_twitter.png";
 import I_discord from "../../img/icon/I_discord.png";
 import I_medium from "../../img/icon/I_medium.svg";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 export default function LendingFooter() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const isMobile = useSelector((state) => state.common.isMobile);
@@ -19,21 +21,21 @@ export default function LendingFooter() {
             <ul className="termList">
               <li>
                 <button className="privacy" onClick={() => {}}>
-                  Privacy Policy
+                {t("Privacy Policy")}
                 </button>
               </li>
               <span className="dot" />
 
               <li>
                 <button className="terms" onClick={() => {}}>
-                  Terms of Service
+                {t("Terms of Service")}
                 </button>
               </li>
             </ul>
           </article>
 
           <article className="btArea">
-            <p className="copyright">© Betbit, 2022. All rights reserved.</p>
+            <p className="copyright">{t("© Betbit, 2022. All rights reserved.")}</p>
 
             <ul className="navList">
               <li>
@@ -67,7 +69,7 @@ export default function LendingFooter() {
               <img src={L_yellow} alt="" />
             </button>
 
-            <p className="copyright">© Betbit, 2022. All rights reserved.</p>
+            <p className="copyright">{t("© Betbit, 2022. All rights reserved.")}</p>
           </article>
 
           <article className="rightArea">
@@ -94,14 +96,14 @@ export default function LendingFooter() {
             <ul className="termList">
               <li>
                 <button className="privacy" onClick={() => {}}>
-                  Privacy Policy
+                  {t("Privacy Policy")}
                 </button>
               </li>
               <span className="dot" />
 
               <li>
                 <button className="terms" onClick={() => {}}>
-                  Terms of Service
+                  {t("Terms of Service")}
                 </button>
               </li>
             </ul>
@@ -148,8 +150,8 @@ const MlendingFooterBox = styled.footer`
         align-items: center;
         gap: 10px;
 
-        button{
-          img{
+        button {
+          img {
             height: 12px;
           }
         }

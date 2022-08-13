@@ -11,8 +11,10 @@ import axios from "axios";
 import { API } from "../../configs/api";
 import { gCliId } from "../../configs/setting";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 export default function Login() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const isMobile = useSelector((state) => state.common.isMobile);
@@ -68,11 +70,11 @@ export default function Login() {
         if (data.message === "EMAIL-DOESNT-EXIST") {
           setUserData({
             ...userData,
-            emailAlarm: "The account doesn't exist",
+            emailAlarm: "The account doesn't exist.",
           });
           return;
         }
-        
+
         if (data.message === "ACCESS-NOT-ALLOWED") {
           setUserData({
             ...userData,
@@ -84,7 +86,7 @@ export default function Login() {
         if (data.message === "PHONE-NUMBER-DOESNT-EXIST") {
           setUserData({
             ...userData,
-            phoneAlarm: "The account doesn't exist",
+            phoneAlarm: "The account doesn't exist.",
           });
           return;
         }
@@ -130,7 +132,7 @@ export default function Login() {
         <MloginBox>
           <section className="innerBox">
             <div className="titleBox">
-              <strong className="pgTitle">Betbit Account Login</strong>
+              <strong className="pgTitle">{t("Betbit Account Login")}</strong>
             </div>
 
             <article className="contArea">
@@ -142,7 +144,9 @@ export default function Login() {
                         key={i}
                         className={`${category.key === v.key && "on"}`}
                       >
-                        <button onClick={() => setCategory(v)}>{v.key}</button>
+                        <button onClick={() => setCategory(v)}>
+                          {t(v.key)}
+                        </button>
                       </li>
                     ))}
                   </ul>
@@ -158,10 +162,10 @@ export default function Login() {
 
                 <div className="btnBox">
                   <button className="loginBtn" onClick={onClickLoginBtn}>
-                    Login
+                    {t("Login")}
                   </button>
 
-                  <p className="or">or</p>
+                  <p className="or">{t("or")}</p>
 
                   <GoogleLogin
                     style={{ border: "5px" }}
@@ -175,7 +179,7 @@ export default function Login() {
                         onClick={renderProps.onClick}
                       >
                         <img src={L_google} alt="" />
-                        <p>Continue with Google</p>
+                        <p>{t("Continue with Google")}</p>
                       </button>
                     )}
                   />
@@ -186,14 +190,14 @@ export default function Login() {
                     className="forgetBtn"
                     onClick={() => navigate("/auth/resetpw")}
                   >
-                    Forgot password?
+                    {t("Forgot password?")}
                   </button>
 
                   <button
                     className="signupBtn"
                     onClick={() => navigate("/auth/signup")}
                   >
-                    Register now
+                    {t("Register now")}
                   </button>
                 </div>
               </div>
@@ -210,7 +214,7 @@ export default function Login() {
         <PloginBox onKeyDown={onKeyDown}>
           <section className="innerBox">
             <div className="titleBox">
-              <strong className="pgTitle">Betbit Account Login</strong>
+              <strong className="pgTitle">{t("Betbit Account Login")}</strong>
             </div>
 
             <article className="contArea">
@@ -222,7 +226,9 @@ export default function Login() {
                         key={i}
                         className={`${category.key === v.key && "on"}`}
                       >
-                        <button onClick={() => setCategory(v)}>{v.key}</button>
+                        <button onClick={() => setCategory(v)}>
+                          {t(v.key)}
+                        </button>
                       </li>
                     ))}
                   </ul>
@@ -242,10 +248,10 @@ export default function Login() {
                     disabled={disableLoginBtn()}
                     onClick={onClickLoginBtn}
                   >
-                    Login
+                    {t("Login")}
                   </button>
 
-                  <p className="or">or</p>
+                  <p className="or">{t("or")}</p>
 
                   <GoogleLogin
                     clientId={gCliId}
@@ -258,7 +264,7 @@ export default function Login() {
                         onClick={renderProps.onClick}
                       >
                         <img src={L_google} alt="" />
-                        <p>Continue with Google</p>
+                        <p>{t("Continue with Google")}</p>
                       </button>
                     )}
                   />
@@ -271,14 +277,14 @@ export default function Login() {
                       navigate("/auth/resetpw");
                     }}
                   >
-                    Forgot password?
+                    {t("Forgot password?")}
                   </button>
 
                   <button
                     className="signupBtn"
                     onClick={() => navigate("/auth/signup")}
                   >
-                    Register now
+                    {t("Register now")}
                   </button>
                 </div>
               </div>
@@ -294,10 +300,12 @@ export default function Login() {
                 </div>
 
                 <div className="textBox">
-                  <strong className="title">Mobile with QR code</strong>
+                  <strong className="title">{t("Mobile with QR code")}</strong>
 
                   <p className="explain">
-                    Scan this code and you will be taken to your mobile login.
+                    {t(
+                      "Scan this code and you will be taken to your mobile login."
+                    )}
                   </p>
                 </div>
               </div>

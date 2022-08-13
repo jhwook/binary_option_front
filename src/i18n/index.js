@@ -2,6 +2,7 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import en from "./en.json";
 import kr from "./kr.json";
+import cn from "./cn.json";
 
 const lng = localStorage.getItem("lng");
 
@@ -11,6 +12,9 @@ const resources = {
   },
   kr: {
     translation: kr,
+  },
+  cn: {
+    translation: cn,
   },
 };
 

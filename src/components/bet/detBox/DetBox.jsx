@@ -5,8 +5,10 @@ import { D_detCategoryList } from "../../../data/D_bet";
 import Closed from "./Closed";
 import Opened from "./Opened";
 import I_xWhite from "../../../img/icon/I_xWhite.svg";
+import { useTranslation } from "react-i18next";
 
 export default function DetBox({ off, mode, page }) {
+  const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [detCategory, setDetCategory] = useState(D_detCategoryList[0]);
@@ -21,7 +23,7 @@ export default function DetBox({ off, mode, page }) {
               className={`${detCategory === v && "on"}`}
               onClick={() => setDetCategory(v)}
             >
-              {v}
+              {t(v)}
             </li>
           ))}
         </ul>
@@ -34,7 +36,7 @@ export default function DetBox({ off, mode, page }) {
             <img src={I_xWhite} alt="" />
           </button>
 
-          <strong className="explain">Trading history</strong>
+          <strong className="explain">{t("Trading history")}</strong>
         </footer>
       </MdetBoxCont>
     );
@@ -48,7 +50,7 @@ export default function DetBox({ off, mode, page }) {
               className={`${detCategory === v && "on"}`}
               onClick={() => setDetCategory(v)}
             >
-              {v}
+              {t(v)}
             </li>
           ))}
         </ul>

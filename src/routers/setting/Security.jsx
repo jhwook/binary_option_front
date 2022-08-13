@@ -8,8 +8,10 @@ import { useSelector } from "react-redux";
 import DefaultHeader from "../../components/header/DefaultHeader";
 import axios from "axios";
 import { API } from "../../configs/api";
+import { useTranslation } from "react-i18next";
 
 export default function Security() {
+  const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [page, setPage] = useState(1);
@@ -33,7 +35,7 @@ export default function Security() {
   function onClickNextPageBtn() {
     setPage(page + 1);
   }
-  
+
   useEffect(() => {
     getData();
   }, [page]);
@@ -51,7 +53,7 @@ export default function Security() {
                   {tblData.map((v, i) => (
                     <li key={i}>
                       <div>
-                        <p className="key">{D_securityListHeader[0]}</p>
+                        <p className="key">{t(D_securityListHeader[0])}</p>
 
                         <span className="value">
                           <p>
@@ -61,23 +63,23 @@ export default function Security() {
                       </div>
 
                       <div>
-                        <p className="key">{D_securityListHeader[1]}</p>
+                        <p className="key">{t(D_securityListHeader[1])}</p>
 
                         <span className="value">
-                          <p>{v.ip}</p>
+                          <p>{v.ipaddress}</p>
                         </span>
                       </div>
 
                       <div>
-                        <p className="key">{D_securityListHeader[2]}</p>
+                        <p className="key">{t(D_securityListHeader[2])}</p>
 
                         <span className="value">
-                          <p>{v.dev_os}</p>
+                          <p>{v.deviceos}</p>
                         </span>
                       </div>
 
                       <div>
-                        <p className="key">{D_securityListHeader[3]}</p>
+                        <p className="key">{t(D_securityListHeader[3])}</p>
 
                         <span className="value">
                           <p>{v.browser}</p>
@@ -85,18 +87,12 @@ export default function Security() {
                       </div>
 
                       <div>
-                        <p className="key">{D_securityListHeader[4]}</p>
+                        <p className="key">{t(D_securityListHeader[4])}</p>
 
                         <span className="value">
-                          <p>{v.country}</p>
-                        </span>
-                      </div>
-
-                      <div>
-                        <p className="key">{D_securityListHeader[5]}</p>
-
-                        <span className="value">
-                          <p>{v.status}</p>
+                          <p>
+                            {v.country} / {v.status}
+                          </p>
                         </span>
                       </div>
                     </li>
@@ -149,14 +145,14 @@ export default function Security() {
         <PsecurityBox>
           <section className="innerBox">
             <article className="titleArea">
-              <strong className="title">Login History</strong>
+              <strong className="title">{t("Login History")}</strong>
             </article>
 
             <article className="contArea">
               <div className="listBox">
                 <ul className="listHeader">
                   {D_securityListHeader.map((v, i) => (
-                    <li key={i}>{v}</li>
+                    <li key={i}>{t(v)}</li>
                   ))}
                 </ul>
                 <ul className="list">

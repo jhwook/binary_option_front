@@ -9,8 +9,10 @@ import DefaultHeader from "../../components/header/DefaultHeader";
 import { setToast } from "../../util/Util";
 import SelectPhoneLocPopup from "../../components/auth/SelectPhoneLocPopup";
 import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
+import { useTranslation } from "react-i18next";
 
 export default function MyProfile({ userData }) {
+  const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [profData, setProfData] = useState("");
@@ -110,7 +112,7 @@ export default function MyProfile({ userData }) {
       else setToast({ type: "alarm", cont: data.message });
     });
 
-    setToast({ type: "alarm", cont: "Your changes have been saved." });
+    setToast({ type: "alarm", cont: t("Your changes have been saved.") });
   }
 
   useEffect(() => {
@@ -118,13 +120,15 @@ export default function MyProfile({ userData }) {
 
     if (!validatePw(pw)) {
       setPwAlarm(
-        "Password must be at least 8 characters with 1 upper case letter and 1 number."
+        t(
+          "Password must be at least 8 characters with 1 upper case letter and 1 number."
+        )
       );
       return;
     }
 
     if (pw !== pwChk) {
-      setPwAlarm("The password you have entered does not coincide");
+      setPwAlarm(t("The password you have entered does not coincide"));
       return;
     }
 
@@ -167,14 +171,14 @@ export default function MyProfile({ userData }) {
             <article className="contArea">
               <ul className="inputList">
                 <li>
-                  <p className="key">UID</p>
+                  <p className="key">{t("UID")}</p>
                   <div className="value">
                     <input disabled value={uid} />
                   </div>
                 </li>
 
                 <li>
-                  <p className="key">Password*</p>
+                  <p className="key">{t("Password")}*</p>
                   <div className={`${pwAlarm && "alarmBox"} value`}>
                     <input
                       type="password"
@@ -188,13 +192,13 @@ export default function MyProfile({ userData }) {
                       className="changeBtn"
                       onClick={() => setChangePw(true)}
                     >
-                      Change
+                      {t("Change")}
                     </button>
                   </div>
                 </li>
                 {changePw && (
                   <li>
-                    <p className="key">Confirm Password*</p>
+                    <p className="key">{t("Confirm Password")}*</p>
                     <div className={`${pwAlarm && "alarmBox"} value`}>
                       <input
                         type="password"
@@ -204,12 +208,12 @@ export default function MyProfile({ userData }) {
                       />
                     </div>
 
-                    {pwAlarm && <p className="alarm">{pwAlarm}</p>}
+                    {pwAlarm && <p className="alarm">{t(pwAlarm)}</p>}
                   </li>
                 )}
 
                 <li>
-                  <p className="key">First name*</p>
+                  <p className="key">{t("First name")}*</p>
                   <div className="value">
                     <input
                       value={firstName}
@@ -220,7 +224,7 @@ export default function MyProfile({ userData }) {
                 </li>
 
                 <li>
-                  <p className="key">Last name*</p>
+                  <p className="key">{t("Last name")}*</p>
                   <div className="value">
                     <input
                       value={lastName}
@@ -231,7 +235,7 @@ export default function MyProfile({ userData }) {
                 </li>
 
                 <li>
-                  <p className="key">Email*</p>
+                  <p className="key">{t("Email")}*</p>
                   <div className="value">
                     <input
                       type="email"
@@ -242,13 +246,13 @@ export default function MyProfile({ userData }) {
                     />
 
                     {emailVerify ? (
-                      <p className="verified">Verified</p>
+                      <p className="verified">{t("Verified")}</p>
                     ) : (
                       <button
                         className={`${!emailSend && "init"} sendBtn`}
                         onClick={onClickVeriEmailBtn}
                       >
-                        {emailSend ? "Resend" : "Unverified"}
+                        {emailSend ? t("Resend") : t("Unverified")}
                       </button>
                     )}
                   </div>
@@ -256,7 +260,7 @@ export default function MyProfile({ userData }) {
 
                 {!emailVerify && emailSend && (
                   <li>
-                    <p className="key">Email Code*</p>
+                    <p className="key">{t("Email Code")}*</p>
                     <div className={`${emailCodeAlarm && "alarmBox"} value`}>
                       <input
                         type="text"
@@ -270,7 +274,7 @@ export default function MyProfile({ userData }) {
                           className="checkBtn"
                           onClick={onClickCheckEmailCodeBtn}
                         >
-                          Check
+                          {t("Check")}
                         </button>
                       ) : (
                         <></>
@@ -278,20 +282,20 @@ export default function MyProfile({ userData }) {
                     </div>
 
                     {emailCodeAlarm && (
-                      <p className="alarm">{emailCodeAlarm}</p>
+                      <p className="alarm">{t(emailCodeAlarm)}</p>
                     )}
                   </li>
                 )}
 
                 <li>
-                  <p className="key">Phone</p>
+                  <p className="key">{t("Phone")}</p>
 
                   <div className="selectBox local">
                     <button
                       className="selectBtn"
                       onClick={() => setSelLocPopup(true)}
                     >
-                      <p>{countryNum} </p>
+                      <p>{countryNum}</p>
 
                       <img src={I_dnPolWhite} alt="" />
                     </button>
@@ -318,13 +322,13 @@ export default function MyProfile({ userData }) {
                     />
 
                     {phoneVerify ? (
-                      <p className="verified">Verified</p>
+                      <p className="verified">{t("Verified")}</p>
                     ) : (
                       <button
-                        className={`${!emailSend && "init"} sendBtn`}
+                        className={`${!phoneSend && "init"} sendBtn`}
                         onClick={onClickVeriPhoneBtn}
                       >
-                        {emailSend ? "Resend" : "Unverified"}
+                        {phoneSend ? t("Resend") : t("Unverified")}
                       </button>
                     )}
                   </div>
@@ -332,7 +336,7 @@ export default function MyProfile({ userData }) {
 
                 {!phoneVerify && phoneSend && (
                   <li>
-                    <p className="key">Phone Code*</p>
+                    <p className="key">{t("Phone Code")}*</p>
                     <div className={`${phoneCodeAlarm && "alarmBox"} value`}>
                       <input
                         type="text"
@@ -346,14 +350,14 @@ export default function MyProfile({ userData }) {
                           className="checkBtn"
                           onClick={onClickCheckPhoneCodeBtn}
                         >
-                          Check
+                          {t("Check")}
                         </button>
                       ) : (
                         <></>
                       )}
                     </div>
                     {phoneCodeAlarm && (
-                      <p className="alarm">{phoneCodeAlarm}</p>
+                      <p className="alarm">{t(phoneCodeAlarm)}</p>
                     )}
                   </li>
                 )}
@@ -364,7 +368,7 @@ export default function MyProfile({ userData }) {
                 disabled={!(firstName && lastName) || (changePw && !pwChk)}
                 onClick={onclickSaveBtn}
               >
-                Save
+                {t("Save")}
               </button>
             </article>
           </section>
@@ -399,16 +403,18 @@ export default function MyProfile({ userData }) {
         <PmyProfileBox>
           <section className="innerBox">
             <article className="titleArea">
-              <strong className="title">My Profile</strong>
+              <strong className="title">{t("My Profile")}</strong>
               <p className="explain">
-                Please for your security, please fill out the following form
+                {t(
+                  "Please for your security, please fill out the following form"
+                )}
               </p>
             </article>
 
             <article className="contArea">
               <ul className="inputList">
                 <li>
-                  <p className="key">UID</p>
+                  <p className="key">{t("UID")}</p>
                   <div className="value">
                     <div className="inputBox">
                       <input disabled value={uid} />
@@ -417,7 +423,7 @@ export default function MyProfile({ userData }) {
                 </li>
 
                 <li>
-                  <p className="key">Password*</p>
+                  <p className="key">{t("Password")}*</p>
                   <div className="value">
                     <div className={`${pwAlarm && "alarmBox"} inputBox`}>
                       <input
@@ -432,14 +438,14 @@ export default function MyProfile({ userData }) {
                         className="changeBtn"
                         onClick={() => setChangePw(true)}
                       >
-                        Change
+                        {t("Change")}
                       </button>
                     </div>
                   </div>
                 </li>
                 {changePw && (
                   <li>
-                    <p className="key">Confirm Password*</p>
+                    <p className="key">{t("Confirm Password")}*</p>
                     <div className="value">
                       <div className={`${pwAlarm && "alarmBox"} inputBox`}>
                         <input
@@ -451,12 +457,12 @@ export default function MyProfile({ userData }) {
                       </div>
                     </div>
 
-                    {pwAlarm && <p className="alarm">{pwAlarm}</p>}
+                    {pwAlarm && <p className="alarm">{t(pwAlarm)}</p>}
                   </li>
                 )}
 
                 <li>
-                  <p className="key">First name*</p>
+                  <p className="key">{t("First name")}*</p>
                   <div className="value">
                     <div className="inputBox">
                       <input
@@ -469,7 +475,7 @@ export default function MyProfile({ userData }) {
                 </li>
 
                 <li>
-                  <p className="key">Last name*</p>
+                  <p className="key">{t("Last name")}*</p>
                   <div className="value">
                     <div className="inputBox">
                       <input
@@ -482,7 +488,7 @@ export default function MyProfile({ userData }) {
                 </li>
 
                 <li>
-                  <p className="key">Email*</p>
+                  <p className="key">{t("Email")}*</p>
                   <div className="value">
                     <div className="inputBox">
                       <input
@@ -495,23 +501,22 @@ export default function MyProfile({ userData }) {
 
                       {/* {emailVerify ? ( */}
                       {0 ? (
-                        <p className="verified">Verified</p>
+                        <p className="verified">{t("Verified")}</p>
                       ) : (
                         <button
                           className={`${!emailSend && "init"} sendBtn`}
                           onClick={onClickVeriEmailBtn}
                         >
-                          {emailSend ? "Resend" : "Unverified"}
+                          {emailSend ? t("Resend") : t("Unverified")}
                         </button>
                       )}
                     </div>
                   </div>
                 </li>
 
-                {/* {!emailVerify && emailSend && ( */}
-                {1 && (
+                {!emailVerify && emailSend && (
                   <li>
-                    <p className="key">Email Code*</p>
+                    <p className="key">{t("Email Code")}*</p>
                     <div className="value">
                       <div
                         className={`${emailCodeAlarm && "alarmBox"} inputBox`}
@@ -528,7 +533,7 @@ export default function MyProfile({ userData }) {
                             className="checkBtn"
                             onClick={onClickCheckEmailCodeBtn}
                           >
-                            Check
+                            {t("Check")}
                           </button>
                         ) : (
                           <></>
@@ -536,13 +541,13 @@ export default function MyProfile({ userData }) {
                       </div>
                     </div>
                     {emailCodeAlarm && (
-                      <p className="alarm">{emailCodeAlarm}</p>
+                      <p className="alarm">{t(emailCodeAlarm)}</p>
                     )}
                   </li>
                 )}
 
                 <li>
-                  <p className="key">Phone</p>
+                  <p className="key">{t("Phone")}</p>
                   <div className="value">
                     <div className="selectBox local">
                       <button
@@ -576,13 +581,13 @@ export default function MyProfile({ userData }) {
                       />
 
                       {phoneVerify ? (
-                        <p className="verified">Verified</p>
+                        <p className="verified">{t("Verified")}</p>
                       ) : (
                         <button
                           className={`${!phoneSend && "init"} sendBtn`}
                           onClick={onClickVeriPhoneBtn}
                         >
-                          {phoneSend ? "Resend" : "Unverified"}
+                          {phoneSend ? t("Resend") : t("Unverified")}
                         </button>
                       )}
                     </div>
@@ -591,7 +596,7 @@ export default function MyProfile({ userData }) {
 
                 {!phoneVerify && phoneSend && (
                   <li>
-                    <p className="key">Phone Code*</p>
+                    <p className="key">{t("Phone Code")}*</p>
                     <div className="value">
                       <div
                         className={`${phoneCodeAlarm && "alarmBox"} inputBox`}
@@ -608,7 +613,7 @@ export default function MyProfile({ userData }) {
                             className="checkBtn"
                             onClick={onClickCheckPhoneCodeBtn}
                           >
-                            Check
+                            {t("Check")}
                           </button>
                         ) : (
                           <></>
@@ -616,7 +621,7 @@ export default function MyProfile({ userData }) {
                       </div>
                     </div>
                     {phoneCodeAlarm && (
-                      <p className="alarm">{phoneCodeAlarm}</p>
+                      <p className="alarm">{t(phoneCodeAlarm)}</p>
                     )}
                   </li>
                 )}
@@ -627,7 +632,7 @@ export default function MyProfile({ userData }) {
                 disabled={!(firstName && lastName) || (changePw && !pwChk)}
                 onClick={onclickSaveBtn}
               >
-                Save
+                {t("Save")}
               </button>
             </article>
           </section>

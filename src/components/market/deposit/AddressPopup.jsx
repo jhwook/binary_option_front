@@ -5,8 +5,11 @@ import I_cpWhite from "../../../img/icon/I_cpWhite.svg";
 import I_chkOrange from "../../../img/icon/I_chkOrange.svg";
 import { onClickCopy } from "../../../util/Util";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 export default function AddressPopup({ off }) {
+  const { t } = useTranslation();
+
   function onClickCopyBtn(str) {
     onClickCopy(str);
     toast(
@@ -15,7 +18,7 @@ export default function AddressPopup({ off }) {
           <img src={I_chkOrange} alt="" />
         </span>
 
-        <p className="cont">Copied Successfully</p>
+        <p className="cont">{t("Copied Successfully")}</p>
       </div>,
       {
         toastId: "CustomToastAlarm",
@@ -28,7 +31,7 @@ export default function AddressPopup({ off }) {
       <article className="topArea">
         <span className="blank" />
 
-        <strong className="title">Deposit address</strong>
+        <strong className="title">{t("Deposit address")}</strong>
 
         <button className="exitBtn" onClick={() => off()}>
           <img src={I_xWhite} alt="" />

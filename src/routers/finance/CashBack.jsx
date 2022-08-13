@@ -8,8 +8,10 @@ import { useEffect, useState } from "react";
 import { setToast } from "../../util/Util";
 import axios from "axios";
 import { API } from "../../configs/api";
+import { useTranslation } from "react-i18next";
 
 export default function CashBack() {
+  const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [listData, setListData] = useState([]);
@@ -150,9 +152,9 @@ export default function CashBack() {
       <PcashBackBox>
         <section className="innerBox">
           <article className="titleArea">
-            <strong className="title">Recommender Fee Rates</strong>
+            <strong className="title">{t("Recommender Fee Rates")}</strong>
             <p className="explain">
-              Fee setting for transaction amount by sub-account
+              {t("Fee setting for transaction amount by sub-account")}
             </p>
           </article>
 
@@ -162,12 +164,12 @@ export default function CashBack() {
                 <div className="imgBox">
                   <img src={v.imgurl} alt="" />
 
-                  <span className="name">{v.levelstr_disp}</span>
+                  <span className="name">{t(v.levelstr_disp)}</span>
                 </div>
 
                 <div className="andBar">
                   <div className="line" />
-                  <p>and</p>
+                  <p>{t("and")}</p>
                   <div className="line" />
                 </div>
 
@@ -184,11 +186,11 @@ export default function CashBack() {
                       className="saveBtn"
                       onClick={() => onClickSaveBtn(i)}
                     >
-                      Save
+                      {t("Save")}
                     </button>
                   </div>
 
-                  <p className="key">{i + 1}st level</p>
+                  <p className="key">{i + 1}{t("st level")}</p>
                 </div>
               </li>
             ))}

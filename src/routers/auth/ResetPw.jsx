@@ -8,8 +8,10 @@ import { useSelector } from "react-redux";
 import PopupBg from "../../components/common/PopupBg";
 import SelectPhoneLocPopup from "../../components/auth/SelectPhoneLocPopup";
 import QRCode from "react-qr-code";
+import { useTranslation } from "react-i18next";
 
 export default function ResetPw() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const isMobile = useSelector((state) => state.common.isMobile);
@@ -35,7 +37,7 @@ export default function ResetPw() {
         <MloginBox>
           <section className="innerBox">
             <div className="titleBox">
-              <strong className="pgTitle">Reset Your Password</strong>
+              <strong className="pgTitle">{t("Reset Your Password")}</strong>
             </div>
 
             <article className="contArea">
@@ -44,7 +46,9 @@ export default function ResetPw() {
                   <ul className="categoryList">
                     {D_loginCategoryList.map((v, i) => (
                       <li key={i} className={`${category === i && "on"}`}>
-                        <button onClick={() => setCategory(i)}>{v.key}</button>
+                        <button onClick={() => setCategory(i)}>
+                          {t(v.key)}
+                        </button>
                       </li>
                     ))}
                   </ul>
@@ -52,7 +56,7 @@ export default function ResetPw() {
                   {category === 0 && (
                     <ul className="inputList">
                       <li>
-                        <p className="key">Email</p>
+                        <p className="key">{t("Email")}</p>
                         <div className="value">
                           <div className={`inputBox`}>
                             <input
@@ -76,7 +80,7 @@ export default function ResetPw() {
 
                       {email && (
                         <li>
-                          <p className="key">Email Verification Code</p>
+                          <p className="key">{t("Email Verification Code")}</p>
 
                           <div className="value">
                             <div className={`inputBox`}>
@@ -88,7 +92,7 @@ export default function ResetPw() {
                               />
 
                               <button className="getCodeBtn" onClick={() => {}}>
-                                Get code
+                                {t("Get code")}
                               </button>
                             </div>
                           </div>
@@ -100,7 +104,7 @@ export default function ResetPw() {
                   {category === 1 && (
                     <ul className="inputList">
                       <li className="phoneNumBox">
-                        <p className="key">Phone Number</p>
+                        <p className="key">{t("Phone Number")}</p>
                         <div className="value">
                           <div className="selectBox local">
                             <button
@@ -137,7 +141,9 @@ export default function ResetPw() {
 
                       {phone && (
                         <li>
-                          <p className="key">Phone Number Verification Code</p>
+                          <p className="key">
+                            {t("Phone Number Verification Code")}
+                          </p>
 
                           <div className="value">
                             <div className={`inputBox`}>
@@ -149,7 +155,7 @@ export default function ResetPw() {
                               />
 
                               <button className="getCodeBtn" onClick={() => {}}>
-                                Get code
+                                {t("Get code")}
                               </button>
                             </div>
                           </div>
@@ -161,7 +167,7 @@ export default function ResetPw() {
 
                 <div className="btnBox">
                   <button className="loginBtn" onClick={onClickContBtn}>
-                    Continue
+                    {t("Continue")}
                   </button>
                 </div>
               </div>
@@ -178,7 +184,7 @@ export default function ResetPw() {
         <PloginBox>
           <section className="innerBox">
             <div className="titleBox">
-              <strong className="pgTitle">Reset Your Password</strong>
+              <strong className="pgTitle">{t("Reset Your Password")}</strong>
             </div>
 
             <article className="contArea">
@@ -187,7 +193,9 @@ export default function ResetPw() {
                   <ul className="categoryList">
                     {D_loginCategoryList.map((v, i) => (
                       <li key={i} className={`${category === i && "on"}`}>
-                        <button onClick={() => setCategory(i)}>{v.key}</button>
+                        <button onClick={() => setCategory(i)}>
+                          {t(v.key)}
+                        </button>
                       </li>
                     ))}
                   </ul>
@@ -195,7 +203,7 @@ export default function ResetPw() {
                   {category === 0 && (
                     <ul className="inputList">
                       <li>
-                        <p className="key">Email</p>
+                        <p className="key">{t("Email")}</p>
                         <div className="value">
                           <div className={`inputBox`}>
                             <input
@@ -219,7 +227,7 @@ export default function ResetPw() {
 
                       {email && (
                         <li>
-                          <p className="key">Email Verification Code</p>
+                          <p className="key">{t("Email Verification Code")}</p>
 
                           <div className="value">
                             <div className={`inputBox`}>
@@ -231,7 +239,7 @@ export default function ResetPw() {
                               />
 
                               <button className="getCodeBtn" onClick={() => {}}>
-                                Get code
+                                {t("Get code")}
                               </button>
                             </div>
                           </div>
@@ -243,7 +251,7 @@ export default function ResetPw() {
                   {category === 1 && (
                     <ul className="inputList">
                       <li className="phoneNumBox">
-                        <p className="key">Phone Number</p>
+                        <p className="key">{t("Phone Number")}</p>
                         <div className="value">
                           <div className="selectBox local">
                             <button
@@ -280,7 +288,9 @@ export default function ResetPw() {
 
                       {phone && (
                         <li>
-                          <p className="key">Phone Number Verification Code</p>
+                          <p className="key">
+                            {t("Phone Number Verification Code")}
+                          </p>
 
                           <div className="value">
                             <div className={`inputBox`}>
@@ -292,7 +302,7 @@ export default function ResetPw() {
                               />
 
                               <button className="getCodeBtn" onClick={() => {}}>
-                                Get code
+                                {t("Get code")}
                               </button>
                             </div>
                           </div>
@@ -304,7 +314,7 @@ export default function ResetPw() {
 
                 <div className="btnBox">
                   <button className="loginBtn" onClick={onClickContBtn}>
-                    Continue
+                    {t("Continue")}
                   </button>
                 </div>
               </div>
@@ -320,10 +330,12 @@ export default function ResetPw() {
                 </div>
 
                 <div className="textBox">
-                  <strong className="title">Mobile with QR code</strong>
+                  <strong className="title">{t("Mobile with QR code")}</strong>
 
                   <p className="explain">
-                    Scan this code and you will be taken to your mobile login.
+                    {t(
+                      "Scan this code and you will be taken to your mobile login."
+                    )}
                   </p>
                 </div>
               </div>

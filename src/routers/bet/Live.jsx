@@ -37,17 +37,23 @@ import BetChart from "../../components/bet/BetChart";
 import ChartTypePopup from "../../components/bet/ChartTypePopup";
 import BarSizePopup from "../../components/bet/BarSizePopup";
 import ChartOptPopup from "../../components/bet/ChartOptPopup";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import SelLngPopup from "../../components/header/SelLngPopup";
 
 export default function Live() {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const hoverRef1 = useRef();
   const hoverRef2 = useRef();
   const chartRef = useRef();
-  const dispatch = useDispatch();
   const isMobile = useSelector((state) => state.common.isMobile);
   const openedData = useSelector((state) => state.bet.openedData);
   const tokenPopupData = useSelector((state) => state.bet.tokenPopupData);
   const dividObj = useSelector((state) => state.bet.dividObj);
-  
+
   const [assetInfo, setAssetInfo] = useState();
   const [loading, setLoading] = useState(true);
   const [liveTradePopup, setLiveTradePopup] = useState(false);
@@ -76,6 +82,7 @@ export default function Live() {
     barSize: D_timeList[0].value,
     barSizeStr: D_timeList[0].key,
   });
+  const [lngPopup, setLngPopup] = useState(false);
 
   function getAssetList() {
     axios
@@ -121,7 +128,7 @@ export default function Live() {
       })
       .catch((err) => {
         console.error(err);
-        localStorage.clear();
+        localStorage.removeItem("token");
       });
   }
 
@@ -381,7 +388,7 @@ export default function Live() {
                   <div className="actionBox">
                     <div className="infoBox">
                       <div className="timeBox contBox">
-                        <p className="key">Time</p>
+                        <p className="key">{t("Time")}</p>
 
                         <div className="value">
                           <button
@@ -411,7 +418,7 @@ export default function Live() {
                       </div>
 
                       <div className="amountBox contBox">
-                        <p className="key">Amount</p>
+                        <p className="key">{t("Amount")}</p>
 
                         <div className="value">
                           <p className="unit">$</p>
@@ -444,7 +451,7 @@ export default function Live() {
                           onClick={() => onClickPayBtn("HIGH")}
                         >
                           <img src={I_highArwGreen} alt="" />
-                          <p>HIGH</p>
+                          <p>{t("HIGH")}</p>
                         </button>
 
                         <p className="rate">
@@ -467,7 +474,7 @@ export default function Live() {
                           onClick={() => onClickPayBtn("LOW")}
                         >
                           <img src={I_lowArwRed} alt="" />
-                          <p>LOW</p>
+                          <p>{t("LOW")}</p>
                         </button>
 
                         <p className="rate">
@@ -664,16 +671,16 @@ export default function Live() {
                   <div className="actionBox">
                     <div className="timeBox contBox">
                       <div className="key">
-                        <p>Time</p>
+                        <p>{t("Time")}</p>
 
                         <button className="infoBtn">
                           <img src={I_qnaWhite} alt="" />
 
                           <span className="hoverPopup">
                             <p>
-                              Set the time when your trading operation will be
-                              dosed. By placing a “Higher” or “Lower” forecast
-                              you will receive the result in 5min.
+                              {t(
+                                'Set the time when your trading operation will be dosed. By placing a "Higher" or "Lower" forecast you will receive the result in 5min.'
+                              )}
                             </p>
                           </span>
                         </button>
@@ -707,7 +714,7 @@ export default function Live() {
 
                     <div className="amountBox contBox">
                       <div className="key">
-                        <p>Amount</p>
+                        <p>{t("Amount")}</p>
 
                         <button className="infoBtn" onClick={() => {}}>
                           <img src={I_qnaWhite} alt="" />
@@ -715,9 +722,11 @@ export default function Live() {
                           <span className="hoverPopup">
                             <p>
                               {amountMode === "int" &&
-                                "Specify the exact amount of trade."}
+                                t("Specify the exact amount of trade.")}
                               {amountMode === "percent" &&
-                                "Specify the percentage of the trading account balance used calculate your trade amount."}
+                                t(
+                                  "Specify the percentage of the trading account balance used calculate your trade amount."
+                                )}
                             </p>
                           </span>
                         </button>
@@ -753,7 +762,7 @@ export default function Live() {
                       >
                         <span className="defaultBox">
                           <img src={I_highArwGreen} alt="" />
-                          <strong>HIGH</strong>
+                          <strong>{t("HIGH")}</strong>
                         </span>
 
                         <span className="hoverBox">
@@ -793,7 +802,7 @@ export default function Live() {
                       >
                         <span className="defaultBox">
                           <img src={I_lowArwRed} alt="" />
-                          <strong>LOW</strong>
+                          <strong>{t("LOW")}</strong>
                         </span>
 
                         <span className="hoverBox">
@@ -838,13 +847,24 @@ export default function Live() {
               </section>
 
               <footer>
-                <button className="qnaBtn" onClick={() => {}}>
-                  <img src={I_qnaWhite} alt="" />
-                </button>
+                <span>
+                  <button className="qnaBtn" onClick={() => navigate("/qna")}>
+                    <img src={I_qnaWhite} alt="" />
+                  </button>
+                </span>
 
-                <button className="langBtn" onClick={() => {}}>
-                  <img src={I_langWhite} alt="" />
-                </button>
+                <span>
+                  <button className="langBtn" onClick={() => setLngPopup(true)}>
+                    <img src={I_langWhite} alt="" />
+                  </button>
+
+                  {lngPopup && (
+                    <>
+                      <SelLngPopup off={setLngPopup} />
+                      <PopupBg off={setLngPopup} />
+                    </>
+                  )}
+                </span>
               </footer>
             </PbetBox>
 
@@ -1485,9 +1505,18 @@ const PbetBox = styled.main`
     gap: 14px;
     padding: 0 0 30px;
 
-    button {
-      img {
-        height: 22px;
+    span {
+      position: relative;
+
+      button {
+        img {
+          height: 22px;
+        }
+      }
+
+      .selectPopup {
+        top: unset;
+        bottom: 36px;
       }
     }
   }

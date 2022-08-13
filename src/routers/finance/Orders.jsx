@@ -20,9 +20,12 @@ import { getabistr_forfunction, reqTx } from "../../util/contractcall";
 import contractaddr from "../../configs/contractaddr";
 import { metaMaskLink } from "../../configs/metaMask";
 import { io } from "socket.io-client";
+import { useTranslation } from "react-i18next";
 
 export default function Orders() {
   registerLocale("ko", ko);
+  const { t } = useTranslation();
+
   const walletAddress = localStorage.getItem("walletAddress");
 
   const isMobile = useSelector((state) => state.common.isMobile);
@@ -221,7 +224,7 @@ export default function Orders() {
                     className="applyBtn"
                     onClick={() => getData({ filter: true })}
                   >
-                    Apply
+                    {t("Apply")}
                   </button>
                 </div>
               </div>
@@ -232,7 +235,7 @@ export default function Orders() {
                     tblData.map((v, i) => (
                       <li key={i}>
                         <div>
-                          <p className="key">{D_ordersListHeader[0]}</p>
+                          <p className="key">{t(D_ordersListHeader[0])}</p>
                           <div className="value">
                             <p>
                               {v.user.email ||
@@ -242,21 +245,21 @@ export default function Orders() {
                         </div>
 
                         <div>
-                          <p className="key">{D_ordersListHeader[1]}</p>
+                          <p className="key">{t(D_ordersListHeader[1])}</p>
                           <div className="value">
                             <p>{`${v.user.level} Level`}</p>
                           </div>
                         </div>
 
                         <div>
-                          <p className="key">{D_ordersListHeader[2]}</p>
+                          <p className="key">{t(D_ordersListHeader[2])}</p>
                           <div className="value">
                             <p>{moment(v.createdat).format("YYYY-MM-DD")}</p>
                           </div>
                         </div>
 
                         <div>
-                          <p className="key">{D_ordersListHeader[3]}</p>
+                          <p className="key">{t(D_ordersListHeader[3])}</p>
                           <div className="value">
                             <p>
                               {`¥${(v?.localeAmount / 10 ** 6)?.toLocaleString(
@@ -268,7 +271,7 @@ export default function Orders() {
                         </div>
 
                         <div>
-                          <p className="key">{D_ordersListHeader[4]}</p>
+                          <p className="key">{t(D_ordersListHeader[4])}</p>
                           <div className="value">
                             <p>
                               {`${v?.cumulAmount?.toLocaleString(
@@ -280,14 +283,14 @@ export default function Orders() {
                         </div>
 
                         <div>
-                          <p className="key">{D_ordersListHeader[5]}</p>
+                          <p className="key">{t(D_ordersListHeader[5])}</p>
                           <div className="value">
                             <p>{`${v.name || "-"}/${v.cardNum || "-"}`}</p>
                           </div>
                         </div>
 
                         <div>
-                          <p className="key">{D_ordersListHeader[6]}</p>
+                          <p className="key">{t(D_ordersListHeader[6])}</p>
                           <div className="value">
                             <button
                               className={`${
@@ -296,7 +299,7 @@ export default function Orders() {
                               disabled={loader !== "" || v.txhash}
                               onClick={() => onClickDepositBtn(v, i)}
                             >
-                              <p className="common">Deposit</p>
+                              <p className="common">{t("Deposit")}</p>
 
                               <img className="loader" src={L_loader} alt="" />
                             </button>
@@ -306,7 +309,7 @@ export default function Orders() {
                     ))
                   ) : (
                     <p className="notFound">
-                      Nothing found or not yet calculated
+                      {t("Nothing found or not yet calculated")}
                     </p>
                   )}
                 </ul>
@@ -355,7 +358,7 @@ export default function Orders() {
     return (
       <PordersBox>
         <section className="innerBox">
-          <strong className="pageTitle">Orders</strong>
+          <strong className="pageTitle">{t("Orders")}</strong>
 
           <article className="contArea">
             <div className="filterBar">
@@ -377,7 +380,7 @@ export default function Orders() {
                   className="applyBtn"
                   onClick={() => getData({ filter: true })}
                 >
-                  Apply
+                  {t("Apply")}
                 </button>
               </div>
 
@@ -393,7 +396,7 @@ export default function Orders() {
               <ul className="listHeader">
                 {D_ordersListHeader.map((v, i) => (
                   <li key={i}>
-                    <p>{v}</p>
+                    <p>{t(v)}</p>
                   </li>
                 ))}
               </ul>
@@ -439,7 +442,7 @@ export default function Orders() {
                         disabled={loader !== "" || v.txhash}
                         onClick={() => onClickDepositBtn(v, i)}
                       >
-                        <p className="common">Deposit</p>
+                        <p className="common">{t("Deposit")}</p>
 
                         <img className="loader" src={L_loader} alt="" />
                       </button>

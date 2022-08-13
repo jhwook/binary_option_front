@@ -1,16 +1,18 @@
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import I_x from "../../img/icon/I_x.svg";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
-import { GetTier } from "../../util/Util";
+import { GetTier, GetTierByLevel } from "../../util/Util";
 
 export default function ProfPopup({ off, offAll, userData }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const isMobile = useSelector((state) => state.common.isMobile);
 
   function onClickLogOutBtn() {
-    localStorage.clear();
+    localStorage.removeItem("token");
     navigate("/");
 
     if (offAll) offAll();
@@ -35,13 +37,13 @@ export default function ProfPopup({ off, offAll, userData }) {
 
         <article className="contArea">
           <div className="profBox">
-            <img className="tierImg" src={GetTier("gold")} alt="" />
+            <img className="tierImg" src={GetTierByLevel(0).img} alt="" />
 
             <div className="textBox">
               <p className="id">
                 {userData.firstname + ", " + userData.lastname}
               </p>
-              <p className="pos">GOLD</p>
+              <p className="pos">{GetTierByLevel(0).text}</p>
             </div>
           </div>
 
@@ -49,24 +51,24 @@ export default function ProfPopup({ off, offAll, userData }) {
             <div className="title">
               <span className="dot" />
 
-              <p>Live account</p>
+              <p>{t("Live account")}</p>
             </div>
 
             <ul className="infoList">
               <li>
-                <p className="key">Deals</p>
+                <p className="key">{t("Deals")}</p>
                 <p className="value">0</p>
               </li>
               <li>
-                <p className="key">Trading turnover</p>
+                <p className="key">{t("Trading turnover")}</p>
                 <p className="value">$0</p>
               </li>
               <li>
-                <p className="key">Net turnover</p>
+                <p className="key">{t("Net turnover")}</p>
                 <p className="value">$0</p>
               </li>
               <li>
-                <p className="key">Trading profit</p>
+                <p className="key">{t("Trading profit")}</p>
                 <p className="value">$0</p>
               </li>
             </ul>
@@ -78,7 +80,7 @@ export default function ProfPopup({ off, offAll, userData }) {
                 className="navBtn"
                 onClick={() => onClickNav("/setting/prof")}
               >
-                Profile
+                {t("Profile")}
               </button>
             </li>
             <li>
@@ -86,7 +88,7 @@ export default function ProfPopup({ off, offAll, userData }) {
                 className="navBtn"
                 onClick={() => onClickNav("/market/deposit")}
               >
-                Deposit
+                {t("Deposit")}
               </button>
             </li>
             <li>
@@ -94,7 +96,7 @@ export default function ProfPopup({ off, offAll, userData }) {
                 className="navBtn"
                 onClick={() => onClickNav("/market/withdrawal")}
               >
-                Withdrawal
+                {t("Withdrawal")}
               </button>
             </li>
             <li>
@@ -102,7 +104,7 @@ export default function ProfPopup({ off, offAll, userData }) {
                 className="navBtn"
                 onClick={() => onClickNav("/setting/referral")}
               >
-                Referral
+                {t("Referral")}
               </button>
             </li>
             <li>
@@ -110,8 +112,8 @@ export default function ProfPopup({ off, offAll, userData }) {
                 className="navBtn"
                 onClick={() => onClickNav("/setting/noti")}
               >
-                <p>Notifications</p>
-                <p className="new">new</p>
+                <p>{t("Notifications")}</p>
+                <p className="new">{t("new")}</p>
               </button>
             </li>
             <li>
@@ -119,13 +121,13 @@ export default function ProfPopup({ off, offAll, userData }) {
                 className="navBtn"
                 onClick={() => onClickNav("/setting/security")}
               >
-                Settings
+                {t("Settings")}
               </button>
             </li>
           </ul>
 
           <button className="logOutBtn" onClick={onClickLogOutBtn}>
-            Sign Out
+            {t("Sign Out")}
           </button>
         </article>
       </MprofPopupBox>
@@ -138,13 +140,13 @@ export default function ProfPopup({ off, offAll, userData }) {
         </button>
 
         <div className="profBox">
-          <img className="tierImg" src={GetTier("gold")} alt="" />
+          <img className="tierImg" src={GetTierByLevel(0).img} alt="" />
 
           <div className="textBox">
             <p className="id">
               {userData.firstname + ", " + userData.lastname}
             </p>
-            <p className="pos">GOLD</p>
+            <p className="pos">{GetTierByLevel(0).text}</p>
           </div>
         </div>
 
@@ -152,24 +154,24 @@ export default function ProfPopup({ off, offAll, userData }) {
           <div className="title">
             <span className="dot" />
 
-            <p>Live account</p>
+            <p>{t("Live account")}</p>
           </div>
 
           <ul className="infoList">
             <li>
-              <p className="key">Deals</p>
+              <p className="key">{t("Deals")}</p>
               <p className="value">0</p>
             </li>
             <li>
-              <p className="key">Trading turnover</p>
+              <p className="key">{t("Trading turnover")}</p>
               <p className="value">$0</p>
             </li>
             <li>
-              <p className="key">Net turnover</p>
+              <p className="key">{t("Net turnover")}</p>
               <p className="value">$0</p>
             </li>
             <li>
-              <p className="key">Trading profit</p>
+              <p className="key">{t("Trading profit")}</p>
               <p className="value">$0</p>
             </li>
           </ul>
@@ -181,7 +183,7 @@ export default function ProfPopup({ off, offAll, userData }) {
               className="navBtn"
               onClick={() => onClickNav("/setting/prof")}
             >
-              Profile
+              {t("Profile")}
             </button>
           </li>
           <li>
@@ -189,7 +191,7 @@ export default function ProfPopup({ off, offAll, userData }) {
               className="navBtn"
               onClick={() => onClickNav("/market/deposit")}
             >
-              Deposit
+              {t("Deposit")}
             </button>
           </li>
           <li>
@@ -197,7 +199,7 @@ export default function ProfPopup({ off, offAll, userData }) {
               className="navBtn"
               onClick={() => onClickNav("/market/withdrawal")}
             >
-              Withdrawal
+              {t("Withdrawal")}
             </button>
           </li>
           <li>
@@ -205,7 +207,7 @@ export default function ProfPopup({ off, offAll, userData }) {
               className="navBtn"
               onClick={() => onClickNav("/setting/referral")}
             >
-              Referral
+              {t("Referral")}
             </button>
           </li>
           <li>
@@ -213,8 +215,8 @@ export default function ProfPopup({ off, offAll, userData }) {
               className="navBtn"
               onClick={() => onClickNav("/setting/noti")}
             >
-              <p>Notifications</p>
-              <p className="new">new</p>
+              <p>{t("Notifications")}</p>
+              <p className="new">{t("new")}</p>
             </button>
           </li>
           <li>
@@ -222,13 +224,13 @@ export default function ProfPopup({ off, offAll, userData }) {
               className="navBtn"
               onClick={() => onClickNav("/setting/security")}
             >
-              Settings
+              {t("Settings")}
             </button>
           </li>
         </ul>
 
         <button className="logOutBtn" onClick={onClickLogOutBtn}>
-          Sign Out
+          {t("Sign Out")}
         </button>
       </PprofPopupBox>
     );

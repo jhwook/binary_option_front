@@ -1,8 +1,10 @@
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 export default function CompPw() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const isMobile = useSelector((state) => state.common.isMobile);
@@ -17,13 +19,13 @@ export default function CompPw() {
         <McompPwBox>
           <section className="innerBox">
             <article className="titleArea">
-              <strong className="title">Password Changed</strong>
+              <strong className="title">{t("Password Changed")}</strong>
 
-              <p className="explain">Please log in with the new password.</p>
+              <p className="explain">{t("Please log in with the new password.")}</p>
             </article>
 
             <button className="contBtn" onClick={onClickConfirmBtn}>
-              Continue
+              {t("Continue")}
             </button>
           </section>
 
@@ -37,13 +39,15 @@ export default function CompPw() {
         <PcompPwBox>
           <section className="innerBox">
             <article className="titleArea">
-              <strong className="title">Password Changed</strong>
+              <strong className="title">{t("Password Changed")}</strong>
 
-              <p className="explain">Please log in with the new password.</p>
+              <p className="explain">
+                {t("Please log in with the new password.")}
+              </p>
             </article>
 
             <button className="contBtn" onClick={onClickConfirmBtn}>
-              Continue
+              {t("Continue")}
             </button>
           </section>
 

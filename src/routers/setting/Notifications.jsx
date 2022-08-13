@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import DefaultHeader from "../../components/header/DefaultHeader";
 
 export default function Notifications() {
+  const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [toggleList, setToggleList] = useState(new Array(5).fill(false));
@@ -26,106 +28,112 @@ export default function Notifications() {
               <ul className="optList">
                 <li>
                   <div className="topBar">
-                    <p className="title">Position End Notification</p>
+                    <p className="title">{t("Position End Notification")}</p>
 
                     <button
                       className={`${toggleList[0] && "on"} toggleBtn`}
                       onClick={() => onClickToggleBtn(0)}
                     >
-                      <p className="on">on</p>
+                      <p className="on">{t("on")}</p>
                       <span />
-                      <p className="off">off</p>
-                    </button>
-                  </div>
-
-                  <div className="key">
-                    <p className="explain">Notification when position closes</p>
-                  </div>
-                </li>
-
-                <li>
-                  <div className="topBar">
-                    <p className="title">Orders request successful</p>
-
-                    <button
-                      className={`${toggleList[1] && "on"} toggleBtn`}
-                      onClick={() => onClickToggleBtn(1)}
-                    >
-                      <p className="on">on</p>
-                      <span />
-                      <p className="off">off</p>
-                    </button>
-                  </div>
-
-                  <div className="key">
-                    <p className="explain">Confirmation window for orders</p>
-                  </div>
-                </li>
-
-                <li>
-                  <div className="topBar">
-                    <p className="title">Email notifications</p>
-
-                    <button
-                      className={`${toggleList[2] && "on"} toggleBtn`}
-                      onClick={() => onClickToggleBtn(2)}
-                    >
-                      <p className="on">on</p>
-                      <span />
-                      <p className="off">off</p>
-                    </button>
-                  </div>
-
-                  <div className="key">
-                    <p className="explain">Subscribe to Betbit updates</p>
-                  </div>
-                </li>
-
-                <li>
-                  <div className="topBar">
-                    <p className="title">Latest news</p>
-
-                    <button
-                      className={`${toggleList[3] && "on"} toggleBtn`}
-                      onClick={() => onClickToggleBtn(3)}
-                    >
-                      <p className="on">on</p>
-                      <span />
-                      <p className="off">off</p>
+                      <p className="off">{t("off")}</p>
                     </button>
                   </div>
 
                   <div className="key">
                     <p className="explain">
-                      Promotion: Our latest events, offers and more
+                      {t("Notification when position closes")}
                     </p>
                   </div>
                 </li>
 
                 <li>
                   <div className="topBar">
-                    <p className="title">Questions</p>
+                    <p className="title">{t("Orders request successful")}</p>
 
                     <button
-                      className={`${toggleList[4] && "on"} toggleBtn`}
-                      onClick={() => onClickToggleBtn(4)}
+                      className={`${toggleList[1] && "on"} toggleBtn`}
+                      onClick={() => onClickToggleBtn(1)}
                     >
-                      <p className="on">on</p>
+                      <p className="on">{t("on")}</p>
                       <span />
-                      <p className="off">off</p>
+                      <p className="off">{t("off")}</p>
                     </button>
                   </div>
 
                   <div className="key">
                     <p className="explain">
-                      Notification of answers to support team inquiries
+                      {t("Confirmation window for orders")}
+                    </p>
+                  </div>
+                </li>
+
+                <li>
+                  <div className="topBar">
+                    <p className="title">{t("Email notifications")}</p>
+
+                    <button
+                      className={`${toggleList[2] && "on"} toggleBtn`}
+                      onClick={() => onClickToggleBtn(2)}
+                    >
+                      <p className="on">{t("on")}</p>
+                      <span />
+                      <p className="off">{t("off")}</p>
+                    </button>
+                  </div>
+
+                  <div className="key">
+                    <p className="explain">
+                      {t("Subscribe to Betbit updates")}
+                    </p>
+                  </div>
+                </li>
+
+                <li>
+                  <div className="topBar">
+                    <p className="title">{t("Latest news")}</p>
+
+                    <button
+                      className={`${toggleList[3] && "on"} toggleBtn`}
+                      onClick={() => onClickToggleBtn(3)}
+                    >
+                      <p className="on">{t("on")}</p>
+                      <span />
+                      <p className="off">{t("off")}</p>
+                    </button>
+                  </div>
+
+                  <div className="key">
+                    <p className="explain">
+                      {t("Promotion: Our latest events, offers and more")}
+                    </p>
+                  </div>
+                </li>
+
+                <li>
+                  <div className="topBar">
+                    <p className="title">{t("Questions")}</p>
+
+                    <button
+                      className={`${toggleList[4] && "on"} toggleBtn`}
+                      onClick={() => onClickToggleBtn(4)}
+                    >
+                      <p className="on">{t("on")}</p>
+                      <span />
+                      <p className="off">{t("off")}</p>
+                    </button>
+                  </div>
+
+                  <div className="key">
+                    <p className="explain">
+                      {t("Notification of answers to support team inquiries")}
                     </p>
                   </div>
                 </li>
               </ul>
 
               <button className="saveBtn" onClick={() => {}}>
-                Save
+                {t("Save")}
               </button>
             </article>
           </section>
@@ -138,10 +146,11 @@ export default function Notifications() {
         <PnotificationsBox>
           <section className="innerBox">
             <article className="titleArea">
-              <strong className="title">Notification settings</strong>
+              <strong className="title">{t("Notification settings")}</strong>
               <p className="explain">
-                Please select the type of notifications you want to receive from
-                this account
+                {t(
+                  "Please select the type of notifications you want to receive from this account"
+                )}
               </p>
             </article>
 
@@ -149,57 +158,63 @@ export default function Notifications() {
               <ul className="optList">
                 <li>
                   <div className="key">
-                    <p className="title">Position End Notification</p>
-                    <p className="explain">Notification when position closes</p>
+                    <p className="title">{t("Position End Notification")}</p>
+                    <p className="explain">
+                      {t("Notification when position closes")}
+                    </p>
                   </div>
 
                   <button
                     className={`${toggleList[0] && "on"} toggleBtn`}
                     onClick={() => onClickToggleBtn(0)}
                   >
-                    <p className="on">on</p>
+                    <p className="on">{t("on")}</p>
                     <span />
-                    <p className="off">off</p>
+                    <p className="off">{t("off")}</p>
                   </button>
                 </li>
 
                 <li>
                   <div className="key">
-                    <p className="title">Orders request successful</p>
-                    <p className="explain">Confirmation window for orders</p>
+                    <p className="title">{t("Orders request successful")}</p>
+                    <p className="explain">
+                      {t("Confirmation window for orders")}
+                    </p>
                   </div>
 
                   <button
                     className={`${toggleList[1] && "on"} toggleBtn`}
                     onClick={() => onClickToggleBtn(1)}
                   >
-                    <p className="on">on</p>
+                    <p className="on">{t("on")}</p>
                     <span />
-                    <p className="off">off</p>
+                    <p className="off">{t("off")}</p>
                   </button>
                 </li>
 
                 <li>
                   <div className="key">
-                    <p className="title">Email notifications</p>
-                    <p className="explain">Subscribe to Betbit updates</p>
+                    <p className="title">{t("Email notifications")}</p>
+                    <p className="explain">
+                      {t("Subscribe to Betbit updates")}
+                    </p>
                   </div>
 
                   <button
                     className={`${toggleList[2] && "on"} toggleBtn`}
                     onClick={() => onClickToggleBtn(2)}
                   >
-                    <p className="on">on</p>
+                    <p className="on">{t("on")}</p>
                     <span />
-                    <p className="off">off</p>
+                    <p className="off">{t("off")}</p>
                   </button>
                 </li>
 
                 <li>
                   <div className="key">
-                    <p className="title">Latest news</p>
+                    <p className="title">{t("Latest news")}</p>
                     <p className="explain">
-                      Promotion: Our latest events, offers and more
+                      {t("Promotion: Our latest events, offers and more")}
                     </p>
                   </div>
 
@@ -207,17 +222,17 @@ export default function Notifications() {
                     className={`${toggleList[3] && "on"} toggleBtn`}
                     onClick={() => onClickToggleBtn(3)}
                   >
-                    <p className="on">on</p>
+                    <p className="on">{t("on")}</p>
                     <span />
-                    <p className="off">off</p>
+                    <p className="off">{t("off")}</p>
                   </button>
                 </li>
 
                 <li>
                   <div className="key">
-                    <p className="title">Questions</p>
+                    <p className="title">{t("Questions")}</p>
                     <p className="explain">
-                      Notification of answers to support team inquiries
+                      {t("Notification of answers to support team inquiries")}
                     </p>
                   </div>
 
@@ -225,15 +240,15 @@ export default function Notifications() {
                     className={`${toggleList[4] && "on"} toggleBtn`}
                     onClick={() => onClickToggleBtn(4)}
                   >
-                    <p className="on">on</p>
+                    <p className="on">{t("on")}</p>
                     <span />
-                    <p className="off">off</p>
+                    <p className="off">{t("off")}</p>
                   </button>
                 </li>
               </ul>
 
               <button className="saveBtn" onClick={() => {}}>
-                Save
+                {t("Save")}
               </button>
             </article>
           </section>
@@ -335,6 +350,13 @@ const MnotificationsBox = styled.main`
                   right: 10px;
                 }
               }
+            }
+          }
+
+          .key {
+            .explain {
+              font-size: 14px;
+              color: rgba(255, 255, 255, 0.6);
             }
           }
         }

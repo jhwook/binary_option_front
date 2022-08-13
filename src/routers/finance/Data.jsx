@@ -7,8 +7,10 @@ import DefaultHeader from "../../components/header/DefaultHeader";
 import Recommender from "../../components/finance/data/Recommender";
 import ProfitHistory from "../../components/finance/data/ProfitHistory";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function Data() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const isMobile = useSelector((state) => state.common.isMobile);
 
@@ -22,14 +24,14 @@ export default function Data() {
         <MdataBox>
           <section className="innerBox">
             <article className="titleArea">
-              <strong className="title">Trading Rewards Data</strong>
+              <strong className="title">{t("Trading Rewards Data")}</strong>
               <strong className="explain">
-                All rewards are made available through Betbit.&nbsp;
+                {t("All rewards are made available through Betbit.")}&nbsp;
                 <button
                   className="cashBackBtn"
                   onClick={() => navigate("/finance/data/cashback")}
                 >
-                  <p>Cashback settings</p>
+                  <p>{t("Cashback settings")}</p>
                   <img src={I_rtArwYellow} alt="" />
                 </button>
               </strong>
@@ -43,7 +45,7 @@ export default function Data() {
                     className={`${category === v && "on"}`}
                     onClick={() => setCategory(v)}
                   >
-                    {v}
+                    {t(v)}
                   </li>
                 ))}
               </ul>
@@ -61,14 +63,14 @@ export default function Data() {
         <PdataBox>
           <section className="innerBox">
             <article className="titleArea">
-              <strong className="title">Trading Rewards Data</strong>
+              <strong className="title">{t("Trading Rewards Data")}</strong>
               <strong className="explain">
-                All rewards are made available through Betbit.&nbsp;
+                {t("All rewards are made available through Betbit.")}&nbsp;
                 <button
                   className="cashBackBtn"
                   onClick={() => navigate("/finance/data/cashback")}
                 >
-                  <p>Cashback settings</p>
+                  <p>{t("Cashback settings")}</p>
                   <img src={I_rtArwYellow} alt="" />
                 </button>
               </strong>
@@ -82,7 +84,7 @@ export default function Data() {
                     className={`${category === v && "on"}`}
                     onClick={() => setCategory(v)}
                   >
-                    {v}
+                    {t(v)}
                   </li>
                 ))}
               </ul>

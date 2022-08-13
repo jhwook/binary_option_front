@@ -2,8 +2,10 @@ import styled from "styled-components";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
 import { useSelector } from "react-redux";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function ReqeustPopup({ off }) {
+  const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [cont, setCont] = useState("");
@@ -18,7 +20,7 @@ export default function ReqeustPopup({ off }) {
         <article className="topArea">
           <span className="blank" />
 
-          <p className="title">Submit a request</p>
+          <p className="title">{t("Submit a request")}</p>
 
           <button className="exitBtn" onClick={() => off()}>
             <img src={I_xWhite} alt="" />
@@ -33,7 +35,7 @@ export default function ReqeustPopup({ off }) {
           />
 
           <button className="sendBtn" onClick={onClickSendBtn}>
-            Send request
+          {t("Send request")}
           </button>
         </article>
       </MrequestPopupBox>
@@ -44,7 +46,7 @@ export default function ReqeustPopup({ off }) {
         <article className="topArea">
           <span className="blank" />
 
-          <p className="title">Submit a request</p>
+          <p className="title">{t("Submit a request")}</p>
 
           <button className="exitBtn" onClick={() => off()}>
             <img src={I_xWhite} alt="" />
@@ -59,7 +61,7 @@ export default function ReqeustPopup({ off }) {
           />
 
           <button className="sendBtn" onClick={onClickSendBtn}>
-            Send request
+            {t("Send request")}
           </button>
         </article>
       </PrequestPopupBox>

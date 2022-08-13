@@ -1,8 +1,10 @@
 import styled from "styled-components";
-import {  D_timeList } from "../../data/D_bet";
+import { D_timeList } from "../../data/D_bet";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 export default function BarSizePopup({ off, chartOpt, setChartOpt }) {
+  const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
 
   function onClickTimeBtn(v) {
@@ -17,7 +19,7 @@ export default function BarSizePopup({ off, chartOpt, setChartOpt }) {
   else
     return (
       <PbarSizePopupBox>
-        <p className="key">Time frames</p>
+        <p className="key">{t("Time frames")}</p>
 
         <ul className="value">
           {D_timeList.map((v, i) => (

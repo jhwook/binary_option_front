@@ -2,15 +2,16 @@ import moment from "moment";
 import styled from "styled-components";
 import I_highArwGreen from "../../../img/icon/I_highArwGreen.svg";
 import I_lowArwRed from "../../../img/icon/I_lowArwRed.svg";
-import E_Closedchart from "../../../img/example/bet/E_Closedchart.svg";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { API } from "../../../configs/api";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ClosedChartBox from "./ClosedChart";
+import { useTranslation } from "react-i18next";
 
 export default function Closed({ page }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -85,7 +86,7 @@ export default function Closed({ page }) {
           className="viewDemoBtn"
           onClick={() => navigate("/position/history")}
         >
-          View history of {page} trades
+          {t(`View history of ${page} trades`)}
         </button>
 
         <ul className="dataList">
@@ -125,7 +126,7 @@ export default function Closed({ page }) {
                           <div className="timeBox">
                             <ul className="timeList">
                               <li>
-                                <p className="key">Open time</p>
+                                <p className="key">{t("Open time")}</p>
                                 <p className="value">
                                   {moment
                                     .unix(detV.starting)
@@ -135,7 +136,7 @@ export default function Closed({ page }) {
 
                               <li>
                                 <p>
-                                  M
+                                  {t("M")}
                                   {moment(
                                     moment
                                       .unix(detV.expiry)
@@ -145,7 +146,7 @@ export default function Closed({ page }) {
                               </li>
 
                               <li>
-                                <p className="key">ClosingTime</p>
+                                <p className="key">{t("Closing Time")}</p>
                                 <p className="value">
                                   {moment.unix(detV.expiry).format("hh:mm:ss")}
                                 </p>
@@ -163,20 +164,20 @@ export default function Closed({ page }) {
                             <div className="detResBox">
                               <ul className="forcastList">
                                 <li>
-                                  <p className="key">Your forecast</p>
+                                  <p className="key">{t("Your forecast")}</p>
                                   <p className="value">
                                     {getForcast(detV.side)}
                                   </p>
                                 </li>
                                 <li>
-                                  <p className="key">Payout</p>
+                                  <p className="key">{t("Payout")}</p>
                                   <p className="value">{`$${
                                     detV.amount &&
                                     (detV.amount / 10 ** 6).toFixed(2)
                                   }`}</p>
                                 </li>
                                 <li>
-                                  <p className="key">Profit</p>
+                                  <p className="key">{t("Profit")}</p>
                                   <p className="value">{`$${Number(
                                     detV.profit_amount
                                   ).toFixed(2)}`}</p>
@@ -185,7 +186,7 @@ export default function Closed({ page }) {
 
                               <ul className="priceList">
                                 <li>
-                                  <p className="key">Open price</p>
+                                  <p className="key">{t("Open price")}</p>
 
                                   <p className="value">
                                     {detV.startingPrice
@@ -194,7 +195,7 @@ export default function Closed({ page }) {
                                   </p>
                                 </li>
                                 <li>
-                                  <p className="key">Ending price</p>
+                                  <p className="key">{t("Ending price")}</p>
 
                                   <p className="value">
                                     {detV.endingPrice
@@ -203,7 +204,7 @@ export default function Closed({ page }) {
                                   </p>
                                 </li>
                                 <li>
-                                  <p className="key">Difference</p>
+                                  <p className="key">{t("Difference")}</p>
 
                                   <p
                                     className={`${
@@ -216,7 +217,7 @@ export default function Closed({ page }) {
                                     } value point`}
                                   >{`${Number(
                                     detV.endingPrice - detV.startingPrice
-                                  ).toFixed(2)} points`}</p>
+                                  ).toFixed(2)} ${t("points")}`}</p>
                                 </li>
                               </ul>
                             </div>
@@ -238,7 +239,7 @@ export default function Closed({ page }) {
           className="viewDemoBtn"
           onClick={() => navigate("/position/history")}
         >
-          View history of {page} trades
+          {t(`View history of ${page} trades`)}
         </button>
 
         <ul className="dataList">
@@ -278,7 +279,7 @@ export default function Closed({ page }) {
                           <div className="timeBox">
                             <ul className="timeList">
                               <li>
-                                <p className="key">Open time</p>
+                                <p className="key">{t("Open time")}</p>
                                 <p className="value">
                                   {moment
                                     .unix(detV.starting)
@@ -288,7 +289,7 @@ export default function Closed({ page }) {
 
                               <li>
                                 <p>
-                                  M
+                                  {t("M")}
                                   {moment(
                                     moment
                                       .unix(detV.expiry)
@@ -298,7 +299,7 @@ export default function Closed({ page }) {
                               </li>
 
                               <li>
-                                <p className="key">ClosingTime</p>
+                                <p className="key">{t("Closing Time")}</p>
                                 <p className="value">
                                   {moment.unix(detV.expiry).format("hh:mm:ss")}
                                 </p>
@@ -316,20 +317,20 @@ export default function Closed({ page }) {
                             <div className="detResBox">
                               <ul className="forcastList">
                                 <li>
-                                  <p className="key">Your forecast</p>
+                                  <p className="key">{t("Your forecast")}</p>
                                   <p className="value">
                                     {getForcast(detV.side)}
                                   </p>
                                 </li>
                                 <li>
-                                  <p className="key">Payout</p>
+                                  <p className="key">{t("Payout")}</p>
                                   <p className="value">{`$${
                                     detV.amount &&
                                     (detV.amount / 10 ** 6).toFixed(2)
                                   }`}</p>
                                 </li>
                                 <li>
-                                  <p className="key">Profit</p>
+                                  <p className="key">{t("Profit")}</p>
                                   <p className="value">{`$${Number(
                                     detV.profit_amount
                                   ).toFixed(2)}`}</p>
@@ -338,7 +339,7 @@ export default function Closed({ page }) {
 
                               <ul className="priceList">
                                 <li>
-                                  <p className="key">Open price</p>
+                                  <p className="key">{t("Open price")}</p>
 
                                   <p className="value">
                                     {detV.startingPrice
@@ -347,7 +348,7 @@ export default function Closed({ page }) {
                                   </p>
                                 </li>
                                 <li>
-                                  <p className="key">Ending price</p>
+                                  <p className="key">{t("Ending price")}</p>
 
                                   <p className="value">
                                     {detV.endingPrice
@@ -356,7 +357,7 @@ export default function Closed({ page }) {
                                   </p>
                                 </li>
                                 <li>
-                                  <p className="key">Difference</p>
+                                  <p className="key">{t("Difference")}</p>
 
                                   <p
                                     className={`${
@@ -369,7 +370,7 @@ export default function Closed({ page }) {
                                     } value point`}
                                   >{`${Number(
                                     detV.endingPrice - detV.startingPrice
-                                  ).toFixed(2)} points`}</p>
+                                  ).toFixed(2)} ${t("points")}`}</p>
                                 </li>
                               </ul>
                             </div>

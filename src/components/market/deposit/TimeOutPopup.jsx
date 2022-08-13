@@ -1,9 +1,11 @@
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import I_x from "../../../img/icon/I_x.svg";
 import I_xWhite from "../../../img/icon/I_xWhite.svg";
 
 export default function TimeOutPopup({ off }) {
+  const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
 
   function onClickGotBtn() {
@@ -17,7 +19,7 @@ export default function TimeOutPopup({ off }) {
         <article className="topArea">
           <span className="blank" />
 
-          <p className="title">Notice</p>
+          <p className="title">{t("Notice")}</p>
 
           <button className="exitBtn" onClick={() => off()}>
             <img src={I_xWhite} alt="" />
@@ -26,13 +28,13 @@ export default function TimeOutPopup({ off }) {
 
         <article className="contArea">
           <p className="explain">
-            Request timed out! Your order has been automatically canceled.
-            Please note that up to 3 cancelations can be made per day. For more
-            information, please contact customer support.
+            {t(
+              "Request timed out! Your order has been automatically canceled. Please note that up to 3 cancelations can be made per day. For more information, please contact customer support."
+            )}
           </p>
 
           <button className="confirmBtn" onClick={onClickGotBtn}>
-            Got it
+            {t("Got it")}
           </button>
         </article>
       </MtimeOutPopupBox>
@@ -43,7 +45,7 @@ export default function TimeOutPopup({ off }) {
         <article className="topArea">
           <span className="blank" />
 
-          <p className="title">Notice</p>
+          <p className="title">{t("Notice")}</p>
 
           <button className="exitBtn" onClick={() => off()}>
             <img src={I_x} alt="" />
@@ -52,13 +54,13 @@ export default function TimeOutPopup({ off }) {
 
         <article className="contArea">
           <p className="explain">
-            Request timed out! Your order has been automatically canceled.
-            Please note that up to 3 cancelations can be made per day. For more
-            information, please contact customer support.
+            {t(
+              "Request timed out! Your order has been automatically canceled. Please note that up to 3 cancelations can be made per day. For more information, please contact customer support."
+            )}
           </p>
 
           <button className="confirmBtn" onClick={onClickGotBtn}>
-            Got it
+            {t("Got it")}
           </button>
         </article>
       </PtimeOutPopupBox>

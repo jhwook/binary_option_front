@@ -1,11 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { API } from "../../configs/api";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
 
 export default function InsufficientPopup({ off, amount, type, nextProc }) {
+  const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [balance, setBalance] = useState();
@@ -27,7 +29,7 @@ export default function InsufficientPopup({ off, amount, type, nextProc }) {
       })
       .catch((err) => {
         console.error(err);
-        localStorage.clear();
+        localStorage.removeItem("token");
       });
   }
 
@@ -39,7 +41,7 @@ export default function InsufficientPopup({ off, amount, type, nextProc }) {
     return (
       <MinsufficientPopupBox className="defaultPopup">
         <article className="topArea">
-          <p className="title">Insufficient Balance</p>
+          <p className="title">{t("Insufficient Balance")}</p>
 
           <button className="exitBtn" onClick={() => off()}>
             <img src={I_xWhite} alt="" />
@@ -49,20 +51,23 @@ export default function InsufficientPopup({ off, amount, type, nextProc }) {
         <article className="contArea">
           <ul className="balanceList">
             <li>
-              <p className="key">Your balance</p>
+              <p className="key">{t("Your balance")}</p>
               <p className="value">
-                ${type === "Live" && Number(balance?.LIVE?.avail/10**6).toFixed(2)}
-                {type === "Demo" && Number(balance?.DEMO?.avail/10**6).toFixed(2)}
+                $
+                {type === "Live" &&
+                  Number(balance?.LIVE?.avail / 10 ** 6).toFixed(2)}
+                {type === "Demo" &&
+                  Number(balance?.DEMO?.avail / 10 ** 6).toFixed(2)}
               </p>
             </li>
             <li>
-              <p className="key">Trace balance</p>
+              <p className="key">{t("Trace balance")}</p>
               <p className="value">{`$${Number(amount).toFixed(2)}`}</p>
             </li>
           </ul>
 
           <button className="addBtn" onClick={onClickConfirm}>
-            Add funds
+            {t("Add funds")}
           </button>
         </article>
       </MinsufficientPopupBox>
@@ -71,7 +76,7 @@ export default function InsufficientPopup({ off, amount, type, nextProc }) {
     return (
       <PinsufficientPopupBox className="defaultPopup">
         <article className="topArea">
-          <p className="title">Insufficient Balance</p>
+          <p className="title">{t("Insufficient Balance")}</p>
 
           <button className="exitBtn" onClick={() => off()}>
             <img src={I_xWhite} alt="" />
@@ -81,20 +86,23 @@ export default function InsufficientPopup({ off, amount, type, nextProc }) {
         <article className="contArea">
           <ul className="balanceList">
             <li>
-              <p className="key">Your balance</p>
+              <p className="key">{t("Your balance")}</p>
               <p className="value">
-                ${type === "Live" && Number(balance?.LIVE?.avail/10**6).toFixed(2)}
-                {type === "Demo" && Number(balance?.DEMO?.avail/10**6).toFixed(2)}
+                $
+                {type === "Live" &&
+                  Number(balance?.LIVE?.avail / 10 ** 6).toFixed(2)}
+                {type === "Demo" &&
+                  Number(balance?.DEMO?.avail / 10 ** 6).toFixed(2)}
               </p>
             </li>
             <li>
-              <p className="key">Trace balance</p>
+              <p className="key">{t("Trace balance")}</p>
               <p className="value">{`$${Number(amount).toFixed(2)}`}</p>
             </li>
           </ul>
 
           <button className="addBtn" onClick={onClickConfirm}>
-            Add funds
+            {t("Add funds")}
           </button>
         </article>
       </PinsufficientPopupBox>

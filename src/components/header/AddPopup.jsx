@@ -1,13 +1,14 @@
 import axios from "axios";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { API } from "../../configs/api";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
 
 export default function AddPopup({ off }) {
+  const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
-  const token = localStorage.getItem("token");
 
   const [amount, setAmount] = useState("");
 
@@ -27,7 +28,7 @@ export default function AddPopup({ off }) {
         <article className="topArea">
           <span className="blank" />
 
-          <p className="title">Add</p>
+          <p className="title">{t("Add")}</p>
 
           <button className="exitBtn" onClick={() => off()}>
             <img src={I_xWhite} alt="" />
@@ -36,7 +37,7 @@ export default function AddPopup({ off }) {
 
         <article className="contArea">
           <div className="inputCont">
-            <p className="key">Add virtual money on Demo account</p>
+            <p className="key">{t("Add virtual money on Demo account")}</p>
             <div className="value">
               <input
                 value={amount}
@@ -49,7 +50,7 @@ export default function AddPopup({ off }) {
           </div>
 
           <button className="addBtn" onClick={onClickAddBtn}>
-            Add funds
+            {t("Add funds")}
           </button>
         </article>
       </MaddPopupBox>
@@ -60,7 +61,7 @@ export default function AddPopup({ off }) {
         <article className="topArea">
           <span className="blank" />
 
-          <p className="title">Add</p>
+          <p className="title">{t("Add")}</p>
 
           <button className="exitBtn" onClick={() => off()}>
             <img src={I_xWhite} alt="" />
@@ -69,7 +70,7 @@ export default function AddPopup({ off }) {
 
         <article className="contArea">
           <div className="inputCont">
-            <p className="key">Add virtual money on Demo account</p>
+            <p className="key">{t("Add virtual money on Demo account")}</p>
             <div className="value">
               <input
                 value={amount}
@@ -82,7 +83,7 @@ export default function AddPopup({ off }) {
           </div>
 
           <button className="addBtn" onClick={onClickAddBtn}>
-            Add funds
+            {t("Add funds")}
           </button>
         </article>
       </PaddPopupBox>
