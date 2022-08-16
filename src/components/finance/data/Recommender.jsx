@@ -64,7 +64,7 @@ export default function Recommender() {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [page]);
 
   if (isMobile)
     return (

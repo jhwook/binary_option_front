@@ -1,16 +1,34 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { API } from "../../configs/api";
 import I_x from "../../img/icon/I_x.svg";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
-import { GetTier, GetTierByLevel } from "../../util/Util";
+import { getBigCount, GetTier, GetTierByLevel } from "../../util/Util";
 
-export default function ProfPopup({ off, offAll, userData }) {
+export default function ProfPopup({ off, offAll }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const isMobile = useSelector((state) => state.common.isMobile);
 
+  const [data, setData] = useState("");
+
+  function getData() {
+    axios
+      .get(API.MY_POSITION)
+      .then(({ data }) => {
+        console.log(data.result);
+        setData(data.result);
+      })
+      .catch(console.error);
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
   function onClickLogOutBtn() {
     localStorage.removeItem("token");
     navigate("/");
@@ -37,13 +55,13 @@ export default function ProfPopup({ off, offAll, userData }) {
 
         <article className="contArea">
           <div className="profBox">
-            <img className="tierImg" src={GetTierByLevel(0).img} alt="" />
+            <img src={GetTierByLevel(data.level)?.img} alt="" />
 
             <div className="textBox">
-              <p className="id">
-                {userData.firstname + ", " + userData.lastname}
-              </p>
-              <p className="pos">{GetTierByLevel(0).text}</p>
+              <p className="id">{data.firstName + ", " + data.lastName}</p>
+              <strong className="pos">
+                {t(GetTierByLevel(data.level)?.text)}
+              </strong>
             </div>
           </div>
 
@@ -57,19 +75,19 @@ export default function ProfPopup({ off, offAll, userData }) {
             <ul className="infoList">
               <li>
                 <p className="key">{t("Deals")}</p>
-                <p className="value">0</p>
+                <p className="value">{data.deal}</p>
               </li>
               <li>
                 <p className="key">{t("Trading turnover")}</p>
-                <p className="value">$0</p>
+                <p className="value">${getBigCount(data.trading_turnover)}</p>
               </li>
               <li>
                 <p className="key">{t("Net turnover")}</p>
-                <p className="value">$0</p>
+                <p className="value">${getBigCount(data.net_turnover)}</p>
               </li>
               <li>
                 <p className="key">{t("Trading profit")}</p>
-                <p className="value">$0</p>
+                <p className="value">${getBigCount(data.trading_turnover)}</p>
               </li>
             </ul>
           </div>
@@ -140,13 +158,13 @@ export default function ProfPopup({ off, offAll, userData }) {
         </button>
 
         <div className="profBox">
-          <img className="tierImg" src={GetTierByLevel(0).img} alt="" />
+          <img src={GetTierByLevel(data.level)?.img} alt="" />
 
           <div className="textBox">
-            <p className="id">
-              {userData.firstname + ", " + userData.lastname}
-            </p>
-            <p className="pos">{GetTierByLevel(0).text}</p>
+            <p className="id">{data.firstName + ", " + data.lastName}</p>
+            <strong className="pos">
+              {t(GetTierByLevel(data.level)?.text)}
+            </strong>
           </div>
         </div>
 
@@ -160,19 +178,19 @@ export default function ProfPopup({ off, offAll, userData }) {
           <ul className="infoList">
             <li>
               <p className="key">{t("Deals")}</p>
-              <p className="value">0</p>
+              <p className="value">{data.deal}</p>
             </li>
             <li>
               <p className="key">{t("Trading turnover")}</p>
-              <p className="value">$0</p>
+              <p className="value">${getBigCount(data.trading_turnover)}</p>
             </li>
             <li>
               <p className="key">{t("Net turnover")}</p>
-              <p className="value">$0</p>
+              <p className="value">${getBigCount(data.net_turnover)}</p>
             </li>
             <li>
               <p className="key">{t("Trading profit")}</p>
-              <p className="value">$0</p>
+              <p className="value">${getBigCount(data.trading_turnover)}</p>
             </li>
           </ul>
         </div>

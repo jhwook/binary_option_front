@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import I_plusWhite from "../../img/icon/I_plusWhite.svg";
 import I_minusWhite from "../../img/icon/I_minusWhite.svg";
-import { useState } from "react";
 import { D_timeBtnList } from "../../data/D_bet";
 import { useSelector } from "react-redux";
 

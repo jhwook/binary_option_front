@@ -90,7 +90,9 @@ export default function MenuPopup({ off, userData }) {
         <article className="contArea">
           <ul className="navList">
             {D_headerList.map((v, i) =>
-              v.key === "Finance" && userData.isadmin !== 1 ? (
+              v.key === "Finance" &&
+              userData.isadmin !== 1 &&
+              userData.isadmin !== 3 ? (
                 <Fragment key={i} />
               ) : v.det ? (
                 <li key={i}>

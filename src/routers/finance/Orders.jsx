@@ -158,7 +158,7 @@ export default function Orders() {
   function getData(arg) {
     let params = {};
 
-    console.log(arg?.filter);
+
 
     if (arg?.filter) {
       params.startDate = startDate;
@@ -194,7 +194,7 @@ export default function Orders() {
 
   useEffect(() => {
     getData();
-  }, [page]);
+  }, [page, startDate, endDate]);
 
   if (isMobile)
     return (

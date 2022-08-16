@@ -8,6 +8,7 @@ export const API = {
   AUTH: URL + "/users/auth",
   REFRESH: URL + "/users/refresh",
   EDIT_REF: URL + "/users/edit/ref",
+  MY_POSITION: URL + "/users/my/position",
   USER_PROFILE: URL + "/users/profile",
   USER_SEND_CERTIFICATION: URL + "/users/send/verification", //:type
   USER_VERIFY: URL + "/users/verify", //:type/:code

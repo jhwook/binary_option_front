@@ -4,14 +4,31 @@ import DefaultHeader from "../../components/header/DefaultHeader";
 import T_dia from "../../img/tier/T_dia.svg";
 import I_upPolGreen from "../../img/icon/I_upPolGreen.svg";
 import { useTranslation } from "react-i18next";
-import { GetTierByLevel } from "../../util/Util";
+import { getBigCount, GetTierByLevel } from "../../util/Util";
+import axios from "axios";
+import { API } from "../../configs/api";
+import { useEffect, useState } from "react";
 
 export default function MyPosition() {
   const { t } = useTranslation();
 
   const isMobile = useSelector((state) => state.common.isMobile);
 
-  function userData() {}
+  const [data, setData] = useState("");
+
+  function getData() {
+    axios
+      .get(API.MY_POSITION)
+      .then(({ data }) => {
+        console.log(data.result);
+        setData(data.result);
+      })
+      .catch(console.error);
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   if (isMobile)
     return (
@@ -22,23 +39,25 @@ export default function MyPosition() {
           <section className="innerBox">
             <article className="posArea">
               <span className="posBox">
-                <img src={GetTierByLevel(0).img} alt="" />
+                <img src={GetTierByLevel(data.level)?.img} alt="" />
 
                 <div className="textBox">
-                  <strong className="pos">{t(GetTierByLevel(0).text)}</strong>
+                  <strong className="pos">
+                    {t(GetTierByLevel(data.level)?.text)}
+                  </strong>
 
-                  <p className="cashBack">{`Cashback 0%`}</p>
+                  <p className="cashBack">{`Cashback ${data.cashback}%`}</p>
                 </div>
               </span>
 
               <ul className="balanceList">
                 <li>
                   <p className="key">{t("Total")}</p>
-                  <strong className="value">60 USDT</strong>
+                  <strong className="value">{data.total} USDT</strong>
                 </li>
                 <li>
                   <p className="key">{t("Safe Balance")}</p>
-                  <strong className="value">60 USDT</strong>
+                  <strong className="value">{data.safeBalance} USDT</strong>
                 </li>
               </ul>
             </article>
@@ -49,13 +68,20 @@ export default function MyPosition() {
                   <p className="key">{t("Positions")}</p>
 
                   <div className="value">
-                    <strong className="price">${(0).toFixed(2)}</strong>
+                    <strong className="price">
+                      ${data.today_betamount && data.today_betamount.toFixed(2)}
+                    </strong>
 
                     <div className="changeBox">
                       <img src={I_upPolGreen} alt="" />
 
                       <span className="text">
-                        <p className="change">$0.00 (0.00%)</p>&nbsp;
+                        <p className="change">
+                          $
+                          {data.today_win_amount &&
+                            data.today_win_amount.toFixed(2)}{" "}
+                          ({data.profit_today}%)
+                        </p>
                         <p className="time">{t("Today")}</p>
                       </span>
                     </div>
@@ -65,41 +91,49 @@ export default function MyPosition() {
                 <div className="detPriceList">
                   <li>
                     <p className="key">{t("Deals")}</p>
-                    <p className="value">0</p>
+                    <p className="value">
+                      ${getBigCount(data.total_betamount)}
+                    </p>
                   </li>
                   <li>
                     <p className="key">{t("Trading profit")}</p>
-                    <p className="value">$0</p>
+                    <p className="value">
+                      ${getBigCount(data.total_win_amount)}
+                    </p>
                   </li>
                   <li>
                     <p className="key">{t("Profitable deals")}</p>
-                    <p className="value">0%</p>
+                    <p className="value">{data.total_profit}%</p>
                   </li>
 
                   <li>
                     <p className="key">{t("Average profit")}</p>
-                    <p className="value">$0</p>
+                    <p className="value">${getBigCount(data.average_profit)}</p>
                   </li>
                   <li>
                     <p className="key">{t("Net turnover")}</p>
-                    <p className="value">$0</p>
+                    <p className="value">${getBigCount(data.net_turnover)}</p>
                   </li>
                   <li>
                     <p className="key">{t("Hedged trades")}</p>
-                    <p className="value">$0</p>
+                    <p className="value">${getBigCount(data.hedged_trades)}</p>
                   </li>
 
                   <li>
                     <p className="key">{t("Min trade amount")}</p>
-                    <p className="value">$0</p>
+                    <p className="value">
+                      ${getBigCount(data.min_trade_amount)}
+                    </p>
                   </li>
                   <li>
                     <p className="key">{t("Max trade amount")}</p>
-                    <p className="value">$0</p>
+                    <p className="value">
+                      ${getBigCount(data.max_trade_amount)}
+                    </p>
                   </li>
                   <li>
                     <p className="key">{t("Max trade profit")}</p>
-                    <p className="value">$0</p>
+                    <p className="value">${getBigCount(data.max_profit)}</p>
                   </li>
                 </div>
               </div>
@@ -115,23 +149,25 @@ export default function MyPosition() {
         <section className="innerBox">
           <article className="posArea">
             <span className="posBox">
-              <img src={GetTierByLevel(0).img} alt="" />
+              <img src={GetTierByLevel(data.level)?.img} alt="" />
 
               <div className="textBox">
-                <strong className="pos">{t(GetTierByLevel(0).text)}</strong>
+                <strong className="pos">
+                  {t(GetTierByLevel(data.level)?.text)}
+                </strong>
 
-                <p className="cashBack">{`Cashback 0%`}</p>
+                <p className="cashBack">{`Cashback ${data.cashback}%`}</p>
               </div>
             </span>
 
             <ul className="balanceList">
               <li>
                 <p className="key">{t("Total")}</p>
-                <strong className="value">60 USDT</strong>
+                <strong className="value">{data.total} USDT</strong>
               </li>
               <li>
                 <p className="key">{t("Safe Balance")}</p>
-                <strong className="value">60 USDT</strong>
+                <strong className="value">{data.safeBalance} USDT</strong>
               </li>
             </ul>
           </article>
@@ -142,13 +178,21 @@ export default function MyPosition() {
                 <p className="key">{t("Positions")}</p>
 
                 <div className="value">
-                  <strong className="price">${(0).toFixed(2)}</strong>
+                  <strong className="price">
+                    ${data.today_betamount && data.today_betamount.toFixed(2)}
+                  </strong>
 
                   <div className="changeBox">
                     <img src={I_upPolGreen} alt="" />
 
                     <span className="text">
-                      <p className="change">$0.00 (0.00%)</p>&nbsp;
+                      <p className="change">
+                        $
+                        {data.today_win_amount &&
+                          data.today_win_amount.toFixed(2)}{" "}
+                        ({data.profit_today}%)
+                      </p>
+                      &nbsp;
                       <p className="time">{t("Today")}</p>
                     </span>
                   </div>
@@ -159,43 +203,51 @@ export default function MyPosition() {
                 <li>
                   <div>
                     <p className="key">{t("Deals")}</p>
-                    <p className="value">0</p>
+                    <p className="value">
+                      ${getBigCount(data.total_betamount)}
+                    </p>
                   </div>
                   <div>
                     <p className="key">{t("Trading profit")}</p>
-                    <p className="value">$0</p>
+                    <p className="value">
+                      ${getBigCount(data.total_win_amount)}
+                    </p>
                   </div>
                   <div>
                     <p className="key">{t("Profitable deals")}</p>
-                    <p className="value">0%</p>
+                    <p className="value">{data.total_profit}%</p>
                   </div>
                 </li>
                 <li>
                   <div>
                     <p className="key">{t("Average profit")}</p>
-                    <p className="value">$0</p>
+                    <p className="value">${getBigCount(data.average_profit)}</p>
                   </div>
                   <div>
                     <p className="key">{t("Net turnover")}</p>
-                    <p className="value">$0</p>
+                    <p className="value">${getBigCount(data.net_turnover)}</p>
                   </div>
                   <div>
                     <p className="key">{t("Hedged trades")}</p>
-                    <p className="value">$0</p>
+                    <p className="value">${getBigCount(data.hedged_trades)}</p>
                   </div>
                 </li>
                 <li>
                   <div>
                     <p className="key">{t("Min trade amount")}</p>
-                    <p className="value">$0</p>
+                    <p className="value">
+                      ${getBigCount(data.min_trade_amount)}
+                    </p>
                   </div>
                   <div>
                     <p className="key">{t("Max trade amount")}</p>
-                    <p className="value">$0</p>
+                    <p className="value">
+                      ${getBigCount(data.max_trade_amount)}
+                    </p>
                   </div>
                   <div>
                     <p className="key">{t("Max trade profit")}</p>
-                    <p className="value">$0</p>
+                    <p className="value">${getBigCount(data.max_profit)}</p>
                   </div>
                 </li>
               </div>
@@ -494,7 +546,7 @@ const PmyPositionBox = styled.main`
             display: flex;
             flex-direction: column;
             gap: 10px;
-            padding: 0 20px;
+            padding: 0 14px;
             font-size: 14px;
 
             &:nth-of-type(n + 2) {

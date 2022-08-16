@@ -239,13 +239,13 @@ export function setToast({ type, cont, assetInfo, amount, profit }) {
 export function GetTierByLevel(v) {
   switch (v) {
     case 0:
-      return { text: "Bronze", img: T_bronze };
-    case 1:
-      return { text: "Silver", img: T_silver };
-    case 2:
-      return { text: "Gold", img: T_gold };
-    case 3:
       return { text: "Diamond", img: T_dia };
+    case 1:
+      return { text: "Gold", img: T_gold };
+    case 2:
+      return { text: "Silver", img: T_silver };
+    case 3:
+      return { text: "Bronze", img: T_bronze };
     default:
       return null;
   }
@@ -344,4 +344,17 @@ export function getTier(level) {
     default:
       break;
   }
+}
+
+export function getBigCount(num) {
+  if (!num) return;
+
+  let _num = Number(num);
+
+  if (_num > 10 ** 9) return `${Math.floor(_num / 10 ** (9 - 2)) / 10 ** 2}B`;
+  else if (_num > 10 ** 6)
+    return `${Math.floor(_num / 10 ** (6 - 2)) / 10 ** 2}M`;
+  else if (_num > 10 ** 3)
+    return `${Math.floor(_num / 10 ** (3 - 2)) / 10 ** 2}K`;
+  else return Math.floor(_num * 10 ** 2) / 10 ** 2;
 }

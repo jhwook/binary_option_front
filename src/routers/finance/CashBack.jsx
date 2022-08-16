@@ -58,90 +58,54 @@ export default function CashBack() {
 
         <McashBackBox>
           <section className="innerBox">
-            <article className="posArea">
-              <span className="posBox">
-                <img src={T_dia} alt="" />
-
-                <div className="textBox">
-                  <strong className="pos">Diamond</strong>
-
-                  <p className="cashBack">{`Cashback 0%`}</p>
-                </div>
-              </span>
-
-              <ul className="balanceList">
-                <li>
-                  <p className="key">Total</p>
-                  <strong className="value">60 USDT</strong>
-                </li>
-                <li>
-                  <p className="key">Safe Balance</p>
-                  <strong className="value">60 USDT</strong>
-                </li>
-              </ul>
+            <article className="titleArea">
+              <strong className="title">{t("Recommender Fee Rates")}</strong>
+              <p className="explain">
+                {t("Fee setting for transaction amount by sub-account")}
+              </p>
             </article>
 
-            <article className="detArea">
-              <div className="detBox">
-                <div className="posBox">
-                  <p className="key">Positions</p>
+            <article className="rateArea">
+              <ul className="rateList">
+                {[...listData].reverse().map((v, i) => (
+                  <li key={i}>
+                    <div className="imgBox">
+                      <img src={v.imgurl} alt="" />
 
-                  <div className="value">
-                    <strong className="price">${(0).toFixed(2)}</strong>
-
-                    <div className="changeBox">
-                      <img src={I_upPolGreen} alt="" />
-
-                      <span className="text">
-                        <p className="change">$0.00 (0.00%)</p>&nbsp;
-                        <p className="time">Today</p>
-                      </span>
+                      <span className="name">{t(v.levelstr_disp)}</span>
                     </div>
-                  </div>
-                </div>
 
-                <div className="detPriceList">
-                  <li>
-                    <p className="key">Deals:</p>
-                    <p className="value">0</p>
-                  </li>
-                  <li>
-                    <p className="key">Trading profit</p>
-                    <p className="value">$0</p>
-                  </li>
-                  <li>
-                    <p className="key">Profitable deals:</p>
-                    <p className="value">0%</p>
-                  </li>
+                    <div className="andBar">
+                      <div className="line" />
+                      <p>{t("and")}</p>
+                      <div className="line" />
+                    </div>
 
-                  <li>
-                    <p className="key">Average profit:</p>
-                    <p className="value">$0</p>
-                  </li>
-                  <li>
-                    <p className="key">Net turnover:</p>
-                    <p className="value">$0</p>
-                  </li>
-                  <li>
-                    <p className="key">Hedged trades:</p>
-                    <p className="value">$0</p>
-                  </li>
+                    <div className="setBox">
+                      <div className="inputBox">
+                        <input
+                          value={v.fee}
+                          onChange={(e) => onChangeSettingList(e, i)}
+                        />
 
-                  <li>
-                    <p className="key">Min trade amount:</p>
-                    <p className="value">$0</p>
+                        <strong className="unit">%</strong>
+
+                        <button
+                          className="saveBtn"
+                          onClick={() => onClickSaveBtn(i)}
+                        >
+                          {t("Save")}
+                        </button>
+                      </div>
+
+                      <p className="key">
+                        {i + 1}
+                        {t("st level")}
+                      </p>
+                    </div>
                   </li>
-                  <li>
-                    <p className="key">Max trade amount:</p>
-                    <p className="value">$0</p>
-                  </li>
-                  <li>
-                    <p className="key">Max trade profit:</p>
-                    <p className="value">$0</p>
-                  </li>
-                </div>
-              </div>
-              <div className="chartBox"></div>
+                ))}
+              </ul>
             </article>
           </section>
         </McashBackBox>
@@ -190,7 +154,10 @@ export default function CashBack() {
                     </button>
                   </div>
 
-                  <p className="key">{i + 1}{t("st level")}</p>
+                  <p className="key">
+                    {i + 1}
+                    {t("st level")}
+                  </p>
                 </div>
               </li>
             ))}
@@ -206,137 +173,148 @@ const McashBackBox = styled.main`
   .innerBox {
     display: flex;
     flex-direction: column;
+    gap: 40px;
     height: 100%;
     overflow-y: scroll;
 
-    .posArea {
-      .posBox {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 14px 20px;
+    .titleArea {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 0 20px;
 
-        img {
-          height: 74px;
-        }
-
-        .textBox {
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
-
-          .pos {
-            font-size: 20px;
-          }
-
-          .cashBack {
-            font-size: 14px;
-            opacity: 0.4;
-          }
-        }
+      .title {
+        font-size: 20px;
       }
 
-      .balanceList {
-        display: flex;
-        padding: 12px 0;
-        border-top: 1px solid rgba(255, 255, 255, 0.2);
-
-        li {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-          padding: 4px 20px;
-
-          &:nth-of-type(n + 2) {
-            border-left: 1px solid rgba(255, 255, 255, 0.2);
-          }
-
-          .key {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.4);
-          }
-
-          .value {
-            font-size: 16px;
-          }
-        }
+      .explain {
+        font-size: 14px;
+        opacity: 0.6;
       }
     }
 
-    .detArea {
-      .detBox {
-        .posBox {
-          display: flex;
-          flex-direction: column;
-          gap: 14px;
-          padding: 16px 20px;
-          border-top: 1px solid rgba(255, 255, 255, 0.2);
+    .rateArea {
+      padding: 0 20px;
+      
+      .rateList {
+        display: flex;
+        overflow-x: scroll;
+        padding: 50px 14px 44px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        box-shadow: inset 40px 0px 40px 0px rgba(10, 14, 23, 0.7),
+          inset -40px 0px 40px 0px rgba(10, 14, 23, 0.7);
 
-          .key {
-            font-size: 14px;
-            opacity: 0.4;
+        li {
+          flex: 1;
+          min-width: 260px;
+          width: 260px;
+          padding: 0 30px;
+
+          &:first-of-type{
+            
           }
 
-          .value {
+          &:nth-of-type(n + 2) {
+            border-left: 1px solid rgba(255, 255, 255, 0.14);
+          }
+
+          .imgBox {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 200px;
+            height: 190px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 14px;
+            position: relative;
+
+            img {
+              width: 78px;
+            }
+
+            .name {
+              height: 34px;
+              padding: 0 14px;
+              font-size: 14px;
+              font-weight: 700;
+              line-height: 34px;
+              color: #f7ab1f;
+              background: rgba(247, 171, 31, 0.1);
+              border: 1.4px solid #f7ab1f;
+              border-radius: 20px;
+              box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.4);
+              top: -17px;
+              right: -10px;
+              position: absolute;
+            }
+          }
+
+          .andBar {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            margin: 12px 0 0;
+            font-size: 14px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.6);
+
+            .line {
+              flex: 1;
+              height: 1px;
+              background: rgba(255, 255, 255, 0.14);
+            }
+          }
+
+          .setBox {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 14px;
+            margin: 18px 0 0;
 
-            .price {
-              font-size: 24px;
-            }
-
-            .changeBox {
+            .inputBox {
               display: flex;
               align-items: center;
-              gap: 4px;
+              height: 40px;
+              padding: 0 18px;
+              background: rgba(0, 0, 0, 0.14);
+              border-radius: 10px;
 
-              img {
-                width: 10px;
+              &:focus-within {
+                background: rgba(255, 255, 255, 0.1);
+
+                .unit {
+                  display: none;
+                }
+
+                .saveBtn {
+                  display: inline-block;
+
+                  &:hover {
+                    opacity: 1;
+                  }
+                }
               }
 
-              .text {
-                display: flex;
+              input {
+                flex: 1;
                 font-size: 14px;
+              }
 
-                .change {
-                  color: #3fb68b;
-                }
-
-                .time {
-                  opacity: 0.4;
-                }
+              .saveBtn {
+                display: none;
+                font-size: 14px;
+                font-weight: 700;
+                opacity: 0.4;
               }
             }
-          }
-        }
-
-        .detPriceList {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-          padding: 16px 20px;
-          font-size: 14px;
-          border-top: 1px solid rgba(255, 255, 255, 0.2);
-
-          li {
-            display: flex;
-            justify-content: space-between;
 
             .key {
-              white-space: nowrap;
-              opacity: 0.4;
+              font-size: 14px;
+              opacity: 0.6;
             }
           }
         }
-      }
-
-      .chartBox {
-        min-width: 730px;
-        width: 730px;
-        border-left: 1px solid rgba(255, 255, 255, 0.2);
       }
     }
   }

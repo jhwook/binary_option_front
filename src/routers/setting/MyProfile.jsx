@@ -15,7 +15,6 @@ export default function MyProfile({ userData }) {
   const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
 
-  const [profData, setProfData] = useState("");
   const [uid, setUid] = useState("");
   const [pw, setPw] = useState("");
   const [changePw, setChangePw] = useState(false);
@@ -108,11 +107,15 @@ export default function MyProfile({ userData }) {
     axios.patch(`${API.USER_PROFILE}`, patchData).then(({ data }) => {
       console.log(data);
 
-      if (data.message === "successfully updated") window.location.reload();
-      else setToast({ type: "alarm", cont: data.message });
+      if (data.message === "CHANGED") {
+        setToast({ type: "alarm", cont: t("Your changes have been saved.") });
+        localStorage.setItem("token", data.jwttoken.tokenId);
+        
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
+      } else setToast({ type: "alarm", cont: data.message });
     });
-
-    setToast({ type: "alarm", cont: t("Your changes have been saved.") });
   }
 
   useEffect(() => {
@@ -239,7 +242,7 @@ export default function MyProfile({ userData }) {
                   <div className="value">
                     <input
                       type="email"
-                      disabled={profData.email}
+                      disabled={userData.email}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder=""
@@ -315,7 +318,7 @@ export default function MyProfile({ userData }) {
                     <input
                       type="number"
                       value={phone}
-                      disabled={profData.phone}
+                      disabled={userData.phone}
                       onChange={(e) => setPhone(e.target.value)}
                       placeholder=""
                       onBlur={onBlurPhone}
@@ -493,7 +496,7 @@ export default function MyProfile({ userData }) {
                     <div className="inputBox">
                       <input
                         type="email"
-                        disabled={profData.email}
+                        disabled={userData.email}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder=""
@@ -574,7 +577,7 @@ export default function MyProfile({ userData }) {
                       <input
                         type="number"
                         value={phone}
-                        disabled={profData.phone}
+                        disabled={userData.phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder=""
                         onBlur={onBlurPhone}

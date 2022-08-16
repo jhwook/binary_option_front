@@ -11,7 +11,6 @@ import I_lowArwRed from "../../img/icon/I_lowArwRed.svg";
 import I_plusWhite from "../../img/icon/I_plusWhite.svg";
 import I_timeWhite from "../../img/icon/I_timeWhite.svg";
 import I_barChartWhite from "../../img/icon/I_barChartWhite.svg";
-import I_candleChartWhite from "../../img/icon/I_candleChartWhite.svg";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import LiveTradePopup from "../../components/bet/LiveTradePopup";
 import PopupBg from "../../components/common/PopupBg";
@@ -22,33 +21,19 @@ import DetBox from "../../components/bet/detBox/DetBox";
 import InsufficientPopup from "../../components/bet/InsufficientPopup";
 import MyBalancePopup from "../../components/header/MyBalancePopup";
 import AddPopup from "../../components/header/AddPopup";
+import ReactTradingviewWidget, { Themes } from "react-tradingview-widget";
 import axios from "axios";
 import { API } from "../../configs/api";
 import LoadingBar from "../../components/common/LoadingBar";
-import {
-  D_amountTypeList,
-  D_timeList,
-  D_tokenCategoryList,
-} from "../../data/D_bet";
+import { D_amountTypeList, D_tokenCategoryList } from "../../data/D_bet";
 import { getDividFromData, setToast } from "../../util/Util";
 import { setBetFlag } from "../../reducers/bet";
 import { socketIo } from "../../util/socket";
-import BetChart from "../../components/bet/BetChart";
-import ChartTypePopup from "../../components/bet/ChartTypePopup";
-import BarSizePopup from "../../components/bet/BarSizePopup";
-import ChartOptPopup from "../../components/bet/ChartOptPopup";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
-import SelLngPopup from "../../components/header/SelLngPopup";
 
 export default function Live() {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
   const hoverRef1 = useRef();
   const hoverRef2 = useRef();
-  const chartRef = useRef();
+  const dispatch = useDispatch();
   const isMobile = useSelector((state) => state.common.isMobile);
   const openedData = useSelector((state) => state.bet.openedData);
   const tokenPopupData = useSelector((state) => state.bet.tokenPopupData);
@@ -67,22 +52,6 @@ export default function Live() {
   const [amount, setAmount] = useState("");
   const [amountMode, setAmountMode] = useState(D_amountTypeList[0]);
   const [bookMark, setBookMark] = useState([]);
-  const [chartWidth, setChartWidth] = useState({
-    width: window.innerWidth * 2,
-    per: 1,
-  });
-  const [dragX, setDragX] = useState("");
-  const [chartOptPopup, setChartOptPopup] = useState(false);
-  const [chartTypePopup, setChartTypePopup] = useState(false);
-  const [barSizePopup, setBarSizePopup] = useState(false);
-  const [chartOpt, setChartOpt] = useState({
-    width: window.innerWidth * 2,
-    type: "candlestick",
-    typeStr: "Candles",
-    barSize: D_timeList[0].value,
-    barSizeStr: D_timeList[0].key,
-  });
-  const [lngPopup, setLngPopup] = useState(false);
 
   function getAssetList() {
     axios
@@ -128,7 +97,7 @@ export default function Live() {
       })
       .catch((err) => {
         console.error(err);
-        localStorage.removeItem("token");
+        localStorage.clear();
       });
   }
 
@@ -239,31 +208,6 @@ export default function Live() {
     );
   }
 
-  function onWheelChart(e) {
-    e.stopPropagation();
-
-    if (e.deltaY < 0 && chartWidth.width > window.innerWidth)
-      setChartWidth({ ...chartWidth, per: chartWidth.per - 0.01 });
-    else if (e.deltaY > 0 && chartWidth.width < window.innerWidth * 3)
-      setChartWidth({ ...chartWidth, per: chartWidth.per + 0.01 });
-  }
-
-  function onDragChartBox(e) {
-    if (!dragX) return;
-
-    let diffX = e.clientX - dragX;
-
-    if (
-      chartRef.current.scrollLeft - diffX > 0 &&
-      chartRef.current.scrollLeft - diffX < chartWidth.width * chartWidth.per
-    ) {
-      chartRef.current.scrollTo({
-        left: chartRef.current.scrollLeft - diffX,
-        behavior: "smooth",
-      });
-    }
-  }
-
   useLayoutEffect(() => {
     localStorage.setItem("balanceType", "Live");
   }, []);
@@ -277,15 +221,6 @@ export default function Live() {
 
     chkMinimumBalance();
   }, []);
-
-  useEffect(() => {
-    if (!chartRef.current) return;
-
-    chartRef.current.scrollTo({
-      left: 99999,
-      behavior: "smooth",
-    });
-  }, [chartRef.current]);
 
   useEffect(() => {
     if (!socketIo) return;
@@ -313,24 +248,16 @@ export default function Live() {
             <MbetBox>
               <section className="innerBox">
                 <article className="contArea">
-                  <div className="chartCont">
-                    <div className="chartBox">
-                      <div
-                        id="Chart"
-                        className="chart"
-                        style={{
-                          width: chartWidth.width * chartWidth.per,
-                        }}
-                      >
-                        <BetChart
-                          assetInfo={assetInfo}
-                          chartWidth={chartWidth}
-                          setChartWidth={setChartWidth}
-                          chartOpt={chartOpt}
-                          openedData={openedData}
-                        />
-                      </div>
-                    </div>
+                  <div className="chartBox">
+                    <ReactTradingviewWidget
+                      symbol={assetInfo.dispSymbol}
+                      theme={Themes.DARK}
+                      locale="kr"
+                      autosize
+                      interval="1"
+                      timezone="Asia/Seoul"
+                      allow_symbol_change={false}
+                    />
 
                     <span className="utilBox">
                       <ul className="btnList">
@@ -354,26 +281,6 @@ export default function Live() {
                             </>
                           )}
                         </li>
-
-                        <li>
-                          <button
-                            className="chartOptBtn"
-                            onClick={() => setChartOptPopup(true)}
-                          >
-                            <img src={I_candleChartWhite} alt="" />
-                          </button>
-
-                          {chartOptPopup && (
-                            <>
-                              <ChartOptPopup
-                                off={setChartOptPopup}
-                                chartOpt={chartOpt}
-                                setChartOpt={setChartOpt}
-                              />
-                              <PopupBg off={setChartOptPopup} />
-                            </>
-                          )}
-                        </li>
                       </ul>
 
                       <button
@@ -388,7 +295,7 @@ export default function Live() {
                   <div className="actionBox">
                     <div className="infoBox">
                       <div className="timeBox contBox">
-                        <p className="key">{t("Time")}</p>
+                        <p className="key">Time</p>
 
                         <div className="value">
                           <button
@@ -418,7 +325,7 @@ export default function Live() {
                       </div>
 
                       <div className="amountBox contBox">
-                        <p className="key">{t("Amount")}</p>
+                        <p className="key">Amount</p>
 
                         <div className="value">
                           <p className="unit">$</p>
@@ -451,7 +358,7 @@ export default function Live() {
                           onClick={() => onClickPayBtn("HIGH")}
                         >
                           <img src={I_highArwGreen} alt="" />
-                          <p>{t("HIGH")}</p>
+                          <p>HIGH</p>
                         </button>
 
                         <p className="rate">
@@ -474,7 +381,7 @@ export default function Live() {
                           onClick={() => onClickPayBtn("LOW")}
                         >
                           <img src={I_lowArwRed} alt="" />
-                          <p>{t("LOW")}</p>
+                          <p>LOW</p>
                         </button>
 
                         <p className="rate">
@@ -547,7 +454,7 @@ export default function Live() {
           <LoadingBar />
         ) : (
           <>
-            <PbetBox onMouseUp={() => setDragX("")}>
+            <PbetBox>
               <section className="innerBox">
                 <article className="tokenArea">
                   <div className="selectBox">
@@ -594,93 +501,34 @@ export default function Live() {
                 </article>
 
                 <article className="contArea">
-                  <div className="chartCont">
-                    <div className="utilBox">
-                      <ul className="btnList">
-                        <li>
-                          <button
-                            className="utilBtn"
-                            onClick={() => setBarSizePopup(true)}
-                          >
-                            <p>{chartOpt.barSizeStr}</p>
-                          </button>
-
-                          <p className="info">{`Time frames : ${chartOpt.barSizeStr}`}</p>
-                        </li>
-
-                        {barSizePopup && (
-                          <>
-                            <BarSizePopup
-                              off={setBarSizePopup}
-                              chartOpt={chartOpt}
-                              setChartOpt={setChartOpt}
-                            />
-                            <PopupBg off={setBarSizePopup} />
-                          </>
-                        )}
-
-                        <li>
-                          <button
-                            className="utilBtn"
-                            onClick={() => setChartTypePopup(true)}
-                          >
-                            <img src={I_candleChartWhite} alt="" />
-                          </button>
-
-                          <p className="info">{`Chart type : ${chartOpt.typeStr}`}</p>
-                        </li>
-
-                        {chartTypePopup && (
-                          <>
-                            <ChartTypePopup
-                              off={setChartTypePopup}
-                              chartOpt={chartOpt}
-                              setChartOpt={setChartOpt}
-                            />
-                            <PopupBg off={setChartTypePopup} />
-                          </>
-                        )}
-                      </ul>
-                    </div>
-
-                    <div
-                      className="chartBox"
-                      ref={chartRef}
-                      onMouseDown={(e) => setDragX(e.clientX)}
-                      onMouseMove={onDragChartBox}
-                      onWheel={onWheelChart}
-                    >
-                      <div
-                        id="Chart"
-                        className="chart"
-                        style={{
-                          width: chartWidth.width * chartWidth.per,
-                        }}
-                      >
-                        <BetChart
-                          assetInfo={assetInfo}
-                          chartWidth={chartWidth}
-                          setChartWidth={setChartWidth}
-                          chartOpt={chartOpt}
-                          openedData={openedData}
-                        />
-                      </div>
+                  <div className="chartBox">
+                    <div className="chart">
+                      <ReactTradingviewWidget
+                        container_id={"technical-analysis-chart-demo"}
+                        symbol={assetInfo?.dispSymbol}
+                        theme={Themes.DARK}
+                        locale="kr"
+                        autosize
+                        interval="1"
+                        timezone="Asia/Seoul"
+                        allow_symbol_change={false}
+                      />
                     </div>
                   </div>
 
                   <div className="actionBox">
                     <div className="timeBox contBox">
                       <div className="key">
-                        <p>{t("Time")}</p>
+                        <p>Time</p>
 
                         <button className="infoBtn">
                           <img src={I_qnaWhite} alt="" />
 
                           <span className="hoverPopup">
                             <p>
-                              {t(
-                                'Set the time when your trading operation will be dosed. By placing a "Higher" or "Lower" forecast you will receive the result in 5min.'
-                              )}
+                              Set the time when your trading operation will be
+                              dosed. By placing a “Higher” or “Lower” forecast
+                              you will receive the result in 5min.
                             </p>
                           </span>
                         </button>
@@ -714,7 +562,7 @@ export default function Live() {
 
                     <div className="amountBox contBox">
                       <div className="key">
-                        <p>{t("Amount")}</p>
+                        <p>Amount</p>
 
                         <button className="infoBtn" onClick={() => {}}>
                           <img src={I_qnaWhite} alt="" />
@@ -722,11 +570,9 @@ export default function Live() {
                           <span className="hoverPopup">
                             <p>
                               {amountMode === "int" &&
-                                t("Specify the exact amount of trade.")}
+                                "Specify the exact amount of trade."}
                               {amountMode === "percent" &&
-                                t(
-                                  "Specify the percentage of the trading account balance used calculate your trade amount."
-                                )}
+                                "Specify the percentage of the trading account balance used calculate your trade amount."}
                             </p>
                           </span>
                         </button>
@@ -762,7 +608,7 @@ export default function Live() {
                       >
                         <span className="defaultBox">
                           <img src={I_highArwGreen} alt="" />
-                          <strong>{t("HIGH")}</strong>
+                          <strong>HIGH</strong>
                         </span>
 
                         <span className="hoverBox">
@@ -802,7 +648,7 @@ export default function Live() {
                       >
                         <span className="defaultBox">
                           <img src={I_lowArwRed} alt="" />
-                          <strong>{t("LOW")}</strong>
+                          <strong>LOW</strong>
                         </span>
 
                         <span className="hoverBox">
@@ -847,24 +693,13 @@ export default function Live() {
               </section>
 
               <footer>
-                <span>
-                  <button className="qnaBtn" onClick={() => navigate("/qna")}>
-                    <img src={I_qnaWhite} alt="" />
-                  </button>
-                </span>
+                <button className="qnaBtn" onClick={() => {}}>
+                  <img src={I_qnaWhite} alt="" />
+                </button>
 
-                <span>
-                  <button className="langBtn" onClick={() => setLngPopup(true)}>
-                    <img src={I_langWhite} alt="" />
-                  </button>
-
-                  {lngPopup && (
-                    <>
-                      <SelLngPopup off={setLngPopup} />
-                      <PopupBg off={setLngPopup} />
-                    </>
-                  )}
-                </span>
+                <button className="langBtn" onClick={() => {}}>
+                  <img src={I_langWhite} alt="" />
+                </button>
               </footer>
             </PbetBox>
 
@@ -914,36 +749,20 @@ const MbetBox = styled.main`
   padding: 56px 0 0;
   color: #fff;
   background: #0a0e17;
-
   .innerBox {
     display: flex;
     flex-direction: column;
     height: 100%;
     overflow-y: scroll;
-
     .contArea {
       flex: 1;
       display: flex;
       flex-direction: column;
-
-      .chartCont {
+      .chartBox {
         flex: 1;
-        padding: 62px 0 0;
         background: #181c25;
         position: relative;
-
-        .chartBox {
-          height: 100%;
-          overflow-x: scroll;
-          position: relative;
-          padding: 0 ${window.innerWidth * 0.2}px 0 0;
-
-          .chart {
-            height: 100%;
-            overflow: hidden;
-          }
-        }
-
+        padding: 62px 0 0;
         .utilBox {
           display: flex;
           justify-content: space-between;
@@ -952,14 +771,11 @@ const MbetBox = styled.main`
           left: 16px;
           right: 16px;
           position: absolute;
-
           .btnList {
             display: flex;
             gap: 8px;
-
             & > li {
               position: relative;
-
               .tokenBtn {
                 display: flex;
                 justify-content: space-between;
@@ -972,13 +788,11 @@ const MbetBox = styled.main`
                 font-weight: 700;
                 border: 1px solid #fff;
                 border-radius: 20px;
-
                 img {
                   width: 8px;
                 }
               }
-
-              .chartOptBtn {
+              .chartBtn {
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -986,30 +800,26 @@ const MbetBox = styled.main`
                 aspect-ratio: 1;
                 border: 1px solid #fff;
                 border-radius: 50%;
-
                 img {
                   height: 14px;
                 }
               }
             }
           }
-
           .detBtn {
             display: flex;
             justify-content: center;
             align-items: center;
             width: 34px;
-            height: 34px;
-            background: rgba(255, 255, 255, 0.1);
+            aspect-ratio: 1;
+            border: 1px solid #fff;
             border-radius: 50%;
-
             img {
               height: 14px;
             }
           }
         }
       }
-
       .actionBox {
         display: flex;
         flex-direction: column;
@@ -1021,22 +831,18 @@ const MbetBox = styled.main`
           rgba(10, 14, 23, 0.14) 100%
         );
         border-radius: 20px 20px 0 0;
-
         .infoBox {
           display: flex;
           gap: 12px;
-
           .contBox {
             flex: 1;
             display: flex;
             flex-direction: column;
             gap: 6px;
-
             .key {
               font-size: 14px;
               color: rgba(255, 255, 255, 0.4);
             }
-
             .value {
               display: flex;
               align-items: center;
@@ -1046,23 +852,19 @@ const MbetBox = styled.main`
               border: 1px solid rgba(255, 255, 255, 0.4);
               border-radius: 8px;
               position: relative;
-
               input {
                 width: 100%;
               }
-
               .contBtn {
                 display: flex;
                 align-items: center;
                 width: 100%;
                 height: 100%;
-
                 p {
                   flex: 1;
                   text-align: start;
                 }
               }
-
               img {
                 width: 20px;
                 height: 20px;
@@ -1071,36 +873,29 @@ const MbetBox = styled.main`
             }
           }
         }
-
         .btnCont {
           display: flex;
           gap: 12px;
-
           .btnBox {
             flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 6px;
-
             &.low {
               color: #ff5353;
-
               button {
                 border-color: #ff5353;
                 background: rgba(255, 83, 83, 0.2);
               }
             }
-
             &.high {
               color: #3fb68b;
-
               button {
                 border-color: #3fb68b;
                 background: rgba(63, 182, 139, 0.2);
               }
             }
-
             button {
               display: flex;
               align-items: center;
@@ -1112,12 +907,10 @@ const MbetBox = styled.main`
               font-weight: 700;
               border: 1.2px solid;
               border-radius: 8px;
-
               img {
                 width: 12px;
               }
             }
-
             .rate {
               font-size: 14px;
             }
@@ -1134,22 +927,18 @@ const PbetBox = styled.main`
   color: #fff;
   background: #0a0e17;
   overflow-y: scroll;
-
   .innerBox {
     display: flex;
     flex-direction: column;
     height: 100vh;
     padding: 60px 0 30px 0;
-
     .tokenArea {
       display: flex;
       align-items: center;
       gap: 30px;
       height: 60px;
-
       .selectBox {
         position: relative;
-
         .selectBtn {
           display: flex;
           justify-content: space-between;
@@ -1162,20 +951,17 @@ const PbetBox = styled.main`
           font-weight: 700;
           border: 1px solid #ffffff;
           border-radius: 20px;
-
           img {
             width: 8px;
           }
         }
       }
-
       & > .tokenList {
         flex: 1;
         display: flex;
         gap: 8px;
         overflow-x: scroll;
         position: relative;
-
         li {
           display: flex;
           align-items: center;
@@ -1185,23 +971,19 @@ const PbetBox = styled.main`
           background: rgba(255, 255, 255, 0.06);
           border-radius: 20px;
           cursor: pointer;
-
           img {
             width: 15px;
           }
-
           .textBox {
             display: flex;
             gap: 20px;
             font-size: 14px;
             cursor: pointer;
-
             p {
               white-space: nowrap;
             }
           }
         }
-
         .filter {
           width: 120px;
           background: linear-gradient(
@@ -1216,100 +998,24 @@ const PbetBox = styled.main`
         }
       }
     }
-
     .contArea {
       flex: 1;
       display: flex;
       overflow: hidden;
-
-      .chartCont {
+      .chartBox {
         flex: 1;
-        height: 100%;
-        overflow: hidden;
         background: #181c25;
         border-radius: 12px;
+        overflow: hidden;
         position: relative;
-
-        .utilBox {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
+        .chart {
           position: absolute;
-          top: 24px;
-          left: 24px;
-          z-index: 1;
-
-          &:hover {
-            .typeList {
-              display: flex;
-            }
-          }
-
-          .btnList {
-            display: flex;
-            gap: 8px;
-            position: relative;
-
-            li {
-              &:hover {
-                .info {
-                  display: inline-block;
-                }
-              }
-
-              .utilBtn {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                width: 38px;
-                height: 36px;
-                font-size: 16px;
-                font-weight: 700;
-                background: rgba(246, 246, 246, 0.1);
-                border-radius: 6px;
-
-                &:hover {
-                  background: rgba(246, 246, 246, 0.2);
-                }
-
-                img {
-                  width: 23px;
-                }
-              }
-
-              .info {
-                display: none;
-                height: 34px;
-                padding: 0 12px;
-                font-size: 12px;
-                white-space: nowrap;
-                line-height: 34px;
-                background: rgba(255, 255, 255, 0.2);
-                border-radius: 4px;
-                backdrop-filter: blur(10px);
-                -webkit-backdrop-filter: blur(10px);
-                top: 44px;
-                position: absolute;
-              }
-            }
-          }
-        }
-
-        .chartBox {
-          width: 100%;
-          height: 100%;
-          padding: 0 ${window.innerWidth * 0.2}px 0 0;
-          overflow-x: scroll;
-          position: relative;
-          cursor: pointer;
-
-          .chart {
-            height: 100%;
-            overflow: hidden;
-          }
+          width: calc(100% + 2px);
+          height: calc(100% + 2px);
+          top: -1px;
+          left: -1px;
         }
       }
-
       .actionBox {
         display: flex;
         flex-direction: column;
@@ -1320,32 +1026,26 @@ const PbetBox = styled.main`
         margin: 0 0 0 10px;
         background: #181c25;
         border-radius: 12px;
-
         .contBox {
           display: flex;
           flex-direction: column;
           gap: 6px;
-
           .key {
             display: flex;
             align-items: center;
             gap: 4px;
             font-size: 12px;
             color: rgba(255, 255, 255, 0.4);
-
             .infoBtn {
               position: relative;
-
               &:hover {
                 .hoverPopup {
                   display: block;
                 }
               }
-
               img {
                 width: 12px;
               }
-
               .hoverPopup {
                 display: none;
                 width: 210px;
@@ -1357,14 +1057,12 @@ const PbetBox = styled.main`
                 top: 18px;
                 right: 0;
                 position: absolute;
-
                 p {
                   color: #fff;
                 }
               }
             }
           }
-
           .value {
             display: flex;
             align-items: center;
@@ -1375,23 +1073,19 @@ const PbetBox = styled.main`
             border: 1px solid rgba(255, 255, 255, 0.4);
             border-radius: 8px;
             position: relative;
-
             input {
               flex: 1;
             }
-
             .contBtn {
               display: flex;
               align-items: center;
               width: 100%;
               height: 100%;
-
               p {
                 flex: 1;
                 text-align: start;
               }
             }
-
             img {
               width: 20px;
               height: 20px;
@@ -1399,10 +1093,8 @@ const PbetBox = styled.main`
             }
           }
         }
-
         .btnBox {
           width: 100%;
-
           button {
             width: 100%;
             height: 48px;
@@ -1410,17 +1102,14 @@ const PbetBox = styled.main`
             border: 1.2px solid;
             border-radius: 8px;
             position: relative;
-
             .defaultBox {
               display: flex;
               align-items: center;
               justify-content: center;
               gap: 20px;
             }
-
             .hoverBox {
               display: none;
-
               .hoverPopup {
                 padding: 10px;
                 font-size: 12px;
@@ -1434,38 +1123,30 @@ const PbetBox = styled.main`
                 transform: translate(-100%, 0);
               }
             }
-
             &:hover {
               .defaultBox {
                 display: none;
               }
-
               .hoverBox {
                 display: block;
-
                 .percent {
                 }
-
                 .amount {
                   font-size: 12px;
                 }
               }
             }
-
             &.highBtn {
               color: #3fb68b;
               border-color: #3fb68b;
-
               &:hover {
                 background: rgba(63, 182, 139, 0.2);
                 box-shadow: 0px 0px 10px rgba(63, 182, 139, 0.6);
               }
             }
-
             &.lowBtn {
               color: #ff5353;
               border-color: #ff5353;
-
               &:hover {
                 background: rgba(255, 83, 83, 0.2);
                 box-shadow: 0px 0px 10px rgba(255, 83, 83, 0.6);
@@ -1474,7 +1155,6 @@ const PbetBox = styled.main`
           }
         }
       }
-
       & > .plusBtn {
         display: flex;
         align-items: flex-start;
@@ -1483,12 +1163,10 @@ const PbetBox = styled.main`
         height: 50px;
         padding: 10px;
         opacity: 0.6;
-
         img {
           height: 20px;
           transition: all 0.3s;
         }
-
         &.on {
           img {
             transform: rotate(45deg);
@@ -1497,26 +1175,15 @@ const PbetBox = styled.main`
       }
     }
   }
-
   footer {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     gap: 14px;
     padding: 0 0 30px;
-
-    span {
-      position: relative;
-
-      button {
-        img {
-          height: 22px;
-        }
-      }
-
-      .selectPopup {
-        top: unset;
-        bottom: 36px;
+    button {
+      img {
+        height: 22px;
       }
     }
   }
