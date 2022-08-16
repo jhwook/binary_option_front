@@ -172,8 +172,8 @@ export default function Orders() {
       .then(({ data }) => {
         let { respdata } = data;
         console.log(data);
-        setTblData(respdata);
-        setTotal(respdata.length);
+        setTblData(respdata.rows);
+        setTotal(respdata.count);
       });
   }
 
