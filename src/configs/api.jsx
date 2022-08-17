@@ -6,10 +6,14 @@ export const API = {
   SIGNUP: URL + "/users/signup", //type
   LOGIN: URL + "/users/login",
   AUTH: URL + "/users/auth",
+  RESET_PW: URL + "/users/reset/password", //:type
+  RESET_VERIFY: URL + "/users/reset/verify", //:type/:code
+  CHANGE_PW: URL + "/users/change/password", //:type
   REFRESH: URL + "/users/refresh",
   EDIT_REF: URL + "/users/edit/ref",
   MY_POSITION: URL + "/users/my/position",
   USER_PROFILE: URL + "/users/profile",
+  USER_DAILY_SUMMARY: URL + "/users02/daily-summary",
   USER_SEND_CERTIFICATION: URL + "/users/send/verification", //:type
   USER_VERIFY: URL + "/users/verify", //:type/:code
   USER_QUERY: URL + "/users/query", //tablename/offset/limit
@@ -20,7 +24,10 @@ export const API = {
   USER_BETLOGS: URL + "/users/betlogs", //:type/:offset/:limit
   USER_DEMO_TOKEN: URL + "/users/demo/token",
   USER_REFERRAL: URL + "/users/myreferrals", //:offset/:limit/id/DESC
+  NOTI: URL + "/users/notice/setting",
   USER_REFERRAL_HISTORY: URL + "/users/myreferrals/fee/log", //:offset/:limit/id/DESC
+  INQUIRY_ENROLL: URL + "/inquiry/enroll",
+  NOTI_SET: URL + "/users/notice/set",
 
   GET_ASSETS: URL + "/assets/list",
   GET_ASSETS_TICKER_PRICE: URL + "/assets/ticker/price", //:symbol

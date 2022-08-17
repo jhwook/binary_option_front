@@ -32,13 +32,18 @@ export default function Orders() {
 
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const [useDate, setUseDate] = useState(false);
   const [page, setPage] = useState(1);
   const [tblData, setTblData] = useState([]);
   const [total, setTotal] = useState(0);
   const [loader, setLoader] = useState("");
 
-  const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
-    <button className="dateBtn" onClick={onClick} ref={ref}>
+  const CustomInput = forwardRef(({ value, onClick }, ref) => (
+    <button
+      className={`${useDate && "on"} dateBtn`}
+      onClick={onClick}
+      ref={ref}
+    >
       <img src={I_calender} alt="" />
       <p>{value}</p>
     </button>
@@ -158,11 +163,11 @@ export default function Orders() {
   function getData(arg) {
     let params = {};
 
-
-
     if (arg?.filter) {
-      params.startDate = startDate;
-      params.endDate = endDate;
+      if (useDate) {
+        params.startDate = startDate;
+        params.endDate = endDate;
+      }
     }
 
     axios
@@ -179,6 +184,7 @@ export default function Orders() {
 
   function dateChange(dates) {
     const [start, end] = dates;
+    setUseDate(true);
 
     setStartDate(start);
     setEndDate(end);
@@ -194,7 +200,7 @@ export default function Orders() {
 
   useEffect(() => {
     getData();
-  }, [page, startDate, endDate]);
+  }, [page]);
 
   if (isMobile)
     return (
@@ -216,7 +222,7 @@ export default function Orders() {
                       endDate={endDate}
                       selectsRange
                       renderCustomHeader={renderCustomHeader}
-                      customInput={<ExampleCustomInput />}
+                      customInput={<CustomInput />}
                     />
                   </span>
 
@@ -372,7 +378,7 @@ export default function Orders() {
                     endDate={endDate}
                     selectsRange
                     renderCustomHeader={renderCustomHeader}
-                    customInput={<ExampleCustomInput />}
+                    customInput={<CustomInput />}
                   />
                 </span>
 
@@ -537,6 +543,10 @@ const MordersBox = styled.main`
                 align-items: center;
                 gap: 12px;
                 font-size: 14px;
+
+                &.on {
+                  color: #fff;
+                }
 
                 img {
                   width: 16px;
@@ -739,6 +749,10 @@ const PordersBox = styled.main`
                 display: flex;
                 align-items: center;
                 gap: 8px;
+
+                &.on {
+                  color: #fff;
+                }
 
                 img {
                   width: 16px;

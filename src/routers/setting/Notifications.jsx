@@ -1,21 +1,58 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import DefaultHeader from "../../components/header/DefaultHeader";
+import { API } from "../../configs/api";
 
 export default function Notifications() {
   const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
 
-  const [toggleList, setToggleList] = useState(new Array(5).fill(false));
+  const [betEnd, setBetEnd] = useState(false);
+  const [orderRequest, setOrderRequest] = useState(false);
+  const [emailNoti, setEmailNoti] = useState(false);
+  const [lastNews, setLasetNews] = useState(false);
+  const [question, setQuestion] = useState(false);
 
-  function onClickToggleBtn(i) {
-    let dataList = toggleList;
-    dataList[i] = !dataList[i];
+  function getData() {
+    axios
+      .get(API.NOTI)
+      .then(({ data }) => {
+        console.log(data.resp);
+        let _resp = data.resp;
 
-    setToggleList([...dataList]);
+        setBetEnd(_resp.betend);
+        setOrderRequest(_resp.orderrequest);
+        setEmailNoti(_resp.emailnotice);
+        setLasetNews(_resp.latestnews);
+        setQuestion(_resp.questions);
+      })
+      .catch(console.error);
   }
+
+  function onClickSaveBtn() {
+    let _formData = {};
+
+    _formData.betend = betEnd ? 1 : 0;
+    _formData.orderrequest = orderRequest ? 1 : 0;
+    _formData.emailnotice = emailNoti ? 1 : 0;
+    _formData.latestnews = lastNews ? 1 : 0;
+    _formData.questions = question ? 1 : 0;
+
+    axios
+      .patch(API.NOTI_SET, _formData)
+      .then((res) => {
+        console.log(res);
+        // window.location.reload();
+      })
+      .catch(console.error);
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   if (isMobile)
     return (
@@ -31,8 +68,8 @@ export default function Notifications() {
                     <p className="title">{t("Position End Notification")}</p>
 
                     <button
-                      className={`${toggleList[0] && "on"} toggleBtn`}
-                      onClick={() => onClickToggleBtn(0)}
+                      className={`${betEnd && "on"} toggleBtn`}
+                      onClick={() => setBetEnd(!betEnd)}
                     >
                       <p className="on">{t("on")}</p>
                       <span />
@@ -52,8 +89,8 @@ export default function Notifications() {
                     <p className="title">{t("Orders request successful")}</p>
 
                     <button
-                      className={`${toggleList[1] && "on"} toggleBtn`}
-                      onClick={() => onClickToggleBtn(1)}
+                      className={`${orderRequest && "on"} toggleBtn`}
+                      onClick={() => setOrderRequest(!orderRequest)}
                     >
                       <p className="on">{t("on")}</p>
                       <span />
@@ -73,8 +110,8 @@ export default function Notifications() {
                     <p className="title">{t("Email notifications")}</p>
 
                     <button
-                      className={`${toggleList[2] && "on"} toggleBtn`}
-                      onClick={() => onClickToggleBtn(2)}
+                      className={`${emailNoti && "on"} toggleBtn`}
+                      onClick={() => setEmailNoti(!emailNoti)}
                     >
                       <p className="on">{t("on")}</p>
                       <span />
@@ -94,8 +131,8 @@ export default function Notifications() {
                     <p className="title">{t("Latest news")}</p>
 
                     <button
-                      className={`${toggleList[3] && "on"} toggleBtn`}
-                      onClick={() => onClickToggleBtn(3)}
+                      className={`${lastNews && "on"} toggleBtn`}
+                      onClick={() => setLasetNews(!lastNews)}
                     >
                       <p className="on">{t("on")}</p>
                       <span />
@@ -115,8 +152,8 @@ export default function Notifications() {
                     <p className="title">{t("Questions")}</p>
 
                     <button
-                      className={`${toggleList[4] && "on"} toggleBtn`}
-                      onClick={() => onClickToggleBtn(4)}
+                      className={`${question && "on"} toggleBtn`}
+                      onClick={() => setQuestion(!question)}
                     >
                       <p className="on">{t("on")}</p>
                       <span />
@@ -132,7 +169,7 @@ export default function Notifications() {
                 </li>
               </ul>
 
-              <button className="saveBtn" onClick={() => {}}>
+              <button className="saveBtn" onClick={onClickSaveBtn}>
                 {t("Save")}
               </button>
             </article>
@@ -165,8 +202,8 @@ export default function Notifications() {
                   </div>
 
                   <button
-                    className={`${toggleList[0] && "on"} toggleBtn`}
-                    onClick={() => onClickToggleBtn(0)}
+                    className={`${betEnd && "on"} toggleBtn`}
+                    onClick={() => setBetEnd(!betEnd)}
                   >
                     <p className="on">{t("on")}</p>
                     <span />
@@ -183,8 +220,8 @@ export default function Notifications() {
                   </div>
 
                   <button
-                    className={`${toggleList[1] && "on"} toggleBtn`}
-                    onClick={() => onClickToggleBtn(1)}
+                    className={`${orderRequest && "on"} toggleBtn`}
+                    onClick={() => setOrderRequest(!orderRequest)}
                   >
                     <p className="on">{t("on")}</p>
                     <span />
@@ -201,8 +238,8 @@ export default function Notifications() {
                   </div>
 
                   <button
-                    className={`${toggleList[2] && "on"} toggleBtn`}
-                    onClick={() => onClickToggleBtn(2)}
+                    className={`${emailNoti && "on"} toggleBtn`}
+                    onClick={() => setEmailNoti(!emailNoti)}
                   >
                     <p className="on">{t("on")}</p>
                     <span />
@@ -219,8 +256,8 @@ export default function Notifications() {
                   </div>
 
                   <button
-                    className={`${toggleList[3] && "on"} toggleBtn`}
-                    onClick={() => onClickToggleBtn(3)}
+                    className={`${lastNews && "on"} toggleBtn`}
+                    onClick={() => setLasetNews(!lastNews)}
                   >
                     <p className="on">{t("on")}</p>
                     <span />
@@ -237,8 +274,8 @@ export default function Notifications() {
                   </div>
 
                   <button
-                    className={`${toggleList[4] && "on"} toggleBtn`}
-                    onClick={() => onClickToggleBtn(4)}
+                    className={`${question && "on"} toggleBtn`}
+                    onClick={() => setQuestion(!question)}
                   >
                     <p className="on">{t("on")}</p>
                     <span />
@@ -247,7 +284,7 @@ export default function Notifications() {
                 </li>
               </ul>
 
-              <button className="saveBtn" onClick={() => {}}>
+              <button className="saveBtn" onClick={onClickSaveBtn}>
                 {t("Save")}
               </button>
             </article>

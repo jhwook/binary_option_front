@@ -30,14 +30,27 @@ export default function TradingHistory() {
   const [category, setCategory] = useState(D_historyCategoryList[0]);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const [useDate, setUseDate] = useState(false);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [listData, setListData] = useState([]);
 
-  function getData() {
+  function getData(arg) {
+    let params = {};
+
+    if (arg?.filter) {
+      if (useDate) {
+        params.startDate = startDate;
+        params.endDate = endDate;
+      }
+      params.searchkey = search;
+    }
+
     axios
-      .get(`${API.USER_BETLOGS}/${category}/${(page - 1) * 10}/10`)
+      .get(`${API.USER_BETLOGS}/${category}/${(page - 1) * 8}/8`, {
+        params,
+      })
       .then(({ data }) => {
         console.log(data.bet_log);
         setListData(data.bet_log.rows);
@@ -46,8 +59,12 @@ export default function TradingHistory() {
       .catch((err) => console.error(err));
   }
 
-  const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
-    <button className="dateBtn" onClick={onClick} ref={ref}>
+  const CustomInput = forwardRef(({ value, onClick }, ref) => (
+    <button
+      className={`${useDate && "on"} dateBtn`}
+      onClick={onClick}
+      ref={ref}
+    >
       <img src={I_calender} alt="" />
       <p>{value}</p>
     </button>
@@ -59,6 +76,7 @@ export default function TradingHistory() {
 
   function dateChange(dates) {
     const [start, end] = dates;
+    setUseDate(true);
 
     setStartDate(start);
     setEndDate(end);
@@ -108,19 +126,14 @@ export default function TradingHistory() {
                       endDate={endDate}
                       selectsRange
                       renderCustomHeader={renderCustomHeader}
-                      customInput={<ExampleCustomInput />}
+                      customInput={<CustomInput />}
                     />
                   </span>
 
-                  {/* <span className="searchBox filterOpt">
-                    <input
-                      value={search}
-                      onChange={(e) => setSearch(e.target.value)}
-                      placeholder="Order"
-                    />
-                  </span> */}
-
-                  <button className="applyBtn" onClick={() => {}}>
+                  <button
+                    className="applyBtn"
+                    onClick={() => getData({ filter: true })}
+                  >
                     {t("Apply")}
                   </button>
                 </div>
@@ -307,7 +320,7 @@ export default function TradingHistory() {
                     endDate={endDate}
                     selectsRange
                     renderCustomHeader={renderCustomHeader}
-                    customInput={<ExampleCustomInput />}
+                    customInput={<CustomInput />}
                   />
                 </span>
 
@@ -319,7 +332,10 @@ export default function TradingHistory() {
                   />
                 </span>
 
-                <button className="applyBtn" onClick={() => {}}>
+                <button
+                  className="applyBtn"
+                  onClick={() => getData({ filter: true })}
+                >
                   {t("Apply")}
                 </button>
               </div>
@@ -510,6 +526,10 @@ const MtradingHistoryBox = styled.main`
                 align-items: center;
                 gap: 12px;
                 font-size: 14px;
+
+                &.on {
+                  color: #fff;
+                }
 
                 img {
                   width: 16px;
@@ -723,6 +743,10 @@ const PtradingHistoryBox = styled.main`
                 align-items: center;
                 gap: 8px;
 
+                &.on {
+                  color: #fff;
+                }
+
                 img {
                   width: 16px;
                   height: 17px;
@@ -732,6 +756,8 @@ const PtradingHistoryBox = styled.main`
 
             &.searchBox {
               input {
+                color: #fff;
+
                 &::placeholder {
                   color: rgba(255, 255, 255, 0.4);
                 }

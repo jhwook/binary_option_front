@@ -7,7 +7,7 @@ import Opened from "./Opened";
 import I_xWhite from "../../../img/icon/I_xWhite.svg";
 import { useTranslation } from "react-i18next";
 
-export default function DetBox({ off, mode, page }) {
+export default function DetBox({ off, mode, page, socket }) {
   const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
 
@@ -28,7 +28,7 @@ export default function DetBox({ off, mode, page }) {
           ))}
         </ul>
 
-        {detCategory === "Opened" && <Opened />}
+        {detCategory === "Opened" && <Opened socket={socket} />}
         {detCategory === "Closed" && <Closed page={page} />}
 
         <footer>
@@ -55,7 +55,7 @@ export default function DetBox({ off, mode, page }) {
           ))}
         </ul>
 
-        {detCategory === "Opened" && <Opened />}
+        {detCategory === "Opened" && <Opened socket={socket} />}
         {detCategory === "Closed" && <Closed page={page} />}
       </PdetBoxCont>
     );

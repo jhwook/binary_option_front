@@ -109,7 +109,7 @@ export const D_historyList = [
 
 export const D_unBranchTokenList = [
   { icon: T_usdt, type: "USDT_BINOPT", text: "USDT" },
-  { icon: T_usdc, type: "USDC", text: "USDC" },
+  // { icon: T_usdc, type: "USDC", text: "USDC" },
 ];
 
 export const D_branchTokenList = [
@@ -117,3 +117,5 @@ export const D_branchTokenList = [
   { icon: T_usd, type: "USD", text: "USD", unit: "$" },
   { icon: T_krw, type: "KRW", text: "KRW", unit: "₩" },
 ];
+
+export const D_paymentList = ["wallet", "address"];

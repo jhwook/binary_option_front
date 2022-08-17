@@ -27,9 +27,8 @@ import axios from "axios";
 import { API } from "../../configs/api";
 import LoadingBar from "../../components/common/LoadingBar";
 import { setBetFlag } from "../../reducers/bet";
-import { socketIo } from "../../util/socket";
 
-export default function Demo({ socket }) {
+export default function Demo({ socket, notiOpt }) {
   const hoverRef1 = useRef();
   const hoverRef2 = useRef();
   const dispatch = useDispatch();
@@ -126,7 +125,9 @@ export default function Demo({ socket }) {
 
         dispatch(setBetFlag());
 
-        setToast({ type, assetInfo, amount });
+        if (notiOpt.orderRequest) {
+          setToast({ type, assetInfo, amount });
+        }
       })
       .catch((err) => console.error(err));
   }
@@ -163,7 +164,7 @@ export default function Demo({ socket }) {
 
     _dividList = new Set(_dividList);
 
-    socketIo.emit(
+    socket.emit(
       "dividendrate",
       [..._dividList],
       (res) => {
@@ -189,7 +190,7 @@ export default function Demo({ socket }) {
   }, []);
 
   useEffect(() => {
-    if (!socketIo) return;
+    if (!socket) return;
     getDivRate();
 
     let divRateInterval = setInterval(() => {
@@ -199,7 +200,7 @@ export default function Demo({ socket }) {
     return () => {
       clearInterval(divRateInterval);
     };
-  }, [socketIo, assetInfo, bookMark, tokenPopupData, openedData]);
+  }, [socket, assetInfo, bookMark, tokenPopupData, openedData]);
 
   if (isMobile)
     return (
@@ -368,7 +369,12 @@ export default function Demo({ socket }) {
             </MbetBox>
 
             {detMode && (
-              <DetBox mode={detMode} page={"live"} off={setDetMode} />
+              <DetBox
+                mode={detMode}
+                page={"live"}
+                socket={socket}
+                off={setDetMode}
+              />
             )}
 
             {insufficientPopup && (
@@ -633,7 +639,12 @@ export default function Demo({ socket }) {
                     </span>
                   </div>
 
-                  <DetBox mode={detMode} page={"live"} socket={socket} />
+                  <DetBox
+                    mode={detMode}
+                    page={"live"}
+                    socket={socket}
+                    off={setDetMode}
+                  />
 
                   <button
                     className={`${detMode && "on"} plusBtn`}

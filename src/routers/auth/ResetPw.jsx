@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { D_loginCategoryList } from "../../data/D_auth";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
@@ -9,6 +9,8 @@ import PopupBg from "../../components/common/PopupBg";
 import SelectPhoneLocPopup from "../../components/auth/SelectPhoneLocPopup";
 import QRCode from "react-qr-code";
 import { useTranslation } from "react-i18next";
+import { API } from "../../configs/api";
+import axios from "axios";
 
 export default function ResetPw() {
   const { t } = useTranslation();
@@ -16,20 +18,73 @@ export default function ResetPw() {
 
   const isMobile = useSelector((state) => state.common.isMobile);
 
-  const [category, setCategory] = useState(0);
+  const [category, setCategory] = useState(D_loginCategoryList[0]);
   const [email, setEmail] = useState("");
+  const [emailSent, setEmailSent] = useState(false);
   const [phoneLoc, setPhoneLoc] = useState("");
   const [phone, setPhone] = useState("");
+  const [phoneSent, setPhoneSent] = useState(false);
   const [selLocPopup, setSelLocPopup] = useState(false);
   const [code, setCode] = useState("");
 
-  function onBlurPhone() {
-    if (phone[0] === "0") setPhone(phone.slice(1));
+  function onChangePhone(v) {
+    if (v[0] === "0") v = v.slice(1);
+    setPhone(v);
+  }
+
+  function getCode() {
+    let _fomrData = {};
+
+    if (category.value === "email") {
+      _fomrData.email = email;
+    } else if (category.value === "phone") {
+      _fomrData.countryNum = phoneLoc;
+      _fomrData.phone = phone;
+    }
+
+    axios
+      .post(`${API.RESET_PW}/${category.value}`, _fomrData)
+      .then(({ data }) => {
+        console.log(data);
+
+        if (data.message === "SENT") {
+          if (category.value === "email") setEmailSent(true);
+          else if (category.value === "phone") setPhoneSent(true);
+        }
+      })
+      .catch(console.error);
   }
 
   function onClickContBtn() {
-    navigate("/auth/setpw/123");
+    axios
+      .post(`${API.RESET_VERIFY}/${category.value}/${code}`)
+      .then(({ data }) => {
+        console.log(data);
+
+        if (data.message === "VALID_CODE")
+          navigate("/auth/setpw/123", {
+            state: {
+              category:category.value,
+              email,
+              phoneLoc,
+              phone,
+            },
+          });
+      })
+      .catch(console.error);
   }
+
+  useEffect(() => {
+    setEmailSent(false);
+  }, [email]);
+
+  useEffect(() => {
+    setPhoneSent(false);
+  }, [phone]);
+
+  useEffect(() => {
+    getCode();
+  }, [phoneLoc]);
 
   if (isMobile)
     return (
@@ -45,15 +100,18 @@ export default function ResetPw() {
                 <div className="contBox">
                   <ul className="categoryList">
                     {D_loginCategoryList.map((v, i) => (
-                      <li key={i} className={`${category === i && "on"}`}>
-                        <button onClick={() => setCategory(i)}>
+                      <li
+                        key={i}
+                        className={`${category.key === v.key && "on"}`}
+                      >
+                        <button onClick={() => setCategory(v)}>
                           {t(v.key)}
                         </button>
                       </li>
                     ))}
                   </ul>
 
-                  {category === 0 && (
+                  {category === D_loginCategoryList[0] && (
                     <ul className="inputList">
                       <li>
                         <p className="key">{t("Email")}</p>
@@ -63,6 +121,7 @@ export default function ResetPw() {
                               type="email"
                               value={email}
                               onChange={(e) => setEmail(e.target.value)}
+                              onBlur={getCode}
                               placeholder=""
                             />
 
@@ -78,7 +137,7 @@ export default function ResetPw() {
                         </div>
                       </li>
 
-                      {email && (
+                      {email && emailSent && (
                         <li>
                           <p className="key">{t("Email Verification Code")}</p>
 
@@ -101,7 +160,7 @@ export default function ResetPw() {
                     </ul>
                   )}
 
-                  {category === 1 && (
+                  {category === D_loginCategoryList[1] && (
                     <ul className="inputList">
                       <li className="phoneNumBox">
                         <p className="key">{t("Phone Number")}</p>
@@ -131,15 +190,15 @@ export default function ResetPw() {
                             <input
                               type="number"
                               value={phone}
-                              onChange={(e) => setPhone(e.target.value)}
-                              onBlur={onBlurPhone}
+                              onChange={(e) => onChangePhone(e.target.value)}
+                              onBlur={getCode}
                               placeholder=""
                             />
                           </div>
                         </div>
                       </li>
 
-                      {phone && (
+                      {phone && phoneSent && (
                         <li>
                           <p className="key">
                             {t("Phone Number Verification Code")}
@@ -192,15 +251,18 @@ export default function ResetPw() {
                 <div className="contBox">
                   <ul className="categoryList">
                     {D_loginCategoryList.map((v, i) => (
-                      <li key={i} className={`${category === i && "on"}`}>
-                        <button onClick={() => setCategory(i)}>
+                      <li
+                        key={i}
+                        className={`${category.key === v.key && "on"}`}
+                      >
+                        <button onClick={() => setCategory(v)}>
                           {t(v.key)}
                         </button>
                       </li>
                     ))}
                   </ul>
 
-                  {category === 0 && (
+                  {category === D_loginCategoryList[0] && (
                     <ul className="inputList">
                       <li>
                         <p className="key">{t("Email")}</p>
@@ -210,6 +272,7 @@ export default function ResetPw() {
                               type="email"
                               value={email}
                               onChange={(e) => setEmail(e.target.value)}
+                              onBlur={getCode}
                               placeholder=""
                             />
 
@@ -225,7 +288,7 @@ export default function ResetPw() {
                         </div>
                       </li>
 
-                      {email && (
+                      {email && emailSent && (
                         <li>
                           <p className="key">{t("Email Verification Code")}</p>
 
@@ -248,7 +311,7 @@ export default function ResetPw() {
                     </ul>
                   )}
 
-                  {category === 1 && (
+                  {category === D_loginCategoryList[1] && (
                     <ul className="inputList">
                       <li className="phoneNumBox">
                         <p className="key">{t("Phone Number")}</p>
@@ -278,15 +341,15 @@ export default function ResetPw() {
                             <input
                               type="number"
                               value={phone}
-                              onChange={(e) => setPhone(e.target.value)}
-                              onBlur={onBlurPhone}
+                              onChange={(e) => onChangePhone(e.target.value)}
+                              onBlur={getCode}
                               placeholder=""
                             />
                           </div>
                         </div>
                       </li>
 
-                      {phone && (
+                      {phone && phoneSent && (
                         <li>
                           <p className="key">
                             {t("Phone Number Verification Code")}

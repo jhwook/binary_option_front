@@ -28,9 +28,8 @@ import LoadingBar from "../../components/common/LoadingBar";
 import { D_amountTypeList, D_tokenCategoryList } from "../../data/D_bet";
 import { getDividFromData, setToast } from "../../util/Util";
 import { setBetFlag } from "../../reducers/bet";
-import { socketIo } from "../../util/socket";
 
-export default function Live() {
+export default function Live({ socket, notiOpt }) {
   const hoverRef1 = useRef();
   const hoverRef2 = useRef();
   const dispatch = useDispatch();
@@ -148,12 +147,14 @@ export default function Live() {
         console.log(res);
 
         dispatch(setBetFlag());
-
-        setToast({ type, assetInfo, amount });
+        if (notiOpt.orderRequest) {
+          setToast({ type, assetInfo, amount });
+        }
       })
       .catch((err) => console.error(err));
   }
 
+  console.log("notiOpt", notiOpt);
   function onMouseOverBtn(e) {
     hoverRef1.current.style.left = `${e.clientX}px`;
     hoverRef1.current.style.top = `${e.clientY}px`;
@@ -186,7 +187,7 @@ export default function Live() {
 
     _dividList = new Set(_dividList);
 
-    socketIo.emit(
+    socket.emit(
       "dividendrate",
       [..._dividList],
       (res) => {
@@ -198,7 +199,7 @@ export default function Live() {
   }
 
   function getClosed() {
-    socketIo.emit(
+    socket.emit(
       "closed",
       {},
       (res) => {
@@ -223,7 +224,7 @@ export default function Live() {
   }, []);
 
   useEffect(() => {
-    if (!socketIo) return;
+    if (!socket) return;
     getDivRate();
 
     let socketInterval = setInterval(() => {
@@ -234,7 +235,7 @@ export default function Live() {
     return () => {
       clearInterval(socketInterval);
     };
-  }, [socketIo, assetInfo, bookMark, tokenPopupData, openedData]);
+  }, [socket, assetInfo, bookMark, tokenPopupData, openedData]);
 
   if (isMobile)
     return (
@@ -403,7 +404,12 @@ export default function Live() {
             </MbetBox>
 
             {detMode && (
-              <DetBox mode={detMode} page={"live"} off={setDetMode} />
+              <DetBox
+                mode={detMode}
+                page={"live"}
+                socket={socket}
+                off={setDetMode}
+              />
             )}
 
             {liveTradePopup && (
@@ -681,7 +687,12 @@ export default function Live() {
                     </span>
                   </div>
 
-                  <DetBox mode={detMode} page={"live"} off={setDetMode} />
+                  <DetBox
+                    mode={detMode}
+                    page={"live"}
+                    socket={socket}
+                    off={setDetMode}
+                  />
 
                   <button
                     className={`${detMode && "on"} plusBtn`}

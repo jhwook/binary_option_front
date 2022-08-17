@@ -35,12 +35,17 @@ export default function History() {
   const [category, setCategory] = useState(0);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const [useDate, setUseDate] = useState(false);
   const [page, setPage] = useState(1);
   const [tblData, setTblData] = useState([]);
   const [total, setTotal] = useState(0);
 
-  const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
-    <button className="dateBtn" onClick={onClick} ref={ref}>
+  const CustomInput = forwardRef(({ value, onClick }, ref) => (
+    <button
+      className={`${useDate && "on"} dateBtn`}
+      onClick={onClick}
+      ref={ref}
+    >
       <img src={I_calender} alt="" />
       <p>{value}</p>
     </button>
@@ -52,15 +57,15 @@ export default function History() {
       val: category == 0 ? "DEPOSIT" : "WITHDRAW",
     };
 
-    console.log(arg?.filter);
-
     if (arg?.filter) {
-      params.startDate = startDate;
-      params.endDate = endDate;
+      if (useDate) {
+        params.startDate = startDate;
+        params.endDate = endDate;
+      }
     }
 
     axios
-      .get(`${API.USER_QUERY}/transactions/${(page - 1) * 10}/10`, {
+      .get(`${API.USER_QUERY}/transactions/${(page - 1) * 8}/8`, {
         params,
       })
       .then(({ data }) => {
@@ -81,6 +86,7 @@ export default function History() {
 
   function dateChange(dates) {
     const [start, end] = dates;
+    setStartDate(start);
 
     setStartDate(start);
     setEndDate(end);
@@ -130,7 +136,7 @@ export default function History() {
                       endDate={endDate}
                       selectsRange
                       renderCustomHeader={renderCustomHeader}
-                      customInput={<ExampleCustomInput />}
+                      customInput={<CustomInput />}
                     />
                   </span>
 
@@ -276,7 +282,7 @@ export default function History() {
                     endDate={endDate}
                     selectsRange
                     renderCustomHeader={renderCustomHeader}
-                    customInput={<ExampleCustomInput />}
+                    customInput={<CustomInput />}
                   />
                 </span>
 
@@ -638,6 +644,10 @@ const PhistoryBox = styled.main`
                 display: flex;
                 align-items: center;
                 gap: 8px;
+
+                &.on {
+                  color: #fff;
+                }
 
                 img {
                   width: 16px;

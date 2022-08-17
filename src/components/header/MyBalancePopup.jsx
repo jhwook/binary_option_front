@@ -2,15 +2,18 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
 import I_chkOrange from "../../img/icon/I_chkOrange.svg";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { API } from "../../configs/api";
 import { useTranslation } from "react-i18next";
+import { setBalanceType } from "../../reducers/common";
 
 export default function MyBalancePopup({ off, setAddPopup }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const location = useLocation();
   const isMobile = useSelector((state) => state.common.isMobile);
   const balanceType = localStorage.getItem("balanceType");
   const demoToken = localStorage.getItem("demoToken");
@@ -44,8 +47,9 @@ export default function MyBalancePopup({ off, setAddPopup }) {
 
   function onClickBalanceType(type) {
     setStateBalanceType(type);
-
     localStorage.setItem("balanceType", type);
+
+    if (location.pathname.split("/")[1] === "bet") navigate(`/bet/${type}`);
   }
 
   useEffect(() => {

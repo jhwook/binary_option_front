@@ -6,10 +6,9 @@ import styled from "styled-components";
 import I_highArwGreen from "../../../img/icon/I_highArwGreen.svg";
 import I_lowArwRed from "../../../img/icon/I_lowArwRed.svg";
 import { setOpenedData } from "../../../reducers/bet";
-import { socketIo } from "../../../util/socket";
 import { getDividFromData } from "../../../util/Util";
 
-export default function Opened() {
+export default function Opened({socket}) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const isMobile = useSelector((state) => state.common.isMobile);
@@ -20,7 +19,7 @@ export default function Opened() {
   const [now, setNow] = useState(new Date());
 
   function getLog() {
-    socketIo.emit("bet", {}, (res) => {
+    socket.emit("bet", {}, (res) => {
       console.log("bet", res);
       setData(res);
       dispatch(setOpenedData(res));

@@ -1,68 +1,308 @@
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import QRCode from "react-qr-code";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
+import contractaddr from "../../../configs/contractaddr";
 import I_cpWhite from "../../../img/icon/I_cpWhite.svg";
-import { onClickCopy, setToast } from "../../../util/Util";
+import { onClickCopy } from "../../../util/Util";
+import I_alarmYellow from "../../../img/icon/I_alarmYellow.svg";
 
-export default function ConfirmUsdt() {
+export default function ConfirmUsdt({ amount, token }) {
+  let time = 1800;
+
   const { t } = useTranslation();
-  function onClickCopyBtn(str) {
-    onClickCopy(str);
-    setToast({ type: "alarm", cont: "Copied Successfully" });
-  }
+  const isMobile = useSelector((state) => state.common.isMobile);
 
-  return (
-    <PconfirmUsdtBox className="value on">
-      <strong className="head">{t("Deposit address")}</strong>
+  const [limit, setLimit] = useState(time);
 
-      <span className="qrBox">
-        <QRCode
-          size={220}
-          style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-          value={"http://google.com"}
-          viewBox={`0 0 220 220`}
-        />
-      </span>
+  useEffect(() => {
+    let intervalId = setInterval(() => {
+      time--;
+      setLimit(time);
 
-      <button
-        className="copyBtn"
-        onClick={() =>
-          onClickCopyBtn("0xd913c9778ca029087789d0da74091bc3b917e34e")
-        }
-      >
-        <p className="address">0xd913c9778ca029087789d0da74091bc3b917e34e</p>
+      if (time <= 0) {
+        clearInterval(intervalId);
+      }
+    }, [1000]);
 
-        <img src={I_cpWhite} alt="" />
-      </button>
-    </PconfirmUsdtBox>
-  );
+    return () => clearInterval(intervalId);
+  }, []);
+
+  if (isMobile)
+    return (
+      <>
+        <MconfirmUsdtBox className="value on">
+          <div className="headArea">
+            <strong className="head">
+              {t("To complete the payment, please transfer")}
+            </strong>
+          </div>
+
+          <div className="contArea">
+            <ul>
+              <li>
+                <p className="key">{t("Deposit to")}</p>
+
+                <button
+                  className="value"
+                  onClick={() => onClickCopy(contractaddr.admin)}
+                >
+                  <strong>{contractaddr.admin}</strong>
+                  <img src={I_cpWhite} alt="" />
+                </button>
+              </li>
+
+              <li>
+                <p className="key">{t("Fee")}</p>
+                <div className="value">
+                  <strong>0 {token.text}</strong>
+                </div>
+              </li>
+
+              <li>
+                <p className="key">{t("Deposit Amount")}</p>
+                <div className="value">
+                  <strong>
+                    {amount} {token.text}
+                  </strong>
+                </div>
+              </li>
+
+              <li>
+                <p className="key">{t("Funds will arrive")}</p>
+                <div className="value">
+                  <strong>Within {Math.floor(limit / 60)} mins</strong>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div className="explain">
+            <img src={I_alarmYellow} alt="" />
+
+            <p>
+              {t(
+                `Please complete the payment within ${
+                  time / 60
+                } minute(s). The coins you've bought will be credited to your Funding Account.`
+              )}
+            </p>
+          </div>
+        </MconfirmUsdtBox>
+      </>
+    );
+  else
+    return (
+      <>
+        <PconfirmUsdtBox className="value on">
+          <div className="headArea">
+            <strong className="head">
+              {t("To complete the payment, please transfer")}
+            </strong>
+          </div>
+
+          <div className="contArea">
+            <ul>
+              <li>
+                <p className="key">{t("Deposit to")}</p>
+
+                <button
+                  className="value"
+                  onClick={() => onClickCopy(contractaddr.admin)}
+                >
+                  <strong>{contractaddr.admin}</strong>
+                  <img src={I_cpWhite} alt="" />
+                </button>
+              </li>
+
+              <li>
+                <p className="key">{t("Fee")}</p>
+                <div className="value">
+                  <strong>0 {token.text}</strong>
+                </div>
+              </li>
+
+              <li>
+                <p className="key">{t("Deposit Amount")}</p>
+                <div className="value">
+                  <strong>
+                    {amount} {token.text}
+                  </strong>
+                </div>
+              </li>
+
+              <li>
+                <p className="key">{t("Funds will arrive")}</p>
+                <div className="value">
+                  <strong>Within {Math.floor(limit / 60)} mins</strong>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div className="explain">
+            <img src={I_alarmYellow} alt="" />
+
+            <p>
+              {t(
+                `Please complete the payment within ${
+                  time / 60
+                } minute(s). The coins you've bought will be credited to your Funding Account.`
+              )}
+            </p>
+          </div>
+        </PconfirmUsdtBox>
+      </>
+    );
 }
 
-const PconfirmUsdtBox = styled.div`
-  .qrBox {
-    display: block;
-    width: 240px;
-    height: 240px;
-    padding: 10px;
-    margin: 40px auto 0 auto;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 14px;
+const MconfirmUsdtBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+  overflow-y: scroll;
+
+  .headArea {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+
+    .timerBox {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+
+      span {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 24px;
+        aspect-ratio: 1;
+        font-size: 14px;
+        font-weight: 700;
+        color: #000;
+        background: #fff;
+        border-radius: 2px;
+      }
+    }
   }
 
-  .copyBtn {
+  .contArea {
+    ul {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .key {
+          width: 130px;
+          opacity: 0.6;
+        }
+
+        .value {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          overflow: hidden;
+
+          strong {
+            flex: 1;
+            text-align: end;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+        }
+      }
+    }
+  }
+
+  .explain {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 14px;
+    line-height: 18px;
+    color: #f7ab1f;
+
+    img {
+      height: 14px;
+      margin: 2px 0;
+      aspect-ratio: 1;
+    }
+  }
+`;
+
+const PconfirmUsdtBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+
+  .headArea {
     display: flex;
     justify-content: center;
-    align-items: center;
-    gap: 8px;
-    margin: 30px 0 0 0;
+    padding: 30px 0 0 0;
+    font-size: 16px;
+  }
 
-    p {
-      font-size: 16px;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      opacity: 0.6;
+  .contArea {
+    ul {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 22px 20px;
+      background: #2f3237;
+      border-radius: 10px;
+
+      li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+
+        .key {
+          width: 130px;
+          opacity: 0.6;
+        }
+
+        .value {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          overflow: hidden;
+
+          strong {
+            flex: 1;
+            text-align: end;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+        }
+      }
+    }
+  }
+
+  .explain {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 14px;
+    line-height: 18px;
+    color: #f7ab1f;
+
+    img {
+      height: 14px;
+      margin: 2px 0;
+      aspect-ratio: 1;
     }
   }
 `;

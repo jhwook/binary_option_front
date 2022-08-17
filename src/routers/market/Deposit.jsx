@@ -18,8 +18,14 @@ import { metaMaskLink } from "../../configs/metaMask";
 import PreDepositWarningPopup from "../../components/market/deposit/PreDepositWarningPopup";
 import io from "socket.io-client";
 import MinimumDepositPopup from "../../components/market/deposit/MinimumDepositPopup";
-import { D_branchTokenList, D_unBranchTokenList } from "../../data/D_market";
+import {
+  D_branchTokenList,
+  D_paymentList,
+  D_unBranchTokenList,
+} from "../../data/D_market";
 import { useTranslation } from "react-i18next";
+import SelectPopup from "../../components/common/SelectPopup";
+import ConfirmUsdt from "../../components/market/deposit/ConfirmUsdt";
 
 export default function Deposit({ userData }) {
   const { t } = useTranslation();
@@ -29,11 +35,13 @@ export default function Deposit({ userData }) {
   const [isBranch, setIsBranch] = useState(false);
   const [amount, setAmount] = useState("");
   const [branchData, setBranchData] = useState("");
-  const [confirm, setConfirm] = useState(false);
+  const [confirm, setConfirm] = useState(1);
   const [securityVerifiPopup, setSecurityVerifiPopup] = useState(false);
   const [cashInPersonPopup, setCashInPersonPopupPopup] = useState(false);
   const [tokenPopup, setTokenPopup] = useState(false);
   const [token, setToken] = useState(D_unBranchTokenList[0]);
+  const [paymentPopup, setPaymentPopup] = useState(false);
+  const [payment, setPayment] = useState(D_paymentList[0]);
   const [loader, setLoader] = useState("");
   const [preDepositWarningPopup, setPreDepositWarningPopup] = useState(false);
   const [minDepositPopup, setMinDepositPopup] = useState(false);
@@ -153,11 +161,24 @@ export default function Deposit({ userData }) {
   }
 
   function reqDeposit() {
-    if (isBranch) {
-      setSecurityVerifiPopup(true);
-    } else {
-      if (isMobile) moDirectPayment();
-      else directPayment();
+    switch (isBranch) {
+      case 0:
+        if (isMobile) moDirectPayment();
+        else directPayment();
+        break;
+      case 1:
+        setSecurityVerifiPopup(true);
+        break;
+      case 2:
+        if (payment === "wallet") {
+          if (isMobile) moDirectPayment();
+          else directPayment();
+        } else if (payment === "address") {
+          setConfirm(true);
+        }
+        break;
+      default:
+        break;
     }
   }
 
@@ -173,7 +194,7 @@ export default function Deposit({ userData }) {
 
     setIsBranch(isbranch);
 
-    if (isbranch) setToken(D_branchTokenList[0]);
+    if (isbranch === 1) setToken(D_branchTokenList[0]);
   }, [userData]);
 
   useEffect(() => {
@@ -187,14 +208,19 @@ export default function Deposit({ userData }) {
 
         <MdepositBox>
           {confirm ? (
-            <ConfirmCny
-              setConfirm={setConfirm}
-              amount={amount}
-              token={token}
-              setOk={(e) => {
-                e && postLocale();
-              }}
-            />
+            <>
+              {isBranch === 1 && (
+                <ConfirmCny
+                  setConfirm={setConfirm}
+                  amount={amount}
+                  token={token}
+                  setOk={(e) => {
+                    e && postLocale();
+                  }}
+                />
+              )}
+              {isBranch === 2 && <ConfirmUsdt amount={amount} token={token} />}
+            </>
           ) : (
             <section className="innerBox ">
               <ul className="inputList">
@@ -217,7 +243,9 @@ export default function Deposit({ userData }) {
                         <TokenSelectPopup
                           off={setTokenPopup}
                           list={
-                            isBranch ? D_branchTokenList : D_unBranchTokenList
+                            isBranch === 1
+                              ? D_branchTokenList
+                              : D_unBranchTokenList
                           }
                           setCont={setToken}
                         />
@@ -245,25 +273,25 @@ export default function Deposit({ userData }) {
                       className={`${amount === 100 && "on"} optBtn`}
                       onClick={() => setAmount(100)}
                     >
-                      {isBranch ? token.unit : "$"}100
+                      {isBranch === 1 ? token.unit : "$"}100
                     </button>
                     <button
                       className={`${amount === 200 && "on"} optBtn`}
                       onClick={() => setAmount(200)}
                     >
-                      {isBranch ? token.unit : "$"}200
+                      {isBranch === 1 ? token.unit : "$"}200
                     </button>
                     <button
                       className={`${amount === 300 && "on"} optBtn`}
                       onClick={() => setAmount(300)}
                     >
-                      {isBranch ? token.unit : "$"}300
+                      {isBranch === 1 ? token.unit : "$"}300
                     </button>
                     <button
                       className={`${amount === 400 && "on"} optBtn`}
                       onClick={() => setAmount(400)}
                     >
-                      {isBranch ? token.unit : "$"}400
+                      {isBranch === 1 ? token.unit : "$"}400
                     </button>
                   </ul>
                 </li>
@@ -371,7 +399,9 @@ export default function Deposit({ userData }) {
                         <TokenSelectPopup
                           off={setTokenPopup}
                           list={
-                            isBranch ? D_branchTokenList : D_unBranchTokenList
+                            isBranch === 1
+                              ? D_branchTokenList
+                              : D_unBranchTokenList
                           }
                           setCont={setToken}
                         />
@@ -380,6 +410,34 @@ export default function Deposit({ userData }) {
                     )}
                   </div>
                 </li>
+
+                {isBranch === 2 && (
+                  <li className="paymentBox">
+                    <p className="key">{t("Payment")}</p>
+
+                    <div className="selectBox">
+                      <button
+                        className={`${paymentPopup && "on"} selBtn`}
+                        onClick={() => setPaymentPopup(true)}
+                      >
+                        <strong className="name">{payment}</strong>
+
+                        <img className="arw" src={I_dnPolWhite} />
+                      </button>
+
+                      {paymentPopup && (
+                        <>
+                          <SelectPopup
+                            off={setPaymentPopup}
+                            list={D_paymentList}
+                            setCont={setPayment}
+                          />
+                          <PopupBg off={setPaymentPopup} />
+                        </>
+                      )}
+                    </div>
+                  </li>
+                )}
 
                 <li className="amountBox">
                   <p className="key">{t("Amount")}</p>
@@ -399,25 +457,25 @@ export default function Deposit({ userData }) {
                       className={`${amount === 100 && "on"} optBtn`}
                       onClick={() => setAmount(100)}
                     >
-                      {isBranch ? token.unit : "$"}100
+                      {isBranch === 1 ? token.unit : "$"}100
                     </button>
                     <button
                       className={`${amount === 200 && "on"} optBtn`}
                       onClick={() => setAmount(200)}
                     >
-                      {isBranch ? token.unit : "$"}200
+                      {isBranch === 1 ? token.unit : "$"}200
                     </button>
                     <button
                       className={`${amount === 300 && "on"} optBtn`}
                       onClick={() => setAmount(300)}
                     >
-                      {isBranch ? token.unit : "$"}300
+                      {isBranch === 1 ? token.unit : "$"}300
                     </button>
                     <button
                       className={`${amount === 400 && "on"} optBtn`}
                       onClick={() => setAmount(400)}
                     >
-                      {isBranch ? token.unit : "$"}400
+                      {isBranch === 1 ? token.unit : "$"}400
                     </button>
                   </ul>
                 </li>
@@ -461,14 +519,21 @@ export default function Deposit({ userData }) {
             </div>
 
             {confirm ? (
-              <ConfirmCny
-                setConfirm={setConfirm}
-                amount={amount}
-                token={token}
-                setOk={(e) => {
-                  e && postLocale();
-                }}
-              />
+              <>
+                {isBranch === 1 && (
+                  <ConfirmCny
+                    setConfirm={setConfirm}
+                    amount={amount}
+                    token={token}
+                    setOk={(e) => {
+                      e && postLocale();
+                    }}
+                  />
+                )}
+                {isBranch === 2 && (
+                  <ConfirmUsdt amount={amount} token={token} />
+                )}
+              </>
             ) : (
               <div className="value">
                 <p className="head">{t("Important")} :</p>
@@ -486,7 +551,9 @@ export default function Deposit({ userData }) {
                       )}
                     </li>
                     <li>
-                      {t("Please note that the current asset does not support deposit via the smart contract.")}
+                      {t(
+                        "Please note that the current asset does not support deposit via the smart contract."
+                      )}
                     </li>
                   </ul>
                 ) : (
@@ -599,7 +666,6 @@ const MdepositBox = styled.main`
               .token {
                 width: 30px;
                 aspect-ratio: 1;
-                box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.4);
               }
 
               .name {
@@ -792,7 +858,6 @@ const PdepositBox = styled.main`
                   .token {
                     width: 38px;
                     aspect-ratio: 1;
-                    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.4);
                   }
 
                   .name {
@@ -803,6 +868,67 @@ const PdepositBox = styled.main`
                   .arw {
                     height: 8px;
                     opacity: 0.4;
+                  }
+                }
+              }
+            }
+
+            &.paymentBox {
+              .selectBox {
+                margin: 10px 0 0 0;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 10px;
+                border: 1.4px solid rgba(0, 0, 0, 0);
+                position: relative;
+
+                .selBtn {
+                  display: flex;
+                  align-items: center;
+                  gap: 10px;
+                  width: 100%;
+                  height: 56px;
+                  padding: 0 24px;
+                  font-size: 20px;
+                  font-weight: 700;
+
+                  &.on {
+                    .arw {
+                      opacity: 1;
+                      transform: rotate(180deg);
+                    }
+                  }
+
+                  .name {
+                    text-align: start;
+                    flex: 1;
+                  }
+
+                  .arw {
+                    height: 8px;
+                    opacity: 0.4;
+                  }
+                }
+
+                .selectPopup {
+                  backdrop-filter: blur(20px);
+                  -webkit-backdrop-filter: blur(20px);
+                  top: unset;
+
+                  li {
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: center;
+                    gap: 10px;
+                    height: 50px;
+                    padding: 0 24px;
+                    font-size: 18px;
+                    font-weight: 700;
+                    opacity: 0.4;
+                    cursor: pointer;
+
+                    &:hover {
+                      opacity: 1;
+                    }
                   }
                 }
               }

@@ -6,11 +6,7 @@ import I_calender from "../../../img/icon/I_calender.svg";
 import I_exportWhite from "../../../img/icon/I_exportWhite.svg";
 import I_ltArwWhite from "../../../img/icon/I_ltArwWhite.svg";
 import I_rtArwWhite from "../../../img/icon/I_rtArwWhite.svg";
-import I_rtArwYellow from "../../../img/icon/I_rtArwYellow.svg";
-import {
-  D_profitHistoryListHeader,
-  D_profitHistoryList,
-} from "../../../data/D_finance";
+import { D_profitHistoryListHeader } from "../../../data/D_finance";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { getExcelFile, getTier } from "../../../util/Util";
@@ -24,13 +20,18 @@ export default function ProfitHistory() {
 
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const [useDate, setUseDate] = useState(false);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [listData, setListData] = useState([]);
 
-  const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
-    <button className="dateBtn" onClick={onClick} ref={ref}>
+  const CustomInput = forwardRef(({ value, onClick }, ref) => (
+    <button
+      className={`${useDate && "on"} dateBtn`}
+      onClick={onClick}
+      ref={ref}
+    >
       <img src={I_calender} alt="" />
       <p>{value}</p>
     </button>
@@ -42,6 +43,7 @@ export default function ProfitHistory() {
 
   function dateChange(dates) {
     const [start, end] = dates;
+    setUseDate(true);
 
     setStartDate(start);
     setEndDate(end);
@@ -55,9 +57,21 @@ export default function ProfitHistory() {
     setPage(page + 1);
   }
 
-  function getData() {
+  function getData(arg) {
+    let params = {};
+
+    if (arg?.filter) {
+      if (useDate) {
+        params.startDate = startDate;
+        params.endDate = endDate;
+      }
+      params.searchkey = search;
+    }
+
     axios
-      .get(`${API.USER_BRANCH_FEE_LOG}/${(page - 1) * 10}/10/id/DESC`)
+      .get(`${API.USER_BRANCH_FEE_LOG}/${(page - 1) * 8}/8/id/DESC`, {
+        params,
+      })
       .then(({ data }) => {
         console.log(data);
         setTotal(data.resp.count);
@@ -190,7 +204,7 @@ export default function ProfitHistory() {
                   startDate={startDate}
                   endDate={endDate}
                   selectsRange
-                  customInput={<ExampleCustomInput />}
+                  customInput={<CustomInput />}
                 />
               </span>
 
@@ -202,7 +216,10 @@ export default function ProfitHistory() {
                 />
               </span>
 
-              <button className="applyBtn" onClick={() => {}}>
+              <button
+                className="applyBtn"
+                onClick={() => getData({ filter: true })}
+              >
                 {t("Apply")}
               </button>
             </div>
@@ -443,6 +460,10 @@ const PprofitHistory = styled.div`
             display: flex;
             align-items: center;
             gap: 8px;
+
+            &.on {
+              color: #fff;
+            }
 
             img {
               width: 16px;

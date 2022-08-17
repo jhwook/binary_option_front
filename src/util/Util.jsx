@@ -347,7 +347,7 @@ export function getTier(level) {
 }
 
 export function getBigCount(num) {
-  if (!num) return;
+  if (num === undefined) return;
 
   let _num = Number(num);
 

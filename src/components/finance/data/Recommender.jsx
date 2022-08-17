@@ -20,13 +20,18 @@ export default function Recommender() {
 
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const [useDate, setUseDate] = useState(false);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [listData, setListData] = useState([]);
 
-  const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
-    <button className="dateBtn" onClick={onClick} ref={ref}>
+  const CustomInput = forwardRef(({ value, onClick }, ref) => (
+    <button
+      className={`${useDate && "on"} dateBtn`}
+      onClick={onClick}
+      ref={ref}
+    >
       <img src={I_calender} alt="" />
       <p>{value}</p>
     </button>
@@ -38,6 +43,7 @@ export default function Recommender() {
 
   function dateChange(dates) {
     const [start, end] = dates;
+    setUseDate(true);
 
     setStartDate(start);
     setEndDate(end);
@@ -51,9 +57,19 @@ export default function Recommender() {
     setPage(page + 1);
   }
 
-  function getData() {
+  function getData(arg) {
+    let params = {};
+
+    if (arg?.filter) {
+      if (useDate) {
+        params.startDate = startDate;
+        params.endDate = endDate;
+      }
+      params.searchkey = search;
+    }
+
     axios
-      .get(`${API.USER_BRANCH}/${(page - 1) * 10}/10/id/DESC`)
+      .get(`${API.USER_BRANCH}/${(page - 1) * 8}/8/id/DESC`, { params })
       .then(({ data }) => {
         console.log(data);
         setTotal(data.resp.count);
@@ -198,7 +214,7 @@ export default function Recommender() {
                   startDate={startDate}
                   endDate={endDate}
                   selectsRange
-                  customInput={<ExampleCustomInput />}
+                  customInput={<CustomInput />}
                 />
               </span>
 
@@ -210,7 +226,10 @@ export default function Recommender() {
                 />
               </span>
 
-              <button className="applyBtn" onClick={() => {}}>
+              <button
+                className="applyBtn"
+                onClick={() => getData({ filter: true })}
+              >
                 {t("Apply")}
               </button>
             </div>
@@ -452,6 +471,10 @@ const PrecommenderBox = styled.div`
             align-items: center;
             gap: 8px;
 
+            &.on {
+              color: #fff;
+            }
+
             img {
               width: 16px;
               height: 17px;
@@ -462,6 +485,7 @@ const PrecommenderBox = styled.div`
         &.searchBox {
           input {
             flex: 1;
+            color: #fff;
 
             &::placeholder {
               color: rgba(255, 255, 255, 0.4);

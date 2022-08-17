@@ -8,6 +8,7 @@ import { getBigCount, GetTierByLevel } from "../../util/Util";
 import axios from "axios";
 import { API } from "../../configs/api";
 import { useEffect, useState } from "react";
+import ReactApexChart from "react-apexcharts";
 
 export default function MyPosition() {
   const { t } = useTranslation();
@@ -15,6 +16,7 @@ export default function MyPosition() {
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [data, setData] = useState("");
+  const [chartData, setChartData] = useState([]);
 
   function getData() {
     axios
@@ -22,6 +24,23 @@ export default function MyPosition() {
       .then(({ data }) => {
         console.log(data.result);
         setData(data.result);
+      })
+      .catch(console.error);
+
+    axios
+      .get(API.USER_DAILY_SUMMARY)
+      .then(({ data }) => {
+        let _chartData = [];
+        console.log(data.list);
+        console.log(new Date(data.list[0].date));
+        data.list.map((e, i) => {
+          _chartData.push({
+            x: new Date(e.date),
+            y: e.sumbetamount / 10 ** 6,
+          });
+        });
+
+        setChartData([..._chartData]);
       })
       .catch(console.error);
   }
@@ -91,9 +110,7 @@ export default function MyPosition() {
                 <div className="detPriceList">
                   <li>
                     <p className="key">{t("Deals")}</p>
-                    <p className="value">
-                      ${getBigCount(data.total_betamount)}
-                    </p>
+                    <p className="value">${getBigCount(data.deal)}</p>
                   </li>
                   <li>
                     <p className="key">{t("Trading profit")}</p>
@@ -203,9 +220,7 @@ export default function MyPosition() {
                 <li>
                   <div>
                     <p className="key">{t("Deals")}</p>
-                    <p className="value">
-                      ${getBigCount(data.total_betamount)}
-                    </p>
+                    <p className="value">${getBigCount(data.deal)}</p>
                   </div>
                   <div>
                     <p className="key">{t("Trading profit")}</p>
@@ -252,7 +267,14 @@ export default function MyPosition() {
                 </li>
               </div>
             </div>
-            <div className="chartBox"></div>
+            <div className="chartBox">
+              <ReactApexChart
+                options={chartOpt}
+                series={[{ data: [...chartData] }]}
+                type="line"
+                height={"100%"}
+              />
+            </div>
           </article>
         </section>
       </PmyPositionBox>
@@ -574,3 +596,82 @@ const PmyPositionBox = styled.main`
     }
   }
 `;
+
+const chartOpt = {
+  chart: {
+    background: "none",
+    zoom: {
+      autoScaleYaxis: true,
+      enabled: false,
+    },
+    toolbar: {
+      show: false,
+    },
+  },
+  colors: ["#F7AB1F"],
+  stroke: {
+    colors: "#F7AB1F",
+    curve: "smooth",
+    width: 2,
+  },
+  dataLabels: {
+    enabled: false,
+  },
+  markers: {
+    size: 0,
+  },
+  xaxis: {
+    type: "datetime",
+    labels: {
+      style: {
+        colors: "#aaa",
+      },
+    },
+    axisBorder: {
+      show: false,
+    },
+    axisTicks: {
+      show: false,
+    },
+  },
+  yaxis: {
+    opposite: true,
+    labels: {
+      show: true,
+      align: "right",
+      style: {
+        colors: "#aaa",
+      },
+      formatter: (val) => {
+        return `$${val}`;
+      },
+    },
+    axisBorder: {
+      show: false,
+    },
+    axisTicks: {
+      show: false,
+    },
+  },
+  tooltip: {
+    x: {
+      format: "dd MMM",
+    },
+    y: {
+      title: {
+        formatter: (_, { series, seriesIndex }) => {
+          return `Profit `;
+        },
+      },
+    },
+  },
+  legend: {
+    show: false,
+  },
+  grid: {
+    borderColor: "rgba(0,0,0,0)",
+  },
+  theme: {
+    mode: "dark",
+  },
+};

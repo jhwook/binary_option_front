@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import { useSelector } from "react-redux";
 import { setToast } from "../../util/Util";
 import { useTranslation } from "react-i18next";
+import axios from "axios";
+import { API } from "../../configs/api";
 
 export default function SetPw() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const state = useLocation().state;
+
+  console.log(state);
 
   const isMobile = useSelector((state) => state.common.isMobile);
 
@@ -22,17 +27,27 @@ export default function SetPw() {
   }
 
   function onClickContBtn() {
-    navigate("/auth/comppw");
+    axios
+      .patch(`${API.CHANGE_PW}/${state.category}`, {
+        email: state.email,
+        countryNum: state.phoneLoc,
+        phone: state.phone,
+        password: pw,
+        confirmPassword: confirmPw,
+      })
+      .then(({ data }) => {
+        console.log(data);
+        
+        if (data.message === "successfully changed") navigate("/auth/comppw");
+      })
+      .catch(console.error);
   }
 
   useEffect(() => {
     if (pw && !validatePw(pw)) {
-      setToast({
-        type: "alarm_black",
-        cont: t(
-          "Password must be at least 8 characters with 1 upper case letter and 1 number."
-        ),
-      });
+      setPwAlarm(
+        "Password must be at least 8 characters with 1 upper case letter and 1 number."
+      );
     } else setPwAlarm("");
   }, [pw]);
 
