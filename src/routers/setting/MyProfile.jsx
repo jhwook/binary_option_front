@@ -817,6 +817,7 @@ const PmyProfileBox = styled.main`
     flex-direction: column;
     gap: 40px;
     height: 100%;
+    margin: 0 0 70px;
 
     .titleArea {
       display: flex;
@@ -837,7 +838,7 @@ const PmyProfileBox = styled.main`
       display: flex;
       flex-direction: column;
       gap: 24px;
-      width: 900px;
+      max-width: 900px;
       padding: 34px 40px;
       background: rgba(255, 255, 255, 0.2);
       border: 2px solid rgba(255, 255, 255, 0.1);

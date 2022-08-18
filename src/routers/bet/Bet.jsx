@@ -16,7 +16,6 @@ export default function Bet() {
   const token = localStorage.getItem("token");
   const demoToken = localStorage.getItem("demoToken");
 
-  const [closedList, setClosedList] = useState([]);
   const [notiOpt, setNotiOpt] = useState({
     betEnd: false,
     orderRequest: false,
@@ -75,7 +74,6 @@ export default function Bet() {
         });
       }
 
-      setClosedList([...closedList, res]);
       dispatch(setClosedFlag());
       dispatch(setBetFlag());
     });

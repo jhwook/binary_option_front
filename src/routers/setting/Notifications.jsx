@@ -20,7 +20,7 @@ export default function Notifications() {
     axios
       .get(API.NOTI)
       .then(({ data }) => {
-        console.log(data.resp);
+        console.log(data);
         let _resp = data.resp;
 
         setBetEnd(_resp.betend);
