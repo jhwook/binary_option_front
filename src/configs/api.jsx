@@ -54,4 +54,5 @@ export const API = {
 
   ADMIN_LEVEL_FEE: URL + "/admins/level/fee",
   ADMIN_FEE_SETTING: URL + "/admins/fee/setting", //:level
+  ADMIN_QR: URL + "/admins/domain/setting/qr",
 };

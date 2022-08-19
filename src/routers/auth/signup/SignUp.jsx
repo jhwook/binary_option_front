@@ -12,6 +12,7 @@ import { API } from "../../../configs/api";
 import { useSelector } from "react-redux";
 import { setToast } from "../../../util/Util";
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 
 export default function Signup() {
   const { t } = useTranslation();
@@ -22,6 +23,7 @@ export default function Signup() {
   const [category, setCategory] = useState(D_loginCategoryList[0]);
   const [chkTerm, setChkTerm] = useState(false);
   const [userData, setUserData] = useState(D_joinData);
+  const [qrUrl, setQrUrl] = useState("");
 
   function onClickSignup() {
     let signDataForm;
@@ -56,6 +58,16 @@ export default function Signup() {
       })
       .catch((err) => console.error(err));
   }
+
+  useEffect(() => {
+    axios
+      .get(API.ADMIN_QR)
+      .then(({ data }) => {
+        console.log(data.url);
+        setQrUrl(data.url);
+      })
+      .catch(console.error);
+  }, []);
 
   if (isMobile)
     return (
@@ -294,7 +306,7 @@ export default function Signup() {
                   <QRCode
                     size={220}
                     style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-                    value={"https://users.options1.net/#/auth/login"}
+                    value={`${qrUrl}/#/auth/signup`}
                     viewBox={`0 0 220 220`}
                   />
                 </div>

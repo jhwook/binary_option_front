@@ -1,41 +1,49 @@
 import axios from "axios";
 import moment from "moment";
+import { useRef } from "react";
 import { useEffect, useLayoutEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
+import styled from "styled-components";
 import { API } from "../../configs/api";
 
 export default function BetChart({
   assetInfo,
-  chartWidth,
-  setChartWidth,
   chartOpt,
   openedData,
+  dragX,
+  setDragX,
 }) {
+  const chartRef = useRef();
+
+  const [chartWidth, setChartWidth] = useState(window.innerWidth * 2);
+  const [chartWidthPer, setChartWidthPer] = useState(1);
   const [apiData, setApiData] = useState([]);
   const [reload, setReload] = useState(false);
   const [updateFlag, setUpdateFlag] = useState(false);
+  const [yAxisWidth, setYaxisWidth] = useState(40);
 
-  function getPreOpt() {
-    switch (chartOpt.barSize) {
-      case 10000:
-      case 30000:
-      case 60000:
-        return "1min";
-      case 300000:
-        return "5min";
-      case 900000:
-        return "15m";
-      case 1800000:
-        return "30m";
-      case 3600000:
-        return "1h";
-      case 14400000:
-        return "4h";
-      case 84400000:
-        return "1d";
+  function onWheelChart(e) {
+    e.stopPropagation();
 
-      default:
-        break;
+    if (e.deltaY < 0 && chartWidthPer > 0.28)
+      setChartWidthPer(chartWidthPer - 0.04);
+    else if (e.deltaY > 0 && chartWidthPer < 4)
+      setChartWidthPer(chartWidthPer + 0.04);
+  }
+
+  function onDragChartBox(e) {
+    if (!dragX) return;
+
+    let diffX = e.clientX - dragX;
+
+    if (
+      chartRef.current.scrollLeft - diffX > 0 &&
+      chartRef.current.scrollLeft - diffX < chartWidth * chartWidthPer
+    ) {
+      chartRef.current.scrollTo({
+        left: chartRef.current.scrollLeft - diffX,
+        behavior: "smooth",
+      });
     }
   }
 
@@ -69,98 +77,81 @@ export default function BetChart({
       .then(({ data }) => {
         const { resp } = data;
 
-        console.log(resp);
-        let chartIndex = -1;
         let _data = [];
 
-        resp.map((e, i) => {
-          if (i % (chartOpt.barSize / 1000) === chartIndex) {
-            if (chartOpt.typeStr === "Line")
-              _data[chartIndex].y = Number(e.price);
-              
+        console.log(resp);
+
+        resp.slice(-1000).map((e, i) => {
+          if (new Date(e.createdat) % chartOpt.barSize) {
+            let _chartIndex = _data.length - 1;
+
+            if (!_data[_chartIndex]?.y) return;
+
+            switch (chartOpt.typeStr) {
+              case "Line":
+                _data[_chartIndex].y = Number(e.price);
+                break;
+
+              case "Candles":
+                if (Number(e.price) > _data[_chartIndex].y[1])
+                  _data[_chartIndex].y[1] = Number(e.price);
+                else if (Number(e.price) < _data[_chartIndex].y[2])
+                  _data[_chartIndex].y[2] = Number(e.price);
+
+                _data[_chartIndex].y[3] = Number(e.price);
+                break;
+
+              case "Heiken Ashi":
+                if (Number(e.price) > _data[_chartIndex].y[1])
+                  _data[_chartIndex].y[1] = Number(e.price);
+                else if (Number(e.price) < _data[_chartIndex].y[2])
+                  _data[_chartIndex].y[2] = Number(e.price);
+
+                _data[_chartIndex].y[3] =
+                  (_data[_chartIndex].y[0] +
+                    _data[_chartIndex].y[1] +
+                    _data[_chartIndex].y[2] +
+                    Number(e.price)) /
+                  4;
+
+                break;
+
+              default:
+                break;
+            }
           } else {
+            let _yData;
+            let _chartIndex = _data.length - 1;
+
+            switch (chartOpt.typeStr) {
+              case "Line":
+                _yData = Number(e.price);
+                break;
+              case "Candles":
+                _yData = new Array(4).fill(Number(e.price));
+                break;
+              case "Heiken Ashi":
+                _yData = _chartIndex >= 0 && [
+                  (_data[_chartIndex][0] + _data[_chartIndex][3]) / 2 || 0,
+                  Number(e.price),
+                  Number(e.price),
+                  Number(e.price),
+                ];
+                break;
+              default:
+                break;
+            }
+
             _data.push({
-              x: new Date(e.createdat).setHours(
-                new Date(e.createdat).getHours() + 9
-              ),
-              y:
-                (chartOpt.typeStr === "Line" && Number(e.price)) ||
-                (chartOpt.typeStr === "Candles" &&
-                  new Array(4).fill(Number(e.price))) ||
-                (chartOpt.typeStr === "Heiken Ashi" &&
-                  chartIndex >= 0 && [
-                    (_data[chartIndex][0] + _data[chartIndex][3]) / 2 || 0,
-                    Number(e.price),
-                    Number(e.price),
-                    Number(e.price),
-                  ]),
+              x: new Date(e.createdat),
+              y: _yData,
             });
-
-            chartIndex++;
-          }
-
-          return {};
-        });
-      })
-      .catch(console.error);
-
-    axios
-      .get(`https://api.twelvedata.com/time_series`, {
-        params: {
-          symbol: assetInfo.APISymbol,
-          interval: getPreOpt(),
-          apikey: process.env.REACT_APP_TWELVEDATA_KEY,
-          outputsize: 100,
-        },
-      })
-      .then(({ data }) => {
-        let _data = data.values.reverse();
-        _data = _data.map((e, i) => {
-          if (chartOpt.typeStr === "Line") {
-            return {
-              x: new Date(e.datetime).setHours(
-                new Date(e.datetime).getHours() + 9
-              ),
-              y: Number(e.close),
-            };
-          } else if (chartOpt.typeStr === "Candles") {
-            return {
-              x: new Date(e.datetime).setHours(
-                new Date(e.datetime).getHours() + 9
-              ),
-              y: [
-                Number(e.open),
-                Number(e.high),
-                Number(e.low),
-                Number(e.close),
-              ],
-            };
-          } else if (chartOpt.typeStr === "Heiken Ashi") {
-            if (i === 0) return;
-
-            return {
-              x: new Date(e.datetime).setHours(
-                new Date(e.datetime).getHours() + 9
-              ),
-              y: [
-                Number(
-                  (Number(_data[i - 1].open) + Number(_data[i - 1].close)) / 2
-                ),
-                Number(e.high),
-                Number(e.low),
-                (Number(e.open) +
-                  Number(e.high) +
-                  Number(e.low) +
-                  Number(e.close)) /
-                  4,
-              ],
-            };
           }
         });
 
+        console.log(_data);
         if (chartOpt.typeStr === "Heiken Ashi") _data.shift();
 
-        // console.log("_data", _data);
         setApiData([..._data]);
       })
       .catch(console.error);
@@ -178,6 +169,41 @@ export default function BetChart({
         let pushData;
         let _apiData = apiData;
         let _lastIndex = _apiData[_apiData.length - 1];
+        let _now = new Date().setMilliseconds(0);
+
+        switch (chartOpt.typeStr) {
+          case "Line":
+            break;
+          case "Candles":
+            if (_now % chartOpt.barSize) {
+              if (Number(data.price) > _lastIndex.y[1])
+                _lastIndex.y[1] = Number(data.price);
+              else if (Number(data.price) < _lastIndex.y[2])
+                _lastIndex.y[2] = Number(data.price);
+
+              _lastIndex.y[3] = Number(data.price);
+
+              _apiData[_apiData.length - 1] = _lastIndex;
+            } else {
+              console.log(_now);
+              pushData = {
+                x: _now,
+                y: [
+                  Number(data.price),
+                  Number(data.price),
+                  Number(data.price),
+                  Number(data.price),
+                ],
+              };
+
+              _apiData.push(pushData);
+            }
+            break;
+          case "Heiken Ashi":
+            break;
+          default:
+            break;
+        }
 
         if (chartOpt.typeStr === "Line") {
           if (_apiData[0].y[3]) return;
@@ -193,28 +219,6 @@ export default function BetChart({
             _apiData.push(pushData);
           }
         } else if (chartOpt.typeStr === "Candles") {
-          if (indexCondition(_lastIndex.x)) {
-            if (Number(data.price) > _lastIndex.y[1])
-              _lastIndex.y[1] = Number(data.price);
-            else if (Number(data.price) < _lastIndex.y[2])
-              _lastIndex.y[2] = Number(data.price);
-
-            _lastIndex.y[3] = Number(data.price);
-
-            _apiData[_apiData.length - 1] = _lastIndex;
-          } else {
-            pushData = {
-              x: new Date(new Date().setSeconds(0)).setMilliseconds(0),
-              y: [
-                Number(data.price),
-                Number(data.price),
-                Number(data.price),
-                Number(data.price),
-              ],
-            };
-
-            _apiData.push(pushData);
-          }
         } else if (chartOpt.typeStr === "Heiken Ashi") {
           if (indexCondition(_lastIndex.x)) {
             if (Number(data.price) > _lastIndex.y[1])
@@ -249,14 +253,35 @@ export default function BetChart({
           }
         }
 
-        // console.log(_apiData);
-        setChartWidth({ ...chartWidth, width: _apiData.length * 20 });
+        console.log(_apiData);
+        setChartWidth(_apiData.length * 20);
         setApiData([..._apiData]);
         setTimeout(() => setReload(false), 1);
         setUpdateFlag(!updateFlag);
       })
       .catch(console.error);
   }
+
+  function getYaxisWidth() {
+    if (document.getElementsByClassName("apexcharts-yaxis-label")[0]) {
+      setYaxisWidth(
+        Math.floor(
+          document
+            .getElementsByClassName("apexcharts-yaxis-label")[0]
+            .firstChild.getBoundingClientRect().width
+        ) + 32
+      );
+    }
+  }
+
+  useEffect(() => {
+    if (!chartRef.current) return;
+
+    chartRef.current.scrollTo({
+      left: 99999,
+      behavior: "smooth",
+    });
+  }, [chartRef.current]);
 
   useLayoutEffect(() => {
     setReload(true);
@@ -265,14 +290,15 @@ export default function BetChart({
 
   useEffect(() => {
     if (!apiData[0]) return;
-
+    setTimeout(() => setReload(false), 1);
     let _dataInterval = setTimeout(() => {
-      getData();
+      // getData();
+      getYaxisWidth();
     }, 1000);
     return () => {
       clearTimeout(_dataInterval);
     };
-  }, [apiData, chartOpt]);
+  }, [apiData, chartOpt, chartWidth]);
 
   const areaOpt = {
     chart: {
@@ -339,7 +365,13 @@ export default function BetChart({
       type: "datetime",
       show: false,
       labels: {
-        show: false,
+        style: {
+          colors: "#aaa",
+          cssClass: "apexcharts-yaxis-label",
+        },
+        formatter: (val, timeStamp) => {
+          return moment(new Date(timeStamp)).format("HH:mm");
+        },
       },
       axisBorder: {
         show: false,
@@ -396,22 +428,6 @@ export default function BetChart({
       },
     },
     annotations: {
-      // xaxis: [
-      //   {
-      //     x: 1660023780000,
-      //     borderColor: "#FEB019",
-      //     label: {
-      //       borderColor: "#FEB019",
-      //       style: {
-      //         color: "#fff",
-      //         background: "#FEB019",
-      //       },
-      //       orientation: "horizontal",
-      //       text: "X Axis Anno Horizonal",
-      //     },
-      //   },
-      // ],
-
       points: openedData.map((e) => {
         let color;
 
@@ -440,44 +456,104 @@ export default function BetChart({
           },
         };
       }),
-
-      // yaxis: yNoti.map((e) => {
-      //   return {
-      // yaxis: [
-      //   {
-      //     // y: Number(e),
-      //     y: 23780.5,
-      //     borderColor: "#00E396",
-      //     label: {
-      //       show: true,
-      //       text: `$${(23780).toFixed(2)}`,
-      //       // text: `$${Number(e).toFixed(2)}`,
-      //       borderRadius: 10,
-      //       offsetY: 0,
-      //       borderWidth: 0,
-      //       // textAnchor: "start",
-      //       // textAnchor: "middle",
-      //       // textAnchor: "",
-      //       style: {
-      //         borderColor: "#000",
-      //         borderWidth: 0,
-      //         color: "#fff",
-      //         background: "#3fb68b66",
-      //         fontSize: 10,
-      //         cssClass: "apexcharts-yaxis-annotation-label",
-      //         padding: {
-      //           left: 8,
-      //           right: 40,
-      //           top: 4,
-      //           bottom: 4,
-      //         },
-      //       },
-      //     },
-      //   },
-      // ],
-      // };
-      // }),
     },
+    dataLabels: {
+      enabled: false,
+    },
+    markers: {
+      size: 0,
+    },
+    xaxis: {
+      type: "datetime",
+      labels: {
+        show: true,
+        align: "right",
+        style: {
+          colors: "#aaa",
+          cssClass: "apexcharts-yaxis-label",
+        },
+        formatter: (val, timeStamp) => {
+          return moment(new Date(timeStamp)).format("HH:mm");
+        },
+      },
+      axisBorder: {
+        show: false,
+      },
+      axisTicks: {
+        show: false,
+      },
+    },
+    yaxis: {
+      tooltip: {
+        enabled: true,
+      },
+      crosshairs: {
+        show: true,
+        position: "back",
+        stroke: {
+          color: "#b6b6b6",
+          width: 1,
+          dashArray: 3,
+        },
+      },
+      labels: {
+        show: false,
+        align: "right",
+        style: {
+          colors: "#aaa",
+          cssClass: "apexcharts-yaxis-label",
+        },
+      },
+      axisBorder: {
+        show: false,
+      },
+      axisTicks: {
+        show: false,
+      },
+    },
+    tooltip: {
+      // enabled: false,
+      custom: () => {
+        return <div className="tooltip" style={{ background: "#f00" }}></div>;
+      },
+      style: {
+        fontSize: 0,
+      },
+    },
+    legend: {
+      show: false,
+    },
+    grid: {
+      borderColor: "rgba(0,0,0,0)",
+    },
+  };
+
+  const yaxisOpt = {
+    chart: {
+      zoom: {
+        autoScaleYaxis: true,
+        enabled: false,
+      },
+      toolbar: {
+        show: false,
+      },
+      events: {
+        dataPointMouseEnter: (e, cont, config) => {
+          console.log(cont, config);
+        },
+      },
+    },
+    fill: {
+      type: "gradient",
+      gradient: {
+        shadeIntensity: 1,
+        opacityFrom: 0.7,
+        opacityTo: 0,
+        stops: [0, 90, 100],
+      },
+    },
+
+    annotations: {},
     dataLabels: {
       enabled: false,
     },
@@ -498,9 +574,13 @@ export default function BetChart({
       },
     },
     yaxis: {
-      show: false,
       labels: {
-        show: false,
+        show: true,
+        align: "right",
+        style: {
+          colors: "#aaa",
+          cssClass: "apexcharts-yaxis-label",
+        },
       },
       axisBorder: {
         show: false,
@@ -520,18 +600,82 @@ export default function BetChart({
     },
   };
 
-  return reload ? (
-    <></>
-  ) : (
-    <ReactApexChart
-      options={
-        (chartOpt.type === "area" && areaOpt) ||
-        (chartOpt.type === "candlestick" && candleOpt)
-      }
-      series={[{ data: reload ? "" : [...apiData], flag: updateFlag }]}
-      type={chartOpt.type}
-      width={chartWidth.width * chartWidth.per}
-      height={"100%"}
-    />
+  return (
+    <BetChartCont>
+      {reload ? (
+        <></>
+      ) : (
+        <>
+          <div
+            className="chartBox"
+            ref={chartRef}
+            onMouseDown={(e) => setDragX(e.clientX)}
+            onMouseMove={onDragChartBox}
+            onWheel={onWheelChart}
+          >
+            <div
+              id="Chart"
+              className="chart"
+              style={{
+                width: chartWidth * chartWidthPer - yAxisWidth,
+              }}
+            >
+              <ReactApexChart
+                options={
+                  (chartOpt.type === "area" && areaOpt) ||
+                  (chartOpt.type === "candlestick" && candleOpt)
+                }
+                series={[
+                  { data: reload ? "" : [...apiData], flag: updateFlag },
+                ]}
+                type={chartOpt.type}
+                width={chartWidth * chartWidthPer - yAxisWidth}
+                height={"100%"}
+              />
+            </div>
+          </div>
+          <div className="yaxisBox">
+            <ReactApexChart
+              options={yaxisOpt}
+              series={[{ data: reload ? "" : [...apiData], flag: updateFlag }]}
+              type={"area"}
+              width={yAxisWidth}
+              height={"100%"}
+            />
+          </div>
+        </>
+      )}
+    </BetChartCont>
   );
 }
+
+const BetChartCont = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  position: relative;
+
+  .chartBox {
+    width: 100%;
+    height: 100%;
+    padding: 0 ${window.innerWidth * 0.2}px 0 0;
+    overflow-x: scroll;
+    position: relative;
+    cursor: pointer;
+
+    .chart {
+      height: 100%;
+      overflow: hidden;
+    }
+  }
+
+  .yaxisBox {
+  }
+
+  .apexcharts-tooltip,
+  .apexcharts-xaxistooltip.apexcharts-xaxistooltip-bottom,
+  .apexcharts-yaxistooltip {
+    display: none;
+  }
+`;

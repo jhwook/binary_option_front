@@ -21,6 +21,7 @@ export default function Login() {
 
   const [category, setCategory] = useState(D_loginCategoryList[0]);
   const [userData, setUserData] = useState(D_joinData);
+  const [qrUrl, setQrUrl] = useState("");
 
   function disableLoginBtn() {
     switch (category) {
@@ -121,6 +122,16 @@ export default function Login() {
   function onKeyDown(e) {
     if (e.key === "Enter") onClickLoginBtn();
   }
+
+  useEffect(() => {
+    axios
+      .get(API.ADMIN_QR)
+      .then(({ data }) => {
+        console.log(data.url);
+        setQrUrl(data.url);
+      })
+      .catch(console.error);
+  }, []);
 
   useEffect(() => {
     setUserData(D_joinData);
@@ -294,7 +305,7 @@ export default function Login() {
                   <QRCode
                     size={220}
                     style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-                    value={"https://users.options1.net/#/auth/login"}
+                    value={`${qrUrl}/#/auth/login`}
                     viewBox={`0 0 220 220`}
                   />
                 </div>

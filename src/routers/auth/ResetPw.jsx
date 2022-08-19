@@ -26,6 +26,7 @@ export default function ResetPw() {
   const [phoneSent, setPhoneSent] = useState(false);
   const [selLocPopup, setSelLocPopup] = useState(false);
   const [code, setCode] = useState("");
+  const [qrUrl, setQrUrl] = useState("");
 
   function onChangePhone(v) {
     if (v[0] === "0") v = v.slice(1);
@@ -64,7 +65,7 @@ export default function ResetPw() {
         if (data.message === "VALID_CODE")
           navigate("/auth/setpw/123", {
             state: {
-              category:category.value,
+              category: category.value,
               email,
               phoneLoc,
               phone,
@@ -75,6 +76,16 @@ export default function ResetPw() {
   }
 
   useEffect(() => {
+    axios
+      .get(API.ADMIN_QR)
+      .then(({ data }) => {
+        console.log(data.url);
+        setQrUrl(data.url);
+      })
+      .catch(console.error);
+  }, []);
+
+  useEffect(() => {
     setEmailSent(false);
   }, [email]);
 
@@ -83,6 +94,8 @@ export default function ResetPw() {
   }, [phone]);
 
   useEffect(() => {
+    if (!phoneLoc) return;
+
     getCode();
   }, [phoneLoc]);
 
@@ -387,7 +400,7 @@ export default function ResetPw() {
                   <QRCode
                     size={220}
                     style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-                    value={"https://users.options1.net/#/auth/login"}
+                    value={`${qrUrl}/#/auth/resetpw`}
                     viewBox={`0 0 220 220`}
                   />
                 </div>
