@@ -8,7 +8,7 @@ import I_lowArwRed from "../../../img/icon/I_lowArwRed.svg";
 import { setOpenedData } from "../../../reducers/bet";
 import { getDividFromData } from "../../../util/Util";
 
-export default function Opened({socket}) {
+export default function Opened({ socket }) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const isMobile = useSelector((state) => state.common.isMobile);
@@ -130,6 +130,10 @@ export default function Opened({socket}) {
                     <summary>
                       <div className="contBox">
                         <p className="token">{v.asset.name}</p>
+
+                        <p className="price">
+                          {Math.floor(v.startingPrice * 100) / 100}
+                        </p>
 
                         <p className="percent">{`${v.diffRate || 0}%`}</p>
                       </div>
@@ -276,6 +280,10 @@ export default function Opened({socket}) {
                     <summary>
                       <div className="contBox">
                         <p className="token">{v?.asset?.name}</p>
+
+                        <p className="price">
+                          {Math.floor(v.startingPrice * 100) / 100}
+                        </p>
 
                         <p className="percent">{`${v.diffRate || 0}%`}</p>
                       </div>
@@ -452,10 +460,19 @@ const MopenedBox = styled.ul`
           align-items: center;
           gap: 10px;
 
+          & > * {
+            flex: 1;
+          }
+
           .percent {
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
+            text-align: end;
+          }
+
+          .price {
+            text-align: center;
           }
 
           .forecast {
@@ -469,6 +486,8 @@ const MopenedBox = styled.ul`
           }
 
           .benefit {
+            text-align: center;
+
             &.plus {
               color: #3fb68b;
             }
@@ -476,6 +495,10 @@ const MopenedBox = styled.ul`
             &.minus {
               color: #ff5353;
             }
+          }
+
+          .time {
+            text-align: end;
           }
         }
       }
@@ -614,10 +637,19 @@ const PopenedBox = styled.ul`
           align-items: center;
           gap: 10px;
 
+          & > * {
+            flex: 1;
+          }
+
           .percent {
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
+            text-align: end;
+          }
+
+          .price {
+            text-align: center;
           }
 
           .forecast {
@@ -631,6 +663,8 @@ const PopenedBox = styled.ul`
           }
 
           .benefit {
+            text-align: center;
+
             &.plus {
               color: #3fb68b;
             }
@@ -638,6 +672,10 @@ const PopenedBox = styled.ul`
             &.minus {
               color: #ff5353;
             }
+          }
+
+          .time {
+            text-align: end;
           }
         }
       }

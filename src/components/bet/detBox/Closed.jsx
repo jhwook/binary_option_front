@@ -103,6 +103,10 @@ export default function Closed({ page }) {
                           <div className="contBox">
                             <p className="token">{detV?.asset?.name}</p>
 
+                            <p className="price">
+                              {Math.floor(detV.startingPrice * 100) / 100}
+                            </p>
+
                             <p className="percent">{`${detV.diffRate}%`}</p>
                           </div>
 
@@ -257,6 +261,10 @@ export default function Closed({ page }) {
                         <summary>
                           <div className="contBox">
                             <p className="token">{detV?.asset?.name}</p>
+
+                            <p className="price">
+                              {Math.floor(detV.startingPrice * 100) / 100}
+                            </p>
 
                             <p className="percent">{`${detV.diffRate}%`}</p>
                           </div>
@@ -454,13 +462,21 @@ const MclosedBox = styled.ul`
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-
                 gap: 10px;
+
+                & > * {
+                  flex: 1;
+                }
 
                 .percent {
                   overflow: hidden;
                   white-space: nowrap;
                   text-overflow: ellipsis;
+                  text-align: end;
+                }
+
+                .price {
+                  text-align: center;
                 }
 
                 .forecast {
@@ -474,6 +490,8 @@ const MclosedBox = styled.ul`
                 }
 
                 .benefit {
+                  text-align: center;
+
                   &.plus {
                     color: #3fb68b;
                   }
@@ -481,6 +499,10 @@ const MclosedBox = styled.ul`
                   &.minus {
                     color: #ff5353;
                   }
+                }
+
+                .time {
+                  text-align: end;
                 }
               }
             }
@@ -684,10 +706,19 @@ const PclosedBox = styled.ul`
                 align-items: center;
                 gap: 10px;
 
+                & > * {
+                  flex: 1;
+                }
+
                 .percent {
                   overflow: hidden;
                   white-space: nowrap;
                   text-overflow: ellipsis;
+                  text-align: end;
+                }
+
+                .price {
+                  text-align: center;
                 }
 
                 .forecast {
@@ -701,6 +732,8 @@ const PclosedBox = styled.ul`
                 }
 
                 .benefit {
+                  text-align: center;
+
                   &.plus {
                     color: #3fb68b;
                   }
@@ -708,6 +741,10 @@ const PclosedBox = styled.ul`
                   &.minus {
                     color: #ff5353;
                   }
+                }
+
+                .time {
+                  text-align: end;
                 }
               }
             }
