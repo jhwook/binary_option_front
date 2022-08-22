@@ -1222,11 +1222,11 @@ const PbetBox = styled.main`
                 height: 36px;
                 font-size: 16px;
                 font-weight: 700;
-                background: rgba(246, 246, 246, 0.1);
+                background: #32323d;
                 border-radius: 6px;
 
                 &:hover {
-                  background: rgba(246, 246, 246, 0.2);
+                  background: #474751;
                 }
 
                 img {

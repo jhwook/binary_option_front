@@ -1,5 +1,7 @@
 //export const URL = "http://options1.net:30708";
 // export const URL = "http://litriggy.com:30708";
+// export const URL = "https://options1.net:30718";
+export const CLOSED_SOCKET_URL = "https://options1.net:38687";
 export const URL = "https://options1.net:30718";
 
 export const API = {

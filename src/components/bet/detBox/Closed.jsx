@@ -112,9 +112,11 @@ export default function Closed({ page }) {
                               <p>{`$${detV.amount / 10 ** 6}`}</p>
                             </span>
 
-                            <p
-                              className={`${getPreResult(detV)} benefit`}
-                            >{`$${Number(detV.profit_amount).toFixed(2)}`}</p>
+                            <p className={`${getPreResult(detV)} benefit`}>{`$${
+                              detV.profit_amount
+                                ? Number(detV.profit_amount).toFixed(2)
+                                : 0
+                            }`}</p>
 
                             <p className="time">
                               {moment.unix(detV.starting).format("HH:mm:ss")}
@@ -265,9 +267,11 @@ export default function Closed({ page }) {
                               <p>{`$${detV.amount / 10 ** 6}`}</p>
                             </span>
 
-                            <p
-                              className={`${getPreResult(detV)} benefit`}
-                            >{`$${Number(detV.profit_amount).toFixed(2)}`}</p>
+                            <p className={`${getPreResult(detV)} benefit`}>{`$${
+                              detV.profit_amount
+                                ? Number(detV.profit_amount).toFixed(2)
+                                : 0
+                            }`}</p>
 
                             <p className="time">
                               {moment.unix(detV.starting).format("HH:mm:ss")}

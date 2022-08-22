@@ -93,20 +93,34 @@ export default function DefaultHeader({ white, border, title, demoToken }) {
             {title ? (
               <p className="title">{t(title)}</p>
             ) : token && location.pathname.indexOf("auth") === -1 ? (
-              <button
-                className="accountBtn"
-                onClick={() => setMyBalancePopup(true)}
-              >
-                {balanceType === "Demo" ? (
-                  <p>{`Demo ${`$${Number(
-                    balance?.DEMO?.avail / 10 ** 6 || 0
-                  ).toFixed(2)}`}`}</p>
-                ) : (
-                  <p>{`Live ${`$${Number(
-                    balance?.LIVE?.avail / 10 ** 6 || 0
-                  ).toFixed(2)}`}`}</p>
-                )}
-              </button>
+              <span className="accountBox">
+                <button
+                  className="accountBtn"
+                  onClick={() => setMyBalancePopup(true)}
+                >
+                  {balanceType === "Demo" ? (
+                    <>
+                      <strong className="key">Demo</strong>
+                      <strong className="value">{`${`$${Number(
+                        balance?.DEMO?.avail / 10 ** 6 || 0
+                      ).toFixed(2)}`}`}</strong>
+                    </>
+                  ) : (
+                    <>
+                      <strong className="key">Live</strong>
+                      <strong className="value">
+                        {`$${Number(
+                          balance?.LIVE?.avail / 10 ** 6 || 0
+                        ).toFixed(2)}`}
+                      </strong>
+                    </>
+                  )}
+                </button>
+
+                <button className="depositBtn" onClick={onClickDepositBtn}>
+                  <img src={I_wallet} alt="" />
+                </button>
+              </span>
             ) : (
               <button className="logoBtn" onClick={() => navigate("/")}>
                 <img src={L_yellow} alt="" />
@@ -276,7 +290,10 @@ export default function DefaultHeader({ white, border, title, demoToken }) {
 
         {myBalancePopup && (
           <>
-            <MyBalancePopup off={()=>setMyBalancePopup} setAddPopup={setAddPopup} />
+            <MyBalancePopup
+              off={() => setMyBalancePopup}
+              setAddPopup={setAddPopup}
+            />
             <PopupBg off={setMyBalancePopup} />
           </>
         )}
@@ -288,7 +305,7 @@ export default function DefaultHeader({ white, border, title, demoToken }) {
           </>
         )}
 
-        {profPopup && (
+        {profPopup && token && (
           <>
             <ProfPopup off={setProfPopup} userData={userData} />
             <PopupBg off={setProfPopup} />
@@ -349,15 +366,42 @@ const MdefaultHeaderBox = styled.header`
       }
     }
 
-    .accountBtn {
+    .accountBox {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 116px;
       height: 34px;
       font-size: 14px;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(247, 171, 31, 0.2);
       border-radius: 28px;
+      overflow: hidden;
+
+      .accountBtn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 4px;
+        width: 126px;
+        overflow: hidden;
+
+        .value {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+      }
+
+      .depositBtn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 34px;
+        aspect-ratio: 1;
+        background: #f7ab1f;
+        border-radius: 50%;
+
+        img {
+          height: 14px;
+        }
+      }
     }
   }
 

@@ -3,7 +3,7 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, Navigate } from "react-router";
 import { io } from "socket.io-client";
-import { API, URL } from "../../configs/api";
+import { API, CLOSED_SOCKET_URL, URL } from "../../configs/api";
 import { setBetFlag, setClosedFlag, setDividObj } from "../../reducers/bet";
 import { setToast } from "../../util/Util";
 import Demo from "./Demo";
@@ -20,6 +20,8 @@ export default function Bet() {
     betEnd: false,
     orderRequest: false,
   });
+  const [socketIo, setSocketIo] = useState("");
+  const [closedSocketIo, setClosedSocketIo] = useState("");
 
   function getNotiOpt() {
     axios
@@ -37,17 +39,37 @@ export default function Bet() {
       .catch(console.error);
   }
 
-  const socketIo = io(URL, {
-    transports: ["websocket"],
-    query: {
-      token: localStorage.getItem("token") || localStorage.getItem("demoToken"),
-    },
-  });
+  useEffect(() => {
+    setSocketIo(
+      io(URL, {
+        transports: ["websocket"],
+        query: {
+          token:
+            localStorage.getItem("token") || localStorage.getItem("demoToken"),
+        },
+      })
+    );
+
+    setClosedSocketIo(
+      io(CLOSED_SOCKET_URL, {
+        transports: ["websocket"],
+        query: {
+          token:
+            localStorage.getItem("token") || localStorage.getItem("demoToken"),
+        },
+      })
+    );
+  }, []);
 
   function getBetSocket() {
     socketIo.on("connect", (res) => {
-      console.log("connect");
-      console.log(socketIo);
+      console.log("socketIo connect", socketIo);
+    });
+
+    console.log("closedSocketIo connect", closedSocketIo);
+
+    closedSocketIo.on("connect", (res) => {
+      console.log("closedSocketIo connect", closedSocketIo);
     });
 
     socketIo.on("connect_error", (res) => {
@@ -63,7 +85,7 @@ export default function Bet() {
       console.log("bet", res);
     });
 
-    socketIo.on("bet_closed", (res) => {
+    closedSocketIo.on("bet_closed", (res) => {
       console.log("bet_closed", res);
       if (notiOpt.betEnd) {
         setToast({
@@ -96,6 +118,11 @@ export default function Bet() {
   useLayoutEffect(() => {
     getDemoToken();
     getNotiOpt();
+  }, []);
+
+  useEffect(() => {
+    if (!(socketIo || closedSocketIo)) return;
+    getBetSocket();
 
     return () => {
       localStorage.removeItem("demoToken");
@@ -107,11 +134,7 @@ export default function Bet() {
       socketIo.disconnect("bet");
       socketIo.disconnect("bet_closed");
     };
-  }, []);
-
-  useEffect(() => {
-    getBetSocket();
-  }, [socketIo]);
+  }, [socketIo, closedSocketIo]);
 
   return (
     <Routes>

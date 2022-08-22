@@ -158,20 +158,27 @@ export default function Lending() {
               </div>
             </span>
 
-            <article className="textArea">
-              <strong className="explain">
-                {t("THE RIGHT PLACE")}
-                <br /> {t("FOR ONLINE TRADING ON FINANCIAL MARKETS")}
-              </strong>
+            <article className="contArea">
+              <div className="textCont">
+                <strong className="explain">
+                  {t("THE MOST")}
+                  <br /> {t("TRUSTED PLATFORM")}
+                </strong>
 
-              <strong className="do">
-                {t("Place Your Trades On Best Conditions")}
-              </strong>
+                <strong className="do">
+                  {t("Place Your Trades On Best Conditions")}
+                </strong>
+              </div>
+
+              <button
+                className="tradeBtn"
+                onClick={() => navigate("/bet/live")}
+              >
+                {t("Trade Now")}
+              </button>
             </article>
 
-            <button className="tradeBtn" onClick={() => navigate("/bet/live")}>
-              {t("Trade Now")}
-            </button>
+            <img className="bg" src={B_lending1} alt="" />
           </section>
 
           <section className="featureSec">
@@ -662,6 +669,7 @@ const MlendingBox = styled.main`
 
 const PlendingBox = styled.main`
   height: 100vh;
+  padding: 60px 0 0;
   color: #fff;
   background: #0a0e17;
   overflow-y: scroll;
@@ -669,25 +677,23 @@ const PlendingBox = styled.main`
   .placeSec {
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 40px;
-    height: 1080px;
-    padding: 0 0 210px 0;
-    background: center no-repeat url(${B_lending1});
+    gap: 270px;
+    width: 1120px;
+    height: 1030px;
+    padding: 34px 0 210px 0;
+    margin: 0 auto;
     position: relative;
 
     .banner {
       display: flex;
       align-items: center;
       gap: 40px;
-      width: 900px;
+      width: 800px;
       height: 60px;
       padding: 0 24px;
+      margin: 0 auto;
       background: rgba(255, 255, 255, 0.2);
       border-radius: 12px;
-      top: 94px;
-      position: absolute;
 
       .contBox {
         flex: 1;
@@ -725,35 +731,66 @@ const PlendingBox = styled.main`
       }
     }
 
-    .textArea {
+    .contArea {
       display: flex;
       flex-direction: column;
-      text-align: center;
-      gap: 20px;
+      gap: 30px;
 
-      .explain {
-        font-size: 34px;
-        font-weight: 800;
-        font-family: "Open Sans", sans-serif;
+      .textCont {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+
+        .explain {
+          display: inline-block;
+          font-size: 64px;
+          font-weight: 700;
+          font-family: "Noto Sans JP";
+          background: linear-gradient(
+            96deg,
+            #ffffff 40.65%,
+            rgba(255, 255, 255, 0) 127.33%
+          );
+          color: transparent;
+          -webkit-background-clip: text;
+        }
+
+        .do {
+          font-size: 30px;
+          font-family: "Noto Sans JP";
+          background: linear-gradient(
+            96deg,
+            #ffffff 40.65%,
+            rgba(255, 255, 255, 0) 127.33%
+          );
+          color: transparent;
+          -webkit-background-clip: text;
+        }
       }
 
-      .do {
-        font-size: 18px;
+      .tradeBtn {
+        width: 180px;
+        height: 50px;
+        font-size: 20px;
+        font-weight: 700;
+        background: rgba(235, 235, 235, 0.2);
+        border: 1.6px solid #fbfbfb;
+        box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.25);
+        border-radius: 30px;
+
+        &:hover {
+          color: #0a0e17;
+          background: #fff;
+        }
       }
     }
 
-    .tradeBtn {
-      width: 440px;
-      height: 60px;
-      font-size: 20px;
-      font-weight: 700;
-      border: 1px solid #fff;
-      border-radius: 28px;
-
-      &:hover {
-        color: #0a0e17;
-        background: #fff;
-      }
+    .bg {
+      width: 772px;
+      right: -20%;
+      bottom: 4%;
+      position: absolute;
     }
   }
 

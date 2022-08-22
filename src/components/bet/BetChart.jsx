@@ -73,7 +73,11 @@ export default function BetChart({
 
   function getPreData() {
     axios
-      .get(`${API.GET_ASSETS_TICKER_PRICE}/${assetInfo.socketAPISymbol}`)
+      .get(`${API.GET_ASSETS_TICKER_PRICE}`, {
+        params: {
+          symbol: assetInfo.socketAPISymbol,
+        },
+      })
       .then(({ data }) => {
         const { resp } = data;
 
@@ -170,6 +174,7 @@ export default function BetChart({
         let _apiData = apiData;
         let _lastIndex = _apiData[_apiData.length - 1];
         let _now = new Date().setMilliseconds(0);
+        console.log("data", data);
 
         switch (chartOpt.typeStr) {
           case "Line":
@@ -185,7 +190,7 @@ export default function BetChart({
 
               _apiData[_apiData.length - 1] = _lastIndex;
             } else {
-              console.log(_now);
+              // console.log(_now);
               pushData = {
                 x: _now,
                 y: [
@@ -253,7 +258,7 @@ export default function BetChart({
           }
         }
 
-        console.log(_apiData);
+        // console.log(_apiData);
         setChartWidth(_apiData.length * 20);
         setApiData([..._apiData]);
         setTimeout(() => setReload(false), 1);
@@ -292,7 +297,7 @@ export default function BetChart({
     if (!apiData[0]) return;
     setTimeout(() => setReload(false), 1);
     let _dataInterval = setTimeout(() => {
-      // getData();
+      getData();
       getYaxisWidth();
     }, 1000);
     return () => {
@@ -467,7 +472,6 @@ export default function BetChart({
       type: "datetime",
       labels: {
         show: true,
-        align: "right",
         style: {
           colors: "#aaa",
           cssClass: "apexcharts-yaxis-label",

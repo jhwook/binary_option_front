@@ -154,7 +154,6 @@ export default function Live({ socket, notiOpt }) {
       .catch((err) => console.error(err));
   }
 
-  console.log("notiOpt", notiOpt);
   function onMouseOverBtn(e) {
     hoverRef1.current.style.left = `${e.clientX}px`;
     hoverRef1.current.style.top = `${e.clientY}px`;
