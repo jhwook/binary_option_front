@@ -337,6 +337,12 @@ export default function BetChart({
         if (e.side === "HIGH") color = "#3fb68b";
         else if (e.side === "LOW") color = "#FF5353";
 
+        console.log(
+          "noew",
+          moment().format("YYYY-MM-DD hh:MM:ss"),
+          moment.unix(e.starting).seconds(0).format("YYYY-MM-DD hh:MM:ss")
+        );
+
         return {
           x: Number(moment.unix(e.starting).seconds(0).format("x")),
           y: Number(e.startingPrice).toFixed(2),
@@ -516,9 +522,8 @@ export default function BetChart({
       },
     },
     tooltip: {
-      // enabled: false,
       custom: () => {
-        return <div className="tooltip" style={{ background: "#f00" }}></div>;
+        return <div className="tooltip"></div>;
       },
       style: {
         fontSize: 0,
@@ -605,7 +610,7 @@ export default function BetChart({
   };
 
   return (
-    <BetChartCont>
+    <BetChartCont width={chartWidth * chartWidthPer - yAxisWidth}>
       {reload ? (
         <></>
       ) : (
@@ -615,20 +620,14 @@ export default function BetChart({
             ref={chartRef}
             style={{
               padding:
-                
+                chartWidth * chartWidthPer - yAxisWidth >= window.innerWidth &&
                 `0 ${window.innerWidth * 0.2}px 0 0`,
             }}
             onMouseDown={(e) => setDragX(e.clientX)}
             onMouseMove={onDragChartBox}
             onWheel={onWheelChart}
           >
-            <div
-              id="Chart"
-              className="chart"
-              style={{
-                width: chartWidth * chartWidthPer - yAxisWidth,
-              }}
-            >
+            <div id="Chart" className="chart">
               <ReactApexChart
                 options={
                   (chartOpt.type === "area" && areaOpt) ||
@@ -673,8 +672,15 @@ const BetChartCont = styled.div`
     cursor: pointer;
 
     .chart {
+      display: flex;
+      justify-content: flex-end;
+      width: ${(props) => props.width}px;
+      min-width: 100%;
       height: 100%;
       overflow: hidden;
+
+      & > div {
+      }
     }
   }
 
