@@ -25,7 +25,7 @@ export default function BetChart({
   function onWheelChart(e) {
     e.stopPropagation();
 
-    if (e.deltaY < 0 && chartWidthPer > 0.28)
+    if (e.deltaY < 0 && chartWidthPer > 0.5)
       setChartWidthPer(chartWidthPer - 0.04);
     else if (e.deltaY > 0 && chartWidthPer < 4)
       setChartWidthPer(chartWidthPer + 0.04);
@@ -341,7 +341,7 @@ export default function BetChart({
           x: Number(moment.unix(e.starting).seconds(0).format("x")),
           y: Number(e.startingPrice).toFixed(2),
           marker: {
-            size: 10,
+            size: 5,
             strokeColor: color,
             fillColor: "#181c25",
           },
@@ -443,7 +443,7 @@ export default function BetChart({
           x: Number(moment.unix(e.starting).seconds(0).format("x")),
           y: Number(e.startingPrice).toFixed(2),
           marker: {
-            size: 10,
+            size: 5,
             strokeColor: color,
             fillColor: "#181c25",
           },
@@ -613,6 +613,11 @@ export default function BetChart({
           <div
             className="chartBox"
             ref={chartRef}
+            style={{
+              padding:
+                
+                `0 ${window.innerWidth * 0.2}px 0 0`,
+            }}
             onMouseDown={(e) => setDragX(e.clientX)}
             onMouseMove={onDragChartBox}
             onWheel={onWheelChart}
@@ -663,7 +668,6 @@ const BetChartCont = styled.div`
   .chartBox {
     width: 100%;
     height: 100%;
-    padding: 0 ${window.innerWidth * 0.2}px 0 0;
     overflow-x: scroll;
     position: relative;
     cursor: pointer;

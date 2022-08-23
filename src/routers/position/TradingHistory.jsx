@@ -788,7 +788,7 @@ const PtradingHistoryBox = styled.main`
           border-radius: 50%;
 
           img {
-            width: 20px;
+            width: 14px;
           }
         }
       }
