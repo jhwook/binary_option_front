@@ -1,6 +1,10 @@
 import styled from "styled-components";
 import DefaultHeader from "../../components/header/DefaultHeader";
-import { D_amountTypeList, D_tokenCategoryList } from "../../data/D_bet";
+import {
+  D_amountTypeList,
+  D_timeList,
+  D_tokenCategoryList,
+} from "../../data/D_bet";
 import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
 import I_starYellowO from "../../img/icon/I_starYellowO.svg";
 import I_qnaWhite from "../../img/icon/I_qnaWhite.svg";
@@ -27,6 +31,7 @@ import axios from "axios";
 import { API } from "../../configs/api";
 import LoadingBar from "../../components/common/LoadingBar";
 import { setBetFlag } from "../../reducers/bet";
+import AmChart from "../../components/bet/AmChart";
 
 export default function Demo({ socket, notiOpt }) {
   const hoverRef1 = useRef();
@@ -51,6 +56,10 @@ export default function Demo({ socket, notiOpt }) {
   const [amount, setAmount] = useState("");
   const [amountMode, setAmountMode] = useState(D_amountTypeList[0]);
   const [bookMark, setBookMark] = useState([]);
+  const [chartOpt, setChartOpt] = useState({
+    barSize: D_timeList[0].value,
+    barSizeStr: D_timeList[0].key,
+  });
 
   function getAssetList() {
     axios
@@ -458,20 +467,11 @@ export default function Demo({ socket, notiOpt }) {
                 </article>
 
                 <article className="contArea">
-                  <div className="chartBox">
-                    <div className="chart">
-                      <ReactTradingviewWidget
-                        container_id={"technical-analysis-chart-demo"}
-                        symbol={assetInfo?.dispSymbol}
-                        theme={Themes.DARK}
-                        locale="kr"
-                        autosize
-                        interval="1"
-                        timezone="Asia/Seoul"
-                        allow_symbol_change={false}
-                      />
-                    </div>
-                  </div>
+                  <AmChart
+                    assetInfo={assetInfo}
+                    chartOpt={chartOpt}
+                    openedData={openedData}
+                  />
 
                   <div className="actionBox">
                     <div className="timeBox contBox">
@@ -997,22 +997,6 @@ const PbetBox = styled.main`
       flex: 1;
       display: flex;
       overflow: hidden;
-
-      .chartBox {
-        flex: 1;
-        background: #181c25;
-        border-radius: 12px;
-        overflow: hidden;
-        position: relative;
-
-        .chart {
-          position: absolute;
-          width: calc(100% + 2px);
-          height: calc(100% + 2px);
-          top: -1px;
-          left: -1px;
-        }
-      }
 
       .actionBox {
         display: flex;

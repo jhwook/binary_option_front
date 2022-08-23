@@ -72,6 +72,7 @@ export default function BetChart({
   }
 
   function getPreData() {
+    setApiData([]);
     axios
       .get(`${API.GET_ASSETS_TICKER_PRICE}`, {
         params: {
@@ -85,7 +86,7 @@ export default function BetChart({
 
         console.log(resp);
 
-        resp.slice(-1000).map((e, i) => {
+        resp.slice(-600).map((e, i) => {
           if (new Date(e.createdat) % chartOpt.barSize) {
             let _chartIndex = _data.length - 1;
 
@@ -180,7 +181,10 @@ export default function BetChart({
           case "Line":
             break;
           case "Candles":
-            if (_now % chartOpt.barSize) {
+            if (
+              Math.floor(_now / chartOpt.barSize) ===
+              Math.floor(_lastIndex.x / chartOpt.barSize)
+            ) {
               if (Number(data.price) > _lastIndex.y[1])
                 _lastIndex.y[1] = Number(data.price);
               else if (Number(data.price) < _lastIndex.y[2])
@@ -190,7 +194,7 @@ export default function BetChart({
 
               _apiData[_apiData.length - 1] = _lastIndex;
             } else {
-              // console.log(_now);
+              console.log(_now);
               pushData = {
                 x: _now,
                 y: [
@@ -296,10 +300,12 @@ export default function BetChart({
   useEffect(() => {
     if (!apiData[0]) return;
     setTimeout(() => setReload(false), 1);
+
     let _dataInterval = setTimeout(() => {
       getData();
       getYaxisWidth();
     }, 1000);
+
     return () => {
       clearTimeout(_dataInterval);
     };
@@ -337,33 +343,28 @@ export default function BetChart({
         if (e.side === "HIGH") color = "#3fb68b";
         else if (e.side === "LOW") color = "#FF5353";
 
-        console.log(
-          "noew",
-          moment().format("YYYY-MM-DD hh:MM:ss"),
-          moment.unix(e.starting).seconds(0).format("YYYY-MM-DD hh:MM:ss")
-        );
-
-        return {
-          x: Number(moment.unix(e.starting).seconds(0).format("x")),
-          y: Number(e.startingPrice).toFixed(2),
-          marker: {
-            size: 5,
-            strokeColor: color,
-            fillColor: "#181c25",
-          },
-          label: {
-            borderColor: color,
-            borderRadius: 4,
-            style: {
-              fontSize: 12,
-              color: "#fff",
-              background: color,
+        if (new Date() >= new Date(moment.unix(e.starting).seconds(0)))
+          return {
+            x: Number(moment.unix(e.starting).seconds(0).format("x")),
+            y: Number(e.startingPrice).toFixed(2),
+            marker: {
+              size: 5,
+              strokeColor: color,
+              fillColor: "#181c25",
             },
-            text: `${
-              (e.side === "HIGH" && "▲") || (e.side === "LOW" && "▼")
-            } $${e.amount / 10 ** 6}`,
-          },
-        };
+            label: {
+              borderColor: color,
+              borderRadius: 4,
+              style: {
+                fontSize: 12,
+                color: "#fff",
+                background: color,
+              },
+              text: `${
+                (e.side === "HIGH" && "▲") || (e.side === "LOW" && "▼")
+              } $${e.amount / 10 ** 6}`,
+            },
+          };
       }),
     },
     dataLabels: {
@@ -445,27 +446,28 @@ export default function BetChart({
         if (e.side === "HIGH") color = "#3fb68b";
         else if (e.side === "LOW") color = "#FF5353";
 
-        return {
-          x: Number(moment.unix(e.starting).seconds(0).format("x")),
-          y: Number(e.startingPrice).toFixed(2),
-          marker: {
-            size: 5,
-            strokeColor: color,
-            fillColor: "#181c25",
-          },
-          label: {
-            borderColor: color,
-            borderRadius: 4,
-            style: {
-              fontSize: 12,
-              color: "#fff",
-              background: color,
+        if (new Date() >= new Date(moment.unix(e.starting).seconds(0)))
+          return {
+            x: Number(moment.unix(e.starting).seconds(0).format("x")),
+            y: Number(e.startingPrice).toFixed(2),
+            marker: {
+              size: 5,
+              strokeColor: color,
+              fillColor: "#181c25",
             },
-            text: `${
-              (e.side === "HIGH" && "▲") || (e.side === "LOW" && "▼")
-            } $${e.amount / 10 ** 6}`,
-          },
-        };
+            label: {
+              borderColor: color,
+              borderRadius: 4,
+              style: {
+                fontSize: 12,
+                color: "#fff",
+                background: color,
+              },
+              text: `${
+                (e.side === "HIGH" && "▲") || (e.side === "LOW" && "▼")
+              } $${e.amount / 10 ** 6}`,
+            },
+          };
       }),
     },
     dataLabels: {
