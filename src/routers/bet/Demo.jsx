@@ -32,6 +32,8 @@ import { API } from "../../configs/api";
 import LoadingBar from "../../components/common/LoadingBar";
 import { setBetFlag } from "../../reducers/bet";
 import AmChart from "../../components/bet/AmChart";
+import I_candleChartWhite from "../../img/icon/I_candleChartWhite.svg";
+import BarSizePopup from "../../components/bet/BarSizePopup";
 
 export default function Demo({ socket, notiOpt }) {
   const hoverRef1 = useRef();
@@ -60,6 +62,7 @@ export default function Demo({ socket, notiOpt }) {
     barSize: D_timeList[0].value,
     barSizeStr: D_timeList[0].key,
   });
+  const [barSizePopup, setBarSizePopup] = useState(false);
 
   function getAssetList() {
     axios
@@ -467,11 +470,37 @@ export default function Demo({ socket, notiOpt }) {
                 </article>
 
                 <article className="contArea">
-                  <AmChart
-                    assetInfo={assetInfo}
-                    chartOpt={chartOpt}
-                    openedData={openedData}
-                  />
+                  <div className="chartCont">
+                    <ul className="btnList">
+                      <li>
+                        <button
+                          className="utilBtn"
+                          onClick={() => setBarSizePopup(true)}
+                        >
+                          <p>{chartOpt.barSizeStr}</p>
+                        </button>
+
+                        <p className="info">{`Time frames : ${chartOpt.barSizeStr}`}</p>
+                      </li>
+
+                      {barSizePopup && (
+                        <>
+                          <BarSizePopup
+                            off={setBarSizePopup}
+                            chartOpt={chartOpt}
+                            setChartOpt={setChartOpt}
+                          />
+                          <PopupBg off={setBarSizePopup} />
+                        </>
+                      )}
+                    </ul>
+
+                    <AmChart
+                      assetInfo={assetInfo}
+                      chartOpt={chartOpt}
+                      openedData={openedData}
+                    />
+                  </div>
 
                   <div className="actionBox">
                     <div className="timeBox contBox">
@@ -936,7 +965,7 @@ const PbetBox = styled.main`
           padding: 0 24px;
           font-size: 16px;
           font-weight: 700;
-          border: 1px solid #ffffff;
+          border: 1px solid #fff;
           border-radius: 20px;
 
           img {
@@ -997,6 +1026,67 @@ const PbetBox = styled.main`
       flex: 1;
       display: flex;
       overflow: hidden;
+
+      .chartCont {
+        flex: 1;
+        display: flex;
+        border-radius: 12px;
+        overflow: hidden;
+        position: relative;
+
+        .btnList {
+          display: flex;
+          gap: 8px;
+          top: 14px;
+          left: 16px;
+          right: 16px;
+          position: absolute;
+          z-index: 1;
+
+          li {
+            &:hover {
+              .info {
+                display: inline-block;
+              }
+            }
+
+            .utilBtn {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 38px;
+              height: 36px;
+              font-size: 16px;
+              font-weight: 700;
+              background: #32323d;
+              border-radius: 6px;
+
+              &:hover {
+                background: #474751;
+              }
+
+              img {
+                width: 23px;
+              }
+            }
+
+            .info {
+              display: none;
+              height: 34px;
+              padding: 0 12px;
+              font-size: 12px;
+              white-space: nowrap;
+              line-height: 34px;
+              background: rgba(255, 255, 255, 0.2);
+              border-radius: 4px;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              top: 44px;
+              position: absolute;
+            }
+          }
+        }
+      }
 
       .actionBox {
         display: flex;

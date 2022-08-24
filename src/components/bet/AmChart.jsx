@@ -18,45 +18,42 @@ export default function AmChart({ assetInfo, chartOpt, openedData }) {
   const [stockChart, setStockChart] = useState();
   const [currentValueDataItem, setCurrentValueDataItem] = useState();
 
-  async function getPreData() {
+  function getPreData() {
     setApiData([]);
-    let _preData = await axios.get(`${API.GET_ASSETS_TICKER_PRICE}`, {
-      params: {
-        symbol: assetInfo.socketAPISymbol,
-      },
-    });
+    axios
+      .get(`${API.GET_ASSETS_TICKER_PRICE}`, {
+        params: {
+          symbol: assetInfo.socketAPISymbol,
+        },
+      })
+      .then(({ data }) => {
+        let _data = [];
 
-    if (!_preData.data.resp) throw "preData error";
-    let resp = _preData.data.resp;
-    let _data = [];
+        data.resp.map((e, i) => {
+          if (new Date(e.createdat) % chartOpt.barSize) {
+            let _chartIndex = _data.length - 1;
 
-    resp.slice(-1000).map((e, i) => {
-      if (new Date(e.createdat) % 10000) {
-        let _chartIndex = _data.length - 1;
+            if (!_data[_chartIndex]?.Open) return;
 
-        if (!_data[_chartIndex]?.Open) return;
+            if (Number(e.price) > _data[_chartIndex].High)
+              _data[_chartIndex].High = Number(e.price);
+            else if (Number(e.price) < _data[_chartIndex].Low)
+              _data[_chartIndex].Low = Number(e.price);
 
-        if (Number(e.price) > _data[_chartIndex].High)
-          _data[_chartIndex].High = Number(e.price);
-        else if (Number(e.price) < _data[_chartIndex].Low)
-          _data[_chartIndex].Low = Number(e.price);
-
-        _data[_chartIndex].Close = Number(e.price);
-      } else {
-        _data.push({
-          Date: new Date(e.createdat).getTime(),
-          Open: Number(e.price),
-          High: Number(e.price),
-          Low: Number(e.price),
-          Close: Number(e.price),
+            _data[_chartIndex].Close = Number(e.price);
+          } else {
+            _data.push({
+              Date: new Date(e.createdat).getTime(),
+              Open: Number(e.price),
+              High: Number(e.price),
+              Low: Number(e.price),
+              Close: Number(e.price),
+            });
+          }
         });
-      }
-    });
 
-    _preData = [..._data];
-    setApiData([..._data]);
-
-    return _preData;
+        setApiData([..._data]);
+      });
   }
 
   function getData() {
@@ -74,7 +71,10 @@ export default function AmChart({ assetInfo, chartOpt, openedData }) {
         let _now = new Date().setMilliseconds(0);
         console.log("data", data);
 
-        if (Math.floor(_now / 10000) === Math.floor(_lastIndex.Date / 10000)) {
+        if (
+          Math.floor(_now / chartOpt.barSize) ===
+          Math.floor(_lastIndex.Date / chartOpt.barSize)
+        ) {
           if (Number(data.price) > _lastIndex.High)
             _lastIndex.High = Number(data.price);
           else if (Number(data.price) < _lastIndex.Low)
@@ -143,6 +143,7 @@ export default function AmChart({ assetInfo, chartOpt, openedData }) {
         visible: true,
         strokeOpacity: 0.2,
         strokeDasharray: [3, 3],
+        stroke: color,
       });
     }
 
@@ -154,7 +155,6 @@ export default function AmChart({ assetInfo, chartOpt, openedData }) {
       am5.Circle.new(root, {
         radius: 10,
         stroke: color,
-        fill: am5.color(0xffffff),
         tooltipText: description,
         tooltip: tooltip,
         tooltipY: 0,
@@ -178,13 +178,18 @@ export default function AmChart({ assetInfo, chartOpt, openedData }) {
     );
   }
 
-  useLayoutEffect(async () => {
-    var root = am5.Root.new("chartCont");
+  useLayoutEffect(() => {
+    var root = am5.Root.new("ChartBox");
     setRoot(root);
     root.setThemes([am5themes_Animated.new(root)]);
+    root.interfaceColors.set("text", am5.color(0xffffff));
 
     var stockChart = root.container.children.push(
-      am5stock.StockChart.new(root, {})
+      am5stock.StockChart.new(root, {
+        background: am5.Rectangle.new(root, {
+          fill: am5.color(0x181c25),
+        }),
+      })
     );
 
     setStockChart(stockChart);
@@ -241,7 +246,11 @@ export default function AmChart({ assetInfo, chartOpt, openedData }) {
 
     let currentGrid = currentValueDataItem.get("grid");
     if (currentGrid) {
-      currentGrid.setAll({ strokeOpacity: 0.5, strokeDasharray: [2, 5] });
+      currentGrid.setAll({
+        strokeOpacity: 0.5,
+        strokeDasharray: [2, 5],
+        stroke: am5.color(0xffffff),
+      });
     }
 
     var valueSeries = mainPanel.series.push(
@@ -272,43 +281,14 @@ export default function AmChart({ assetInfo, chartOpt, openedData }) {
       })
     );
 
-    var volumeAxisRenderer = am5xy.AxisRendererY.new(root, {
-      inside: true,
-    });
-
-    volumeAxisRenderer.labels.template.set("forceHidden", true);
-    volumeAxisRenderer.grid.template.set("forceHidden", true);
-
-    var volumeValueAxis = mainPanel.yAxes.push(
-      am5xy.ValueAxis.new(root, {
-        numberFormat: "#.#a",
-        height: am5.percent(20),
-        y: am5.percent(100),
-        centerY: am5.percent(100),
-        renderer: volumeAxisRenderer,
+    valueLegend.set(
+      "background",
+      am5.Rectangle.new(root, {
+        fill: am5.color(0x181c25),
       })
     );
 
-    var volumeSeries = mainPanel.series.push(
-      am5xy.ColumnSeries.new(root, {
-        name: "Volume",
-        clustered: false,
-        valueXField: "Date",
-        valueYField: "Volume",
-        xAxis: dateAxis,
-        yAxis: volumeValueAxis,
-        legendValueText: "[bold]{valueY.formatNumber('#,###.0a')}[/]",
-      })
-    );
-
-    volumeSeries.columns.template.setAll({
-      strokeOpacity: 0,
-      fillOpacity: 0.5,
-    });
-
-    stockChart.set("volumeSeries", volumeSeries);
-
-    valueLegend.data.setAll([valueSeries, volumeSeries]);
+    // valueLegend.data.setAll([valueSeries]);
 
     mainPanel.set(
       "cursor",
@@ -320,71 +300,17 @@ export default function AmChart({ assetInfo, chartOpt, openedData }) {
       })
     );
 
-    var scrollbar = mainPanel.set(
-      "scrollbarX",
-      am5xy.XYChartScrollbar.new(root, {
-        orientation: "horizontal",
-        height: 50,
-      })
-    );
-    stockChart.toolsContainer.children.push(scrollbar);
+    let cursor = mainPanel.get("cursor");
 
-    var sbDateAxis = scrollbar.chart.xAxes.push(
-      am5xy.GaplessDateAxis.new(root, {
-        baseInterval: {
-          timeUnit: "second",
-          count: 1,
-        },
-        renderer: am5xy.AxisRendererX.new(root, {}),
-      })
-    );
-
-    var sbValueAxis = scrollbar.chart.yAxes.push(
-      am5xy.ValueAxis.new(root, {
-        renderer: am5xy.AxisRendererY.new(root, {}),
-      })
-    );
-
-    var sbSeries = scrollbar.chart.series.push(
-      am5xy.LineSeries.new(root, {
-        valueYField: "Close",
-        valueXField: "Date",
-        xAxis: sbDateAxis,
-        yAxis: sbValueAxis,
-      })
-    );
-
-    sbSeries.fills.template.setAll({
-      visible: true,
-      fillOpacity: 0.3,
+    cursor.lineX.setAll({
+      strokeDasharray: [2, 5],
+      stroke: am5.color(0xffffff),
     });
 
-    // var toolbar = am5stock.StockToolbar.new(root, {
-    //   container: document.getElementById("chartcontrols"),
-    //   stockChart: stockChart,
-    //   controls: [
-    //     am5stock.IndicatorControl.new(root, {
-    //       stockChart: stockChart,
-    //       legend: valueLegend,
-    //     }),
-    //     am5stock.DateRangeSelector.new(root, {
-    //       stockChart: stockChart,
-    //     }),
-    //     am5stock.PeriodSelector.new(root, {
-    //       stockChart: stockChart,
-    //     }),
-    //     seriesSwitcher,
-    //     am5stock.DrawingControl.new(root, {
-    //       stockChart: stockChart,
-    //     }),
-    //     am5stock.ResetControl.new(root, {
-    //       stockChart: stockChart,
-    //     }),
-    //     am5stock.SettingsControl.new(root, {
-    //       stockChart: stockChart,
-    //     }),
-    //   ],
-    // });
+    cursor.lineY.setAll({
+      strokeDasharray: [2, 5],
+      stroke: am5.color(0xffffff),
+    });
 
     var tooltip = am5.Tooltip.new(root, {
       getStrokeFromSprite: false,
@@ -395,20 +321,15 @@ export default function AmChart({ assetInfo, chartOpt, openedData }) {
 
     tooltip.get("background").setAll({
       strokeOpacity: 1,
-      stroke: am5.color(0x000000),
+      stroke: am5.color(0xffffff),
     });
-
-    const _preData = await getPreData();
-
-    // set data to all series
-    // sbSeries.data.setAll(data);
-    // console.log("_data", _data);
-    console.log("_preData", _preData);
-
-    return () => {
-      root.dispose();
-    };
   }, []);
+
+  useEffect(() => {
+    if (!root) return;
+
+    getPreData();
+  }, [root, chartOpt]);
 
   useEffect(() => {
     if (!apiData[0]) return;
@@ -427,26 +348,22 @@ export default function AmChart({ assetInfo, chartOpt, openedData }) {
     if (!openedData) return;
 
     openedData.map((e) => {
-      if (new Date() >= new Date(moment.unix(e.starting).seconds(0)))
-        return makeEvent(
-          dateAxis,
-          root,
-          tooltip,
-          Number(moment.unix(e.starting).seconds(0).format("x")),
-          e.side === "HIGH" ? "H" : "L",
-          am5.color(e.side === "HIGH" ? 0x3fb68b : 0xff5353),
-          Number(e.startingPrice).toFixed(2)
-        );
+      // if (new Date() >= new Date(moment.unix(e.starting).seconds(0)))
+      makeEvent(
+        dateAxis,
+        root,
+        tooltip,
+        Number(moment(e.createdat).format("x")),
+        e.side === "HIGH" ? "H" : "L",
+        am5.color(e.side === "HIGH" ? 0x3fb68b : 0xff5353),
+        Number(e.startingPrice).toFixed(2)
+      );
     });
   }, [dateAxis, root, tooltip, openedData]);
 
-  return <AmChartBox id="chartCont"></AmChartBox>;
+  return <AmChartBox id="ChartBox"></AmChartBox>;
 }
 
 const AmChartBox = styled.div`
   flex: 1;
-  background: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  position: relative;
 `;

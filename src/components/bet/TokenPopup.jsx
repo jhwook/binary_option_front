@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { D_currencyList, D_tokenCategoryList } from "../../data/D_bet";
+import { D_tokenCategoryList } from "../../data/D_bet";
 import I_searchWhite from "../../img/icon/I_searchWhite.svg";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
 import I_starYellow from "../../img/icon/I_starYellow.svg";
 import I_starYellowO from "../../img/icon/I_starYellowO.svg";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { API, URL } from "../../configs/api";
+import { API } from "../../configs/api";
 import { setTokenPopupData } from "../../reducers/bet";
 import { getDividFromData } from "../../util/Util";
 
@@ -205,47 +205,51 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
 
         <article className="listArea">
           <ul className="tokenList">
-            {listData.filter(e=>e.active).map((v, i) => {
-              let _percent = getDividFromData({
-                id: v.id,
-                _case: "totalRate",
-                dataObj: dividObj,
-              });
+            {listData
+              .filter((e) => e.active)
+              .map((v, i) => {
+                let _percent = getDividFromData({
+                  id: v.id,
+                  _case: "totalRate",
+                  dataObj: dividObj,
+                });
 
-              let _congestion = getDividFromData({
-                id: v.id,
-                _case: "betCount",
-                dataObj: dividObj,
-              });
+                let _congestion = getDividFromData({
+                  id: v.id,
+                  _case: "betCount",
+                  dataObj: dividObj,
+                });
 
-              return (
-                <li key={i} onClick={() => onClickStock(v)}>
-                  <button
-                    className="favBtn"
-                    onClick={(e) => onClickFavBtn(e, v)}
-                  >
-                    <img
-                      src={v.bookmark ? I_starYellowO : I_starYellow}
-                      alt=""
-                    />
-                  </button>
+                return (
+                  <li key={i} onClick={() => onClickStock(v)}>
+                    <button
+                      className="favBtn"
+                      onClick={(e) => onClickFavBtn(e, v)}
+                    >
+                      <img
+                        src={v.bookmark ? I_starYellowO : I_starYellow}
+                        alt=""
+                      />
+                    </button>
 
-                  <img className="tknImg" src={v.imgurl} alt="" />
+                    <img className="tknImg" src={v.imgurl} alt="" />
 
-                  <span className="nameBox">
-                    <p className="name">{v.name}</p>
+                    <span className="nameBox">
+                      <p className="name">{v.name}</p>
 
-                    {category === "crypto" && (
-                      <p className="inital">{v.baseAsset}</p>
-                    )}
-                  </span>
+                      {category === "crypto" && (
+                        <p className="inital">{v.baseAsset}</p>
+                      )}
+                    </span>
 
-                  <p
-                    className={`${_congestion >= 50 ? "red" : "green"} percent`}
-                  >{`${_percent}%`}</p>
-                </li>
-              );
-            })}
+                    <p
+                      className={`${
+                        _congestion >= 50 ? "red" : "green"
+                      } percent`}
+                    >{`${_percent}%`}</p>
+                  </li>
+                );
+              })}
           </ul>
         </article>
       </PtokenPopupBox>

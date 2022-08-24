@@ -16,10 +16,7 @@ export default function Bet() {
   const token = localStorage.getItem("token");
   const demoToken = localStorage.getItem("demoToken");
 
-  const [notiOpt, setNotiOpt] = useState({
-    betEnd: false,
-    orderRequest: false,
-  });
+  const [notiOpt, setNotiOpt] = useState("");
   const [socketIo, setSocketIo] = useState("");
   const [closedSocketIo, setClosedSocketIo] = useState("");
 
@@ -27,7 +24,6 @@ export default function Bet() {
     axios
       .get(API.NOTI)
       .then(({ data }) => {
-        console.log(data.resp);
         let _resp = data.resp;
         let _notiOpt = {};
 
@@ -66,11 +62,11 @@ export default function Bet() {
       console.log("socketIo connect", socketIo);
     });
 
-    console.log("closedSocketIo connect", closedSocketIo);
+    // console.log("closedSocketIo connect", closedSocketIo);
 
-    closedSocketIo.on("connect", (res) => {
-      console.log("closedSocketIo connect", closedSocketIo);
-    });
+    // closedSocketIo.on("connect", (res) => {
+    //   console.log("closedSocketIo connect", closedSocketIo);
+    // });
 
     socketIo.on("connect_error", (res) => {
       console.error("auth", res);
@@ -85,8 +81,9 @@ export default function Bet() {
       console.log("bet", res);
     });
 
-    closedSocketIo.on("bet_closed", (res) => {
+    socketIo.on("bet_closed", (res) => {
       console.log("bet_closed", res);
+      console.log("notiOpt", notiOpt);
       if (notiOpt.betEnd) {
         setToast({
           type: "closed",
@@ -121,9 +118,14 @@ export default function Bet() {
   }, []);
 
   useEffect(() => {
-    if (!(socketIo || closedSocketIo)) return;
+    // if (!(socketIo || closedSocketIo)) return;
+    if (!(socketIo || notiOpt)) return;
     getBetSocket();
+  }, [socketIo, notiOpt]);
 
+  useEffect(() => {
+    if (!socketIo) return;
+    
     return () => {
       localStorage.removeItem("demoToken");
       socketIo.on("disconnect", () => {
@@ -134,7 +136,7 @@ export default function Bet() {
       socketIo.disconnect("bet");
       socketIo.disconnect("bet_closed");
     };
-  }, [socketIo, closedSocketIo]);
+  }, [socketIo]);
 
   return (
     <Routes>

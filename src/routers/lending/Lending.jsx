@@ -18,12 +18,58 @@ import I_xWhite from "../../img/icon/I_xWhite.svg";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
+import { useState } from "react";
+import { useEffect } from "react";
+import { swiperListener } from "../../util/Util";
+import axios from "axios";
+import { API } from "../../configs/api";
 
 export default function Lending() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
+  const assetListRef = useRef();
+
   const isMobile = useSelector((state) => state.common.isMobile);
+
+  const [assetListIndex, setAssetListIndex] = useState(0);
+  const [assetList, setAssetList] = useState([]);
+
+  async function getAssetList() {
+    let _assetList = [];
+
+    let _cryptoRes = await axios.get(`${API.GET_ASSETS}`, {
+      params: { group: "crypto" },
+    });
+
+    let _forexRes = await axios.get(`${API.GET_ASSETS}`, {
+      params: { group: "forex" },
+    });
+
+    let _stockRes = await axios.get(`${API.GET_ASSETS}`, {
+      params: { group: "stock" },
+    });
+
+    _assetList = [
+      ..._assetList,
+      ..._forexRes.data.resp,
+      ..._stockRes.data.resp,
+    ];
+
+    _assetList = _assetList.slice(0, 15);
+
+    console.log(_assetList);
+    setAssetList(_assetList);
+  }
+
+  useEffect(() => {
+    getAssetList();
+  }, []);
+
+  useEffect(() => {
+    swiperListener(assetListRef, assetListIndex);
+  }, [assetListIndex]);
 
   if (isMobile)
     return (
@@ -179,6 +225,30 @@ export default function Lending() {
             </article>
 
             <img className="bg" src={B_lending1} alt="" />
+          </section>
+
+          <section className="trendingSec">
+            <strong className="title">Trending</strong>
+
+            <article className="contArea">
+              <ul className="slideList assetList" ref={assetListRef}>
+                {assetList.map((v, i) => (
+                  <li key={i}>{v.id}</li>
+                ))}
+              </ul>
+
+              <ul className="btnList">
+                {new Array(Math.floor(assetList.length / 4))
+                  .fill("")
+                  .map((v, i) => (
+                    <button
+                      key={i}
+                      className={`${assetListIndex === i && "on"}`}
+                      onClick={() => setAssetListIndex(i)}
+                    />
+                  ))}
+              </ul>
+            </article>
           </section>
 
           <section className="featureSec">
@@ -791,6 +861,58 @@ const PlendingBox = styled.main`
       right: -20%;
       bottom: 4%;
       position: absolute;
+    }
+  }
+
+  .trendingSec {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 1180px;
+    margin: 0 auto;
+    overflow: hidden;
+
+    .title {
+      font-size: 20px;
+    }
+
+    .contArea {
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+
+      .slideList {
+        display: flex;
+        gap: 20px;
+        overflow-x: scroll;
+
+        li {
+          min-width: 280px;
+          width: 280px;
+          background: #fafafc;
+          border-radius: 12px;
+        }
+      }
+
+      .btnList {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin: 0 auto;
+
+        button {
+          width: 8px;
+          height: 8px;
+          background: rgba(255, 255, 255, 0.2);
+          border-radius: 50%;
+
+          &.on {
+            width: 30px;
+            background: #fff;
+            border-radius: 10px;
+          }
+        }
+      }
     }
   }
 

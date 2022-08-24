@@ -121,19 +121,6 @@ export default function MenuPopup({ off, userData }) {
                 </button>
               )
             )}
-
-            <details>
-              <summary>
-                <strong className="title">{t("More")}</strong>
-                <img src={I_dnPolWhite} alt="" />
-              </summary>
-
-              <ul className="detNavList">
-                {D_moreList.map((v, i) => (
-                  <li key={i}>{t(v.key)}</li>
-                ))}
-              </ul>
-            </details>
           </ul>
 
           <span className="btnBox">

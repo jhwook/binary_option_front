@@ -1,9 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import L_yellow from "../../img/logo/L_yellow.svg";
-import I_twitter from "../../img/icon/I_twitter.png";
-import I_discord from "../../img/icon/I_discord.png";
-import I_medium from "../../img/icon/I_medium.svg";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 
@@ -21,41 +18,23 @@ export default function LendingFooter() {
             <ul className="termList">
               <li>
                 <button className="privacy" onClick={() => {}}>
-                {t("Privacy Policy")}
+                  {t("Privacy Policy")}
                 </button>
               </li>
               <span className="dot" />
 
               <li>
                 <button className="terms" onClick={() => {}}>
-                {t("Terms of Service")}
+                  {t("Terms of Service")}
                 </button>
               </li>
             </ul>
           </article>
 
           <article className="btArea">
-            <p className="copyright">{t("© Betbit, 2022. All rights reserved.")}</p>
-
-            <ul className="navList">
-              <li>
-                <button className="" onClick={() => {}}>
-                  <img src={I_twitter} alt="" />
-                </button>
-              </li>
-
-              <li>
-                <button className="" onClick={() => {}}>
-                  <img src={I_discord} alt="" />
-                </button>
-              </li>
-
-              <li>
-                <button className="" onClick={() => {}}>
-                  <img src={I_medium} alt="" />
-                </button>
-              </li>
-            </ul>
+            <p className="copyright">
+              {t("© Betbit, 2022. All rights reserved.")}
+            </p>
           </article>
         </section>
       </MlendingFooterBox>
@@ -69,30 +48,12 @@ export default function LendingFooter() {
               <img src={L_yellow} alt="" />
             </button>
 
-            <p className="copyright">{t("© Betbit, 2022. All rights reserved.")}</p>
+            <p className="copyright">
+              {t("© Betbit, 2022. All rights reserved.")}
+            </p>
           </article>
 
           <article className="rightArea">
-            <ul className="navList">
-              <li>
-                <button className="" onClick={() => {}}>
-                  <img src={I_twitter} alt="" />
-                </button>
-              </li>
-
-              <li>
-                <button className="" onClick={() => {}}>
-                  <img src={I_discord} alt="" />
-                </button>
-              </li>
-
-              <li>
-                <button className="" onClick={() => {}}>
-                  <img src={I_medium} alt="" />
-                </button>
-              </li>
-            </ul>
-
             <ul className="termList">
               <li>
                 <button className="privacy" onClick={() => {}}>
@@ -134,9 +95,6 @@ const MlendingFooterBox = styled.footer`
     }
 
     .btArea {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       padding: 20px 0 0 0;
       border-top: 1px solid rgba(255, 255, 255, 0.2);
 
@@ -170,6 +128,7 @@ const PlendingFooterBox = styled.footer`
   .innerBox {
     display: flex;
     justify-content: space-between;
+    align-items: flex-end;
     width: 100%;
     max-width: 1440px;
     padding: 0 30px 80px;

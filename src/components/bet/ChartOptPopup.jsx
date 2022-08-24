@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useState } from "react";
 import { D_chartTypeList, D_timeList } from "../../data/D_bet";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
@@ -7,8 +6,6 @@ import { useTranslation } from "react-i18next";
 export default function ChartOptPopup({ off, chartOpt, setChartOpt }) {
   const { t } = useTranslation();
   const isMobile = useSelector((state) => state.common.isMobile);
-
-  const [toggleList, setToggleList] = useState(new Array(2).fill(false));
 
   function onClickTypeBtn(v) {
     let _chartOpt = chartOpt;

@@ -1556,7 +1556,6 @@ export const D_timeList = [
   { key: "30s", value: 30000 },
   { key: "1m", value: 60000 },
   { key: "5m", value: 300000 },
-  { key: "15m", value: 900000 },
   { key: "30m", value: 1800000 },
   { key: "1h", value: 3600000 },
   { key: "4h", value: 14400000 },
