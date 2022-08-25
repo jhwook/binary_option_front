@@ -28,11 +28,13 @@ import LoadingBar from "../../components/common/LoadingBar";
 import { D_amountTypeList, D_tokenCategoryList } from "../../data/D_bet";
 import { getDividFromData, setToast } from "../../util/Util";
 import { setBetFlag } from "../../reducers/bet";
+import { useNavigate } from "react-router-dom";
 
 export default function Live({ socket, notiOpt }) {
   const hoverRef1 = useRef();
   const hoverRef2 = useRef();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const isMobile = useSelector((state) => state.common.isMobile);
   const openedData = useSelector((state) => state.bet.openedData);
   const tokenPopupData = useSelector((state) => state.bet.tokenPopupData);
@@ -703,7 +705,7 @@ export default function Live({ socket, notiOpt }) {
               </section>
 
               <footer>
-                <button className="qnaBtn" onClick={() => {}}>
+                <button className="qnaBtn" onClick={() => navigate('/qna')}>
                   <img src={I_qnaWhite} alt="" />
                 </button>
 

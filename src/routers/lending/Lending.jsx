@@ -33,8 +33,8 @@ export default function Lending() {
 
   const isMobile = useSelector((state) => state.common.isMobile);
 
-  const [assetListIndex, setAssetListIndex] = useState(0);
   const [assetList, setAssetList] = useState([]);
+  const [assetListIndex, setAssetListIndex] = useState(0);
 
   async function getAssetList() {
     let _assetList = [];
@@ -52,12 +52,29 @@ export default function Lending() {
     });
 
     _assetList = [
-      ..._assetList,
+      ..._cryptoRes.data.resp,
       ..._forexRes.data.resp,
       ..._stockRes.data.resp,
     ];
 
     _assetList = _assetList.slice(0, 15);
+
+    await Promise.all(
+      _assetList.map(async (e, i) => {
+        return await axios
+          .get(`https://api.twelvedata.com/quote`, {
+            params: {
+              symbol: e.APISymbol,
+              apikey: process.env.REACT_APP_TWELVEDATA_KEY,
+            },
+          })
+          .then(({ data }) => {
+            _assetList[i].close = data.close;
+            _assetList[i].change = data.change;
+          })
+          .catch(console.error);
+      })
+    );
 
     console.log(_assetList);
     setAssetList(_assetList);
@@ -233,7 +250,22 @@ export default function Lending() {
             <article className="contArea">
               <ul className="slideList assetList" ref={assetListRef}>
                 {assetList.map((v, i) => (
-                  <li key={i}>{v.id}</li>
+                  <li key={i}>
+                    <span className="assetImgBox">
+                      {v.imgurl ? <img src={v.imgurl} alt="" /> : <></>}
+                    </span>
+
+                    <div className="textBox">
+                      <strong className="name">{v.APISymbol}</strong>
+                      <p className="close">
+                        {v.close && Number(v.close).toLocaleString("eu", "US")}
+                      </p>
+
+                      <strong className="change">
+                        {v.change && `${Math.floor(v.change * 10 ** 2) / 10 ** 2}%`}
+                      </strong>
+                    </div>
+                  </li>
                 ))}
               </ul>
 
@@ -887,10 +919,51 @@ const PlendingBox = styled.main`
         overflow-x: scroll;
 
         li {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          gap: 12px;
           min-width: 280px;
           width: 280px;
+          height: 164px;
+          color: #000;
           background: #fafafc;
           border-radius: 12px;
+
+          .assetImgBox {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+            }
+          }
+
+          .textBox {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+
+            .name {
+            }
+
+            .close {
+              font-size: 12px;
+              opacity: 0.4;
+            }
+
+            .change {
+              color: #ff5353;
+            }
+          }
         }
       }
 

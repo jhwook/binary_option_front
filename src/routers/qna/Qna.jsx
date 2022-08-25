@@ -7,6 +7,7 @@ import PopupBg from "../../components/common/PopupBg";
 import ReqeustPopup from "../../components/qna/RequestPopup";
 import DefaultHeader from "../../components/header/DefaultHeader";
 import { useTranslation } from "react-i18next";
+import axios from "axios";
 
 export default function Qna() {
   const { t } = useTranslation();

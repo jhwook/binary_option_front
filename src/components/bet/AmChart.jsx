@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import styled from "styled-components";
 import * as am5 from "@amcharts/amcharts5";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
+import am5themes_Dark from "@amcharts/amcharts5/themes/Dark";
 import * as am5stock from "@amcharts/amcharts5/stock";
 import * as am5xy from "@amcharts/amcharts5/xy";
 import axios from "axios";
@@ -155,6 +156,7 @@ export default function AmChart({ assetInfo, chartOpt, openedData }) {
       am5.Circle.new(root, {
         radius: 10,
         stroke: color,
+        fill: am5.color(0x181c25),
         tooltipText: description,
         tooltip: tooltip,
         tooltipY: 0,
@@ -164,6 +166,7 @@ export default function AmChart({ assetInfo, chartOpt, openedData }) {
     var label = bullet.children.push(
       am5.Label.new(root, {
         text: letter,
+        stroke: color,
         centerX: am5.p50,
         centerY: am5.p50,
       })
@@ -181,8 +184,7 @@ export default function AmChart({ assetInfo, chartOpt, openedData }) {
   useLayoutEffect(() => {
     var root = am5.Root.new("ChartBox");
     setRoot(root);
-    root.setThemes([am5themes_Animated.new(root)]);
-    root.interfaceColors.set("text", am5.color(0xffffff));
+    root.setThemes([am5themes_Animated.new(root), am5themes_Dark.new(root)]);
 
     var stockChart = root.container.children.push(
       am5stock.StockChart.new(root, {
@@ -191,6 +193,10 @@ export default function AmChart({ assetInfo, chartOpt, openedData }) {
         }),
       })
     );
+
+    root.interfaceColors.setAll({
+      grid: "rgba(255, 255, 255, 0.1)",
+    });
 
     setStockChart(stockChart);
 
@@ -278,17 +284,48 @@ export default function AmChart({ assetInfo, chartOpt, openedData }) {
     var valueLegend = mainPanel.plotContainer.children.push(
       am5stock.StockLegend.new(root, {
         stockChart: stockChart,
+
+        paddingTop: 50,
       })
     );
 
-    valueLegend.set(
-      "background",
-      am5.Rectangle.new(root, {
-        fill: am5.color(0x181c25),
+    var volumeAxisRenderer = am5xy.AxisRendererY.new(root, {
+      inside: true,
+    });
+
+    volumeAxisRenderer.labels.template.set("forceHidden", true);
+    volumeAxisRenderer.grid.template.set("forceHidden", true);
+
+    var volumeValueAxis = mainPanel.yAxes.push(
+      am5xy.ValueAxis.new(root, {
+        numberFormat: "#.#a",
+        height: am5.percent(20),
+        y: am5.percent(100),
+        centerY: am5.percent(100),
+        renderer: volumeAxisRenderer,
       })
     );
 
-    // valueLegend.data.setAll([valueSeries]);
+    var volumeSeries = mainPanel.series.push(
+      am5xy.ColumnSeries.new(root, {
+        name: "Volume",
+        clustered: false,
+        valueXField: "Date",
+        valueYField: "Volume",
+        xAxis: dateAxis,
+        yAxis: volumeValueAxis,
+        legendValueText: "[bold]{valueY.formatNumber('#,###.0a')}[/]",
+      })
+    );
+
+    volumeSeries.columns.template.setAll({
+      strokeOpacity: 0,
+      fillOpacity: 0.5,
+    });
+
+    stockChart.set("volumeSeries", volumeSeries);
+
+    valueLegend.data.setAll([valueSeries, volumeSeries]);
 
     mainPanel.set(
       "cursor",
@@ -320,9 +357,11 @@ export default function AmChart({ assetInfo, chartOpt, openedData }) {
     setTooltip(tooltip);
 
     tooltip.get("background").setAll({
-      strokeOpacity: 1,
       stroke: am5.color(0xffffff),
+      strokeOpacity: 0.8,
     });
+
+    mainPanel.set("tooltip", tooltip);
   }, []);
 
   useEffect(() => {
@@ -348,7 +387,6 @@ export default function AmChart({ assetInfo, chartOpt, openedData }) {
     if (!openedData) return;
 
     openedData.map((e) => {
-      // if (new Date() >= new Date(moment.unix(e.starting).seconds(0)))
       makeEvent(
         dateAxis,
         root,
@@ -366,4 +404,5 @@ export default function AmChart({ assetInfo, chartOpt, openedData }) {
 
 const AmChartBox = styled.div`
   flex: 1;
+  overflow: hidden;
 `;

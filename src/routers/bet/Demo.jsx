@@ -16,6 +16,7 @@ import I_highArwGreen from "../../img/icon/I_highArwGreen.svg";
 import I_lowArwRed from "../../img/icon/I_lowArwRed.svg";
 import I_plusWhite from "../../img/icon/I_plusWhite.svg";
 import I_barChartWhite from "../../img/icon/I_barChartWhite.svg";
+import I_candleChartWhite from "../../img/icon/I_candleChartWhite.svg";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import PopupBg from "../../components/common/PopupBg";
 import TokenPopup from "../../components/bet/TokenPopup";
@@ -32,13 +33,15 @@ import { API } from "../../configs/api";
 import LoadingBar from "../../components/common/LoadingBar";
 import { setBetFlag } from "../../reducers/bet";
 import AmChart from "../../components/bet/AmChart";
-import I_candleChartWhite from "../../img/icon/I_candleChartWhite.svg";
 import BarSizePopup from "../../components/bet/BarSizePopup";
+import ChartTypePopup from "../../components/bet/ChartTypePopup";
+import { useNavigate } from "react-router-dom";
 
 export default function Demo({ socket, notiOpt }) {
   const hoverRef1 = useRef();
   const hoverRef2 = useRef();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const demoToken = localStorage.getItem("demoToken");
 
   const isMobile = useSelector((state) => state.common.isMobile);
@@ -59,10 +62,13 @@ export default function Demo({ socket, notiOpt }) {
   const [amountMode, setAmountMode] = useState(D_amountTypeList[0]);
   const [bookMark, setBookMark] = useState([]);
   const [chartOpt, setChartOpt] = useState({
+    type: "candlestick",
+    typeStr: "Candles",
     barSize: D_timeList[0].value,
     barSizeStr: D_timeList[0].key,
   });
   const [barSizePopup, setBarSizePopup] = useState(false);
+  const [chartTypePopup, setChartTypePopup] = useState(false);
 
   function getAssetList() {
     axios
@@ -493,6 +499,28 @@ export default function Demo({ socket, notiOpt }) {
                           <PopupBg off={setBarSizePopup} />
                         </>
                       )}
+
+                      <li>
+                        <button
+                          className="utilBtn"
+                          onClick={() => setChartTypePopup(true)}
+                        >
+                          <img src={I_candleChartWhite} alt="" />
+                        </button>
+
+                        <p className="info">{`Chart type : ${chartOpt.typeStr}`}</p>
+                      </li>
+
+                      {chartTypePopup && (
+                        <>
+                          <ChartTypePopup
+                            off={setChartTypePopup}
+                            chartOpt={chartOpt}
+                            setChartOpt={setChartOpt}
+                          />
+                          <PopupBg off={setChartTypePopup} />
+                        </>
+                      )}
                     </ul>
 
                     <AmChart
@@ -685,7 +713,7 @@ export default function Demo({ socket, notiOpt }) {
               </section>
 
               <footer>
-                <button className="qnaBtn" onClick={() => {}}>
+                <button className="qnaBtn" onClick={() => navigate("/qna")}>
                   <img src={I_qnaWhite} alt="" />
                 </button>
 
@@ -1037,9 +1065,8 @@ const PbetBox = styled.main`
         .btnList {
           display: flex;
           gap: 8px;
-          top: 14px;
-          left: 16px;
-          right: 16px;
+          top: 24px;
+          left: 24px;
           position: absolute;
           z-index: 1;
 
@@ -1054,8 +1081,8 @@ const PbetBox = styled.main`
               display: flex;
               justify-content: center;
               align-items: center;
-              width: 38px;
-              height: 36px;
+              width: 32px;
+              height: 32px;
               font-size: 16px;
               font-weight: 700;
               background: #32323d;
