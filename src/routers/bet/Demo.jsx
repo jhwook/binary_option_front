@@ -32,7 +32,7 @@ import axios from "axios";
 import { API } from "../../configs/api";
 import LoadingBar from "../../components/common/LoadingBar";
 import { setBetFlag } from "../../reducers/bet";
-import AmChart from "../../components/bet/AmChart";
+import AmChart from "../../components/bet/chart/AmChart";
 import BarSizePopup from "../../components/bet/BarSizePopup";
 import ChartTypePopup from "../../components/bet/ChartTypePopup";
 import { useNavigate } from "react-router-dom";
@@ -527,6 +527,7 @@ export default function Demo({ socket, notiOpt }) {
                       assetInfo={assetInfo}
                       chartOpt={chartOpt}
                       openedData={openedData}
+                      socket={socket}
                     />
                   </div>
 

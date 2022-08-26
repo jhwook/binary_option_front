@@ -62,12 +62,6 @@ export default function Bet() {
       console.log("socketIo connect", socketIo);
     });
 
-    // console.log("closedSocketIo connect", closedSocketIo);
-
-    // closedSocketIo.on("connect", (res) => {
-    //   console.log("closedSocketIo connect", closedSocketIo);
-    // });
-
     socketIo.on("connect_error", (res) => {
       console.error("auth", res);
     });
@@ -118,14 +112,13 @@ export default function Bet() {
   }, []);
 
   useEffect(() => {
-    // if (!(socketIo || closedSocketIo)) return;
     if (!(socketIo || notiOpt)) return;
     getBetSocket();
   }, [socketIo, notiOpt]);
 
   useEffect(() => {
     if (!socketIo) return;
-    
+
     return () => {
       localStorage.removeItem("demoToken");
       socketIo.on("disconnect", () => {

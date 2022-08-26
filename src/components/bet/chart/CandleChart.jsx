@@ -6,10 +6,10 @@ import am5themes_Dark from "@amcharts/amcharts5/themes/Dark";
 import * as am5stock from "@amcharts/amcharts5/stock";
 import * as am5xy from "@amcharts/amcharts5/xy";
 import axios from "axios";
-import { API } from "../../configs/api";
+import { API } from "../../../configs/api";
 import moment from "moment";
 
-export default function AmChart({ assetInfo, chartOpt, openedData }) {
+export default function CandleChart({ assetInfo, chartOpt, openedData, socket }) {
   const [valueSeries, setValueSeries] = useState();
   const [dateAxis, setDateAxis] = useState();
   const [root, setRoot] = useState();
@@ -18,17 +18,20 @@ export default function AmChart({ assetInfo, chartOpt, openedData }) {
   const [currentLabel, setCurrentLabel] = useState();
   const [stockChart, setStockChart] = useState();
   const [currentValueDataItem, setCurrentValueDataItem] = useState();
+  const [currentPrice, setCurrentPrice] = useState(0);
 
   function getPreData() {
     setApiData([]);
     axios
       .get(`${API.GET_ASSETS_TICKER_PRICE}`, {
         params: {
-          symbol: assetInfo.socketAPISymbol,
+          symbol: assetInfo.APISymbol,
         },
       })
       .then(({ data }) => {
         let _data = [];
+
+        console.log("data", data);
 
         data.resp.map((e, i) => {
           if (new Date(e.createdat) % chartOpt.barSize) {
@@ -57,72 +60,55 @@ export default function AmChart({ assetInfo, chartOpt, openedData }) {
       });
   }
 
-  function getData() {
-    axios
-      .get(`https://api.twelvedata.com/price`, {
-        params: {
-          symbol: assetInfo.APISymbol,
-          apikey: process.env.REACT_APP_TWELVEDATA_KEY,
-        },
-      })
-      .then(({ data }) => {
-        let pushData;
-        let _apiData = apiData;
-        let _lastIndex = _apiData[_apiData.length - 1];
-        let _now = new Date().setMilliseconds(0);
-        console.log("data", data);
+  function getData(price) {
+    let pushData;
+    let _apiData = apiData;
+    let _lastIndex = _apiData[_apiData.length - 1];
+    let _now = new Date().setMilliseconds(0);
 
-        if (
-          Math.floor(_now / chartOpt.barSize) ===
-          Math.floor(_lastIndex.Date / chartOpt.barSize)
-        ) {
-          if (Number(data.price) > _lastIndex.High)
-            _lastIndex.High = Number(data.price);
-          else if (Number(data.price) < _lastIndex.Low)
-            _lastIndex.Low = Number(data.price);
+    if (
+      Math.floor(_now / chartOpt.barSize) ===
+      Math.floor(_lastIndex.Date / chartOpt.barSize)
+    ) {
+      if (price > _lastIndex.High) _lastIndex.High = price;
+      else if (price < _lastIndex.Low) _lastIndex.Low = price;
 
-          _lastIndex.Close = Number(data.price);
+      _lastIndex.Close = price;
 
-          _apiData[_apiData.length - 1] = _lastIndex;
+      _apiData[_apiData.length - 1] = _lastIndex;
 
-          valueSeries.data.setIndex(valueSeries.data.length - 1, _lastIndex);
+      valueSeries.data.setIndex(valueSeries.data.length - 1, _lastIndex);
+    } else {
+      pushData = {
+        Date: _now,
+        Open: price,
+        High: price,
+        Low: price,
+        Close: price,
+      };
+
+      valueSeries.data.push(pushData);
+    }
+
+    setApiData([...valueSeries.data]);
+
+    if (currentLabel) {
+      currentValueDataItem.animate({
+        key: "value",
+        to: price,
+        duration: 500,
+        easing: am5.ease.out(am5.ease.cubic),
+      });
+      currentLabel.set("text", stockChart.getNumberFormatter().format(price));
+      let bg = currentLabel.get("background");
+      if (bg) {
+        if (price < _lastIndex.Open) {
+          bg.set("fill", root.interfaceColors.get("negative"));
         } else {
-          console.log(_now);
-          pushData = {
-            Date: _now,
-            Open: Number(data.price),
-            High: Number(data.price),
-            Low: Number(data.price),
-            Close: Number(data.price),
-          };
-
-          valueSeries.data.push(pushData);
+          bg.set("fill", root.interfaceColors.get("positive"));
         }
-
-        setApiData([...valueSeries.data]);
-
-        if (currentLabel) {
-          currentValueDataItem.animate({
-            key: "value",
-            to: Number(data.price),
-            duration: 500,
-            easing: am5.ease.out(am5.ease.cubic),
-          });
-          currentLabel.set(
-            "text",
-            stockChart.getNumberFormatter().format(Number(data.price))
-          );
-          let bg = currentLabel.get("background");
-          if (bg) {
-            if (data.price < _lastIndex.Open) {
-              bg.set("fill", root.interfaceColors.get("negative"));
-            } else {
-              bg.set("fill", root.interfaceColors.get("positive"));
-            }
-          }
-        }
-      })
-      .catch(console.error);
+      }
+    }
   }
 
   function makeEvent(
@@ -167,6 +153,7 @@ export default function AmChart({ assetInfo, chartOpt, openedData }) {
       am5.Label.new(root, {
         text: letter,
         stroke: color,
+        strokeOpacity: 0.6,
         centerX: am5.p50,
         centerY: am5.p50,
       })
@@ -371,17 +358,33 @@ export default function AmChart({ assetInfo, chartOpt, openedData }) {
   }, [root, chartOpt]);
 
   useEffect(() => {
+    socket.on("get_ticker_price", (res) => {
+      if (!res) return;
+
+      setCurrentPrice(Number(res));
+    });
+  }, []);
+
+  useEffect(() => {
     if (!apiData[0]) return;
     valueSeries.data.setAll([...apiData]);
 
     let _dataInterval = setTimeout(() => {
-      getData();
+      socket.emit("get_ticker_price", assetInfo.APISymbol);
+      if (currentPrice) getData(currentPrice);
     }, 1000);
 
     return () => {
       clearTimeout(_dataInterval);
     };
-  }, [apiData, valueSeries, currentLabel, currentValueDataItem, stockChart]);
+  }, [
+    apiData,
+    currentPrice,
+    valueSeries,
+    currentLabel,
+    currentValueDataItem,
+    stockChart,
+  ]);
 
   useEffect(() => {
     if (!openedData) return;
@@ -398,6 +401,8 @@ export default function AmChart({ assetInfo, chartOpt, openedData }) {
       );
     });
   }, [dateAxis, root, tooltip, openedData]);
+
+  // console.log(chartOpt.type);
 
   return <AmChartBox id="ChartBox"></AmChartBox>;
 }

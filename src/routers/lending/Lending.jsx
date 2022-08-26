@@ -21,7 +21,7 @@ import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
-import { swiperListener } from "../../util/Util";
+import { getStyle, swiperListener } from "../../util/Util";
 import axios from "axios";
 import { API } from "../../configs/api";
 
@@ -80,13 +80,17 @@ export default function Lending() {
     setAssetList(_assetList);
   }
 
+  function onScrollAssetList() {
+    let _contWidth = assetListRef.current.children[0].offsetWidth;
+    let _gap = getStyle(assetListRef, "gap");
+    let _index = assetListRef.current.scrollLeft / (_contWidth + _gap);
+    console.log(_index);
+    setAssetListIndex(_index);
+  }
+
   useEffect(() => {
     getAssetList();
   }, []);
-
-  useEffect(() => {
-    swiperListener(assetListRef, assetListIndex);
-  }, [assetListIndex]);
 
   if (isMobile)
     return (
@@ -94,13 +98,31 @@ export default function Lending() {
         <DefaultHeader />
         <MlendingBox>
           <section className="placeSec">
+            <article className="contArea">
+              <div className="textCont">
+                <strong className="explain">
+                  {t("THE MOST")}
+                  <br /> {t("TRUSTED PLATFORM")}
+                </strong>
+
+                <strong className="do">
+                  {t("Place Your Trades On Best Conditions")}
+                </strong>
+              </div>
+
+              <button
+                className="tradeBtn"
+                onClick={() => navigate("/bet/live")}
+              >
+                {t("Trade Now")}
+              </button>
+            </article>
+
             <span className="banner">
               <div className="contBox">
                 <img className="icon" src={I_thunderGrad} alt="" />
 
-                <strong className="cont">
-                  {t("Start trading on Betbit today.")}
-                </strong>
+                <strong className="cont">{t("Start trading")}</strong>
               </div>
 
               <div className="btnBox">
@@ -114,20 +136,51 @@ export default function Lending() {
               </div>
             </span>
 
-            <article className="textArea">
-              <strong className="explain">
-                {t("THE RIGHT PLACE")}
-                <br /> {t("FOR ONLINE TRADING ON FINANCIAL MARKETS")}
-              </strong>
+            <img className="bg" src={B_lending1} alt="" />
+          </section>
 
-              <strong className="do">
-                {t("Place Your Trades On Best Conditions")}
-              </strong>
+          <section className="trendingSec">
+            <strong className="title">Trending</strong>
+
+            <article className="contArea">
+              <ul
+                className="slideList assetList"
+                ref={assetListRef}
+                onScroll={onScrollAssetList}
+              >
+                {assetList.slice(0, 5).map((v, i) => (
+                  <li key={i}>
+                    <span className="assetImgBox">
+                      {v.imgurl ? <img src={v.imgurl} alt="" /> : <></>}
+                    </span>
+
+                    <div className="textBox">
+                      <strong className="name">{v.APISymbol}</strong>
+                      <p className="close">
+                        {v.close && Number(v.close).toLocaleString("eu", "US")}
+                      </p>
+
+                      <strong className="change">
+                        {v.change &&
+                          `${Math.floor(v.change * 10 ** 2) / 10 ** 2}%`}
+                      </strong>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+
+              <ul className="btnList">
+                {new Array(Math.floor(assetList.slice(0, 5).length))
+                  .fill("")
+                  .map((v, i) => (
+                    <button
+                      key={i}
+                      className={`${assetListIndex === i && "on"}`}
+                      onClick={() => swiperListener(assetListRef, i)}
+                    />
+                  ))}
+              </ul>
             </article>
-
-            <button className="tradeBtn" onClick={() => navigate("/bet/live")}>
-              {t("Trade Now")}
-            </button>
           </section>
 
           <section className="featureSec">
@@ -262,7 +315,8 @@ export default function Lending() {
                       </p>
 
                       <strong className="change">
-                        {v.change && `${Math.floor(v.change * 10 ** 2) / 10 ** 2}%`}
+                        {v.change &&
+                          `${Math.floor(v.change * 10 ** 2) / 10 ** 2}%`}
                       </strong>
                     </div>
                   </li>
@@ -276,7 +330,10 @@ export default function Lending() {
                     <button
                       key={i}
                       className={`${assetListIndex === i && "on"}`}
-                      onClick={() => setAssetListIndex(i)}
+                      onClick={() => {
+                        swiperListener(assetListRef, i);
+                        setAssetListIndex(i);
+                      }}
                     />
                   ))}
               </ul>
@@ -387,6 +444,7 @@ const mFloat = keyframes`
 const MlendingBox = styled.main`
   width: 100%;
   height: 100vh;
+  padding: 56px 0 0;
   color: #fff;
   background: #0a0e17;
   overflow: hidden;
@@ -395,31 +453,26 @@ const MlendingBox = styled.main`
   .placeSec {
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 40px;
-    height: 720px;
-    padding: 0 20px 250px;
-    background: url(${B_lending1});
+    gap: 44px;
+    padding: 324px 0 120px 0;
+    margin: 0 auto;
     position: relative;
 
     .banner {
       display: flex;
       align-items: center;
-      gap: 20px;
-      width: 88.88vw;
+      gap: 40px;
       height: 54px;
       padding: 0 22px;
+      margin: 0 20px;
       background: rgba(255, 255, 255, 0.2);
       border-radius: 30px;
-      bottom: 54px;
-      position: absolute;
 
       .contBox {
         flex: 1;
         display: flex;
         align-items: center;
-        gap: 16px;
+        gap: 20px;
         overflow: hidden;
 
         .icon {
@@ -428,7 +481,7 @@ const MlendingBox = styled.main`
 
         .cont {
           flex: 1;
-          font-size: 16px;
+          font-size: 18px;
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
@@ -438,7 +491,7 @@ const MlendingBox = styled.main`
       .btnBox {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 15px;
 
         button {
           display: flex;
@@ -451,34 +504,162 @@ const MlendingBox = styled.main`
       }
     }
 
-    .textArea {
+    .contArea {
       display: flex;
       flex-direction: column;
-      text-align: center;
-      gap: 14px;
+      align-items: center;
+      gap: 24px;
+      padding: 0 28px;
 
-      .explain {
-        font-size: 24px;
-        font-weight: 800;
-        font-family: "Open Sans", sans-serif;
+      .textCont {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        text-align: center;
+
+        .explain {
+          display: inline-block;
+          font-size: 30px;
+          font-weight: 700;
+          font-family: "Noto Sans JP";
+          background: linear-gradient(
+            96deg,
+            #ffffff 40.65%,
+            rgba(255, 255, 255, 0) 127.33%
+          );
+          color: transparent;
+          -webkit-background-clip: text;
+        }
+
+        .do {
+          font-size: 16px;
+          font-family: "Noto Sans JP";
+          background: linear-gradient(
+            96deg,
+            #ffffff 40.65%,
+            rgba(255, 255, 255, 0) 127.33%
+          );
+          color: transparent;
+          -webkit-background-clip: text;
+        }
       }
 
-      .do {
-        font-size: 14px;
+      .tradeBtn {
+        width: 180px;
+        height: 50px;
+        font-size: 20px;
+        font-weight: 700;
+        background: rgba(235, 235, 235, 0.2);
+        border: 1.6px solid #fbfbfb;
+        box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.25);
+        border-radius: 30px;
+
+        &:hover {
+          color: #0a0e17;
+          background: #fff;
+        }
       }
     }
 
-    .tradeBtn {
-      width: 220px;
-      height: 50px;
-      font-size: 20px;
-      font-weight: 700;
-      border: 1px solid #fff;
-      border-radius: 28px;
+    .bg {
+      width: 322px;
+      right: 8%;
+      top: 0;
+      position: absolute;
+    }
+  }
 
-      &:hover {
-        color: #0a0e17;
-        background: #fff;
+  .trendingSec {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 280px;
+    margin: 0 auto;
+    overflow: hidden;
+
+    .title {
+      font-size: 20px;
+    }
+
+    .contArea {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      .slideList {
+        display: flex;
+        gap: 20px;
+        overflow-x: scroll;
+        scroll-snap-type: x mandatory;
+
+        li {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          gap: 12px;
+          min-width: 280px;
+          width: 280px;
+          height: 164px;
+          scroll-snap-align: center;
+          color: #000;
+          background: #fafafc;
+          border-radius: 12px;
+
+          .assetImgBox {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+            }
+          }
+
+          .textBox {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+
+            .name {
+            }
+
+            .close {
+              font-size: 12px;
+              opacity: 0.4;
+            }
+
+            .change {
+              color: #ff5353;
+            }
+          }
+        }
+      }
+
+      .btnList {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin: 0 auto;
+
+        button {
+          width: 8px;
+          height: 8px;
+          background: rgba(255, 255, 255, 0.2);
+          border-radius: 50%;
+
+          &.on {
+            width: 30px;
+            background: #fff;
+            border-radius: 10px;
+          }
+        }
       }
     }
   }
