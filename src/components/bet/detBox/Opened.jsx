@@ -6,14 +6,12 @@ import styled from "styled-components";
 import I_highArwGreen from "../../../img/icon/I_highArwGreen.svg";
 import I_lowArwRed from "../../../img/icon/I_lowArwRed.svg";
 import { setOpenedData } from "../../../reducers/bet";
-import { getDividFromData } from "../../../util/Util";
 
 export default function Opened({ socket }) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const isMobile = useSelector((state) => state.common.isMobile);
   const betFlag = useSelector((state) => state.bet.betFlag);
-  const dividObj = useSelector((state) => state.bet.dividObj);
 
   const [data, setData] = useState([]);
   const [now, setNow] = useState(new Date());
@@ -75,15 +73,6 @@ export default function Opened({ socket }) {
       default:
         break;
     }
-
-    if (
-      getDividFromData({
-        id: v.assetId,
-        _case: v.side,
-        dataObj: dividObj,
-      }) === 0
-    )
-      result = null;
 
     return result;
   }

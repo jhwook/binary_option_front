@@ -1,22 +1,28 @@
 import styled from "styled-components";
 import DefaultHeader from "../../components/header/DefaultHeader";
+import {
+  D_amountTypeList,
+  D_timeList,
+  D_tokenCategoryList,
+} from "../../data/D_bet";
 import I_dnPolWhite from "../../img/icon/I_dnPolWhite.svg";
 import I_starYellowO from "../../img/icon/I_starYellowO.svg";
 import I_qnaWhite from "../../img/icon/I_qnaWhite.svg";
 import I_langWhite from "../../img/icon/I_langWhite.svg";
 import I_dollarWhite from "../../img/icon/I_dollarWhite.svg";
+import I_flagWhite from "../../img/icon/I_flagWhite.svg";
 import I_percentWhite from "../../img/icon/I_percentWhite.svg";
 import I_highArwGreen from "../../img/icon/I_highArwGreen.svg";
 import I_lowArwRed from "../../img/icon/I_lowArwRed.svg";
 import I_plusWhite from "../../img/icon/I_plusWhite.svg";
-import I_timeWhite from "../../img/icon/I_timeWhite.svg";
 import I_barChartWhite from "../../img/icon/I_barChartWhite.svg";
+import I_candleChartWhite from "../../img/icon/I_candleChartWhite.svg";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import LiveTradePopup from "../../components/bet/LiveTradePopup";
 import PopupBg from "../../components/common/PopupBg";
 import TokenPopup from "../../components/bet/TokenPopup";
 import { useDispatch, useSelector } from "react-redux";
 import TimePopup from "../../components/bet/TimePopup";
+import { getDividFromData, setToast } from "../../util/Util";
 import DetBox from "../../components/bet/detBox/DetBox";
 import InsufficientPopup from "../../components/bet/InsufficientPopup";
 import MyBalancePopup from "../../components/header/MyBalancePopup";
@@ -25,16 +31,19 @@ import ReactTradingviewWidget, { Themes } from "react-tradingview-widget";
 import axios from "axios";
 import { API } from "../../configs/api";
 import LoadingBar from "../../components/common/LoadingBar";
-import { D_amountTypeList, D_tokenCategoryList } from "../../data/D_bet";
-import { getDividFromData, setToast } from "../../util/Util";
 import { setBetFlag } from "../../reducers/bet";
+import AmChart from "../../components/bet/chart/AmChart";
+import BarSizePopup from "../../components/bet/BarSizePopup";
+import ChartTypePopup from "../../components/bet/ChartTypePopup";
 import { useNavigate } from "react-router-dom";
 
-export default function Live({ socket, notiOpt }) {
+export default function Demo({ socket, notiOpt }) {
   const hoverRef1 = useRef();
   const hoverRef2 = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const demoToken = localStorage.getItem("demoToken");
+
   const isMobile = useSelector((state) => state.common.isMobile);
   const openedData = useSelector((state) => state.bet.openedData);
   const tokenPopupData = useSelector((state) => state.bet.tokenPopupData);
@@ -42,7 +51,6 @@ export default function Live({ socket, notiOpt }) {
 
   const [assetInfo, setAssetInfo] = useState();
   const [loading, setLoading] = useState(true);
-  const [liveTradePopup, setLiveTradePopup] = useState(false);
   const [tokenPopup, setTokenPopup] = useState(false);
   const [duration, setDuration] = useState(1);
   const [timePopup, setTimePopup] = useState(false);
@@ -53,6 +61,14 @@ export default function Live({ socket, notiOpt }) {
   const [amount, setAmount] = useState("");
   const [amountMode, setAmountMode] = useState(D_amountTypeList[0]);
   const [bookMark, setBookMark] = useState([]);
+  const [chartOpt, setChartOpt] = useState({
+    type: "candlestick",
+    typeStr: "Candles",
+    barSize: D_timeList[0].value,
+    barSizeStr: D_timeList[0].key,
+  });
+  const [barSizePopup, setBarSizePopup] = useState(false);
+  const [chartTypePopup, setChartTypePopup] = useState(false);
 
   function getAssetList() {
     axios
@@ -82,30 +98,7 @@ export default function Live({ socket, notiOpt }) {
     }, 5000);
   }
 
-  function chkMinimumBalance() {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setLiveTradePopup(true);
-      return;
-    }
-
-    axios
-      .get(`${API.USER_BALANCE}`)
-      .then(async ({ data }) => {
-        console.log(data);
-
-        if (data.respdata.LIVE.avail / 10 ** 6 < 5) setLiveTradePopup(true);
-      })
-      .catch((err) => {
-        console.error(err);
-        localStorage.clear();
-      });
-  }
-
   async function getBalance() {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
     return axios.get(`${API.USER_BALANCE}`);
   }
 
@@ -114,9 +107,9 @@ export default function Live({ socket, notiOpt }) {
 
     switch (amountMode) {
       case "int":
-        if (amount <= 0) throw "Not Possible Balance";
+        if (amount <= 0) throw "Not Possible Percent";
 
-        if (balance.data.respdata.LIVE.avail / 10 ** 6 < amount) {
+        if (balance.data.respdata.DEMO.avail / 10 ** 6 < amount) {
           setInsufficientPopup(true);
           throw "Not Balance";
         }
@@ -126,7 +119,7 @@ export default function Live({ socket, notiOpt }) {
       case "percent":
         if (amount > 100 || amount <= 0) throw "Not Possible Percent";
 
-        return (balance.data.respdata.LIVE.avail * amount) / 100;
+        return (balance.data.respdata.DEMO.avail * amount) / 100;
 
       default:
         break;
@@ -144,11 +137,12 @@ export default function Live({ socket, notiOpt }) {
     }
 
     axios
-      .post(`${API.BETS}/LIVE/${assetInfo.id}/${_amount}/${duration}/${type}`)
+      .post(`${API.BETS}/DEMO/${assetInfo?.id}/${_amount}/${duration}/${type}`)
       .then((res) => {
         console.log(res);
 
         dispatch(setBetFlag());
+
         if (notiOpt.orderRequest) {
           setToast({ type, assetInfo, amount });
         }
@@ -206,37 +200,37 @@ export default function Live({ socket, notiOpt }) {
   }
 
   useLayoutEffect(() => {
-    localStorage.setItem("balanceType", "Live");
+    localStorage.setItem("balanceType", "Demo");
   }, []);
 
   useEffect(() => {
+    if (demoToken) axios.defaults.headers.Authorization = demoToken;
+
     getAssetList();
 
     getBookMark();
 
     turnLoader();
-
-    chkMinimumBalance();
   }, []);
 
   useEffect(() => {
     if (!socket) return;
     getDivRate();
 
-    let socketInterval = setInterval(() => {
+    let divRateInterval = setInterval(() => {
       getDivRate();
       getClosed();
     }, 5000);
 
     return () => {
-      clearInterval(socketInterval);
+      clearInterval(divRateInterval);
     };
   }, [socket, assetInfo, bookMark, tokenPopupData, openedData]);
 
   if (isMobile)
     return (
       <>
-        <DefaultHeader />
+        <DefaultHeader demoToken={demoToken} />
 
         {loading ? (
           <LoadingBar />
@@ -247,7 +241,7 @@ export default function Live({ socket, notiOpt }) {
                 <article className="contArea">
                   <div className="chartBox">
                     <ReactTradingviewWidget
-                      symbol={assetInfo.dispSymbol}
+                      symbol={assetInfo?.dispSymbol}
                       theme={Themes.DARK}
                       locale="kr"
                       autosize
@@ -263,7 +257,7 @@ export default function Live({ socket, notiOpt }) {
                             className="tokenBtn"
                             onClick={() => setTokenPopup(true)}
                           >
-                            <p>{assetInfo.name}</p>
+                            <p>{assetInfo?.name}</p>
                             <img src={I_dnPolWhite} alt="" />
                           </button>
 
@@ -305,7 +299,7 @@ export default function Live({ socket, notiOpt }) {
                               :00
                             </p>
 
-                            <img src={I_timeWhite} alt="" />
+                            <img src={I_flagWhite} alt="" />
                           </button>
 
                           {timePopup && (
@@ -408,19 +402,12 @@ export default function Live({ socket, notiOpt }) {
               />
             )}
 
-            {liveTradePopup && (
-              <>
-                <LiveTradePopup off={setLiveTradePopup} />
-                <PopupBg bg off={setLiveTradePopup} />
-              </>
-            )}
-
             {insufficientPopup && (
               <>
                 <InsufficientPopup
                   off={setInsufficientPopup}
                   amount={amount}
-                  type="Live"
+                  type="Demo"
                   nextProc={setMyBalancePopup}
                 />
                 <PopupBg bg off={setInsufficientPopup} />
@@ -450,7 +437,7 @@ export default function Live({ socket, notiOpt }) {
   else
     return (
       <>
-        <DefaultHeader />
+        <DefaultHeader demoToken={demoToken} />
 
         {loading ? (
           <LoadingBar />
@@ -486,14 +473,7 @@ export default function Live({ socket, notiOpt }) {
                         <img src={I_starYellowO} alt="" />
                         <span className="textBox">
                           <p className="key">{v.asset.name}</p>
-                          <p className="value">
-                            {getDividFromData({
-                              id: v.asset.id,
-                              _case: "totalRate",
-                              dataObj: dividObj,
-                            })}
-                            %
-                          </p>
+                          {/* <p className="value">{v.payout}%</p> */}
                         </span>
                       </li>
                     ))}
@@ -503,19 +483,59 @@ export default function Live({ socket, notiOpt }) {
                 </article>
 
                 <article className="contArea">
-                  <div className="chartBox">
-                    <div className="chart">
-                      <ReactTradingviewWidget
-                        container_id={"technical-analysis-chart-demo"}
-                        symbol={assetInfo?.dispSymbol}
-                        theme={Themes.DARK}
-                        locale="kr"
-                        autosize
-                        interval="1"
-                        timezone="Asia/Seoul"
-                        allow_symbol_change={false}
-                      />
-                    </div>
+                  <div className="chartCont">
+                    <ul className="btnList">
+                      <li>
+                        <button
+                          className="utilBtn"
+                          onClick={() => setBarSizePopup(true)}
+                        >
+                          <p>{chartOpt.barSizeStr}</p>
+                        </button>
+
+                        <p className="info">{`Time frames : ${chartOpt.barSizeStr}`}</p>
+                      </li>
+
+                      {barSizePopup && (
+                        <>
+                          <BarSizePopup
+                            off={setBarSizePopup}
+                            chartOpt={chartOpt}
+                            setChartOpt={setChartOpt}
+                          />
+                          <PopupBg off={setBarSizePopup} />
+                        </>
+                      )}
+
+                      <li>
+                        <button
+                          className="utilBtn"
+                          onClick={() => setChartTypePopup(true)}
+                        >
+                          <img src={I_candleChartWhite} alt="" />
+                        </button>
+
+                        <p className="info">{`Chart type : ${chartOpt.typeStr}`}</p>
+                      </li>
+
+                      {chartTypePopup && (
+                        <>
+                          <ChartTypePopup
+                            off={setChartTypePopup}
+                            chartOpt={chartOpt}
+                            setChartOpt={setChartOpt}
+                          />
+                          <PopupBg off={setChartTypePopup} />
+                        </>
+                      )}
+                    </ul>
+
+                    <AmChart
+                      assetInfo={assetInfo}
+                      chartOpt={chartOpt}
+                      openedData={openedData}
+                      socket={socket}
+                    />
                   </div>
 
                   <div className="actionBox">
@@ -528,9 +548,10 @@ export default function Live({ socket, notiOpt }) {
 
                           <span className="hoverPopup">
                             <p>
-                              Set the time when your trading operation will be
-                              dosed. By placing a “Higher” or “Lower” forecast
-                              you will receive the result in 5min.
+                              Set the time (UTC+2) when your trading operation
+                              will be dosed. By placing a “Higher” or “Lower”
+                              forecast you will receve the result exactly at
+                              17.05.2022 11:45:16.
                             </p>
                           </span>
                         </button>
@@ -546,7 +567,7 @@ export default function Live({ socket, notiOpt }) {
                             {`${duration % 60}`.padStart(2, "0")}:00
                           </p>
 
-                          <img src={I_timeWhite} alt="" />
+                          <img src={I_flagWhite} alt="" />
                         </button>
 
                         {timePopup && (
@@ -710,19 +731,12 @@ export default function Live({ socket, notiOpt }) {
               </footer>
             </PbetBox>
 
-            {liveTradePopup && (
-              <>
-                <LiveTradePopup off={setLiveTradePopup} />
-                <PopupBg off={setLiveTradePopup} />
-              </>
-            )}
-
             {insufficientPopup && (
               <>
                 <InsufficientPopup
                   off={setInsufficientPopup}
                   amount={amount}
-                  type="Live"
+                  type="Demo"
                   nextProc={setMyBalancePopup}
                 />
                 <PopupBg off={setInsufficientPopup} />
@@ -756,20 +770,24 @@ const MbetBox = styled.main`
   padding: 56px 0 0;
   color: #fff;
   background: #0a0e17;
+
   .innerBox {
     display: flex;
     flex-direction: column;
     height: 100%;
     overflow-y: scroll;
+
     .contArea {
       flex: 1;
       display: flex;
       flex-direction: column;
+
       .chartBox {
         flex: 1;
         background: #181c25;
         position: relative;
         padding: 62px 0 0;
+
         .utilBox {
           display: flex;
           justify-content: space-between;
@@ -778,27 +796,31 @@ const MbetBox = styled.main`
           left: 16px;
           right: 16px;
           position: absolute;
+
           .btnList {
             display: flex;
             gap: 8px;
+
             & > li {
               position: relative;
+
               .tokenBtn {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                gap: 16px;
-                min-width: 112px;
+                width: 112px;
                 height: 34px;
                 padding: 0 16px;
                 font-size: 14px;
                 font-weight: 700;
                 border: 1px solid #fff;
                 border-radius: 20px;
+
                 img {
                   width: 8px;
                 }
               }
+
               .chartBtn {
                 display: flex;
                 justify-content: center;
@@ -807,12 +829,14 @@ const MbetBox = styled.main`
                 aspect-ratio: 1;
                 border: 1px solid #fff;
                 border-radius: 50%;
+
                 img {
                   height: 14px;
                 }
               }
             }
           }
+
           .detBtn {
             display: flex;
             justify-content: center;
@@ -821,12 +845,14 @@ const MbetBox = styled.main`
             aspect-ratio: 1;
             border: 1px solid #fff;
             border-radius: 50%;
+
             img {
               height: 14px;
             }
           }
         }
       }
+
       .actionBox {
         display: flex;
         flex-direction: column;
@@ -838,18 +864,22 @@ const MbetBox = styled.main`
           rgba(10, 14, 23, 0.14) 100%
         );
         border-radius: 20px 20px 0 0;
+
         .infoBox {
           display: flex;
           gap: 12px;
+
           .contBox {
             flex: 1;
             display: flex;
             flex-direction: column;
             gap: 6px;
+
             .key {
               font-size: 14px;
               color: rgba(255, 255, 255, 0.4);
             }
+
             .value {
               display: flex;
               align-items: center;
@@ -859,50 +889,59 @@ const MbetBox = styled.main`
               border: 1px solid rgba(255, 255, 255, 0.4);
               border-radius: 8px;
               position: relative;
+
               input {
                 width: 100%;
               }
+
               .contBtn {
                 display: flex;
                 align-items: center;
                 width: 100%;
                 height: 100%;
+
                 p {
                   flex: 1;
                   text-align: start;
                 }
               }
+
               img {
-                width: 20px;
                 height: 20px;
-                object-fit: contain;
               }
             }
           }
         }
+
         .btnCont {
           display: flex;
           gap: 12px;
+
           .btnBox {
             flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 6px;
+
             &.low {
               color: #ff5353;
+
               button {
                 border-color: #ff5353;
                 background: rgba(255, 83, 83, 0.2);
               }
             }
+
             &.high {
               color: #3fb68b;
+
               button {
                 border-color: #3fb68b;
                 background: rgba(63, 182, 139, 0.2);
               }
             }
+
             button {
               display: flex;
               align-items: center;
@@ -914,10 +953,12 @@ const MbetBox = styled.main`
               font-weight: 700;
               border: 1.2px solid;
               border-radius: 8px;
+
               img {
                 width: 12px;
               }
             }
+
             .rate {
               font-size: 14px;
             }
@@ -934,7 +975,7 @@ const PbetBox = styled.main`
   color: #fff;
   background: #0a0e17;
   overflow-y: scroll;
-  
+
   .innerBox {
     display: flex;
     flex-direction: column;
@@ -960,7 +1001,7 @@ const PbetBox = styled.main`
           padding: 0 24px;
           font-size: 16px;
           font-weight: 700;
-          border: 1px solid #ffffff;
+          border: 1px solid #fff;
           border-radius: 20px;
 
           img {
@@ -1016,24 +1057,69 @@ const PbetBox = styled.main`
         }
       }
     }
+
     .contArea {
       flex: 1;
       display: flex;
       overflow: hidden;
 
-      .chartBox {
+      .chartCont {
         flex: 1;
-        background: #181c25;
+        display: flex;
         border-radius: 12px;
         overflow: hidden;
         position: relative;
 
-        .chart {
+        .btnList {
+          display: flex;
+          gap: 8px;
+          top: 24px;
+          left: 24px;
           position: absolute;
-          width: calc(100% + 2px);
-          height: calc(100% + 2px);
-          top: -1px;
-          left: -1px;
+          z-index: 1;
+
+          li {
+            &:hover {
+              .info {
+                display: inline-block;
+              }
+            }
+
+            .utilBtn {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 32px;
+              height: 32px;
+              font-size: 16px;
+              font-weight: 700;
+              background: #32323d;
+              border-radius: 6px;
+
+              &:hover {
+                background: #474751;
+              }
+
+              img {
+                width: 23px;
+              }
+            }
+
+            .info {
+              display: none;
+              height: 34px;
+              padding: 0 12px;
+              font-size: 12px;
+              white-space: nowrap;
+              line-height: 34px;
+              background: rgba(255, 255, 255, 0.2);
+              border-radius: 4px;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              top: 44px;
+              position: absolute;
+            }
+          }
         }
       }
 
@@ -1120,9 +1206,7 @@ const PbetBox = styled.main`
             }
 
             img {
-              width: 20px;
               height: 20px;
-              object-fit: contain;
             }
           }
         }
@@ -1172,7 +1256,7 @@ const PbetBox = styled.main`
 
                 .percent {
                 }
-                
+
                 .amount {
                   font-size: 12px;
                 }
@@ -1204,13 +1288,13 @@ const PbetBox = styled.main`
 
       & > .plusBtn {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         min-width: 40px;
         width: 40px;
         height: 50px;
         padding: 10px;
         opacity: 0.6;
-        
+
         img {
           height: 20px;
           transition: all 0.3s;
@@ -1231,7 +1315,7 @@ const PbetBox = styled.main`
     align-items: center;
     gap: 14px;
     padding: 0 0 30px;
-    
+
     button {
       img {
         height: 22px;

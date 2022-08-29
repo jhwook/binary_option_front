@@ -59,23 +59,6 @@ export default function Lending() {
 
     _assetList = _assetList.slice(0, 15);
 
-    await Promise.all(
-      _assetList.map(async (e, i) => {
-        return await axios
-          .get(`https://api.twelvedata.com/quote`, {
-            params: {
-              symbol: e.APISymbol,
-              apikey: process.env.REACT_APP_TWELVEDATA_KEY,
-            },
-          })
-          .then(({ data }) => {
-            _assetList[i].close = data.close;
-            _assetList[i].change = data.change;
-          })
-          .catch(console.error);
-      })
-    );
-
     console.log(_assetList);
     setAssetList(_assetList);
   }

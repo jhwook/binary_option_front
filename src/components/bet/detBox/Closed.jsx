@@ -103,9 +103,7 @@ export default function Closed({ page }) {
                           <div className="contBox">
                             <p className="token">{detV?.asset?.name}</p>
 
-                            <p className="price">
-                              {Math.floor(detV.startingPrice * 100) / 100}
-                            </p>
+                            <p className="winLose">{detV.win_lose}</p>
 
                             <p className="percent">{`${detV.diffRate}%`}</p>
                           </div>
@@ -262,9 +260,7 @@ export default function Closed({ page }) {
                           <div className="contBox">
                             <p className="token">{detV?.asset?.name}</p>
 
-                            <p className="price">
-                              {Math.floor(detV.startingPrice * 100) / 100}
-                            </p>
+                            <p className="winLose">{detV.win_lose}</p>
 
                             <p className="percent">{`${detV.diffRate}%`}</p>
                           </div>
@@ -475,7 +471,7 @@ const MclosedBox = styled.ul`
                   text-align: end;
                 }
 
-                .price {
+                .winLose {
                   text-align: center;
                 }
 
@@ -717,7 +713,7 @@ const PclosedBox = styled.ul`
                   text-align: end;
                 }
 
-                .price {
+                .winLose {
                   text-align: center;
                 }
 
