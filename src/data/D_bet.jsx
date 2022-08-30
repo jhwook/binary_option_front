@@ -1564,7 +1564,7 @@ export const D_timeList = [
 
 export const D_tokenCategoryList = [
   { key: "Currencies", value: "forex" },
-  { key: "Crypto", value: "crypto" },
+  { key: "Coin", value: "coin" },
   { key: "Stocks", value: "stock" },
 ];
 

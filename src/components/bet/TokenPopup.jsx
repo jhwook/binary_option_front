@@ -22,14 +22,10 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
   const [search, setSearch] = useState("");
   const [listData, setListData] = useState([]);
 
-  function onKeyDown(e) {
-    if (e.key === "Enter") getAssetWithSearch();
-  }
-
-  function getAssetWithSearch() {
+  function getAssetWithSearch(_search) {
     axios
       .get(`${API.GET_ASSETS}`, {
-        params: { searchkey: search },
+        params: { searchkey: _search, group: category },
       })
       .then(({ data }) => {
         console.log(data);
@@ -144,14 +140,14 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
                   <span className="nameBox">
                     <p className="name">{v.name}</p>
 
-                    {category === "crypto" && (
+                    {category === "coin" && (
                       <p className="inital">{v.baseAsset}</p>
                     )}
                   </span>
 
                   <p
                     className={`${_congestion >= 50 ? "red" : "green"} percent`}
-                  >{`${_percent}%`}</p>
+                  >{`${_percent || 0}%`}</p>
                 </li>
               );
             })}
@@ -196,8 +192,10 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
 
             <input
               value={search}
-              onKeyDown={onKeyDown}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                getAssetWithSearch(e.target.value);
+              }}
               placeholder="e.g. “ETH” or “Ethereum”"
             />
           </div>
@@ -237,7 +235,7 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
                     <span className="nameBox">
                       <p className="name">{v.name}</p>
 
-                      {category === "crypto" && (
+                      {category === "coin" && (
                         <p className="inital">{v.baseAsset}</p>
                       )}
                     </span>
@@ -246,7 +244,7 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
                       className={`${
                         _congestion >= 50 ? "red" : "green"
                       } percent`}
-                    >{`${_percent}%`}</p>
+                    >{`${_percent || 0}%`}</p>
                   </li>
                 );
               })}

@@ -18,36 +18,37 @@ export default function Bet() {
 
   const [notiOpt, setNotiOpt] = useState("");
   const [socketIo, setSocketIo] = useState("");
-  const [closedSocketIo, setClosedSocketIo] = useState("");
 
   function getNotiOpt() {
     axios
-      .get(API.NOTI)
+      .get(API.NOTI, {
+        headers: {
+          Authorization: token || demoToken,
+        },
+      })
       .then(({ data }) => {
         let _resp = data.resp;
         let _notiOpt = {};
 
         _notiOpt.betEnd = _resp.betend;
         _notiOpt.orderRequest = _resp.orderrequest;
-
+        console.log("resp", _resp);
         setNotiOpt({ ..._notiOpt });
       })
-      .catch(console.error);
+      .catch((err) => {
+        console.error(err);
+
+        if (err.response.status === 419) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("demoToken");
+          window.location.reload();
+        }
+      });
   }
 
   useEffect(() => {
     setSocketIo(
       io(URL, {
-        transports: ["websocket"],
-        query: {
-          token:
-            localStorage.getItem("token") || localStorage.getItem("demoToken"),
-        },
-      })
-    );
-
-    setClosedSocketIo(
-      io(CLOSED_SOCKET_URL, {
         transports: ["websocket"],
         query: {
           token:
@@ -77,13 +78,17 @@ export default function Bet() {
 
     socketIo.on("bet_closed", (res) => {
       console.log("bet_closed", res);
-      console.log("notiOpt", notiOpt);
+
       if (notiOpt.betEnd) {
-        setToast({
-          type: "closed",
-          assetInfo: { name: res.name },
-          amount: res.data.amount / 10 ** 6,
-          profit: res.profit,
+        res.map((v, i) => {
+          setTimeout(() => {
+            setToast({
+              type: "closed",
+              assetInfo: { name: v.name },
+              amount: v.data.amount / 10 ** 6,
+              profit: v.profit,
+            });
+          }, i * 1000);
         });
       }
 
@@ -112,7 +117,7 @@ export default function Bet() {
   }, []);
 
   useEffect(() => {
-    if (!(socketIo || notiOpt)) return;
+    if (!(socketIo && notiOpt)) return;
     getBetSocket();
   }, [socketIo, notiOpt]);
 

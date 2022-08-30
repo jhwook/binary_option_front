@@ -600,7 +600,7 @@ const PqnaBox = styled.main`
     font-size: 16px;
     color: #000;
     background: #fff;
-    padding: 60px 0 220px;
+    padding: 60px 0;
 
     .innerBox {
       display: flex;

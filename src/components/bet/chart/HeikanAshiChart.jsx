@@ -9,7 +9,7 @@ import axios from "axios";
 import { API } from "../../../configs/api";
 import moment from "moment";
 
-export default function CandleChart({
+export default function HeikanAshiChart({
   assetInfo,
   chartOpt,
   openedData,
@@ -26,6 +26,7 @@ export default function CandleChart({
   const [currentPrice, setCurrentPrice] = useState(0);
 
   function getPreData() {
+    setApiData([]);
     axios
       .get(`${API.GET_ASSETS_TICKER_PRICE}`, {
         params: {
@@ -48,16 +49,22 @@ export default function CandleChart({
             else if (Number(e.price) < _data[_chartIndex].Low)
               _data[_chartIndex].Low = Number(e.price);
 
-            _data[_chartIndex].Close = Number(e.price);
+            _data[_chartIndex].Close =
+              (_data[_chartIndex].Open +
+                _data[_chartIndex].High +
+                _data[_chartIndex].Low +
+                Number(e.price)) /
+              4;
           } else {
             let _chartIndex = _data.length - 1;
+            let _open = _data[_chartIndex]?.Close
+              ? (_data[_chartIndex].Open + _data[_chartIndex].Close) / 2
+              : Number(e.price);
 
             _data.push({
               Date: new Date(e.createdat).getTime(),
-              Open: _data[_chartIndex]?.Close
-                ? _data[_chartIndex].Close
-                : Number(e.price),
-              High: Number(e.price),
+              Open: _open,
+              High: _open > e.price ? _open : Number(e.price),
               Low: Number(e.price),
               Close: Number(e.price),
             });
@@ -81,16 +88,19 @@ export default function CandleChart({
       if (price > _lastIndex.High) _lastIndex.High = price;
       else if (price < _lastIndex.Low) _lastIndex.Low = price;
 
-      _lastIndex.Close = price;
+      _lastIndex.Close =
+        (_lastIndex.Open + _lastIndex.High + _lastIndex.Low + price) / 4;
 
       _apiData[_apiData.length - 1] = _lastIndex;
 
       valueSeries.data.setIndex(valueSeries.data.length - 1, _lastIndex);
     } else {
+      let _open = (_lastIndex.Open + _lastIndex.Close) / 2;
+
       pushData = {
         Date: _now,
-        Open: _lastIndex.Close,
-        High: price,
+        Open: _open,
+        High: _open > price ? _open : price,
         Low: price,
         Close: price,
       };
@@ -128,8 +138,6 @@ export default function CandleChart({
     color,
     description
   ) {
-    if (!dateAxis) return;
-
     var dataItem = dateAxis.createAxisRange(
       dateAxis.makeDataItem({ value: date })
     );
@@ -193,8 +201,6 @@ export default function CandleChart({
 
     root.interfaceColors.setAll({
       grid: "rgba(255, 255, 255, 0.1)",
-      negative: am5.color(0xff5353),
-      positive: am5.color(0x3fb68b),
     });
 
     setStockChart(stockChart);

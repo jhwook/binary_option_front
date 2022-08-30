@@ -231,6 +231,20 @@ export function setToast({ type, cont, assetInfo, amount, profit }) {
         }
       );
       break;
+    case "qna":
+      toast(
+        <div className="customBox">
+          <span className="iconBox">
+            <img src={I_chkOrange} alt="" />
+          </span>
+
+          <p className="cont">{cont}</p>
+        </div>,
+        {
+          className: "CustomToastAlarm",
+        }
+      );
+      break;
     default:
       break;
   }

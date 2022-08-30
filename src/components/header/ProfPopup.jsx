@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { API } from "../../configs/api";
 import I_x from "../../img/icon/I_x.svg";
 import I_xWhite from "../../img/icon/I_xWhite.svg";
-import { getBigCount, GetTier, GetTierByLevel } from "../../util/Util";
+import { getBigCount } from "../../util/Util";
 
 export default function ProfPopup({ off, offAll }) {
   const { t } = useTranslation();
@@ -55,13 +55,11 @@ export default function ProfPopup({ off, offAll }) {
 
         <article className="contArea">
           <div className="profBox">
-            <img src={GetTierByLevel(data.level)?.img} alt="" />
+            <img src={data.level_img} alt="" />
 
             <div className="textBox">
-              <p className="id">{data.firstName + ", " + data.lastName}</p>
-              <strong className="pos">
-                {t(GetTierByLevel(data.level)?.text)}
-              </strong>
+              <p className="id">{data.name}</p>
+              <strong className="pos">{t(data.level_str)}</strong>
             </div>
           </div>
 
@@ -158,13 +156,11 @@ export default function ProfPopup({ off, offAll }) {
         </button>
 
         <div className="profBox">
-          <img src={GetTierByLevel(data.level)?.img} alt="" />
+          <img src={data.level_img} alt="" />
 
           <div className="textBox">
-            <p className="id">{data.firstName + ", " + data.lastName}</p>
-            <strong className="pos">
-              {t(GetTierByLevel(data.level)?.text)}
-            </strong>
+            <p className="id">{data.name}</p>
+            <strong className="pos">{t(data.level_str)}</strong>
           </div>
         </div>
 

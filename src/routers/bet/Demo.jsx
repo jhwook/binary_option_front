@@ -483,19 +483,59 @@ export default function Demo({ socket, notiOpt }) {
                 </article>
 
                 <article className="contArea">
-                  <div className="chartBox">
-                    <div className="chart">
-                      <ReactTradingviewWidget
-                        container_id={"technical-analysis-chart-demo"}
-                        symbol={assetInfo?.dispSymbol}
-                        theme={Themes.DARK}
-                        locale="kr"
-                        autosize
-                        interval="1"
-                        timezone="Asia/Seoul"
-                        allow_symbol_change={false}
-                      />
-                    </div>
+                  <div className="chartCont">
+                    <ul className="btnList">
+                      <li>
+                        <button
+                          className="utilBtn"
+                          onClick={() => setBarSizePopup(true)}
+                        >
+                          <p>{chartOpt.barSizeStr}</p>
+                        </button>
+
+                        <p className="info">{`Time frames : ${chartOpt.barSizeStr}`}</p>
+                      </li>
+
+                      {barSizePopup && (
+                        <>
+                          <BarSizePopup
+                            off={setBarSizePopup}
+                            chartOpt={chartOpt}
+                            setChartOpt={setChartOpt}
+                          />
+                          <PopupBg off={setBarSizePopup} />
+                        </>
+                      )}
+
+                      <li>
+                        <button
+                          className="utilBtn"
+                          onClick={() => setChartTypePopup(true)}
+                        >
+                          <img src={I_candleChartWhite} alt="" />
+                        </button>
+
+                        <p className="info">{`Chart type : ${chartOpt.typeStr}`}</p>
+                      </li>
+
+                      {chartTypePopup && (
+                        <>
+                          <ChartTypePopup
+                            off={setChartTypePopup}
+                            chartOpt={chartOpt}
+                            setChartOpt={setChartOpt}
+                          />
+                          <PopupBg off={setChartTypePopup} />
+                        </>
+                      )}
+                    </ul>
+
+                    <AmChart
+                      assetInfo={assetInfo}
+                      chartOpt={chartOpt}
+                      openedData={openedData}
+                      socket={socket}
+                    />
                   </div>
 
                   <div className="actionBox">
@@ -1023,18 +1063,63 @@ const PbetBox = styled.main`
       display: flex;
       overflow: hidden;
 
-      .chartBox {
+      .chartCont {
         flex: 1;
-        background: #181c25;
+        display: flex;
         border-radius: 12px;
         overflow: hidden;
         position: relative;
-        .chart {
+
+        .btnList {
+          display: flex;
+          gap: 8px;
+          top: 24px;
+          left: 24px;
           position: absolute;
-          width: calc(100% + 2px);
-          height: calc(100% + 2px);
-          top: -1px;
-          left: -1px;
+          z-index: 1;
+
+          li {
+            &:hover {
+              .info {
+                display: inline-block;
+              }
+            }
+
+            .utilBtn {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 32px;
+              height: 32px;
+              font-size: 16px;
+              font-weight: 700;
+              background: #32323d;
+              border-radius: 6px;
+
+              &:hover {
+                background: #474751;
+              }
+
+              img {
+                width: 23px;
+              }
+            }
+
+            .info {
+              display: none;
+              height: 34px;
+              padding: 0 12px;
+              font-size: 12px;
+              white-space: nowrap;
+              line-height: 34px;
+              background: rgba(255, 255, 255, 0.2);
+              border-radius: 4px;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              top: 44px;
+              position: absolute;
+            }
+          }
         }
       }
 

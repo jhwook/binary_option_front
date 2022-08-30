@@ -12,9 +12,6 @@ import B_float1 from "../../img/bg/lending/B_float1.png";
 import B_float2 from "../../img/bg/lending/B_float2.png";
 import B_float3 from "../../img/bg/lending/B_float3.png";
 import B_float4 from "../../img/bg/lending/B_float4.png";
-import I_thunderGrad from "../../img/icon/I_thunderGrad.svg";
-import I_rtArw3White from "../../img/icon/I_rtArw3White.svg";
-import I_xWhite from "../../img/icon/I_xWhite.svg";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -39,8 +36,8 @@ export default function Lending() {
   async function getAssetList() {
     let _assetList = [];
 
-    let _cryptoRes = await axios.get(`${API.GET_ASSETS}`, {
-      params: { group: "crypto" },
+    let _coinRes = await axios.get(`${API.GET_ASSETS}`, {
+      params: { group: "coin" },
     });
 
     let _forexRes = await axios.get(`${API.GET_ASSETS}`, {
@@ -52,7 +49,7 @@ export default function Lending() {
     });
 
     _assetList = [
-      ..._cryptoRes.data.resp,
+      ..._coinRes.data.resp,
       ..._forexRes.data.resp,
       ..._stockRes.data.resp,
     ];
@@ -74,6 +71,10 @@ export default function Lending() {
   useEffect(() => {
     getAssetList();
   }, []);
+
+  useEffect(() => {
+    if (!assetListRef) return;
+  }, [assetListRef]);
 
   if (isMobile)
     return (
@@ -100,24 +101,6 @@ export default function Lending() {
                 {t("Trade Now")}
               </button>
             </article>
-
-            <span className="banner">
-              <div className="contBox">
-                <img className="icon" src={I_thunderGrad} alt="" />
-
-                <strong className="cont">{t("Start trading")}</strong>
-              </div>
-
-              <div className="btnBox">
-                <button className="" onClick={() => {}}>
-                  <img src={I_rtArw3White} alt="" />
-                </button>
-
-                <button className="" onClick={() => {}}>
-                  <img src={I_xWhite} alt="" />
-                </button>
-              </div>
-            </span>
 
             <img className="bg" src={B_lending1} alt="" />
           </section>
@@ -150,18 +133,6 @@ export default function Lending() {
                     </div>
                   </li>
                 ))}
-              </ul>
-
-              <ul className="btnList">
-                {new Array(Math.floor(assetList.slice(0, 5).length))
-                  .fill("")
-                  .map((v, i) => (
-                    <button
-                      key={i}
-                      className={`${assetListIndex === i && "on"}`}
-                      onClick={() => swiperListener(assetListRef, i)}
-                    />
-                  ))}
               </ul>
             </article>
           </section>
@@ -213,7 +184,7 @@ export default function Lending() {
               <strong className="title">{t("Start trading on BETBIT")}</strong>
 
               <strong className="explain">
-                {t("Enjoy incredible accessibility to crypto futures")}
+                {t("Enjoy incredible accessibility to coin futures")}
               </strong>
             </div>
 
@@ -237,26 +208,6 @@ export default function Lending() {
         <DefaultHeader />
         <PlendingBox>
           <section className="placeSec">
-            <span className="banner">
-              <div className="contBox">
-                <img className="icon" src={I_thunderGrad} alt="" />
-
-                <strong className="cont">
-                  {t("Start trading on Betbit today.")}
-                </strong>
-              </div>
-
-              <div className="btnBox">
-                <button className="" onClick={() => {}}>
-                  <img src={I_rtArw3White} alt="" />
-                </button>
-
-                <button className="" onClick={() => {}}>
-                  <img src={I_xWhite} alt="" />
-                </button>
-              </div>
-            </span>
-
             <article className="contArea">
               <div className="textCont">
                 <strong className="explain">
@@ -304,21 +255,25 @@ export default function Lending() {
                     </div>
                   </li>
                 ))}
-              </ul>
+                {assetList.map((v, i) => (
+                  <li key={i}>
+                    <span className="assetImgBox">
+                      {v.imgurl ? <img src={v.imgurl} alt="" /> : <></>}
+                    </span>
 
-              <ul className="btnList">
-                {new Array(Math.floor(assetList.length / 4))
-                  .fill("")
-                  .map((v, i) => (
-                    <button
-                      key={i}
-                      className={`${assetListIndex === i && "on"}`}
-                      onClick={() => {
-                        swiperListener(assetListRef, i);
-                        setAssetListIndex(i);
-                      }}
-                    />
-                  ))}
+                    <div className="textBox">
+                      <strong className="name">{v.APISymbol}</strong>
+                      <p className="close">
+                        {v.close && Number(v.close).toLocaleString("eu", "US")}
+                      </p>
+
+                      <strong className="change">
+                        {v.change &&
+                          `${Math.floor(v.change * 10 ** 2) / 10 ** 2}%`}
+                      </strong>
+                    </div>
+                  </li>
+                ))}
               </ul>
             </article>
           </section>
@@ -368,7 +323,7 @@ export default function Lending() {
               <strong className="title">{t("Start trading on BETBIT")}</strong>
 
               <strong className="explain">
-                {t("Enjoy incredible accessibility to crypto futures")}
+                {t("Enjoy incredible accessibility to coin futures")}
               </strong>
             </div>
 
@@ -436,56 +391,9 @@ const MlendingBox = styled.main`
   .placeSec {
     display: flex;
     flex-direction: column;
-    gap: 44px;
-    padding: 324px 0 120px 0;
+    padding: 324px 0 80px 0;
     margin: 0 auto;
     position: relative;
-
-    .banner {
-      display: flex;
-      align-items: center;
-      gap: 40px;
-      height: 54px;
-      padding: 0 22px;
-      margin: 0 20px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 30px;
-
-      .contBox {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        overflow: hidden;
-
-        .icon {
-          height: 28px;
-        }
-
-        .cont {
-          flex: 1;
-          font-size: 18px;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-        }
-      }
-
-      .btnBox {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-
-        button {
-          display: flex;
-          align-items: center;
-
-          img {
-            height: 20px;
-          }
-        }
-      }
-    }
 
     .contArea {
       display: flex;
@@ -573,7 +481,6 @@ const MlendingBox = styled.main`
         display: flex;
         gap: 20px;
         overflow-x: scroll;
-        scroll-snap-type: x mandatory;
 
         li {
           display: flex;
@@ -941,61 +848,10 @@ const PlendingBox = styled.main`
   overflow-y: scroll;
 
   .placeSec {
-    display: flex;
-    flex-direction: column;
-    gap: 270px;
     width: 1120px;
-    height: 1030px;
-    padding: 34px 0 210px 0;
+    padding: 176px 0 210px 0;
     margin: 0 auto;
     position: relative;
-
-    .banner {
-      display: flex;
-      align-items: center;
-      gap: 40px;
-      width: 800px;
-      height: 60px;
-      padding: 0 24px;
-      margin: 0 auto;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 12px;
-
-      .contBox {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        overflow: hidden;
-
-        .icon {
-          height: 28px;
-        }
-
-        .cont {
-          flex: 1;
-          font-size: 18px;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-        }
-      }
-
-      .btnBox {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-
-        button {
-          display: flex;
-          align-items: center;
-
-          img {
-            height: 20px;
-          }
-        }
-      }
-    }
 
     .contArea {
       display: flex;
@@ -1055,8 +911,9 @@ const PlendingBox = styled.main`
     .bg {
       width: 772px;
       right: -20%;
-      bottom: 4%;
+      top: 50%;
       position: absolute;
+      transform: translate(0, -50%);
     }
   }
 

@@ -396,7 +396,7 @@ export default function WithDrawal() {
                   </li>
                   <li>
                     {t(
-                      "Crypto deposits are monitored according to our AML program."
+                      "Coin deposits are monitored according to our AML program."
                     )}
                   </li>
                 </ul>

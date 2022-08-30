@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
 import { API } from "../../configs/api";
+import { setToast } from "../../util/Util";
 
 export default function ReqeustPopup({ off }) {
   const { t } = useTranslation();
@@ -13,15 +14,16 @@ export default function ReqeustPopup({ off }) {
   const [cont, setCont] = useState("");
 
   function onClickSendBtn() {
-    axios
-      .post(`${API.INQUIRY_ENROLL}`, {
-        content: cont,
-      })
-      .then((res) => {
-        console.log(res);
-        off();
-      })
-      .catch(console.error);
+    // axios
+    //   .post(`${API.INQUIRY_ENROLL}`, {
+    //     content: cont,
+    //   })
+    //   .then((res) => {
+    //     console.log(res);
+    //     off();
+    setToast({ type: "qna", cont: "문의가 정상적으로 요청되었습니다." });
+    // })
+    // .catch(console.error);
   }
 
   if (isMobile)

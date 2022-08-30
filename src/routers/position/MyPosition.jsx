@@ -4,7 +4,7 @@ import DefaultHeader from "../../components/header/DefaultHeader";
 import T_dia from "../../img/tier/T_dia.svg";
 import I_upPolGreen from "../../img/icon/I_upPolGreen.svg";
 import { useTranslation } from "react-i18next";
-import { getBigCount, GetTierByLevel } from "../../util/Util";
+import { getBigCount } from "../../util/Util";
 import axios from "axios";
 import { API } from "../../configs/api";
 import { useEffect, useState } from "react";
@@ -58,12 +58,10 @@ export default function MyPosition() {
           <section className="innerBox">
             <article className="posArea">
               <span className="posBox">
-                <img src={GetTierByLevel(data.level)?.img} alt="" />
+                <img src={data.level_img} alt="" />
 
                 <div className="textBox">
-                  <strong className="pos">
-                    {t(GetTierByLevel(data.level)?.text)}
-                  </strong>
+                  <strong className="pos">{t(data.level_str)}</strong>
 
                   <p className="cashBack">{`Cashback ${data.cashback}%`}</p>
                 </div>
@@ -166,12 +164,10 @@ export default function MyPosition() {
         <section className="innerBox">
           <article className="posArea">
             <span className="posBox">
-              <img src={GetTierByLevel(data.level)?.img} alt="" />
+              <img src={data.level_img} alt="" />
 
               <div className="textBox">
-                <strong className="pos">
-                  {t(GetTierByLevel(data.level)?.text)}
-                </strong>
+                <strong className="pos">{t(data.level_str)}</strong>
 
                 <p className="cashBack">{`Cashback ${data.cashback}%`}</p>
               </div>
