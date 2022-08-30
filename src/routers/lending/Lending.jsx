@@ -909,8 +909,8 @@ const PlendingBox = styled.main`
     }
 
     .bg {
-      width: 772px;
-      right: -20%;
+      width: 740px;
+      right: -18%;
       top: 50%;
       position: absolute;
       transform: translate(0, -50%);
@@ -947,7 +947,7 @@ const PlendingBox = styled.main`
           gap: 12px;
           min-width: 280px;
           width: 280px;
-          height: 164px;
+          height: 140px;
           color: #000;
           background: #fafafc;
           border-radius: 12px;
