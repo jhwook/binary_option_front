@@ -1291,8 +1291,8 @@ const PbetBox = styled.main`
         align-items: center;
         min-width: 40px;
         width: 40px;
-        height: 50px;
-        padding: 10px;
+        height: 20px;
+        padding: 0 10px;
         opacity: 0.6;
 
         img {

@@ -27,7 +27,6 @@ import DetBox from "../../components/bet/detBox/DetBox";
 import InsufficientPopup from "../../components/bet/InsufficientPopup";
 import MyBalancePopup from "../../components/header/MyBalancePopup";
 import AddPopup from "../../components/header/AddPopup";
-import ReactTradingviewWidget, { Themes } from "react-tradingview-widget";
 import axios from "axios";
 import { API } from "../../configs/api";
 import LoadingBar from "../../components/common/LoadingBar";
@@ -47,6 +46,8 @@ export default function Demo({ socket, notiOpt }) {
   const isMobile = useSelector((state) => state.common.isMobile);
   const openedData = useSelector((state) => state.bet.openedData);
   const tokenPopupData = useSelector((state) => state.bet.tokenPopupData);
+  const currentPrice = useSelector((state) => state.bet.currentPrice) || 1;
+  const pastPrice = useSelector((state) => state.bet.pastPrice) || 1;
   const dividObj = useSelector((state) => state.bet.dividObj);
 
   const [assetInfo, setAssetInfo] = useState();
@@ -145,6 +146,7 @@ export default function Demo({ socket, notiOpt }) {
 
         if (notiOpt.orderRequest) {
           setToast({ type, assetInfo, amount });
+          setDetMode(true);
         }
       })
       .catch((err) => console.error(err));
@@ -239,38 +241,69 @@ export default function Demo({ socket, notiOpt }) {
             <MbetBox>
               <section className="innerBox">
                 <article className="contArea">
-                  <div className="chartBox">
-                    <ReactTradingviewWidget
-                      symbol={assetInfo?.dispSymbol}
-                      theme={Themes.DARK}
-                      locale="kr"
-                      autosize
-                      interval="1"
-                      timezone="Asia/Seoul"
-                      allow_symbol_change={false}
-                    />
-
-                    <span className="utilBox">
+                  <div className="chartCont">
+                    <div className="topBar">
                       <ul className="btnList">
                         <li>
                           <button
-                            className="tokenBtn"
-                            onClick={() => setTokenPopup(true)}
+                            className="utilBtn"
+                            onClick={() => setBarSizePopup(true)}
                           >
-                            <p>{assetInfo?.name}</p>
-                            <img src={I_dnPolWhite} alt="" />
+                            <p>{chartOpt.barSizeStr}</p>
                           </button>
 
-                          {tokenPopup && (
-                            <>
-                              <TokenPopup
-                                off={setTokenPopup}
-                                setAssetInfo={setAssetInfo}
-                                getBookMark={getBookMark}
-                              />
-                              <PopupBg off={setTokenPopup} />
-                            </>
-                          )}
+                          <p className="info">{`Time frames : ${chartOpt.barSizeStr}`}</p>
+                        </li>
+
+                        {barSizePopup && (
+                          <>
+                            <BarSizePopup
+                              off={setBarSizePopup}
+                              chartOpt={chartOpt}
+                              setChartOpt={setChartOpt}
+                            />
+                            <PopupBg off={setBarSizePopup} />
+                          </>
+                        )}
+
+                        <li>
+                          <button
+                            className="utilBtn"
+                            onClick={() => setChartTypePopup(true)}
+                          >
+                            <img src={I_candleChartWhite} alt="" />
+                          </button>
+
+                          <p className="info">{`Chart type : ${chartOpt.typeStr}`}</p>
+                        </li>
+
+                        {chartTypePopup && (
+                          <>
+                            <ChartTypePopup
+                              off={setChartTypePopup}
+                              chartOpt={chartOpt}
+                              setChartOpt={setChartOpt}
+                            />
+                            <PopupBg off={setChartTypePopup} />
+                          </>
+                        )}
+
+                        <li>
+                          <span
+                            className={`${
+                              currentPrice - pastPrice > 0 ? "up" : ""
+                            } ${
+                              currentPrice - pastPrice < 0 ? "dn" : ""
+                            } priceBox`}
+                          >
+                            <strong className="price">{currentPrice}</strong>
+                            <strong className="percent">
+                              {Math.floor(
+                                ((currentPrice - pastPrice) * 10000) / pastPrice
+                              ) / 100}
+                              %
+                            </strong>
+                          </span>
                         </li>
                       </ul>
 
@@ -280,7 +313,16 @@ export default function Demo({ socket, notiOpt }) {
                       >
                         <img src={I_barChartWhite} alt="" />
                       </button>
-                    </span>
+                    </div>
+
+                    <div className="chartBox">
+                      <AmChart
+                        assetInfo={assetInfo}
+                        chartOpt={chartOpt}
+                        openedData={openedData}
+                        socket={socket}
+                      />
+                    </div>
                   </div>
 
                   <div className="actionBox">
@@ -473,7 +515,14 @@ export default function Demo({ socket, notiOpt }) {
                         <img src={I_starYellowO} alt="" />
                         <span className="textBox">
                           <p className="key">{v.asset.name}</p>
-                          {/* <p className="value">{v.payout}%</p> */}
+                          <p className="value">
+                            {getDividFromData({
+                              id: v.asset.id,
+                              _case: "totalRate",
+                              dataObj: dividObj,
+                            })}
+                            %
+                          </p>
                         </span>
                       </li>
                     ))}
@@ -528,6 +577,24 @@ export default function Demo({ socket, notiOpt }) {
                           <PopupBg off={setChartTypePopup} />
                         </>
                       )}
+
+                      <li>
+                        <span
+                          className={`${
+                            currentPrice - pastPrice > 0 ? "up" : ""
+                          } ${
+                            currentPrice - pastPrice < 0 ? "dn" : ""
+                          } priceBox`}
+                        >
+                          <strong className="price">{currentPrice}</strong>
+                          <strong className="percent">
+                            {Math.floor(
+                              ((currentPrice - pastPrice) * 10000) / pastPrice
+                            ) / 100}
+                            %
+                          </strong>
+                        </span>
+                      </li>
                     </ul>
 
                     <AmChart
@@ -781,57 +848,100 @@ const MbetBox = styled.main`
       flex: 1;
       display: flex;
       flex-direction: column;
+      width: 100%;
+      overflow: hidden;
 
-      .chartBox {
+      .chartCont {
         flex: 1;
+        width: 100%;
         background: #181c25;
         position: relative;
-        padding: 62px 0 0;
+        overflow: hidden;
 
-        .utilBox {
+        .topBar {
           display: flex;
           justify-content: space-between;
           align-items: center;
           top: 14px;
-          left: 16px;
           right: 16px;
+          left: 20px;
           position: absolute;
+          z-index: 1;
 
           .btnList {
             display: flex;
+            align-items: center;
             gap: 8px;
 
-            & > li {
-              position: relative;
-
-              .tokenBtn {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                width: 112px;
-                height: 34px;
-                padding: 0 16px;
-                font-size: 14px;
-                font-weight: 700;
-                border: 1px solid #fff;
-                border-radius: 20px;
-
-                img {
-                  width: 8px;
+            li {
+              &:hover {
+                .info {
+                  display: inline-block;
                 }
               }
 
-              .chartBtn {
+              .utilBtn {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                width: 34px;
-                aspect-ratio: 1;
-                border: 1px solid #fff;
-                border-radius: 50%;
+                width: 32px;
+                height: 32px;
+                font-size: 16px;
+                font-weight: 700;
+                background: #32323d;
+                border-radius: 6px;
+
+                &:hover {
+                  background: #474751;
+                }
 
                 img {
-                  height: 14px;
+                  width: 23px;
+                }
+              }
+
+              .info {
+                display: none;
+                height: 34px;
+                padding: 0 12px;
+                font-size: 12px;
+                white-space: nowrap;
+                line-height: 34px;
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 4px;
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                top: 44px;
+                position: absolute;
+              }
+
+              .priceBox {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                margin: 0 0 0 4px;
+
+                &.up {
+                  .price {
+                    color: #3fb68b;
+                  }
+
+                  .percent {
+                    background: #3fb68b;
+                  }
+                }
+
+                &.dn {
+                  .price {
+                    color: #ff5353;
+                  }
+                }
+
+                .percent {
+                  padding: 3px 8px;
+                  font-size: 12px;
+                  background: #ff5353;
+                  border-radius: 6px;
                 }
               }
             }
@@ -842,7 +952,8 @@ const MbetBox = styled.main`
             justify-content: center;
             align-items: center;
             width: 34px;
-            aspect-ratio: 1;
+            height: 34px;
+            background: #32323d;
             border: 1px solid #fff;
             border-radius: 50%;
 
@@ -850,6 +961,12 @@ const MbetBox = styled.main`
               height: 14px;
             }
           }
+        }
+
+        .chartBox {
+          display: flex;
+          height: 100%;
+          overflow: hidden;
         }
       }
 
@@ -1072,9 +1189,10 @@ const PbetBox = styled.main`
 
         .btnList {
           display: flex;
+          align-items: center;
           gap: 8px;
           top: 24px;
-          left: 24px;
+          left: 20px;
           position: absolute;
           z-index: 1;
 
@@ -1118,6 +1236,36 @@ const PbetBox = styled.main`
               -webkit-backdrop-filter: blur(10px);
               top: 44px;
               position: absolute;
+            }
+
+            .priceBox {
+              display: flex;
+              align-items: center;
+              gap: 6px;
+              margin: 0 0 0 4px;
+
+              &.up {
+                .price {
+                  color: #3fb68b;
+                }
+
+                .percent {
+                  background: #3fb68b;
+                }
+              }
+
+              &.dn {
+                .price {
+                  color: #ff5353;
+                }
+              }
+
+              .percent {
+                padding: 3px 8px;
+                font-size: 12px;
+                background: #ff5353;
+                border-radius: 6px;
+              }
             }
           }
         }
@@ -1165,8 +1313,8 @@ const PbetBox = styled.main`
                 padding: 10px 12px;
                 background: rgba(255, 255, 255, 0.2);
                 border-radius: 4px;
-                backdrop-filter: blur(40px);
-                -webkit-backdrop-filter: blur(40px);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
                 top: 18px;
                 right: 0;
                 position: absolute;
@@ -1289,10 +1437,10 @@ const PbetBox = styled.main`
       & > .plusBtn {
         display: flex;
         align-items: center;
-        min-width: 40px;
-        width: 40px;
-        height: 50px;
-        padding: 10px;
+        min-width: 20px;
+        width: 20px;
+        height: 20px;
+        margin: 6px 0 0 10px;
         opacity: 0.6;
 
         img {

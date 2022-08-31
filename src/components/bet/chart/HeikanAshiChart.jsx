@@ -222,7 +222,7 @@ export default function HeikanAshiChart({
         }),
         extraMin: 0.1, // adds some space for for main series
         tooltip: am5.Tooltip.new(root, {}),
-        numberFormat: "#,###.00",
+        numberFormat: "#,###.####",
         extraTooltipPrecision: 2,
       })
     );

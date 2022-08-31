@@ -542,27 +542,6 @@ const MwithDrawalBox = styled.main`
           }
 
           &.amountBox {
-            .optList {
-              display: flex;
-              gap: 10px;
-              margin: 10px 0 0 0;
-              font-size: 16px;
-              overflow-x: scroll;
-
-              .optBtn {
-                flex: 1;
-                height: 34px;
-                background: rgba(255, 255, 255, 0.1);
-                border-radius: 8px;
-                color: rgba(255, 255, 255, 0.6);
-                border: 1px solid rgba(255, 255, 255, 0.4);
-
-                &.on {
-                  color: #fff;
-                  border: 1px solid #fff;
-                }
-              }
-            }
           }
 
           .key {
@@ -695,9 +674,6 @@ const PwithDrawalBox = styled.main`
             &.tokenBox {
               .selectBox {
                 margin: 10px 0 0 0;
-                background: rgba(255, 255, 255, 0.1);
-                border-radius: 10px;
-                border: 1.4px solid rgba(0, 0, 0, 0);
                 position: relative;
 
                 .selBtn {
@@ -709,6 +685,10 @@ const PwithDrawalBox = styled.main`
                   padding: 0 24px;
                   font-size: 20px;
                   font-weight: 700;
+                  background: #22262e;
+                  border-radius: 10px;
+                  position: relative;
+                  z-index: 7;
 
                   &.on {
                     .arw {
@@ -737,27 +717,6 @@ const PwithDrawalBox = styled.main`
             }
 
             &.amountBox {
-              .optList {
-                display: flex;
-                gap: 12px;
-                margin: 14px 0 0 0;
-                font-size: 20px;
-                overflow-x: scroll;
-
-                .optBtn {
-                  flex: 1;
-                  height: 42px;
-                  background: rgba(255, 255, 255, 0.1);
-                  border-radius: 8px;
-                  color: rgba(255, 255, 255, 0.6);
-                  border: 1px solid rgba(255, 255, 255, 0.4);
-
-                  &.on {
-                    color: #fff;
-                    border: 1px solid #fff;
-                  }
-                }
-              }
             }
 
             &.addressBox {
@@ -776,7 +735,7 @@ const PwithDrawalBox = styled.main`
               margin: 10px 0 0 0;
               font-size: 20px;
               font-weight: 700;
-              background: rgba(255, 255, 255, 0.1);
+              background: #22262e;
               border-radius: 10px;
               border: 1.4px solid rgba(0, 0, 0, 0);
               cursor: pointer;

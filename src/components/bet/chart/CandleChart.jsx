@@ -8,6 +8,8 @@ import * as am5xy from "@amcharts/amcharts5/xy";
 import axios from "axios";
 import { API } from "../../../configs/api";
 import moment from "moment";
+import { useDispatch, useSelector } from "react-redux";
+import { setPrice } from "../../../reducers/bet";
 
 export default function CandleChart({
   assetInfo,
@@ -15,6 +17,10 @@ export default function CandleChart({
   openedData,
   socket,
 }) {
+  const dispatch = useDispatch();
+
+  const isMobile = useSelector((state) => state.common.isMobile);
+
   const [valueSeries, setValueSeries] = useState();
   const [dateAxis, setDateAxis] = useState();
   const [root, setRoot] = useState();
@@ -26,10 +32,12 @@ export default function CandleChart({
   const [currentPrice, setCurrentPrice] = useState(0);
 
   function getPreData() {
+    console.log("chartOpt.barSize", chartOpt.barSize);
     axios
       .get(`${API.GET_ASSETS_TICKER_PRICE}`, {
         params: {
           symbol: assetInfo.APISymbol,
+          limit: 900,
         },
       })
       .then(({ data }) => {
@@ -73,6 +81,8 @@ export default function CandleChart({
     let _apiData = apiData;
     let _lastIndex = _apiData[_apiData.length - 1];
     let _now = new Date().setMilliseconds(0);
+
+    dispatch(setPrice({ currentPrice: price, pastPrice: _lastIndex.Close }));
 
     if (
       Math.floor(_now / chartOpt.barSize) ===
@@ -199,7 +209,7 @@ export default function CandleChart({
 
     setStockChart(stockChart);
 
-    root.numberFormatter.set("numberFormat", "#,###.00");
+    root.numberFormatter.set("numberFormat", "#,###.####");
 
     var mainPanel = stockChart.panels.push(
       am5stock.StockPanel.new(root, {
@@ -216,7 +226,7 @@ export default function CandleChart({
         }),
         extraMin: 0.1, // adds some space for for main series
         tooltip: am5.Tooltip.new(root, {}),
-        numberFormat: "#,###.00",
+        numberFormat: "#,###.####",
         extraTooltipPrecision: 2,
       })
     );
@@ -283,8 +293,8 @@ export default function CandleChart({
     var valueLegend = mainPanel.plotContainer.children.push(
       am5stock.StockLegend.new(root, {
         stockChart: stockChart,
-
-        paddingTop: 50,
+        paddingTop: isMobile ? 30 : 50,
+        paddingLeft: 0,
       })
     );
 

@@ -291,7 +291,7 @@ export default function DefaultHeader({ white, border, title, demoToken }) {
         {myBalancePopup && (
           <>
             <MyBalancePopup
-              off={() => setMyBalancePopup}
+              off={setMyBalancePopup}
               setAddPopup={setAddPopup}
             />
             <PopupBg off={setMyBalancePopup} />

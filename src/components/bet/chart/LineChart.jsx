@@ -21,6 +21,7 @@ export default function LineChart({ assetInfo, chartOpt, openedData, socket }) {
       .get(`${API.GET_ASSETS_TICKER_PRICE}`, {
         params: {
           symbol: assetInfo.APISymbol,
+          limit: 900,
         },
       })
       .then(({ data }) => {
@@ -130,7 +131,7 @@ export default function LineChart({ assetInfo, chartOpt, openedData, socket }) {
         }),
         extraMin: 0.1, // adds some space for for main series
         tooltip: am5.Tooltip.new(root, {}),
-        numberFormat: "#,###.00",
+        numberFormat: "#,###.####",
         extraTooltipPrecision: 2,
       })
     );

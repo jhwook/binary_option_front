@@ -94,7 +94,10 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
                   <li
                     key={i}
                     className={`${category === v.value && "on"}`}
-                    onClick={() => setCategory(v.value)}
+                    onClick={() => {
+                      setCategory(v.value);
+                      setSearch("");
+                    }}
                   >
                     {v.key}
                   </li>
@@ -172,7 +175,10 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
               <li
                 key={i}
                 className={`${category === v.value && "on"}`}
-                onClick={() => setCategory(v.value)}
+                onClick={() => {
+                  setCategory(v.value);
+                  setSearch("");
+                }}
               >
                 {v.key}
               </li>

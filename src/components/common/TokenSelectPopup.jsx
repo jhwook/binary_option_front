@@ -73,12 +73,13 @@ const PselectPopupBox = styled.ul`
   display: flex;
   flex-direction: column;
   width: 100%;
+  padding: 62px 0 12px;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-radius: inherit;
+  border-radius: 0 0 10px 10px;
   overflow-y: scroll;
-  top: 56px;
+  top: 0px;
   position: absolute;
   z-index: 6;
 

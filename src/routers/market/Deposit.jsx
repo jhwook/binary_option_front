@@ -833,9 +833,6 @@ const PdepositBox = styled.main`
             &.tokenBox {
               .selectBox {
                 margin: 10px 0 0 0;
-                background: rgba(255, 255, 255, 0.1);
-                border-radius: 10px;
-                border: 1.4px solid rgba(0, 0, 0, 0);
                 position: relative;
 
                 .selBtn {
@@ -847,6 +844,10 @@ const PdepositBox = styled.main`
                   padding: 0 24px;
                   font-size: 20px;
                   font-weight: 700;
+                  background: #22262e;
+                  border-radius: 10px;
+                  position: relative;
+                  z-index: 7;
 
                   &.on {
                     .arw {
@@ -878,7 +879,7 @@ const PdepositBox = styled.main`
                 margin: 10px 0 0 0;
                 background: rgba(255, 255, 255, 0.1);
                 border-radius: 10px;
-                border: 1.4px solid rgba(0, 0, 0, 0);
+                background: #22262e;
                 position: relative;
 
                 .selBtn {

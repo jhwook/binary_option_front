@@ -6,6 +6,8 @@ const initialState = {
   tokenPopupData: [],
   openedData: [],
   dividObj: "",
+  currentPrice: 0,
+  pastPrice: 0,
 };
 
 export const bet = createSlice({
@@ -31,6 +33,11 @@ export const bet = createSlice({
     setDividObj: (state, action) => {
       state.dividObj = action.payload;
     },
+
+    setPrice: (state, action) => {
+      state.currentPrice = action.payload.currentPrice;
+      state.pastPrice = action.payload.pastPrice;
+    },
   },
 });
 
@@ -40,6 +47,7 @@ export const {
   setTokenPopupData,
   setOpenedData,
   setDividObj,
+  setPrice,
 } = bet.actions;
 
 export default bet.reducer;

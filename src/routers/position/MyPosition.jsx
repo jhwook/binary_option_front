@@ -108,7 +108,7 @@ export default function MyPosition() {
                 <div className="detPriceList">
                   <li>
                     <p className="key">{t("Deals")}</p>
-                    <p className="value">${getBigCount(data.deal)}</p>
+                    <p className="value">{getBigCount(data.deal)}</p>
                   </li>
                   <li>
                     <p className="key">{t("Trading profit")}</p>
@@ -216,7 +216,7 @@ export default function MyPosition() {
                 <li>
                   <div>
                     <p className="key">{t("Deals")}</p>
-                    <p className="value">${getBigCount(data.deal)}</p>
+                    <p className="value">{getBigCount(data.deal)}</p>
                   </div>
                   <div>
                     <p className="key">{t("Trading profit")}</p>

@@ -85,7 +85,7 @@ export default function ProfPopup({ off, offAll }) {
               </li>
               <li>
                 <p className="key">{t("Trading profit")}</p>
-                <p className="value">${getBigCount(data.trading_turnover)}</p>
+                <p className="value">${getBigCount(data.total_win_amount)}</p>
               </li>
             </ul>
           </div>
@@ -186,7 +186,7 @@ export default function ProfPopup({ off, offAll }) {
             </li>
             <li>
               <p className="key">{t("Trading profit")}</p>
-              <p className="value">${getBigCount(data.trading_turnover)}</p>
+              <p className="value">${getBigCount(data.total_win_amount)}</p>
             </li>
           </ul>
         </div>

@@ -15,10 +15,8 @@ import B_float4 from "../../img/bg/lending/B_float4.png";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { useRef } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
-import { getStyle, swiperListener } from "../../util/Util";
 import axios from "axios";
 import { API } from "../../configs/api";
 
@@ -26,12 +24,9 @@ export default function Lending() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const assetListRef = useRef();
-
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [assetList, setAssetList] = useState([]);
-  const [assetListIndex, setAssetListIndex] = useState(0);
 
   async function getAssetList() {
     let _assetList = [];
@@ -60,27 +55,15 @@ export default function Lending() {
     setAssetList(_assetList);
   }
 
-  function onScrollAssetList() {
-    let _contWidth = assetListRef.current.children[0].offsetWidth;
-    let _gap = getStyle(assetListRef, "gap");
-    let _index = assetListRef.current.scrollLeft / (_contWidth + _gap);
-    console.log(_index);
-    setAssetListIndex(_index);
-  }
-
   useEffect(() => {
     getAssetList();
   }, []);
-
-  useEffect(() => {
-    if (!assetListRef) return;
-  }, [assetListRef]);
 
   if (isMobile)
     return (
       <>
         <DefaultHeader />
-        <MlendingBox>
+        <MlendingBox assetListLength={assetList.length}>
           <section className="placeSec">
             <article className="contArea">
               <div className="textCont">
@@ -109,24 +92,52 @@ export default function Lending() {
             <strong className="title">Trending</strong>
 
             <article className="contArea">
-              <ul
-                className="slideList assetList"
-                ref={assetListRef}
-                onScroll={onScrollAssetList}
-              >
-                {assetList.slice(0, 5).map((v, i) => (
+              <span className="filter" />
+              <span className="filter" />
+              
+              <ul className="slideList assetList">
+                {assetList.map((v, i) => (
                   <li key={i}>
                     <span className="assetImgBox">
                       {v.imgurl ? <img src={v.imgurl} alt="" /> : <></>}
                     </span>
 
                     <div className="textBox">
-                      <strong className="name">{v.APISymbol}</strong>
+                      <strong className="name">{v.name}</strong>
                       <p className="close">
                         {v.close && Number(v.close).toLocaleString("eu", "US")}
                       </p>
 
-                      <strong className="change">
+                      <strong
+                        className={`${v.change > 0 ? "up" : ""} ${
+                          v.change < 0 ? "dn" : ""
+                        } change`}
+                      >
+                        {v.change &&
+                          `${Math.floor(v.change * 10 ** 2) / 10 ** 2}%`}
+                      </strong>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+              <ul className="slideList assetList">
+                {assetList.map((v, i) => (
+                  <li key={i}>
+                    <span className="assetImgBox">
+                      {v.imgurl ? <img src={v.imgurl} alt="" /> : <></>}
+                    </span>
+
+                    <div className="textBox">
+                      <strong className="name">{v.name}</strong>
+                      <p className="close">
+                        {v.close && Number(v.close).toLocaleString("eu", "US")}
+                      </p>
+
+                      <strong
+                        className={`${v.change > 0 ? "up" : ""} ${
+                          v.change < 0 ? "dn" : ""
+                        } change`}
+                      >
                         {v.change &&
                           `${Math.floor(v.change * 10 ** 2) / 10 ** 2}%`}
                       </strong>
@@ -206,7 +217,7 @@ export default function Lending() {
     return (
       <>
         <DefaultHeader />
-        <PlendingBox>
+        <PlendingBox assetListLength={assetList.length}>
           <section className="placeSec">
             <article className="contArea">
               <div className="textCont">
@@ -235,7 +246,10 @@ export default function Lending() {
             <strong className="title">Trending</strong>
 
             <article className="contArea">
-              <ul className="slideList assetList" ref={assetListRef}>
+              <span className="filter" />
+              <span className="filter" />
+
+              <ul className="slideList assetList">
                 {assetList.map((v, i) => (
                   <li key={i}>
                     <span className="assetImgBox">
@@ -243,18 +257,25 @@ export default function Lending() {
                     </span>
 
                     <div className="textBox">
-                      <strong className="name">{v.APISymbol}</strong>
+                      <strong className="name">{v.name}</strong>
                       <p className="close">
                         {v.close && Number(v.close).toLocaleString("eu", "US")}
                       </p>
 
-                      <strong className="change">
+                      <strong
+                        className={`${v.change > 0 ? "up" : ""} ${
+                          v.change < 0 ? "dn" : ""
+                        } change`}
+                      >
                         {v.change &&
                           `${Math.floor(v.change * 10 ** 2) / 10 ** 2}%`}
                       </strong>
                     </div>
                   </li>
                 ))}
+              </ul>
+
+              <ul className="slideList assetList">
                 {assetList.map((v, i) => (
                   <li key={i}>
                     <span className="assetImgBox">
@@ -262,12 +283,16 @@ export default function Lending() {
                     </span>
 
                     <div className="textBox">
-                      <strong className="name">{v.APISymbol}</strong>
+                      <strong className="name">{v.name}</strong>
                       <p className="close">
                         {v.close && Number(v.close).toLocaleString("eu", "US")}
                       </p>
 
-                      <strong className="change">
+                      <strong
+                        className={`${v.change > 0 ? "up" : ""} ${
+                          v.change < 0 ? "dn" : ""
+                        } change`}
+                      >
                         {v.change &&
                           `${Math.floor(v.change * 10 ** 2) / 10 ** 2}%`}
                       </strong>
@@ -464,9 +489,27 @@ const MlendingBox = styled.main`
     display: flex;
     flex-direction: column;
     gap: 20px;
-    width: 280px;
+    padding: 0 20px;
     margin: 0 auto;
     overflow: hidden;
+
+    .filter {
+        width: 120px;
+        top: 0;
+        bottom: 0;
+        position: absolute;
+        z-index: 1;
+
+        &:nth-of-type(1) {
+          left: 0;
+          background: linear-gradient(to left, rgba(0, 0, 0, 0), #0a0e17);
+        }
+
+        &:nth-of-type(2) {
+          right: 0;
+          background: linear-gradient(to right, rgba(0, 0, 0, 0), #0a0e17);
+        }
+      }
 
     .title {
       font-size: 20px;
@@ -474,13 +517,21 @@ const MlendingBox = styled.main`
 
     .contArea {
       display: flex;
-      flex-direction: column;
-      gap: 20px;
 
       .slideList {
         display: flex;
         gap: 20px;
-        overflow-x: scroll;
+        padding: 0 10px;
+
+        &:nth-of-type(1) {
+          animation: ${tranlate} ${(props) => 10 * props.assetListLength || 40}s
+            ${(props) => -5 * props.assetListLength || 20}s infinite linear;
+        }
+
+        &:nth-of-type(2) {
+          animation: ${tranlate2}
+            ${(props) => 10 * props.assetListLength || 40}s infinite linear;
+        }
 
         li {
           display: flex;
@@ -526,7 +577,13 @@ const MlendingBox = styled.main`
             }
 
             .change {
-              color: #ff5353;
+              &.up {
+                color: #3fb68b;
+              }
+
+              &.dn {
+                color: #ff5353;
+              }
             }
           }
         }
@@ -774,11 +831,11 @@ const MlendingBox = styled.main`
       white-space: nowrap;
 
       &:nth-of-type(1) {
-        animation: ${tranlate} 20s infinite linear;
+        animation: ${tranlate} 20s -10s infinite linear;
       }
 
       &:nth-of-type(2) {
-        animation: ${tranlate2} 20s 10s infinite linear;
+        animation: ${tranlate2} 20s infinite linear;
       }
     }
   }
@@ -931,13 +988,40 @@ const PlendingBox = styled.main`
 
     .contArea {
       display: flex;
-      flex-direction: column;
-      gap: 26px;
+      position: relative;
+
+      .filter {
+        width: 120px;
+        top: 0;
+        bottom: 0;
+        position: absolute;
+        z-index: 1;
+
+        &:nth-of-type(1) {
+          left: 0;
+          background: linear-gradient(to left, rgba(0, 0, 0, 0), #0a0e17);
+        }
+
+        &:nth-of-type(2) {
+          right: 0;
+          background: linear-gradient(to right, rgba(0, 0, 0, 0), #0a0e17);
+        }
+      }
 
       .slideList {
         display: flex;
         gap: 20px;
-        overflow-x: scroll;
+        padding: 0 10px;
+
+        &:nth-of-type(1) {
+          animation: ${tranlate} ${(props) => 4 * props.assetListLength || 40}s
+            ${(props) => -2 * props.assetListLength || 20}s infinite linear;
+        }
+
+        &:nth-of-type(2) {
+          animation: ${tranlate2} ${(props) => 4 * props.assetListLength || 40}s
+            infinite linear;
+        }
 
         li {
           display: flex;
@@ -982,7 +1066,13 @@ const PlendingBox = styled.main`
             }
 
             .change {
-              color: #ff5353;
+              &.up {
+                color: #3fb68b;
+              }
+
+              &.dn {
+                color: #ff5353;
+              }
             }
           }
         }
@@ -1236,11 +1326,11 @@ const PlendingBox = styled.main`
       white-space: nowrap;
 
       &:nth-of-type(1) {
-        animation: ${tranlate} 20s infinite linear;
+        animation: ${tranlate} 20s -10s infinite linear;
       }
 
       &:nth-of-type(2) {
-        animation: ${tranlate2} 20s 10s infinite linear;
+        animation: ${tranlate2} 20s infinite linear;
       }
     }
   }
