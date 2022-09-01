@@ -43,7 +43,7 @@ const MselectPopupBox = styled.ul`
   border-radius: inherit;
   position: absolute;
   overflow-y: scroll;
-  z-index: 6;
+  z-index: 4;
 
   li {
     display: flex;
@@ -81,7 +81,7 @@ const PselectPopupBox = styled.ul`
   overflow-y: scroll;
   top: 0px;
   position: absolute;
-  z-index: 6;
+  z-index: 4;
 
   li {
     display: flex;

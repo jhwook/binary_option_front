@@ -129,7 +129,6 @@ export default function ProfPopup({ off, offAll }) {
                 onClick={() => onClickNav("/setting/noti")}
               >
                 <p>{t("Notifications")}</p>
-                <p className="new">{t("new")}</p>
               </button>
             </li>
             <li>
@@ -230,7 +229,6 @@ export default function ProfPopup({ off, offAll }) {
               onClick={() => onClickNav("/setting/noti")}
             >
               <p>{t("Notifications")}</p>
-              <p className="new">{t("new")}</p>
             </button>
           </li>
           <li>
@@ -384,10 +382,6 @@ const MprofPopupBox = styled.section`
             color: #fff;
             background: rgba(255, 255, 255, 0.1);
           }
-
-          .new {
-            color: #ff5353;
-          }
         }
       }
     }
@@ -522,10 +516,6 @@ const PprofPopupBox = styled.section`
         &:hover {
           color: #fff;
           background: rgba(255, 255, 255, 0.1);
-        }
-
-        .new {
-          color: #ff5353;
         }
       }
     }

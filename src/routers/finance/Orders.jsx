@@ -4,7 +4,7 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import ko from "date-fns/locale/ko";
 import "../../util/react-datepicker.css";
 import I_calender from "../../img/icon/I_calender.svg";
-import I_exportWhite from "../../img/icon/I_exportWhite.svg";
+import I_downloadWhite from "../../img/icon/I_downloadWhite.svg";
 import I_ltArwWhite from "../../img/icon/I_ltArwWhite.svg";
 import I_rtArwWhite from "../../img/icon/I_rtArwWhite.svg";
 import moment from "moment";
@@ -21,6 +21,7 @@ import contractaddr from "../../configs/contractaddr";
 import { metaMaskLink } from "../../configs/metaMask";
 import { io } from "socket.io-client";
 import { useTranslation } from "react-i18next";
+import ReactTooltip from "react-tooltip";
 
 export default function Orders() {
   registerLocale("ko", ko);
@@ -393,8 +394,10 @@ export default function Orders() {
               <button
                 className="exportBtn"
                 onClick={() => getExcelFile(tblData, "Orders")}
+                data-tip="Downloading as an Excel file"
               >
-                <img src={I_exportWhite} alt="" />
+                <img src={I_downloadWhite} alt="" />
+                <ReactTooltip />
               </button>
             </div>
 
@@ -786,7 +789,7 @@ const PordersBox = styled.main`
           border-radius: 50%;
 
           img {
-            width: 14px;
+            height: 20px;
           }
         }
       }

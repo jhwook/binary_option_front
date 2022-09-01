@@ -146,6 +146,7 @@ export default function Demo({ socket, notiOpt }) {
 
         if (notiOpt.orderRequest) {
           setToast({ type, assetInfo, amount });
+          setAmount("");
           setDetMode(true);
         }
       })
@@ -364,6 +365,7 @@ export default function Demo({ socket, notiOpt }) {
                           <p className="unit">$</p>
                           <input
                             value={amount}
+                            type={"number"}
                             onChange={(e) => setAmount(e.target.value)}
                             placeholder="0"
                           />
@@ -577,24 +579,6 @@ export default function Demo({ socket, notiOpt }) {
                           <PopupBg off={setChartTypePopup} />
                         </>
                       )}
-
-                      <li>
-                        <span
-                          className={`${
-                            currentPrice - pastPrice > 0 ? "up" : ""
-                          } ${
-                            currentPrice - pastPrice < 0 ? "dn" : ""
-                          } priceBox`}
-                        >
-                          <strong className="price">{currentPrice}</strong>
-                          <strong className="percent">
-                            {Math.floor(
-                              ((currentPrice - pastPrice) * 10000) / pastPrice
-                            ) / 100}
-                            %
-                          </strong>
-                        </span>
-                      </li>
                     </ul>
 
                     <AmChart
@@ -672,6 +656,7 @@ export default function Demo({ socket, notiOpt }) {
                         <p className="unit">$</p>
                         <input
                           value={amount}
+                          type={"number"}
                           onChange={(e) => setAmount(e.target.value)}
                           placeholder="0"
                         />
@@ -768,6 +753,20 @@ export default function Demo({ socket, notiOpt }) {
                           </p>
                         </span>
                       </button>
+                    </span>
+
+                    <span
+                      className={`${currentPrice - pastPrice > 0 ? "up" : ""} ${
+                        currentPrice - pastPrice < 0 ? "dn" : ""
+                      } priceBox`}
+                    >
+                      <strong className="price">{currentPrice}</strong>
+                      <strong className="percent">
+                        {Math.floor(
+                          ((currentPrice - pastPrice) * 10000) / pastPrice
+                        ) / 100}
+                        %
+                      </strong>
                     </span>
                   </div>
 
@@ -1237,36 +1236,6 @@ const PbetBox = styled.main`
               top: 44px;
               position: absolute;
             }
-
-            .priceBox {
-              display: flex;
-              align-items: center;
-              gap: 6px;
-              margin: 0 0 0 4px;
-
-              &.up {
-                .price {
-                  color: #3fb68b;
-                }
-
-                .percent {
-                  background: #3fb68b;
-                }
-              }
-
-              &.dn {
-                .price {
-                  color: #ff5353;
-                }
-              }
-
-              .percent {
-                padding: 3px 8px;
-                font-size: 12px;
-                background: #ff5353;
-                border-radius: 6px;
-              }
-            }
           }
         }
       }
@@ -1430,6 +1399,36 @@ const PbetBox = styled.main`
                 box-shadow: 0px 0px 10px rgba(255, 83, 83, 0.6);
               }
             }
+          }
+        }
+
+        .priceBox {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 6px;
+
+          &.up {
+            .price {
+              color: #3fb68b;
+            }
+
+            .percent {
+              background: #3fb68b;
+            }
+          }
+
+          &.dn {
+            .price {
+              color: #ff5353;
+            }
+          }
+
+          .percent {
+            padding: 3px 8px;
+            font-size: 12px;
+            background: #ff5353;
+            border-radius: 6px;
           }
         }
       }

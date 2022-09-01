@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 import "../../../util/react-datepicker.css";
 import { forwardRef, useEffect, useState } from "react";
 import I_calender from "../../../img/icon/I_calender.svg";
-import I_exportWhite from "../../../img/icon/I_exportWhite.svg";
+import I_downloadWhite from "../../../img/icon/I_downloadWhite.svg";
 import I_ltArwWhite from "../../../img/icon/I_ltArwWhite.svg";
 import I_rtArwWhite from "../../../img/icon/I_rtArwWhite.svg";
 import { D_profitHistoryListHeader } from "../../../data/D_finance";
@@ -13,6 +13,7 @@ import { getExcelFile, getTier } from "../../../util/Util";
 import axios from "axios";
 import { API } from "../../../configs/api";
 import { useTranslation } from "react-i18next";
+import ReactTooltip from "react-tooltip";
 
 export default function ProfitHistory() {
   const { t } = useTranslation();
@@ -212,7 +213,7 @@ export default function ProfitHistory() {
                 <input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  placeholder={t("Order")}
+                  placeholder={t("Account, Recommender Level")}
                 />
               </span>
 
@@ -224,8 +225,13 @@ export default function ProfitHistory() {
               </button>
             </div>
 
-            <button className="exportBtn" onClick={onClickExcelBtn}>
-              <img src={I_exportWhite} alt="" />
+            <button
+              className="exportBtn"
+              onClick={onClickExcelBtn}
+              data-tip="Downloading as an Excel file"
+            >
+              <img src={I_downloadWhite} alt="" />
+              <ReactTooltip />
             </button>
           </div>
 
@@ -507,7 +513,7 @@ const PprofitHistory = styled.div`
       border-radius: 50%;
 
       img {
-        width: 20px;
+        height: 20px;
       }
     }
   }

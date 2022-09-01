@@ -14,6 +14,7 @@ import DefaultHeader from "../../components/header/DefaultHeader";
 import { useNavigate } from "react-router-dom";
 import MinimumWithdrawalPopup from "../../components/market/withdrawal/MinimumWithdrawalPopup";
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 
 export default function WithDrawal() {
   const { t } = useTranslation();
@@ -39,6 +40,7 @@ export default function WithDrawal() {
   const [process, setProcess] = useState(false);
   const [loader, setLoader] = useState("");
   const [minWithdrawalPopup, setMinWithdrawalPopup] = useState(false);
+  const [validAddress, setValidAddress] = useState(false);
 
   async function onClickDrawalBtn() {
     if (amount < 5) {
@@ -73,6 +75,11 @@ export default function WithDrawal() {
         .finally(() => setLoader());
     } else setLoader();
   }
+
+  useEffect(() => {
+    const re = /^(0x)[0-9A-Fa-f]{40}$/;
+    setValidAddress(re.test(address));
+  }, [address]);
 
   if (isMobile)
     return (
@@ -210,7 +217,7 @@ export default function WithDrawal() {
                     className={`${
                       loader === "drawalBtn" && "loading"
                     } drawalBtn`}
-                    disabled={!(amount && address)}
+                    disabled={!(amount && address && validAddress)}
                     onClick={onClickDrawalBtn}
                   >
                     <p className="common">{t("Withdrawal")}</p>
@@ -319,7 +326,7 @@ export default function WithDrawal() {
 
                 <button
                   className={`${loader === "drawalBtn" && "loading"} drawalBtn`}
-                  disabled={!(amount && address)}
+                  disabled={!(amount && address && validAddress)}
                   onClick={onClickDrawalBtn}
                 >
                   <p className="common">{t("Withdrawal")}</p>

@@ -45,6 +45,7 @@ export default function Deposit({ userData }) {
   const [loader, setLoader] = useState("");
   const [preDepositWarningPopup, setPreDepositWarningPopup] = useState(false);
   const [minDepositPopup, setMinDepositPopup] = useState(false);
+  const [enableMeta, setEnableMeta] = useState(true);
 
   function getPreDepositReq() {
     axios
@@ -94,13 +95,8 @@ export default function Deposit({ userData }) {
   async function directPayment() {
     setLoader("depositBtn");
     let { ethereum } = window;
-    let address = await ethereum.enable();
-    console.log(address[0]);
 
-    if (!ethereum) {
-      alert("Install Metamask");
-      return;
-    }
+    let address = await ethereum.enable();
 
     let abistr = getabistr_forfunction({
       contractaddress: contractaddr[token.type],
@@ -188,6 +184,12 @@ export default function Deposit({ userData }) {
   }
 
   useEffect(() => {
+    axios
+      .get("https://options1.net:30718/queries/rows/infotokens")
+      .then(({ data }) => console.log("res", data.respdata));
+  }, []);
+
+  useEffect(() => {
     if (!userData) return;
 
     let { isbranch } = userData;
@@ -198,6 +200,14 @@ export default function Deposit({ userData }) {
   }, [userData]);
 
   useEffect(() => {
+    if (!(window.ethereum || /Mobi|Android/i.test(navigator.userAgent))) {
+      alert("Install Metamask");
+      window.open(
+        "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn"
+      );
+      setEnableMeta(false);
+    }
+
     return () => io(URL).disconnect();
   }, []);
 
@@ -249,7 +259,7 @@ export default function Deposit({ userData }) {
                           }
                           setCont={setToken}
                         />
-                        <PopupBg off={setTokenPopup} />
+                        <PopupBg off={setTokenPopup} index={3} />
                       </>
                     )}
                   </div>
@@ -405,7 +415,7 @@ export default function Deposit({ userData }) {
                           }
                           setCont={setToken}
                         />
-                        <PopupBg off={setTokenPopup} />
+                        <PopupBg off={setTokenPopup} index={3} />
                       </>
                     )}
                   </div>
@@ -501,7 +511,7 @@ export default function Deposit({ userData }) {
                   className={`${
                     loader === "depositBtn" && "loading"
                   } depositBtn`}
-                  disabled={!amount}
+                  disabled={!(amount && enableMeta)}
                   onClick={onClickDepositBtn}
                 >
                   <p className="common">{t("Deposit")}</p>
@@ -847,7 +857,7 @@ const PdepositBox = styled.main`
                   background: #22262e;
                   border-radius: 10px;
                   position: relative;
-                  z-index: 7;
+                  z-index: 5;
 
                   &.on {
                     .arw {
@@ -891,6 +901,7 @@ const PdepositBox = styled.main`
                   padding: 0 24px;
                   font-size: 20px;
                   font-weight: 700;
+                  z-index: 5;
 
                   &.on {
                     .arw {

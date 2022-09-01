@@ -35,15 +35,7 @@ export default function Bet() {
         console.log("resp", _resp);
         setNotiOpt({ ..._notiOpt });
       })
-      .catch((err) => {
-        console.error(err);
-
-        if (err.response.status === 419) {
-          localStorage.removeItem("token");
-          localStorage.removeItem("demoToken");
-          window.location.reload();
-        }
-      });
+      .catch(console.error);
   }
 
   useEffect(() => {

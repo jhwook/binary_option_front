@@ -2,14 +2,12 @@ import { forwardRef, useEffect, useState } from "react";
 import styled from "styled-components";
 import {
   D_historyCategoryList,
-  D_trandingList,
   D_trandingListHeader,
 } from "../../data/D_position";
 import DatePicker from "react-datepicker";
 import "../../util/react-datepicker.css";
 import I_calender from "../../img/icon/I_calender.svg";
-import I_exportWhite from "../../img/icon/I_exportWhite.svg";
-import I_timeWhite from "../../img/icon/I_timeWhite.svg";
+import I_downloadWhite from "../../img/icon/I_downloadWhite.svg";
 import I_upArw3Green from "../../img/icon/I_upArw3Green.svg";
 import I_dnArw3Red from "../../img/icon/I_dnArw3Red.svg";
 import I_ltArwWhite from "../../img/icon/I_ltArwWhite.svg";
@@ -22,6 +20,7 @@ import { getExcelFile } from "../../util/Util";
 import axios from "axios";
 import { API } from "../../configs/api";
 import { useTranslation } from "react-i18next";
+import ReactTooltip from "react-tooltip";
 
 export default function TradingHistory() {
   const { t } = useTranslation();
@@ -147,14 +146,6 @@ export default function TradingHistory() {
                         <p className="key">{t(D_trandingListHeader[0])}</p>
 
                         <span className="value">
-                          <img className="timeImg" src={I_timeWhite} alt="" />
-                        </span>
-                      </div>
-
-                      <div className="order">
-                        <p className="key">{t(D_trandingListHeader[1])}</p>
-
-                        <span className="value">
                           <img
                             className="arwImg"
                             src={
@@ -163,7 +154,13 @@ export default function TradingHistory() {
                             }
                             alt=""
                           />
+                        </span>
+                      </div>
 
+                      <div className="order">
+                        <p className="key">{t(D_trandingListHeader[1])}</p>
+
+                        <span className="value">
                           <p>{v.id}</p>
                         </span>
                       </div>
@@ -328,7 +325,7 @@ export default function TradingHistory() {
                   <input
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    placeholder={t("Order")}
+                    placeholder={t("Order, Asset")}
                   />
                 </span>
 
@@ -340,8 +337,13 @@ export default function TradingHistory() {
                 </button>
               </div>
 
-              <button className="exportBtn" onClick={onClickExcelBtn}>
-                <img src={I_exportWhite} alt="" />
+              <button
+                className="exportBtn"
+                onClick={onClickExcelBtn}
+                data-tip="Downloading as an Excel file"
+              >
+                <img src={I_downloadWhite} alt="" />
+                <ReactTooltip />
               </button>
             </div>
 
@@ -358,7 +360,6 @@ export default function TradingHistory() {
                 {listData.map((v, i) => (
                   <li key={i}>
                     <span>
-                      <img className="timeImg" src={I_timeWhite} alt="" />
                       <img
                         className="arwImg"
                         src={
@@ -788,7 +789,7 @@ const PtradingHistoryBox = styled.main`
           border-radius: 50%;
 
           img {
-            width: 14px;
+            height: 20px;
           }
         }
       }
@@ -832,10 +833,6 @@ const PtradingHistoryBox = styled.main`
 
               &:nth-of-type(1) {
                 gap: 14px;
-              }
-
-              .timeImg {
-                height: 16px;
               }
 
               .arwImg {

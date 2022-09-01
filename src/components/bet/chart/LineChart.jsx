@@ -8,7 +8,7 @@ import axios from "axios";
 import { API } from "../../../configs/api";
 import moment from "moment";
 
-export default function LineChart({ assetInfo, chartOpt, openedData, socket }) {
+export default function LineChart({ assetInfo, chartOpt, socket }) {
   const [series, setSeries] = useState();
   const [root, setRoot] = useState();
   const [apiData, setApiData] = useState([]);

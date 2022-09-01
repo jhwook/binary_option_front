@@ -8,15 +8,14 @@ import * as am5xy from "@amcharts/amcharts5/xy";
 import axios from "axios";
 import { API } from "../../../configs/api";
 import moment from "moment";
+import { useSelector } from "react-redux";
 
-export default function HeikanAshiChart({
-  assetInfo,
-  chartOpt,
-  openedData,
-  socket,
-}) {
+export default function HeikanAshiChart({ assetInfo, chartOpt, socket }) {
+  const openedData = useSelector((state) => state.bet.openedData);
+
   const [valueSeries, setValueSeries] = useState();
   const [dateAxis, setDateAxis] = useState();
+  const [valueAxis, setValueAxis] = useState();
   const [root, setRoot] = useState();
   const [apiData, setApiData] = useState([]);
   const [tooltip, setTooltip] = useState();
@@ -31,6 +30,7 @@ export default function HeikanAshiChart({
       .get(`${API.GET_ASSETS_TICKER_PRICE}`, {
         params: {
           symbol: assetInfo.APISymbol,
+          limit: 900,
         },
       })
       .then(({ data }) => {
@@ -129,7 +129,7 @@ export default function HeikanAshiChart({
     }
   }
 
-  function makeEvent(
+  function makeXevent(
     dateAxis,
     root,
     tooltip,
@@ -184,6 +184,28 @@ export default function HeikanAshiChart({
         sprite: bullet,
       })
     );
+
+    setTimeout(() => dateAxis.axisRanges.removeValue(dataItem), 10000);
+  }
+
+  function makeYevent(dateAxis, root, tooltip, date, color, description) {
+    if (!dateAxis) return;
+
+    var dataItem = dateAxis.createAxisRange(
+      dateAxis.makeDataItem({ value: description })
+    );
+
+    var grid = dataItem.get("grid");
+    if (grid) {
+      grid.setAll({
+        visible: true,
+        strokeOpacity: 0.8,
+        strokeDasharray: [3, 3],
+        stroke: color,
+      });
+    }
+
+    setTimeout(() => dateAxis.axisRanges.removeValue(dataItem), 10000);
   }
 
   useLayoutEffect(() => {
@@ -226,6 +248,8 @@ export default function HeikanAshiChart({
         extraTooltipPrecision: 2,
       })
     );
+
+    setValueAxis(valueAxis);
 
     var dateAxis = mainPanel.xAxes.push(
       am5xy.GaplessDateAxis.new(root, {
@@ -408,19 +432,26 @@ export default function HeikanAshiChart({
     if (!openedData) return;
 
     openedData.map((e) => {
-      makeEvent(
+      makeXevent(
         dateAxis,
         root,
         tooltip,
         Number(moment(e.createdat).format("x")),
         e.side === "HIGH" ? "H" : "L",
         am5.color(e.side === "HIGH" ? 0x3fb68b : 0xff5353),
+        Number(e.startingPrice)
+      );
+
+      makeYevent(
+        valueAxis,
+        root,
+        tooltip,
+        Number(moment(e.createdat).format("x")),
+        am5.color(e.side === "HIGH" ? 0x3fb68b : 0xff5353),
         Number(e.startingPrice).toFixed(2)
       );
     });
   }, [dateAxis, root, tooltip, openedData]);
-
-  // console.log(chartOpt.type);
 
   return <AmChartBox id="ChartBox"></AmChartBox>;
 }

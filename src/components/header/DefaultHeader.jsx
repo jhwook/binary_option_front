@@ -59,6 +59,12 @@ export default function DefaultHeader({ white, border, title, demoToken }) {
       })
       .catch((err) => {
         console.error(err);
+
+        if (err.response.status === 419) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("demoToken");
+          window.location.reload();
+        }
       });
 
     await axios
@@ -290,10 +296,7 @@ export default function DefaultHeader({ white, border, title, demoToken }) {
 
         {myBalancePopup && (
           <>
-            <MyBalancePopup
-              off={setMyBalancePopup}
-              setAddPopup={setAddPopup}
-            />
+            <MyBalancePopup off={setMyBalancePopup} setAddPopup={setAddPopup} />
             <PopupBg off={setMyBalancePopup} />
           </>
         )}
