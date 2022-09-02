@@ -29,48 +29,36 @@ export default function CandleChart({ assetInfo, chartOpt, socket }) {
   const [currentPrice, setCurrentPrice] = useState(0);
 
   function getPreData() {
-    console.log("chartOpt.barSize", chartOpt.barSize);
     axios
-      .get(`${API.GET_ASSETS_TICKER_PRICE}`, {
+      .get(API.GET_TICKERS, {
         params: {
+          barSize: chartOpt.barSize,
           symbol: assetInfo.APISymbol,
-          limit: 900,
+          N: 180,
         },
       })
       .then(({ data }) => {
+        console.log("ticker", data);
+        let _resData = data.list;
+
         let _data = [];
 
-        console.log("data", data);
+        _resData.map((e, i) => {
+          if (!e) return;
 
-        data.resp.map((e, i) => {
-          if (new Date(e.createdat) % chartOpt.barSize) {
-            let _chartIndex = _data.length - 1;
-
-            if (!_data[_chartIndex]?.Open) return;
-
-            if (Number(e.price) > _data[_chartIndex].High)
-              _data[_chartIndex].High = Number(e.price);
-            else if (Number(e.price) < _data[_chartIndex].Low)
-              _data[_chartIndex].Low = Number(e.price);
-
-            _data[_chartIndex].Close = Number(e.price);
-          } else {
-            let _chartIndex = _data.length - 1;
-
-            _data.push({
-              Date: new Date(e.createdat).getTime(),
-              Open: _data[_chartIndex]?.Close
-                ? _data[_chartIndex].Close
-                : Number(e.price),
-              High: Number(e.price),
-              Low: Number(e.price),
-              Close: Number(e.price),
-            });
-          }
+          _data.push({
+            Date: e.starttime * 1000,
+            Open: Number(e.open),
+            High: Number(e.high),
+            Low: Number(e.low),
+            Close: Number(e.close),
+          });
         });
 
+        console.log(_data);
         setApiData([..._data]);
-      });
+      })
+      .catch(console.error);
   }
 
   function getData(price) {
@@ -80,17 +68,13 @@ export default function CandleChart({ assetInfo, chartOpt, socket }) {
     let _now = new Date().setMilliseconds(0);
 
     dispatch(setPrice({ currentPrice: price, pastPrice: _lastIndex.Close }));
-
     if (
       Math.floor(_now / chartOpt.barSize) ===
       Math.floor(_lastIndex.Date / chartOpt.barSize)
     ) {
       if (price > _lastIndex.High) _lastIndex.High = price;
       else if (price < _lastIndex.Low) _lastIndex.Low = price;
-
       _lastIndex.Close = price;
-
-      _apiData[_apiData.length - 1] = _lastIndex;
 
       valueSeries.data.setIndex(valueSeries.data.length - 1, _lastIndex);
     } else {
@@ -101,10 +85,8 @@ export default function CandleChart({ assetInfo, chartOpt, socket }) {
         Low: price,
         Close: price,
       };
-
       valueSeries.data.push(pushData);
     }
-
     setApiData([...valueSeries.data]);
 
     if (currentLabel) {
@@ -114,14 +96,14 @@ export default function CandleChart({ assetInfo, chartOpt, socket }) {
         duration: 500,
         easing: am5.ease.out(am5.ease.cubic),
       });
+
       currentLabel.set("text", stockChart.getNumberFormatter().format(price));
       let bg = currentLabel.get("background");
+
       if (bg) {
-        if (price < _lastIndex.Open) {
+        if (price < _lastIndex.Open)
           bg.set("fill", root.interfaceColors.get("negative"));
-        } else {
-          bg.set("fill", root.interfaceColors.get("positive"));
-        }
+        else bg.set("fill", root.interfaceColors.get("positive"));
       }
     }
   }
@@ -401,10 +383,10 @@ export default function CandleChart({ assetInfo, chartOpt, socket }) {
   }, [root, chartOpt]);
 
   useEffect(() => {
-    socket.on("get_ticker_price", (res) => {
+    socket.on("get_ticker_price_05sec", (res) => {
       if (!res) return;
-
-      setCurrentPrice(Number(res));
+      console.log(res);
+      setCurrentPrice(Number(res[0].close));
     });
   }, []);
 
@@ -413,7 +395,7 @@ export default function CandleChart({ assetInfo, chartOpt, socket }) {
     valueSeries.data.setAll([...apiData]);
 
     let _dataInterval = setTimeout(() => {
-      socket.emit("get_ticker_price", assetInfo.APISymbol);
+      socket.emit("get_ticker_price_05sec", assetInfo.APISymbol);
       if (currentPrice) getData(currentPrice);
     }, 1000);
 

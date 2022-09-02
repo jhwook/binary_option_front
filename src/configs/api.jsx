@@ -1,7 +1,6 @@
 //export const URL = "http://options1.net:30708";
 // export const URL = "http://litriggy.com:30708";
 // export const URL = "https://options1.net:30718";
-export const CLOSED_SOCKET_URL = "https://options1.net:38687";
 export const URL = "https://options1.net:30718";
 
 export const API = {
@@ -30,6 +29,7 @@ export const API = {
   USER_REFERRAL_HISTORY: URL + "/users/myreferrals/fee/log", //:offset/:limit/id/DESC
   INQUIRY_ENROLL: URL + "/inquiry/enroll",
   NOTI_SET: URL + "/users/notice/set",
+  GET_TICKERS: URL + "/tickers",
 
   GET_ASSETS: URL + "/assets/list",
   GET_ASSETS_TICKER_PRICE: URL + "/assets/ticker/price", //:symbol

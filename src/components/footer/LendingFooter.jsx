@@ -44,30 +44,35 @@ export default function LendingFooter() {
       <PlendingFooterBox>
         <section className="innerBox">
           <article className="leftArea">
-            <button className="logoBtn" onClick={() => navigate("/")}>
-              <img src={L_yellow} alt="" />
-            </button>
+            <div className="logoBox">
+              <img className="logo" src={L_yellow} alt="" />
 
-            <p className="copyright">
-              {t("© Betbit, 2022. All rights reserved.")}
-            </p>
-          </article>
+              <p className="copyright">
+                {t("© Betbit, 2022. All rights reserved.")}
+              </p>
+            </div>
 
-          <article className="rightArea">
-            <ul className="termList">
-              <li>
-                <button className="privacy" onClick={() => {}}>
-                  {t("Privacy Policy")}
+            <div className="termBox">
+              <p className="key">Privacy and Regulation</p>
+
+              <nav>
+                <button className="" onClick={() => {}}>
+                  Privacy Policy
                 </button>
-              </li>
-              <span className="dot" />
-
-              <li>
-                <button className="terms" onClick={() => {}}>
-                  {t("Terms of Service")}
+                <button className="" onClick={() => {}}>
+                  Terms of Use
                 </button>
-              </li>
-            </ul>
+              </nav>
+            </div>
+
+            <div className="supportBox">
+              <p className="key">Support</p>
+
+              <nav>
+                <p>Support@betbit.com</p>
+                <p>help@betbit.com</p>
+              </nav>
+            </div>
           </article>
         </section>
       </PlendingFooterBox>
@@ -121,55 +126,56 @@ const MlendingFooterBox = styled.footer`
 const PlendingFooterBox = styled.footer`
   display: flex;
   justify-content: center;
-  align-items: flex-end;
-  height: 210px;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+
+  height: 300px;
 
   .innerBox {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
+
     width: 100%;
     max-width: 1440px;
-    padding: 0 30px 80px;
+    padding: 102px 0 0 0;
     font-size: 14px;
 
     .leftArea {
       display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 20px;
+      gap: 60px;
 
-      .logoBtn {
-        img {
+      .logoBox {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+
+        .logo {
           height: 28px;
         }
-      }
-    }
 
-    .rightArea {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 20px;
-
-      .navList {
-        display: flex;
-        align-items: center;
-        gap: 20px;
+        .copyright {
+          font-size: 14px;
+          opacity: 0.4;
+        }
       }
 
-      .termList {
+      .termBox,
+      .supportBox {
         display: flex;
-        align-items: center;
-        gap: 6px;
+        flex-direction: column;
+        gap: 14px;
 
-        .dot {
-          display: inline-block;
-          width: 3px;
-          height: 3px;
-          background: #fff;
-          border-radius: 50%;
+        .key {
+          font-size: 18px;
+          font-weight: 500;
+        }
+
+        nav {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+          font-size: 14px;
+          opacity: 0.4;
         }
       }
     }

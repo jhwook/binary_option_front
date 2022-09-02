@@ -25,7 +25,7 @@ const GlobalStyle = createGlobalStyle`
     text-decoration: none;
     box-sizing: border-box;
     border: none;
-    user-select: none;
+    /* user-select: none; */
     -webkit-text-size-adjust: none;
     -moz-text-size-adjust: none;
     -ms-text-size-adjust: none;

@@ -8,9 +8,12 @@ import * as am5xy from "@amcharts/amcharts5/xy";
 import axios from "axios";
 import { API } from "../../../configs/api";
 import moment from "moment";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setPrice } from "../../../reducers/bet";
 
 export default function HeikanAshiChart({ assetInfo, chartOpt, socket }) {
+  const dispatch = useDispatch();
+
   const openedData = useSelector((state) => state.bet.openedData);
 
   const [valueSeries, setValueSeries] = useState();
@@ -23,91 +26,117 @@ export default function HeikanAshiChart({ assetInfo, chartOpt, socket }) {
   const [stockChart, setStockChart] = useState();
   const [currentValueDataItem, setCurrentValueDataItem] = useState();
   const [currentPrice, setCurrentPrice] = useState(0);
+  const [initPriceList, setInitPirceList] = useState([]);
 
   function getPreData() {
-    setApiData([]);
     axios
-      .get(`${API.GET_ASSETS_TICKER_PRICE}`, {
+      .get(API.GET_TICKERS, {
         params: {
+          barSize: chartOpt.barSize,
           symbol: assetInfo.APISymbol,
-          limit: 900,
+          N: 180,
         },
       })
       .then(({ data }) => {
+        console.log("ticker", data);
+
+        let _resData = data.list;
+
         let _data = [];
 
-        console.log("data", data);
+        _resData.map((e, i) => {
+          if (!(e && _resData[i - 1]) || i === 0) return;
 
-        data.resp.map((e, i) => {
-          if (new Date(e.createdat) % chartOpt.barSize) {
-            let _chartIndex = _data.length - 1;
+          let _chartIndex = i - 1;
 
-            if (!_data[_chartIndex]?.Open) return;
+          let _open =
+            (Number(_resData[_chartIndex].open) +
+              Number(_resData[_chartIndex].close)) /
+            2;
 
-            if (Number(e.price) > _data[_chartIndex].High)
-              _data[_chartIndex].High = Number(e.price);
-            else if (Number(e.price) < _data[_chartIndex].Low)
-              _data[_chartIndex].Low = Number(e.price);
-
-            _data[_chartIndex].Close =
-              (_data[_chartIndex].Open +
-                _data[_chartIndex].High +
-                _data[_chartIndex].Low +
-                Number(e.price)) /
-              4;
-          } else {
-            let _chartIndex = _data.length - 1;
-            let _open = _data[_chartIndex]?.Close
-              ? (_data[_chartIndex].Open + _data[_chartIndex].Close) / 2
-              : Number(e.price);
-
-            _data.push({
-              Date: new Date(e.createdat).getTime(),
-              Open: _open,
-              High: _open > e.price ? _open : Number(e.price),
-              Low: Number(e.price),
-              Close: Number(e.price),
-            });
-          }
+          _data.push({
+            Date: e.starttime * 1000,
+            Open: _open,
+            High: Number(e.high),
+            Low: Number(e.low),
+            Close:
+              (Number(e.open) +
+                Number(e.high) +
+                Number(e.low) +
+                Number(e.close)) /
+              4,
+          });
         });
 
+        console.log(_data);
+
+        setInitPirceList(_resData);
         setApiData([..._data]);
       });
   }
 
   function getData(price) {
     let pushData;
+    let _initPushData;
     let _apiData = apiData;
     let _lastIndex = _apiData[_apiData.length - 1];
+    let _initPriceList = initPriceList;
+    let _initPriceListLastIndex = _initPriceList[_initPriceList.length - 1];
+    let _initPriceListSecondLastIndex =
+      _initPriceList[_initPriceList.length - 2];
     let _now = new Date().setMilliseconds(0);
 
+    dispatch(setPrice({ currentPrice: price, pastPrice: _lastIndex.Close }));
     if (
       Math.floor(_now / chartOpt.barSize) ===
       Math.floor(_lastIndex.Date / chartOpt.barSize)
     ) {
+      if (!_initPriceListLastIndex.Open) _initPriceListLastIndex.Open = price;
+
+      if (price > _initPriceListLastIndex.High)
+        _initPriceListLastIndex.High = price;
+      else if (price < _initPriceListLastIndex.Low)
+        _initPriceListLastIndex.Low = price;
+
+      _initPriceListLastIndex.Close = price;
+
       if (price > _lastIndex.High) _lastIndex.High = price;
       else if (price < _lastIndex.Low) _lastIndex.Low = price;
 
       _lastIndex.Close =
-        (_lastIndex.Open + _lastIndex.High + _lastIndex.Low + price) / 4;
-
-      _apiData[_apiData.length - 1] = _lastIndex;
+        (_initPriceListSecondLastIndex.Open +
+          _lastIndex.High +
+          _lastIndex.Low +
+          _initPriceListSecondLastIndex.Close) /
+        4;
 
       valueSeries.data.setIndex(valueSeries.data.length - 1, _lastIndex);
     } else {
-      let _open = (_lastIndex.Open + _lastIndex.Close) / 2;
+      _initPushData = {
+        Date: _now,
+        Open: _initPriceListLastIndex.Close,
+        High: price,
+        Low: price,
+        Close: price,
+      };
+
+      let _open =
+        (_initPriceListLastIndex.Open + _initPriceListLastIndex.Close) / 2;
 
       pushData = {
         Date: _now,
         Open: _open,
         High: _open > price ? _open : price,
-        Low: price,
+        Low: _open < price ? _open : price,
         Close: price,
       };
 
+      _initPriceList.push(_initPushData);
       valueSeries.data.push(pushData);
     }
 
+    console.log(_initPriceList);
+    setInitPirceList([..._initPriceList]);
     setApiData([...valueSeries.data]);
 
     if (currentLabel) {
@@ -426,6 +455,7 @@ export default function HeikanAshiChart({ assetInfo, chartOpt, socket }) {
     currentLabel,
     currentValueDataItem,
     stockChart,
+    initPriceList,
   ]);
 
   useEffect(() => {

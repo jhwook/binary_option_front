@@ -1559,7 +1559,7 @@ export const D_timeList = [
   { key: "30m", value: 1800000 },
   { key: "1h", value: 3600000 },
   { key: "4h", value: 14400000 },
-  { key: "1d", value: 84400000 },
+  { key: "1d", value: 86400000 },
 ];
 
 export const D_tokenCategoryList = [

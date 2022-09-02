@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { keyframes } from "styled-components";
 import LendingFooter from "../../components/footer/LendingFooter";
 import DefaultHeader from "../../components/header/DefaultHeader";
-import { D_featureList, D_futureList } from "../../data/D_lending";
+import { D_featureList, D_futureList, D_guideList } from "../../data/D_lending";
 import B_lending1 from "../../img/bg/lending/B_lending1.png";
 import B_lending2 from "../../img/bg/lending/B_lending2.png";
 import B_lending3 from "../../img/bg/lending/B_lending3.svg";
@@ -12,21 +12,28 @@ import B_float1 from "../../img/bg/lending/B_float1.png";
 import B_float2 from "../../img/bg/lending/B_float2.png";
 import B_float3 from "../../img/bg/lending/B_float3.png";
 import B_float4 from "../../img/bg/lending/B_float4.png";
+import B_shield from "../../img/bg/lending/B_shield.png";
+import B_tradeText from "../../img/bg/lending/B_tradeText.png";
+import I_ltArwWhite from "../../img/icon/I_ltArwWhite.svg";
+import I_rtArwWhite from "../../img/icon/I_rtArwWhite.svg";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 import { API } from "../../configs/api";
+import { getStyle } from "../../util/Util";
 
 export default function Lending() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const guideRef = useRef();
 
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [assetList, setAssetList] = useState([]);
+  const [guideIndex, setGuideIndex] = useState(0);
 
   async function getAssetList() {
     let _assetList = [];
@@ -59,6 +66,21 @@ export default function Lending() {
     getAssetList();
   }, []);
 
+  useEffect(() => {
+    if (!guideRef.current) return;
+
+    const wrapWidth = guideRef.current.offsetWidth;
+    const contWidth = guideRef.current.children[0].offsetWidth;
+    const itemNumByPage = Math.floor(wrapWidth / contWidth);
+
+    guideRef.current.scrollTo({
+      left:
+        contWidth * itemNumByPage * guideIndex +
+        guideIndex * getStyle(guideRef, "gap") * itemNumByPage,
+      behavior: "smooth",
+    });
+  }, [guideIndex]);
+
   if (isMobile)
     return (
       <>
@@ -81,7 +103,7 @@ export default function Lending() {
                 className="tradeBtn"
                 onClick={() => navigate("/bet/live")}
               >
-                {t("Trade Now")}
+                {t("Trading Now")}
               </button>
             </article>
 
@@ -94,7 +116,7 @@ export default function Lending() {
             <article className="contArea">
               <span className="filter" />
               <span className="filter" />
-              
+
               <ul className="slideList assetList">
                 {assetList.map((v, i) => (
                   <li key={i}>
@@ -235,7 +257,7 @@ export default function Lending() {
                 className="tradeBtn"
                 onClick={() => navigate("/bet/live")}
               >
-                {t("Trade Now")}
+                {t("Trading Now")}
               </button>
             </article>
 
@@ -243,64 +265,60 @@ export default function Lending() {
           </section>
 
           <section className="trendingSec">
-            <strong className="title">Trending</strong>
+            <span className="filter" />
+            <span className="filter" />
 
-            <article className="contArea">
-              <span className="filter" />
-              <span className="filter" />
+            <ul className="slideList assetList">
+              {assetList.map((v, i) => (
+                <li key={i}>
+                  <span className="assetImgBox">
+                    {v.imgurl ? <img src={v.imgurl} alt="" /> : <></>}
+                  </span>
 
-              <ul className="slideList assetList">
-                {assetList.map((v, i) => (
-                  <li key={i}>
-                    <span className="assetImgBox">
-                      {v.imgurl ? <img src={v.imgurl} alt="" /> : <></>}
-                    </span>
+                  <div className="textBox">
+                    <strong className="name">{v.name}</strong>
+                    <strong className="close">
+                      {v.close && Number(v.close).toLocaleString("eu", "US")}
+                    </strong>
 
-                    <div className="textBox">
-                      <strong className="name">{v.name}</strong>
-                      <p className="close">
-                        {v.close && Number(v.close).toLocaleString("eu", "US")}
-                      </p>
+                    <p
+                      className={`${v.change > 0 ? "up" : ""} ${
+                        v.change < 0 ? "dn" : ""
+                      } change`}
+                    >
+                      {v.change &&
+                        `${Math.floor(v.change * 10 ** 2) / 10 ** 2}%`}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
 
-                      <strong
-                        className={`${v.change > 0 ? "up" : ""} ${
-                          v.change < 0 ? "dn" : ""
-                        } change`}
-                      >
-                        {v.change &&
-                          `${Math.floor(v.change * 10 ** 2) / 10 ** 2}%`}
-                      </strong>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+            <ul className="slideList assetList">
+              {assetList.map((v, i) => (
+                <li key={i}>
+                  <span className="assetImgBox">
+                    {v.imgurl ? <img src={v.imgurl} alt="" /> : <></>}
+                  </span>
 
-              <ul className="slideList assetList">
-                {assetList.map((v, i) => (
-                  <li key={i}>
-                    <span className="assetImgBox">
-                      {v.imgurl ? <img src={v.imgurl} alt="" /> : <></>}
-                    </span>
+                  <div className="textBox">
+                    <strong className="name">{v.name}</strong>
+                    <strong className="close">
+                      {v.close && Number(v.close).toLocaleString("eu", "US")}
+                    </strong>
 
-                    <div className="textBox">
-                      <strong className="name">{v.name}</strong>
-                      <p className="close">
-                        {v.close && Number(v.close).toLocaleString("eu", "US")}
-                      </p>
-
-                      <strong
-                        className={`${v.change > 0 ? "up" : ""} ${
-                          v.change < 0 ? "dn" : ""
-                        } change`}
-                      >
-                        {v.change &&
-                          `${Math.floor(v.change * 10 ** 2) / 10 ** 2}%`}
-                      </strong>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </article>
+                    <p
+                      className={`${v.change > 0 ? "up" : ""} ${
+                        v.change < 0 ? "dn" : ""
+                      } change`}
+                    >
+                      {v.change &&
+                        `${Math.floor(v.change * 10 ** 2) / 10 ** 2}%`}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </section>
 
           <section className="featureSec">
@@ -338,28 +356,101 @@ export default function Lending() {
             </ul>
           </section>
 
-          <section className="rollSec">
-            <p>{t("Lightning quick/Mobile friendly/Fast withdrawals")}</p>
-            <p>{t("Lightning quick/Mobile friendly/Fast withdrawals")}</p>
+          <section className="trustedOption">
+            <article className="titleArea">
+              <p className="title">{t("Your trusted binary option")}</p>
+              <p className="explain">
+                {t(
+                  "Here at Betbit, we are committed to user protection with strict protocols and industry-leading technical measures."
+                )}
+              </p>
+            </article>
+
+            <div className="contArea">
+              <img className="shield" src={B_shield} alt="" />
+
+              <ul className="contList">
+                <li>
+                  <strong className="key">Customizable interface</strong>
+                  <p className="value">
+                    Customize the platform to make it fit better to your needs —
+                    from chart type to color theme.
+                  </p>
+                </li>
+
+                <li>
+                  <strong className="key">Convenient withdrawals</strong>
+                  <p className="value">
+                    Withdraw your money in an instant using a wide range of
+                    available payment systems.
+                  </p>
+                </li>
+
+                <li>
+                  <strong className="key">Advanced Data Encryption</strong>
+                  <p className="value">
+                    Your transaction data is secured via end-to-end encryption,
+                    ensuring that only you have access to your personal
+                    information.
+                  </p>
+                </li>
+              </ul>
+
+              <img className="float float_1" src={B_tradeText} alt="" />
+              <img className="float float_2" src={B_tradeText} alt="" />
+            </div>
           </section>
 
-          <section className="futureSec">
+          <section className="guideSec">
             <div className="titleBox">
-              <strong className="title">{t("Start trading on BETBIT")}</strong>
+              <p className="title">{t("The Beginner's Guide")}</p>
 
-              <strong className="explain">
-                {t("Enjoy incredible accessibility to coin futures")}
-              </strong>
+              <p className="explain">
+                {t("Begin your seamless crypto trading journey here.")}
+              </p>
             </div>
 
-            <ul className="futureList">
-              {D_futureList.map((v, i) => (
-                <li key={i}>
-                  <strong className="key">{t(v.title)}</strong>
-                  <p className="value">{t(v.cont)}</p>
-                </li>
-              ))}
-            </ul>
+            <article className="contArea">
+              <button
+                className="preBtn pageBtn"
+                disabled={guideIndex < 1}
+                onClick={() => setGuideIndex(guideIndex - 1)}
+              >
+                <img src={I_ltArwWhite} alt="" />
+              </button>
+
+              <ul className="guideList" ref={guideRef}>
+                {D_guideList.map((v, i) => (
+                  <li key={i}>
+                    <p className="key">{t(v.title)}</p>
+
+                    <span className="imgBox">
+                      <img className="default" src={v.icon} alt="" />
+                      {/* <img className="hover" src={v.iconHover} alt="" /> */}
+                      <span className="bg" />
+                    </span>
+                  </li>
+                ))}
+              </ul>
+
+              <button
+                className="nextBtn pageBtn"
+                disabled={guideIndex >= Math.floor(D_guideList.length / 3)}
+                onClick={() => setGuideIndex(guideIndex + 1)}
+              >
+                <img src={I_rtArwWhite} alt="" />
+              </button>
+            </article>
+          </section>
+
+          <section className="startSec">
+            <strong className="explain">
+              {t("Ready to get free access to the world of investing?")}
+            </strong>
+
+            <button className="startBtn" onClick={() => navigate("/bet/live")}>
+              {t("Start now")}
+            </button>
           </section>
 
           <LendingFooter />
@@ -492,24 +583,25 @@ const MlendingBox = styled.main`
     padding: 0 20px;
     margin: 0 auto;
     overflow: hidden;
+    position: relative;
 
     .filter {
-        width: 120px;
-        top: 0;
-        bottom: 0;
-        position: absolute;
-        z-index: 1;
+      width: 120px;
+      top: 0;
+      bottom: 0;
+      position: absolute;
+      z-index: 1;
 
-        &:nth-of-type(1) {
-          left: 0;
-          background: linear-gradient(to left, rgba(0, 0, 0, 0), #0a0e17);
-        }
-
-        &:nth-of-type(2) {
-          right: 0;
-          background: linear-gradient(to right, rgba(0, 0, 0, 0), #0a0e17);
-        }
+      &:nth-of-type(1) {
+        left: 0;
+        background: linear-gradient(to left, rgba(0, 0, 0, 0), #0a0e17);
       }
+
+      &:nth-of-type(2) {
+        right: 0;
+        background: linear-gradient(to right, rgba(0, 0, 0, 0), #0a0e17);
+      }
+    }
 
     .title {
       font-size: 20px;
@@ -901,12 +993,12 @@ const PlendingBox = styled.main`
   height: 100vh;
   padding: 60px 0 0;
   color: #fff;
-  background: #0a0e17;
+  background: #212121;
   overflow-y: scroll;
 
   .placeSec {
     width: 1120px;
-    padding: 176px 0 210px 0;
+    padding: 260px 0 214px 0;
     margin: 0 auto;
     position: relative;
 
@@ -956,7 +1048,7 @@ const PlendingBox = styled.main`
         background: rgba(235, 235, 235, 0.2);
         border: 1.6px solid #fbfbfb;
         box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.25);
-        border-radius: 30px;
+        border-radius: 14px;
 
         &:hover {
           color: #0a0e17;
@@ -976,125 +1068,113 @@ const PlendingBox = styled.main`
 
   .trendingSec {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 1180px;
-    margin: 0 auto;
-    overflow: hidden;
+    position: relative;
 
-    .title {
-      font-size: 20px;
+    .filter {
+      width: 120px;
+      top: 0;
+      bottom: 0;
+      position: absolute;
+      z-index: 1;
+
+      &:nth-of-type(1) {
+        left: 0;
+        background: linear-gradient(to left, rgba(0, 0, 0, 0), #0a0e17);
+      }
+
+      &:nth-of-type(2) {
+        right: 0;
+        background: linear-gradient(to right, rgba(0, 0, 0, 0), #0a0e17);
+      }
     }
 
-    .contArea {
+    .slideList {
       display: flex;
-      position: relative;
+      gap: 20px;
+      padding: 0 10px;
 
-      .filter {
-        width: 120px;
-        top: 0;
-        bottom: 0;
-        position: absolute;
-        z-index: 1;
-
-        &:nth-of-type(1) {
-          left: 0;
-          background: linear-gradient(to left, rgba(0, 0, 0, 0), #0a0e17);
-        }
-
-        &:nth-of-type(2) {
-          right: 0;
-          background: linear-gradient(to right, rgba(0, 0, 0, 0), #0a0e17);
-        }
+      &:nth-of-type(1) {
+        animation: ${tranlate} ${(props) => 4 * props.assetListLength || 40}s
+          ${(props) => -2 * props.assetListLength || 20}s infinite linear;
       }
 
-      .slideList {
+      &:nth-of-type(2) {
+        animation: ${tranlate2} ${(props) => 4 * props.assetListLength || 40}s
+          infinite linear;
+      }
+
+      li {
         display: flex;
-        gap: 20px;
-        padding: 0 10px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        min-width: 280px;
+        width: 280px;
+        height: 104px;
+        background: rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 4px 20px rgba(255, 255, 255, 0.04);
+        border-radius: 12px;
 
-        &:nth-of-type(1) {
-          animation: ${tranlate} ${(props) => 4 * props.assetListLength || 40}s
-            ${(props) => -2 * props.assetListLength || 20}s infinite linear;
+        &:hover {
+          background: rgba(255, 255, 255, 0.1);
         }
 
-        &:nth-of-type(2) {
-          animation: ${tranlate2} ${(props) => 4 * props.assetListLength || 40}s
-            infinite linear;
-        }
-
-        li {
+        .assetImgBox {
           display: flex;
-          flex-direction: column;
           justify-content: center;
           align-items: center;
-          gap: 12px;
-          min-width: 280px;
-          width: 280px;
-          height: 140px;
-          color: #000;
-          background: #fafafc;
-          border-radius: 12px;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
 
-          .assetImgBox {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+          }
+        }
 
-            img {
-              width: 100%;
-              height: 100%;
-              object-fit: contain;
-            }
+        .textBox {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+
+          .name {
           }
 
-          .textBox {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
+          .close {
+          }
 
-            .name {
+          .change {
+            &.up {
+              color: #3fb68b;
             }
 
-            .close {
-              font-size: 12px;
-              opacity: 0.4;
-            }
-
-            .change {
-              &.up {
-                color: #3fb68b;
-              }
-
-              &.dn {
-                color: #ff5353;
-              }
+            &.dn {
+              color: #ff5353;
             }
           }
         }
       }
+    }
 
-      .btnList {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        margin: 0 auto;
+    .btnList {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin: 0 auto;
 
-        button {
-          width: 8px;
-          height: 8px;
-          background: rgba(255, 255, 255, 0.2);
-          border-radius: 50%;
+      button {
+        width: 8px;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
 
-          &.on {
-            width: 30px;
-            background: #fff;
-            border-radius: 10px;
-          }
+        &.on {
+          width: 30px;
+          background: #fff;
+          border-radius: 10px;
         }
       }
     }
@@ -1103,12 +1183,12 @@ const PlendingBox = styled.main`
   .featureSec {
     display: flex;
     flex-direction: column;
-    gap: 36px;
+    gap: 248px;
 
     .windowArea {
       display: flex;
       justify-content: center;
-      padding: 220px 0;
+      padding: 360px 0 0;
 
       .window {
         width: 1160px;
@@ -1315,33 +1395,94 @@ const PlendingBox = styled.main`
     }
   }
 
-  .rollSec {
+  .trustedOption {
     display: flex;
-    padding: 140px 0 30px;
+    flex-direction: column;
+    align-items: center;
+    gap: 96px;
+    padding: 280px 0 0;
 
-    p {
-      padding: 0 0 0 40px;
-      font-size: 128px;
-      font-family: "Open Sans Hebrew";
-      white-space: nowrap;
+    .titleArea {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      text-align: center;
 
-      &:nth-of-type(1) {
-        animation: ${tranlate} 20s -10s infinite linear;
+      .title {
+        font-size: 40px;
+        font-weight: 500;
       }
 
-      &:nth-of-type(2) {
-        animation: ${tranlate2} 20s infinite linear;
+      .explain {
+        font-size: 18px;
+      }
+    }
+
+    .contArea {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      position: relative;
+
+      .shield {
+        width: 496px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .contList {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        position: relative;
+        z-index: 1;
+
+        li {
+          display: flex;
+          flex-direction: column;
+          gap: 14px;
+          width: 602px;
+          height: 142px;
+          padding: 20px 30px;
+          font-size: 18px;
+          background: rgba(255, 255, 255, 0.1);
+          box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.25);
+          backdrop-filter: blur(4px);
+          -webkit-backdrop-filter: blur(4px);
+          border-radius: 20px;
+
+          .key {
+          }
+
+          .value {
+            opacity: 0.6;
+          }
+        }
+      }
+
+      .float {
+        height: 340px;
+        position: absolute;
+
+        &_1 {
+          top: -16%;
+          left: 16%;
+        }
+
+        &_2 {
+          bottom: -14%;
+          right: 14%;
+        }
       }
     }
   }
 
-  .futureSec {
+  .guideSec {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 42px;
-    padding: 306px 0 240px 0;
-    background: center no-repeat url(${B_lending3});
+    gap: 70px;
+    padding: 240px 0 0;
 
     .titleBox {
       display: flex;
@@ -1352,6 +1493,7 @@ const PlendingBox = styled.main`
 
       .title {
         font-size: 40px;
+        font-weight: 500;
       }
 
       .explain {
@@ -1360,34 +1502,107 @@ const PlendingBox = styled.main`
       }
     }
 
-    .futureList {
+    .contArea {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 30px 32px;
-      max-width: 1200px;
+      align-items: center;
+      gap: 46px;
+      position: relative;
 
-      li {
+      .guideList {
         display: flex;
-        flex-direction: column;
-        gap: 10px;
-        width: 584px;
-        height: 128px;
-        padding: 24px 40px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 14px;
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
+        gap: 18px;
+        width: 1086px;
+        overflow-x: scroll;
 
-        .key {
-          font-size: 22px;
-        }
+        li {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 52px;
+          min-width: 350px;
+          width: 350px;
+          height: 440px;
+          padding: 52px 36px;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 14px;
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
 
-        .value {
-          font-size: 14px;
-          color: rgba(255, 255, 255, 0.6);
+          .key {
+            font-size: 18px;
+            text-align: center;
+          }
+
+          .imgBox {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 230px;
+            height: 230px;
+
+            border-radius: 50%;
+            position: relative;
+
+            img {
+              width: 92px;
+            }
+
+            .bg {
+              width: 100%;
+              height: 100%;
+              background: rgba(255, 255, 255, 0.2);
+              border-radius: 50%;
+              position: absolute;
+              filter: blur(20px);
+            }
+          }
         }
       }
+
+      .pageBtn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        border: 2px solid #fff;
+        border-radius: 50%;
+
+        &:disabled {
+          opacity: 0.2;
+        }
+
+        img {
+          width: 12px;
+        }
+      }
+    }
+  }
+
+  .startSec {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    height: 324px;
+    padding: 90px 0 0;
+    margin: 200px 0 0;
+    color: #000;
+    background: #fff;
+
+    .explain {
+      font-size: 40px;
+    }
+
+    .startBtn {
+      width: 200px;
+      height: 50px;
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      background: #000;
+      box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.25);
+      border-radius: 14px;
     }
   }
 `;

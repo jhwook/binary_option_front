@@ -6,9 +6,12 @@ import am5themes_Dark from "@amcharts/amcharts5/themes/Dark";
 import * as am5xy from "@amcharts/amcharts5/xy";
 import axios from "axios";
 import { API } from "../../../configs/api";
-import moment from "moment";
+import { useDispatch } from "react-redux";
+import { setPrice } from "../../../reducers/bet";
 
 export default function LineChart({ assetInfo, chartOpt, socket }) {
+  const dispatch = useDispatch();
+
   const [series, setSeries] = useState();
   const [root, setRoot] = useState();
   const [apiData, setApiData] = useState([]);
@@ -16,42 +19,33 @@ export default function LineChart({ assetInfo, chartOpt, socket }) {
   const [currentPrice, setCurrentPrice] = useState(0);
 
   function getPreData() {
-    setApiData([]);
     axios
-      .get(`${API.GET_ASSETS_TICKER_PRICE}`, {
+      .get(API.GET_TICKERS, {
         params: {
+          barSize: chartOpt.barSize,
           symbol: assetInfo.APISymbol,
-          limit: 900,
+          N: 180,
         },
       })
       .then(({ data }) => {
+        console.log("ticker", data);
+        let _resData = data.list;
+
         let _data = [];
 
-        console.log("data", data);
+        _resData.map((e, i) => {
+          if (!e) return;
 
-        data.resp.slice(-1000).map((e, i) => {
-          // if (new Date(e.createdat) % chartOpt.barSize) {
-          //   let _chartIndex = _data.length - 1;
-
-          //   if (!_data[_chartIndex]?.value) return;
-
-          //   let _valueCount = (new Date(e.createdat) % chartOpt.barSize) / 1000;
-
-          //   let _average =
-          //     (_data[_chartIndex]?.value * _valueCount + Number(e.price)) /
-          //     (_valueCount + 1);
-
-          //   _data[_chartIndex].value = _average;
-          // } else {
           _data.push({
-            Date: new Date(e.createdat).getTime(),
-            value: Number(e.price),
+            Date: e.starttime * 1000,
+            value: Number(e.close),
           });
-          // }
         });
 
+        console.log(_data);
         setApiData([..._data]);
-      });
+      })
+      .catch(console.error);
   }
 
   function getData(price) {
@@ -60,27 +54,23 @@ export default function LineChart({ assetInfo, chartOpt, socket }) {
     let _lastIndex = _apiData[_apiData.length - 1];
     let _now = new Date().setMilliseconds(0);
 
-    // if (
-    //   Math.floor(_now / chartOpt.barSize) ===
-    //   Math.floor(_lastIndex.Date / chartOpt.barSize)
-    // ) {
-    //   console.log(_now % chartOpt.barSize);
-    //   if (price > _lastIndex.High) _lastIndex.High = price;
-    //   else if (price < _lastIndex.Low) _lastIndex.Low = price;
+    dispatch(setPrice({ currentPrice: price, pastPrice: _lastIndex.Close }));
+    if (
+      Math.floor(_now / chartOpt.barSize) ===
+      Math.floor(_lastIndex.Date / chartOpt.barSize)
+    ) {
+      _lastIndex.value = price;
+      _lastIndex.Close = price;
 
-    //   _lastIndex.Close = price;
-
-    //   _apiData[_apiData.length - 1] = _lastIndex;
-
-    //   series.data.setIndex(series.data.length - 1, _lastIndex);
-    // } else {
-    pushData = {
-      Date: _now,
-      value: price,
-    };
-
-    series.data.push(pushData);
-    // }
+      series.data.setIndex(series.data.length - 1, _lastIndex);
+    } else {
+      pushData = {
+        Date: _now,
+        value: price,
+        Close: price,
+      };
+      series.data.push(pushData);
+    }
 
     setApiData([...series.data]);
   }

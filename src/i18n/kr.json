@@ -322,5 +322,6 @@
   "Request timed out! Your order has been automatically canceled. Please note that up to 3 cancelations can be made per day. For more information, please contact customer support.": "요청 시간이 초과되었습니다! 주문이 자동으로 취소되었습니다. 1일 최대 3회까지 취소가 가능하니 참고하세요. 자세한 내용은 고객 지원에 문의하십시오.",
   "Got it": "Got it",
   "Submit a request": "요청 제출",
-  "Send request": "요청 보내기"
+  "Send request": "요청 보내기",
+  "Confirm withdrawal of":"출금 신청"
 }

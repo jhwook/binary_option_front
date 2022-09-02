@@ -31,6 +31,10 @@ export default function App() {
         href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@800&display=swap"
         rel="stylesheet"
       />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@700&display=swap"
+        rel="stylesheet"
+      />
       <ToastContainer
         position="top-center"
         autoClose={5000}

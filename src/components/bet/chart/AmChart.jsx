@@ -10,8 +10,8 @@ export default function AmChart({ assetInfo, chartOpt, socket }) {
     if (!assetInfo?.APISymbol) return;
 
     setBusy(true);
-    setTimeout(() => setBusy(false), 1000);
-  }, [assetInfo]);
+    setTimeout(() => setBusy(false), 1);
+  }, [assetInfo,chartOpt]);
 
   if (busy) return <></>;
   else

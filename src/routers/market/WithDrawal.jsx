@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import MinimumWithdrawalPopup from "../../components/market/withdrawal/MinimumWithdrawalPopup";
 import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
+import ConfirmPopup from "../../components/market/withdrawal/ConfirmPopup";
 
 export default function WithDrawal() {
   const { t } = useTranslation();
@@ -41,8 +42,9 @@ export default function WithDrawal() {
   const [loader, setLoader] = useState("");
   const [minWithdrawalPopup, setMinWithdrawalPopup] = useState(false);
   const [validAddress, setValidAddress] = useState(false);
+  const [confirmPopup, setConfirmPopup] = useState(false);
 
-  async function onClickDrawalBtn() {
+  async function onClickConfirmBtn() {
     if (amount < 5) {
       setMinWithdrawalPopup(true);
       return;
@@ -218,7 +220,7 @@ export default function WithDrawal() {
                       loader === "drawalBtn" && "loading"
                     } drawalBtn`}
                     disabled={!(amount && address && validAddress)}
-                    onClick={onClickDrawalBtn}
+                    onClick={() => setConfirmPopup(true)}
                   >
                     <p className="common">{t("Withdrawal")}</p>
                     <img className="loader" src={L_loader} alt="" />
@@ -233,6 +235,18 @@ export default function WithDrawal() {
           <>
             <MinimumWithdrawalPopup off={setMinWithdrawalPopup} />
             <PopupBg bg off={setMinWithdrawalPopup} />
+          </>
+        )}
+
+        {confirmPopup && (
+          <>
+            <ConfirmPopup
+              confirmFunc={onClickConfirmBtn}
+              off={setConfirmPopup}
+              amount={amount}
+              unit={token.text}
+            />
+            <PopupBg bg off={setConfirmPopup} />
           </>
         )}
       </>
@@ -327,7 +341,7 @@ export default function WithDrawal() {
                 <button
                   className={`${loader === "drawalBtn" && "loading"} drawalBtn`}
                   disabled={!(amount && address && validAddress)}
-                  onClick={onClickDrawalBtn}
+                  onClick={() => setConfirmPopup(true)}
                 >
                   <p className="common">{t("Withdrawal")}</p>
                   <img className="loader" src={L_loader} alt="" />
@@ -416,6 +430,18 @@ export default function WithDrawal() {
           <>
             <MinimumWithdrawalPopup off={setMinWithdrawalPopup} />
             <PopupBg bg off={setMinWithdrawalPopup} />
+          </>
+        )}
+
+        {confirmPopup && (
+          <>
+            <ConfirmPopup
+              confirmFunc={onClickConfirmBtn}
+              off={setConfirmPopup}
+              amount={amount}
+              unit={token.text}
+            />
+            <PopupBg bg off={setConfirmPopup} />
           </>
         )}
       </>
