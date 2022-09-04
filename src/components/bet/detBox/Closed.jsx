@@ -5,20 +5,37 @@ import I_lowArwRed from "../../../img/icon/I_lowArwRed.svg";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { API } from "../../../configs/api";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ClosedChartBox from "./ClosedChart";
 import { useTranslation } from "react-i18next";
+import { getDividFromData } from "../../../util/Util";
+import { D_tokenCategoryList } from "../../../data/D_bet";
 
 export default function Closed({ page }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
+  const hoverRef = useRef();
 
   const isMobile = useSelector((state) => state.common.isMobile);
   const closedFlag = useSelector((state) => state.bet.closedFlag);
+  const dividObj = useSelector((state) => state.bet.dividObj);
 
   const [data, setData] = useState([]);
+  const [assetInfo, setAssetInfo] = useState();
+
+  function getAssetList() {
+    axios
+      .get(`${API.GET_ASSETS}`, {
+        params: { group: D_tokenCategoryList[1].value },
+      })
+      .then(({ data }) => {
+        console.log("asset", data.resp);
+        setAssetInfo(data.resp[0]);
+      })
+      .catch((err) => console.error(err));
+  }
 
   function getMyBets() {
     axios
@@ -39,6 +56,11 @@ export default function Closed({ page }) {
       default:
         break;
     }
+  }
+
+  function onMouseOverBtn(e) {
+    hoverRef.current.style.left = `${e.clientX}px`;
+    hoverRef.current.style.top = `${e.clientY}px`;
   }
 
   function getPreResult(v) {
@@ -77,6 +99,7 @@ export default function Closed({ page }) {
 
   useEffect(() => {
     getMyBets();
+    getAssetList();
   }, [closedFlag]);
 
   if (isMobile)
@@ -254,7 +277,7 @@ export default function Closed({ page }) {
 
                 <ul className="detListByDate">
                   {v.value.map((detV, i) => (
-                    <li key={i}>
+                    <li onMouseMove={onMouseOverBtn} key={i}>
                       <details>
                         <summary>
                           <div className="contBox">
@@ -385,6 +408,17 @@ export default function Closed({ page }) {
                           </div>
                         </div>
                       </details>
+                      <p className="hoverPopup" ref={hoverRef}>
+                        {`Dividend rate : +${getDividFromData({
+                          id: assetInfo?.id,
+                          _case: `${detV.side.toLowerCase()}Rate`,
+                          dataObj: dividObj,
+                        })}%  ${getDividFromData({
+                          id: assetInfo?.id,
+                          _case: `${detV.side.toLowerCase()}Amount`,
+                          dataObj: dividObj,
+                        })} USDT`}
+                      </p>
                     </li>
                   ))}
                 </ul>
@@ -678,6 +712,29 @@ const PclosedBox = styled.ul`
         gap: 8px;
 
         li {
+          &:hover {
+            .hoverPopup {
+              display: block;
+            }
+          }
+
+          .hoverPopup {
+            display: none;
+            width: 210px;
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            /* top: 18px;
+            right: 0; */
+            position: absolute;
+
+            p {
+              color: #fff;
+            }
+          }
+
           details {
             padding: 14px;
             background: rgba(255, 255, 255, 0.1);

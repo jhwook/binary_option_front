@@ -327,7 +327,8 @@ export default function Live({ socket, notiOpt }) {
                             <strong className="price">{currentPrice}</strong>
                             <strong className="percent">
                               {Math.floor(
-                                ((currentPrice - pastPrice) * 100000) / pastPrice
+                                ((currentPrice - pastPrice) * 100000) /
+                                  pastPrice
                               ) / 1000}
                               %
                             </strong>
