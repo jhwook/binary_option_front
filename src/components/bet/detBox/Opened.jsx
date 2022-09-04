@@ -271,7 +271,9 @@ export default function Opened({ socket }) {
                         <p className="token">{v?.asset?.name}</p>
 
                         <p className="price">
-                          {Math.floor(v.startingPrice * 100) / 100}
+                          {v.startingPrice
+                            ? Math.floor(v.startingPrice * 100) / 100
+                            : "-"}
                         </p>
 
                         <p className="percent">{`${v.diffRate || 0}%`}</p>

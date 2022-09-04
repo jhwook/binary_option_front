@@ -179,7 +179,6 @@ export default function LineChart({ assetInfo, chartOpt, socket }) {
   useEffect(() => {
     socket.on("get_ticker_price", (res) => {
       if (!res) return;
-      console.log(res);
       setCurrentPrice(Number(res));
     });
   }, []);
