@@ -306,7 +306,9 @@ export default function Opened({ socket }) {
                             : "-"}
                         </p>
 
-                        <p className="percent">{`${v.diffRate || 0}%`}</p>
+                        <p className="percent">{`${
+                          v.startingPrice ? v.diffRate || 0 : "- "
+                        }%`}</p>
                       </div>
 
                       <div className="contBox">
@@ -315,9 +317,11 @@ export default function Opened({ socket }) {
                           <p>{`$${v.amount / 10 ** 6}`}</p>
                         </span>
 
-                        <p
-                          className={`${getPreResult(v)} benefit`}
-                        >{`$${getInitBenefit(v).toFixed(2)}`}</p>
+                        <p className={`${getPreResult(v)} benefit`}>
+                          {v.startingPrice
+                            ? `$${getInitBenefit(v).toFixed(2)}`
+                            : "-"}
+                        </p>
 
                         <p className="time">
                           {`${

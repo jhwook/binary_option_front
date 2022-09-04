@@ -60,7 +60,7 @@ export default function Live({ socket, notiOpt }) {
   const [insufficientPopup, setInsufficientPopup] = useState(false);
   const [myBalancePopup, setMyBalancePopup] = useState(false);
   const [addPopup, setAddPopup] = useState(false);
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState(0);
   const [amountMode, setAmountMode] = useState(D_amountTypeList[0]);
   const [bookMark, setBookMark] = useState([]);
   const [chartOpt, setChartOpt] = useState({
@@ -69,8 +69,12 @@ export default function Live({ socket, notiOpt }) {
     barSize: D_timeList[0].value,
     barSizeStr: D_timeList[0].key,
   });
+  const [asterisk, setAsterisk] = useState(false);
   const [barSizePopup, setBarSizePopup] = useState(false);
   const [chartTypePopup, setChartTypePopup] = useState(false);
+
+  const korRegex = /[\u3131-\uD79D]/giu;
+  const engRegex = /^[A-Za-z]+$/;
 
   function getAssetList() {
     axios
@@ -223,6 +227,26 @@ export default function Live({ socket, notiOpt }) {
       () => {},
       (err) => console.error("closed", err)
     );
+  }
+
+  function handleInput(e) {
+    let { value } = e.target;
+    let matchKor = value.match(korRegex);
+    let matchEng = value.match(engRegex);
+    if (
+      (matchKor && matchKor.length > 0) ||
+      (matchEng && matchEng.length > 0)
+    ) {
+      setAsterisk(true);
+      return;
+    }
+    let t = value;
+    value =
+      t.indexOf(".") >= 0
+        ? t.substr(0, t.indexOf(".")) + t.substr(t.indexOf("."), 2)
+        : t;
+    setAsterisk(false);
+    setAmount(value);
   }
 
   useLayoutEffect(() => {
@@ -393,7 +417,7 @@ export default function Live({ socket, notiOpt }) {
                           <p className="unit">$</p>
                           <input
                             value={amount}
-                            type={"number"}
+                            type="number"
                             onChange={(e) => setAmount(e.target.value)}
                             placeholder="0"
                           />
@@ -522,7 +546,7 @@ export default function Live({ socket, notiOpt }) {
           <LoadingBar />
         ) : (
           <>
-            <PbetBox>
+            <PbetBox asterisk={asterisk}>
               <section className="innerBox">
                 <article className="tokenArea">
                   <div className="selectBox">
@@ -686,12 +710,21 @@ export default function Live({ socket, notiOpt }) {
                         </button>
                       </div>
 
-                      <div className="value">
+                      <div className="valueAsterisk">
                         <p className="unit">$</p>
                         <input
                           value={amount}
-                          type={"number"}
-                          onChange={(e) => setAmount(e.target.value)}
+                          type="text"
+                          onChange={(e) => {
+                            // if (typeof value == "string") {
+                            //   setAsterisk(true);
+                            //   return;
+                            // }
+                            // console.log(typeof value);
+                            // setAsterisk(true);
+                            // setAmount(value);
+                            handleInput(e);
+                          }}
                           placeholder="0"
                         />
 
@@ -1346,6 +1379,40 @@ const PbetBox = styled.main`
             padding: 0 18px;
             font-size: 16px;
             border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 8px;
+            position: relative;
+
+            input {
+              flex: 1;
+            }
+
+            .contBtn {
+              display: flex;
+              align-items: center;
+              width: 100%;
+              height: 100%;
+
+              p {
+                flex: 1;
+                text-align: start;
+              }
+            }
+
+            img {
+              width: 20px;
+              height: 20px;
+              object-fit: contain;
+            }
+          }
+          .valueAsterisk {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            height: 48px;
+            padding: 0 18px;
+            font-size: 16px;
+            border: ${({ asterisk }) =>
+              `1px solid ${asterisk ? "#ff0000" : "rgba(255, 255, 255, 0.4)"}`};
             border-radius: 8px;
             position: relative;
 
