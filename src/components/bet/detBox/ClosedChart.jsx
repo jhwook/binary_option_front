@@ -1,6 +1,10 @@
+import { useEffect } from "react";
+import { useState } from "react";
 import ReactApexChart from "react-apexcharts";
 
-export default function ClosedChart({ price }) {
+export default function ClosedChart({ price, data }) {
+  const [chartList, setChartList] = useState([]);
+
   const options = {
     chart: {
       id: "area-datetime",
@@ -133,12 +137,20 @@ export default function ClosedChart({ price }) {
         [1341871200000, price + 0.44],
         [1341957600000, price + 0.2],
         [1342044000000, price + 0.14],
-        [1341871200000, price + 0.44],
-        [1341957600000, price + 0.2],
-        [1342044000000, price + 0.14],
       ],
     },
   ];
+
+  useEffect(() => {
+    let _chartList = [];
+    console.log(data);
+
+    // data.map((e, i) => {
+    //   _chartList.push([new Date(new Date().getTime + i * 1000), e]);
+    // });
+
+    console.log(_chartList);
+  }, []);
 
   return (
     <ReactApexChart

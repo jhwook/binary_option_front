@@ -34,7 +34,7 @@ export default function CandleChart({ assetInfo, chartOpt, socket }) {
         params: {
           barSize: chartOpt.barSize,
           symbol: assetInfo.APISymbol,
-          N: 180,
+          N: 60,
         },
       })
       .then(({ data }) => {
@@ -86,6 +86,7 @@ export default function CandleChart({ assetInfo, chartOpt, socket }) {
         Close: price,
       };
       valueSeries.data.push(pushData);
+      valueSeries.data.shift();
     }
     setApiData([...valueSeries.data]);
 
@@ -100,11 +101,7 @@ export default function CandleChart({ assetInfo, chartOpt, socket }) {
       currentLabel.set("text", stockChart.getNumberFormatter().format(price));
       let bg = currentLabel.get("background");
 
-      if (bg) {
-        if (price < _lastIndex.Open)
-          bg.set("fill", root.interfaceColors.get("negative"));
-        else bg.set("fill", root.interfaceColors.get("positive"));
-      }
+      if (bg) bg.set("fill", am5.color(0xf7ab1f));
     }
   }
 
@@ -267,13 +264,13 @@ export default function CandleChart({ assetInfo, chartOpt, socket }) {
       currentGrid.setAll({
         strokeOpacity: 0.5,
         strokeDasharray: [2, 5],
-        stroke: am5.color(0xffffff),
+        stroke: am5.color(0xf7ab1f),
       });
     }
 
     var valueSeries = mainPanel.series.push(
       am5xy.CandlestickSeries.new(root, {
-        name: assetInfo.APISymbol,
+        name: assetInfo?.APISymbol,
         clustered: false,
         valueXField: "Date",
         valueYField: "Close",

@@ -1,19 +1,19 @@
 import styled from "styled-components";
 import { keyframes } from "styled-components";
-import LendingFooter from "../../components/footer/LendingFooter";
+import LandingFooter from "../../components/footer/LandingFooter";
 import DefaultHeader from "../../components/header/DefaultHeader";
-import { D_featureList, D_futureList, D_guideList } from "../../data/D_lending";
-import B_lending1 from "../../img/bg/lending/B_lending1.png";
-import B_lending2 from "../../img/bg/lending/B_lending2.png";
-import B_lending3 from "../../img/bg/lending/B_lending3.svg";
-import B_lending4 from "../../img/bg/lending/B_lending4.svg";
-import B_lending5 from "../../img/bg/lending/B_lending5.png";
-import B_float1 from "../../img/bg/lending/B_float1.png";
-import B_float2 from "../../img/bg/lending/B_float2.png";
-import B_float3 from "../../img/bg/lending/B_float3.png";
-import B_float4 from "../../img/bg/lending/B_float4.png";
-import B_shield from "../../img/bg/lending/B_shield.png";
-import B_tradeText from "../../img/bg/lending/B_tradeText.png";
+import { D_featureList, D_futureList, D_guideList } from "../../data/D_landing";
+import B_landing1 from "../../img/bg/landing/B_landing1.png";
+import B_landing2 from "../../img/bg/landing/B_landing2.png";
+import B_landing3 from "../../img/bg/landing/B_landing3.svg";
+import B_landing4 from "../../img/bg/landing/B_landing4.svg";
+import B_landing5 from "../../img/bg/landing/B_landing5.png";
+import B_float1 from "../../img/bg/landing/B_float1.png";
+import B_float2 from "../../img/bg/landing/B_float2.png";
+import B_float3 from "../../img/bg/landing/B_float3.png";
+import B_float4 from "../../img/bg/landing/B_float4.png";
+import B_shield from "../../img/bg/landing/B_shield.png";
+import B_tradeText from "../../img/bg/landing/B_tradeText.png";
 import I_ltArwWhite from "../../img/icon/I_ltArwWhite.svg";
 import I_rtArwWhite from "../../img/icon/I_rtArwWhite.svg";
 import { useSelector } from "react-redux";
@@ -25,7 +25,7 @@ import axios from "axios";
 import { API } from "../../configs/api";
 import { getStyle } from "../../util/Util";
 
-export default function Lending() {
+export default function Landing() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const guideRef = useRef();
@@ -35,31 +35,13 @@ export default function Lending() {
   const [assetList, setAssetList] = useState([]);
   const [guideIndex, setGuideIndex] = useState(0);
 
-  async function getAssetList() {
-    let _assetList = [];
-
-    let _coinRes = await axios.get(`${API.GET_ASSETS}`, {
-      params: { group: "coin" },
-    });
-
-    let _forexRes = await axios.get(`${API.GET_ASSETS}`, {
-      params: { group: "forex" },
-    });
-
-    let _stockRes = await axios.get(`${API.GET_ASSETS}`, {
-      params: { group: "stock" },
-    });
-
-    _assetList = [
-      ..._coinRes.data.resp,
-      ..._forexRes.data.resp,
-      ..._stockRes.data.resp,
-    ];
-
-    _assetList = _assetList.slice(0, 15);
-
-    console.log(_assetList);
-    setAssetList(_assetList);
+  function getAssetList() {
+    axios
+      .get(`${API.GET_ASSETS}`, {
+        params: { group: "coin" },
+      })
+      .then(({ data }) => setAssetList(data.resp))
+      .then(console.error);
   }
 
   useEffect(() => {
@@ -85,7 +67,7 @@ export default function Lending() {
     return (
       <>
         <DefaultHeader />
-        <MlendingBox assetListLength={assetList.length}>
+        <MlandingBox assetListLength={assetList.length}>
           <section className="placeSec">
             <article className="contArea">
               <div className="textCont">
@@ -107,7 +89,7 @@ export default function Lending() {
               </button>
             </article>
 
-            <img className="bg" src={B_lending1} alt="" />
+            <img className="bg" src={B_landing1} alt="" />
           </section>
 
           <section className="trendingSec">
@@ -119,7 +101,16 @@ export default function Lending() {
 
               <ul className="slideList assetList">
                 {assetList.map((v, i) => (
-                  <li key={i}>
+                  <li
+                    key={i}
+                    onClick={() =>
+                      navigate("/bet/live", {
+                        state: {
+                          a: "b",
+                        },
+                      })
+                    }
+                  >
                     <span className="assetImgBox">
                       {v.imgurl ? <img src={v.imgurl} alt="" /> : <></>}
                     </span>
@@ -144,7 +135,16 @@ export default function Lending() {
               </ul>
               <ul className="slideList assetList">
                 {assetList.map((v, i) => (
-                  <li key={i}>
+                  <li
+                    key={i}
+                    onClick={() =>
+                      navigate("/bet/live", {
+                        state: {
+                          a: "b",
+                        },
+                      })
+                    }
+                  >
                     <span className="assetImgBox">
                       {v.imgurl ? <img src={v.imgurl} alt="" /> : <></>}
                     </span>
@@ -181,7 +181,7 @@ export default function Lending() {
                 </span>
 
                 <div className="imgBox">
-                  <img src={B_lending4} alt="" />
+                  <img src={B_landing4} alt="" />
                 </div>
               </div>
             </article>
@@ -211,7 +211,7 @@ export default function Lending() {
           </section>
 
           <section className="futureSec">
-            <img className="bg" src={B_lending5} alt="" />
+            <img className="bg" src={B_landing5} alt="" />
 
             <div className="titleBox">
               <strong className="title">{t("Start trading on BETBIT")}</strong>
@@ -231,15 +231,15 @@ export default function Lending() {
             </ul>
           </section>
 
-          <LendingFooter />
-        </MlendingBox>
+          <LandingFooter />
+        </MlandingBox>
       </>
     );
   else
     return (
       <>
         <DefaultHeader />
-        <PlendingBox assetListLength={assetList.length}>
+        <PlandingBox assetListLength={assetList.length}>
           <section className="placeSec">
             <article className="contArea">
               <div className="textCont">
@@ -261,7 +261,7 @@ export default function Lending() {
               </button>
             </article>
 
-            <img className="bg" src={B_lending1} alt="" />
+            <img className="bg" src={B_landing1} alt="" />
           </section>
 
           <section className="trendingSec">
@@ -270,7 +270,16 @@ export default function Lending() {
 
             <ul className="slideList assetList">
               {assetList.map((v, i) => (
-                <li key={i}>
+                <li
+                  key={i}
+                  onClick={() =>
+                    navigate("/bet/live", {
+                      state: {
+                        a: "b",
+                      },
+                    })
+                  }
+                >
                   <span className="assetImgBox">
                     {v.imgurl ? <img src={v.imgurl} alt="" /> : <></>}
                   </span>
@@ -296,7 +305,16 @@ export default function Lending() {
 
             <ul className="slideList assetList">
               {assetList.map((v, i) => (
-                <li key={i}>
+                <li
+                  key={i}
+                  onClick={() =>
+                    navigate("/bet/live", {
+                      state: {
+                        a: "b",
+                      },
+                    })
+                  }
+                >
                   <span className="assetImgBox">
                     {v.imgurl ? <img src={v.imgurl} alt="" /> : <></>}
                   </span>
@@ -332,7 +350,7 @@ export default function Lending() {
                 </span>
 
                 <div className="imgBox">
-                  <img src={B_lending2} alt="" />
+                  <img src={B_landing2} alt="" />
                 </div>
               </div>
             </article>
@@ -350,7 +368,8 @@ export default function Lending() {
                     </div>
                   </span>
 
-                  <p>{t(v.text)}</p>
+                  <p className="title">{t(v.title)}</p>
+                  <p className="text">{t(v.text)}</p>
                 </li>
               ))}
             </ul>
@@ -453,8 +472,8 @@ export default function Lending() {
             </button>
           </section>
 
-          <LendingFooter />
-        </PlendingBox>
+          <LandingFooter />
+        </PlandingBox>
       </>
     );
 }
@@ -495,7 +514,7 @@ const mFloat = keyframes`
   }
 `;
 
-const MlendingBox = styled.main`
+const MlandingBox = styled.main`
   width: 100%;
   height: 100vh;
   padding: 56px 0 0;
@@ -724,21 +743,25 @@ const MlendingBox = styled.main`
               cubic-bezier(0.6, 0.03, 0.6, 0.91);
 
             &:nth-of-type(1) {
+              width: 32px;
               top: 210px;
               left: -70px;
             }
 
             &:nth-of-type(2) {
+              width: 50px;
               top: -48px;
               left: 14px;
             }
 
             &:nth-of-type(3) {
+              width: 32px;
               top: 4px;
               right: -44px;
             }
 
             &:nth-of-type(4) {
+              width: 36px;
               top: 124px;
               right: -60px;
             }
@@ -989,7 +1012,7 @@ const MlendingBox = styled.main`
   }
 `;
 
-const PlendingBox = styled.main`
+const PlandingBox = styled.main`
   height: 100vh;
   padding: 60px 0 0;
   color: #fff;
@@ -1115,6 +1138,7 @@ const PlendingBox = styled.main`
         background: rgba(0, 0, 0, 0.1);
         box-shadow: 0px 4px 20px rgba(255, 255, 255, 0.04);
         border-radius: 12px;
+        cursor: pointer;
 
         &:hover {
           background: rgba(255, 255, 255, 0.1);
@@ -1211,21 +1235,25 @@ const PlendingBox = styled.main`
               cubic-bezier(0.6, 0.03, 0.6, 0.91);
 
             &:nth-of-type(1) {
+              width: 60px;
               top: 474px;
               left: -152px;
             }
 
             &:nth-of-type(2) {
+              width: 84px;
               top: -66px;
               left: 232px;
             }
 
             &:nth-of-type(3) {
+              width: 44px;
               top: 54px;
               right: -86px;
             }
 
             &:nth-of-type(4) {
+              width: 50px;
               top: 256px;
               right: -188px;
             }
@@ -1248,16 +1276,17 @@ const PlendingBox = styled.main`
     .featureList {
       display: flex;
       justify-content: center;
-      gap: 30px;
+      gap: 40px;
       padding: 60px 0 0 0;
 
       li {
         display: flex;
-        justify-content: center;
+        flex-direction: column;
         align-items: center;
-        width: 460px;
-        height: 264px;
-        padding: 0 80px;
+        gap: 20px;
+        width: 350px;
+        height: 200px;
+        padding: 66px 44px 0;
         background: rgba(255, 255, 255, 0.04);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 20px;
@@ -1352,24 +1381,24 @@ const PlendingBox = styled.main`
           justify-content: center;
           width: 100%;
           height: 100%;
+          top: 0;
           position: absolute;
           overflow: hidden;
 
           .shadow {
-            width: 270px;
-            height: 120px;
-
-            top: -120px;
+            width: 130px;
+            height: 60px;
+            top: -60px;
             position: absolute;
           }
         }
 
         .iconBox {
-          width: 96px;
-          height: 96px;
+          width: 80px;
+          height: 80px;
           border: 3px solid rgba(255, 255, 255, 0.3);
           border-radius: 24px;
-          top: -60px;
+          top: -40px;
           position: absolute;
 
           .borderBox {
@@ -1383,12 +1412,22 @@ const PlendingBox = styled.main`
             top: -3px;
             left: -3px;
             position: absolute;
+
+            img{
+              height: 44px;
+            }
           }
         }
 
-        p {
-          font-size: 22px;
-          color: rgba(255, 255, 255, 0.7);
+        .title {
+          font-size: 20px;
+          font-weight: 700;
+          text-align: center;
+        }
+
+        .text {
+          font-size: 16px;
+          color: rgba(255, 255, 255, 0.6);
           text-align: center;
         }
       }

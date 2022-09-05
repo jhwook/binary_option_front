@@ -11,15 +11,18 @@ import I_buyHover from "../img/icon/I_buyHover.svg";
 export const D_featureList = [
   {
     icon: I_thunderYellow,
-    text: "A fast, responsive trading experience. Powered by Betbit low latency blockchain.",
+    title: "Innovative Products",
+    text: "Trade without converting tokens",
   },
   {
     icon: I_stackPink,
-    text: "Permissionless by design. Anyone can trade anything, anytime.",
+    title: "Industry-leading Security",
+    text: "Risk Control with hot & cold wallets segregation",
   },
   {
     icon: I_speakOrange,
-    text: "Transparent pricing. When you trade with Betbit, you know exactly what price you are trading at.",
+    title: "Excellent Customer Service",
+    text: "Reward Centers dedicated to community",
   },
 ];
 
@@ -41,7 +44,6 @@ export const D_futureList = [
     cont: "You can start trading by investing a small amount of money. The minimum deposit is 10 USDT.",
   },
 ];
-
 
 export const D_guideList = [
   {

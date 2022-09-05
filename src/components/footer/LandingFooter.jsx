@@ -4,7 +4,7 @@ import L_yellow from "../../img/logo/L_yellow.svg";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 
-export default function LendingFooter() {
+export default function LandingFooter() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -12,7 +12,7 @@ export default function LendingFooter() {
 
   if (isMobile)
     return (
-      <MlendingFooterBox>
+      <MlandingFooterBox>
         <section className="innerBox">
           <article className="topArea">
             <ul className="termList">
@@ -37,11 +37,11 @@ export default function LendingFooter() {
             </p>
           </article>
         </section>
-      </MlendingFooterBox>
+      </MlandingFooterBox>
     );
   else
     return (
-      <PlendingFooterBox>
+      <PlandingFooterBox>
         <section className="innerBox">
           <article className="leftArea">
             <div className="logoBox">
@@ -75,11 +75,11 @@ export default function LendingFooter() {
             </div>
           </article>
         </section>
-      </PlendingFooterBox>
+      </PlandingFooterBox>
     );
 }
 
-const MlendingFooterBox = styled.footer`
+const MlandingFooterBox = styled.footer`
   padding: 0 20px 20px;
   margin: 312px 0 0 0;
 
@@ -123,7 +123,7 @@ const MlendingFooterBox = styled.footer`
   }
 `;
 
-const PlendingFooterBox = styled.footer`
+const PlandingFooterBox = styled.footer`
   display: flex;
   justify-content: center;
 

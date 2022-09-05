@@ -1,24 +1,17 @@
 import moment from "moment";
-import { Fragment, memo, useEffect, useState, useRef } from "react";
+import { Fragment, memo, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import I_highArwGreen from "../../../img/icon/I_highArwGreen.svg";
 import I_lowArwRed from "../../../img/icon/I_lowArwRed.svg";
 import { setOpenedData } from "../../../reducers/bet";
-import axios from "axios";
-import { API } from "../../../configs/api";
-import { D_tokenCategoryList } from "../../../data/D_bet";
-import { getDividFromData } from "../../../util/Util";
 
 export default function Opened({ socket }) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const isMobile = useSelector((state) => state.common.isMobile);
   const betFlag = useSelector((state) => state.bet.betFlag);
-  const dividObj = useSelector((state) => state.bet.dividObj);
-  const hoverRef = useRef();
-  const [assetInfo, setAssetInfo] = useState();
 
   const [data, setData] = useState([]);
   const [now, setNow] = useState(new Date());
@@ -40,23 +33,6 @@ export default function Opened({ socket }) {
       default:
         break;
     }
-  }
-
-  function onMouseOverBtn(e) {
-    hoverRef.current.style.left = `${e.clientX}px`;
-    hoverRef.current.style.top = `${e.clientY}px`;
-  }
-
-  function getAssetList() {
-    axios
-      .get(`${API.GET_ASSETS}`, {
-        params: { group: D_tokenCategoryList[1].value },
-      })
-      .then(({ data }) => {
-        console.log("asset", data.resp);
-        setAssetInfo(data.resp[0]);
-      })
-      .catch((err) => console.error(err));
   }
 
   function getInitBenefit(v) {
@@ -131,10 +107,6 @@ export default function Opened({ socket }) {
     getLog();
   }, [betFlag]);
 
-  useEffect(() => {
-    getAssetList();
-  }, []);
-
   if (isMobile)
     return (
       <MopenedBox className="detContList">
@@ -149,9 +121,7 @@ export default function Opened({ socket }) {
                         <p className="token">{v.asset.name}</p>
 
                         <p className="price">
-                          {v.startingPrice
-                            ? Math.floor(v.startingPrice * 100) / 100
-                            : "-"}
+                          {Math.floor(v.startingPrice * 100) / 100}
                         </p>
 
                         <p className="percent">{`${v.diffRate || 0}%`}</p>
@@ -160,7 +130,7 @@ export default function Opened({ socket }) {
                       <div className="contBox">
                         <span className="forecast">
                           <img src={getIcon(v.side)} alt="" />
-                          <p>{`$${v.amount / 10 ** 6}`}</p>
+                          <p>{`$${(v.amount / 10 ** 6).toFixed(2)}`}</p>
                         </span>
 
                         <p
@@ -294,34 +264,28 @@ export default function Opened({ socket }) {
           data.map((v, i) => (
             <Fragment key={i}>
               {v.expiry > now.getTime() / 1000 && (
-                <li onMouseMove={onMouseOverBtn}>
+                <li>
                   <details>
                     <summary>
                       <div className="contBox">
                         <p className="token">{v?.asset?.name}</p>
 
                         <p className="price">
-                          {v.startingPrice
-                            ? Math.floor(v.startingPrice * 100) / 100
-                            : "-"}
+                          {Math.floor(v.startingPrice * 100) / 100}
                         </p>
 
-                        <p className="percent">{`${
-                          v.startingPrice ? v.diffRate || 0 : "- "
-                        }%`}</p>
+                        <p className="percent">{`${v.diffRate || 0}%`}</p>
                       </div>
 
                       <div className="contBox">
                         <span className="forecast">
                           <img src={getIcon(v.side)} alt="" />
-                          <p>{`$${v.amount / 10 ** 6}`}</p>
+                          <p>{`$${(v.amount / 10 ** 6).toFixed(2)}`}</p>
                         </span>
 
-                        <p className={`${getPreResult(v)} benefit`}>
-                          {v.startingPrice
-                            ? `$${getInitBenefit(v).toFixed(2)}`
-                            : "-"}
-                        </p>
+                        <p
+                          className={`${getPreResult(v)} benefit`}
+                        >{`$${getInitBenefit(v).toFixed(2)}`}</p>
 
                         <p className="time">
                           {`${
@@ -446,17 +410,6 @@ export default function Opened({ socket }) {
                       </div>
                     </div>
                   </details>
-                  <p className="hoverPopup" ref={hoverRef}>
-                    {`Dividend rate : +${getDividFromData({
-                      id: assetInfo?.id,
-                      _case: `${v.side.toLowerCase()}Rate`,
-                      dataObj: dividObj,
-                    })}%  ${getDividFromData({
-                      id: assetInfo?.id,
-                      _case: `${v.side.toLowerCase()}Amount`,
-                      dataObj: dividObj,
-                    })} USDT`}
-                  </p>
                 </li>
               )}
             </Fragment>
@@ -649,28 +602,6 @@ const PopenedBox = styled.ul`
   overflow-y: scroll;
 
   li {
-    &:hover {
-      .hoverPopup {
-        display: block;
-      }
-    }
-
-    .hoverPopup {
-      display: none;
-      width: 210px;
-      padding: 10px 12px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 4px;
-      backdrop-filter: blur(40px);
-      -webkit-backdrop-filter: blur(40px);
-      /* top: 18px;
-            right: 0; */
-      position: absolute;
-
-      p {
-        color: #fff;
-      }
-    }
     details {
       padding: 14px;
       background: rgba(255, 255, 255, 0.1);
