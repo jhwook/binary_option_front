@@ -120,7 +120,9 @@ export default function Demo({ socket, notiOpt }) {
       case "percent":
         if (amount > 100 || amount <= 0) throw "Not Possible Percent";
 
-        return (balance.data.respdata.DEMO.avail * amount) / 100;
+        return (
+          Math.floor((balance.data.respdata.DEMO.avail * amount) / 10) / 10
+        );
 
       default:
         break;
@@ -158,6 +160,11 @@ export default function Demo({ socket, notiOpt }) {
     hoverRef1.current.style.top = `${e.clientY}px`;
     hoverRef2.current.style.left = `${e.clientX}px`;
     hoverRef2.current.style.top = `${e.clientY}px`;
+  }
+
+  function onChangeAmount(value) {
+    const pattern = /^\d*[.]\d{2}$/;
+    if (!pattern.test(value)) setAmount(value);
   }
 
   function onClickAmountModeBtn() {
@@ -367,7 +374,7 @@ export default function Demo({ socket, notiOpt }) {
                           <input
                             value={amount}
                             type={"number"}
-                            onChange={(e) => setAmount(e.target.value)}
+                            onChange={(e) => onChangeAmount(e.target.value)}
                             placeholder="0"
                           />
 
@@ -390,7 +397,7 @@ export default function Demo({ socket, notiOpt }) {
                       <span className="btnBox high">
                         <button
                           className="highBtn"
-                          disabled={!amount}
+                          disabled={amount <= 0}
                           onClick={() => onClickPayBtn("HIGH")}
                         >
                           <img src={I_highArwGreen} alt="" />
@@ -413,7 +420,7 @@ export default function Demo({ socket, notiOpt }) {
                       <span className="btnBox low">
                         <button
                           className="lowBtn"
-                          disabled={!amount}
+                          disabled={amount <= 0}
                           onClick={() => onClickPayBtn("LOW")}
                         >
                           <img src={I_lowArwRed} alt="" />
@@ -658,7 +665,7 @@ export default function Demo({ socket, notiOpt }) {
                         <input
                           value={amount}
                           type={"number"}
-                          onChange={(e) => setAmount(e.target.value)}
+                          onChange={(e) => onChangeAmount(e.target.value)}
                           placeholder="0"
                         />
 
@@ -679,7 +686,7 @@ export default function Demo({ socket, notiOpt }) {
                     <span className="btnBox" onMouseMove={onMouseOverBtn}>
                       <button
                         className="highBtn"
-                        disabled={!amount}
+                        disabled={amount <= 0}
                         onClick={() => onClickPayBtn("HIGH")}
                       >
                         <span className="defaultBox">
@@ -719,7 +726,7 @@ export default function Demo({ socket, notiOpt }) {
                     <span className="btnBox" onMouseMove={onMouseOverBtn}>
                       <button
                         className="lowBtn"
-                        disabled={!amount}
+                        disabled={amount <= 0}
                         onClick={() => onClickPayBtn("LOW")}
                       >
                         <span className="defaultBox">
