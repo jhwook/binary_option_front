@@ -95,7 +95,7 @@ export default function Opened({ socket }) {
 
     let logInterval = setInterval(() => {
       getLog();
-    }, 10000);
+    }, 1000);
 
     return () => {
       clearInterval(timeInterval);

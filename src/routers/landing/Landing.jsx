@@ -1017,6 +1017,7 @@ const PlandingBox = styled.main`
   padding: 60px 0 0;
   color: #fff;
   background: #212121;
+  overflow: hidden;
   overflow-y: scroll;
 
   .placeSec {
@@ -1413,7 +1414,7 @@ const PlandingBox = styled.main`
             left: -3px;
             position: absolute;
 
-            img{
+            img {
               height: 44px;
             }
           }
