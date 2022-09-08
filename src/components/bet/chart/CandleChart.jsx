@@ -388,6 +388,8 @@ export default function CandleChart({ assetInfo, chartOpt, socket }) {
     socket.on("get_ticker_price", (res) => {
       if (!res) return;
 
+      console.log(res);
+
       setCurrentPrice(Number(res));
     });
   }, []);
