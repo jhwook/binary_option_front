@@ -80,7 +80,8 @@ export default function Bet() {
               type: "closed",
               assetInfo: { name: v.name },
               amount: v.data.amount / 10 ** 6,
-              profit: v.profit,
+              profit: v.profit ,
+              data : v.data
             });
           }, i * 1000);
         });

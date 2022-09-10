@@ -120,7 +120,7 @@ export function onClickCopy(str) {
   document.body.removeChild(textArea);
 }
 
-export function setToast({ type, cont, assetInfo, amount, profit }) {
+export function setToast({ type, cont, assetInfo, amount, profit , data }) {
   switch (type) {
     case "HIGH":
       toast(
@@ -186,15 +186,17 @@ export function setToast({ type, cont, assetInfo, amount, profit }) {
               <strong>{assetInfo.name}</strong>
               <img src={I_highArwGreen} alt="" />
             </li>
-
             <li>
-              <p className="key">Payout</p>
+              <p className="key">Amount</p>
               <p className="value">${amount}</p>
             </li>
-
             <li>
               <p className="key">Profit</p>
               <p className="value">${profit}</p>
+            </li>
+            <li>
+              <p className="key">Outcome</p>
+              <p className="value">{data.outcome}</p>
             </li>
           </ul>
         </div>,
