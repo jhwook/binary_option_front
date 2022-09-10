@@ -15,14 +15,20 @@ export default function Opened({ socket }) {
 
   const [data, setData] = useState([]);
   const [now, setNow] = useState(new Date());
-
-  function getLog() {
+  function getdividendrate() {
+    socket.emit("dividendrate", {}, (res) => {
+      console.log("@dividendrate", res);
+//      setData(res);
+  //    dispatch(setOpenedData(res));
+    });
+  } 
+   function getLog() {
     socket.emit("bet", {}, (res) => {
       console.log("bet", res);
       setData(res);
       dispatch(setOpenedData(res));
     });
-  }
+  } 
 
   function getIcon(type) {
     switch (type) {
@@ -94,6 +100,7 @@ export default function Opened({ socket }) {
     }, 1000);
 
     let logInterval = setInterval(() => {
+      getdividendrate()
       getLog();
     }, 1000);
 
@@ -104,6 +111,8 @@ export default function Opened({ socket }) {
   }, []);
 
   useEffect(() => {
+    getdividendrate()
+
     getLog();
   }, [betFlag]);
 
