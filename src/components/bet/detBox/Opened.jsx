@@ -24,7 +24,7 @@ export default function Opened({ socket }) {
   } 
    function getLog() {
     socket.emit("bet", {}, (res) => {
-      console.log("bet", res);
+      console.log("@@bet", res);
       setData(res);
       dispatch(setOpenedData(res));
     });
@@ -61,10 +61,13 @@ export default function Opened({ socket }) {
         break;
     }
   }
-
   function getPreResult(v) {
     let result;
-
+    switch ( Math.sign( +v.winamount)){
+      case +1: return 'plus'; break
+      case -1: return 'minus' ; break
+      default : return 'plus'
+    }
     switch (v.side) {
       case "HIGH":
         if (v.currentPrice - v.startingPrice > 0) result = "plus";
@@ -144,7 +147,8 @@ export default function Opened({ socket }) {
 
                         <p
                           className={`${getPreResult(v)} benefit`}
-                        >{`$${getInitBenefit(v).toFixed(2)}`}</p>
+                        >{ v?.winamount? ((v?.winamount)/10**6).toFixed(2) :'' }{/** `$${getInitBenefit(v).toFixed(2)}`*/}                        
+                        </p>
 
                         <p className="time">
                           {`${
@@ -294,7 +298,8 @@ export default function Opened({ socket }) {
 
                         <p
                           className={`${getPreResult(v)} benefit`}
-                        >{`$${getInitBenefit(v).toFixed(2)}`}</p>
+                        >{ v?.winamount? ((v?.winamount)/10**6).toFixed(2) :'' }
+                          {/** `$${getInitBenefit(v).toFixed(2)}`*/}</p>
 
                         <p className="time">
                           {`${

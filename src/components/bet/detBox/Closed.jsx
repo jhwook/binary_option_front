@@ -116,7 +116,7 @@ export default function Closed({ page }) {
                             </span>
 
                             <p className={`${getPreResult(detV)} benefit`}>
-{detV.winamount}                              
+{(+detV.winamount).toFixed(2)}
 {/** `$${detV.profit_amount? Number(detV.profit_amount).toFixed(2): detV.profit_amount}`}*/}
 </p>
 
@@ -273,7 +273,7 @@ export default function Closed({ page }) {
                             </span>
 
                             <p className={`${getPreResult(detV)} benefit`}>
-                              {detV.winamount}
+                            {(+detV.winamount).toFixed(2)}
 {/**  `$${detV.profit_amount? Number(detV.profit_amount).toFixed(2): detV.profit_amount}`}*/}
 </p>
 

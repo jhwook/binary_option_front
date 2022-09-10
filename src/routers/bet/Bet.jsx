@@ -61,6 +61,8 @@ export default function Bet() {
 
     socketIo.on("dividendrate", (res) => {
       console.log("dividendrate", res);
+      if (res){}
+      else { return }
       dispatch(setDividObj(res));
     });
 

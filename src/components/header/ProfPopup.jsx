@@ -15,13 +15,14 @@ export default function ProfPopup({ off, offAll }) {
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [data, setData] = useState("");
-
+  let [ myinfo , setmyinfo] = useState()
   function getData() {
     axios
       .get(API.MY_POSITION)
       .then(({ data }) => {
-        console.log(data.result);
+        console.log('@mypositiondata',data.result);
         setData(data.result);
+        setmyinfo ( data.myinfo )
       })
       .catch(console.error);
   }
@@ -60,7 +61,9 @@ export default function ProfPopup({ off, offAll }) {
             <div className="textBox">
               <p className="id">{data.name}</p>
               <strong className="pos">{t(data.level_str)}</strong>
+              <div  className="pos">{ myinfo?.email}</div>
             </div>
+
           </div>
 
           <div className="accountBox">
@@ -160,7 +163,9 @@ export default function ProfPopup({ off, offAll }) {
           <div className="textBox">
             <p className="id">{data.name}</p>
             <strong className="pos">{t(data.level_str)}</strong>
+            <div  className="pos">{ myinfo?.email }</div>
           </div>
+
         </div>
 
         <div className="accountBox">
