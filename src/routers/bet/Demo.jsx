@@ -84,6 +84,8 @@ export default function Demo({ socket, notiOpt }) {
   }
 
   function getBookMark() {
+    if(localStorage.getItem( 'token')){}
+    else { return }
     axios
       .get(API.BOOKMARKS_MY)
       .then(({ data }) => {
