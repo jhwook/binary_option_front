@@ -1,5 +1,5 @@
 import moment from "moment";
-import { Fragment, memo, useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
@@ -15,20 +15,14 @@ export default function Opened({ socket }) {
 
   const [data, setData] = useState([]);
   const [now, setNow] = useState(new Date());
-  function getdividendrate() {
-    socket.emit("dividendrate", {}, (res) => {
-      console.log("@dividendrate", res);
-//      setData(res);
-  //    dispatch(setOpenedData(res));
-    });
-  } 
-   function getLog() {
+
+  function getLog() {
     socket.emit("bet", {}, (res) => {
       console.log("@@bet", res);
       setData(res);
       dispatch(setOpenedData(res));
     });
-  } 
+  }
 
   function getIcon(type) {
     switch (type) {
@@ -41,49 +35,17 @@ export default function Opened({ socket }) {
     }
   }
 
-  function getInitBenefit(v) {
-    let _amount = v.amount / 10 ** 6;
-    switch (v.side) {
-      case "HIGH":
-        if (v.currentPrice - v.startingPrice > 0) {
-          return (_amount * v.diffRate) / 100;
-        } else {
-          return _amount * -1;
-        }
-
-      case "LOW":
-        if (v.currentPrice - v.startingPrice < 0) {
-          return (_amount * v.diffRate) / 100;
-        } else {
-          return _amount * -1;
-        }
-      default:
-        break;
-    }
-  }
   function getPreResult(v) {
-    let result;
-    switch ( Math.sign( +v.winamount)){
-      case +1: return 'plus'; break
-      case -1: return 'minus' ; break
-      default : return 'plus'
-    }
-    switch (v.side) {
-      case "HIGH":
-        if (v.currentPrice - v.startingPrice > 0) result = "plus";
-        else if (v.currentPrice - v.startingPrice < 0) result = "minus";
+    switch (Math.sign(+v.winamount)) {
+      case +1:
+        return "plus";
         break;
-
-      case "LOW":
-        if (v.currentPrice - v.startingPrice > 0) result = "minus";
-        else if (v.currentPrice - v.startingPrice < 0) result = "plus";
+      case -1:
+        return "minus";
         break;
-
       default:
-        break;
+        return "plus";
     }
-
-    return result;
   }
 
   function getForcast(type) {
@@ -103,7 +65,6 @@ export default function Opened({ socket }) {
     }, 1000);
 
     let logInterval = setInterval(() => {
-      getdividendrate()
       getLog();
     }, 1000);
 
@@ -114,8 +75,6 @@ export default function Opened({ socket }) {
   }, []);
 
   useEffect(() => {
-    getdividendrate()
-
     getLog();
   }, [betFlag]);
 
@@ -145,9 +104,10 @@ export default function Opened({ socket }) {
                           <p>{`$${(v.amount / 10 ** 6).toFixed(2)}`}</p>
                         </span>
 
-                        <p
-                          className={`${getPreResult(v)} benefit`}
-                        >{ v?.winamount? ((v?.winamount)/10**6).toFixed(2) :'' }{/** `$${getInitBenefit(v).toFixed(2)}`*/}                        
+                        <p className={`${getPreResult(v)} benefit`}>
+                          {v?.winamount
+                            ? (v?.winamount / 10 ** 6).toFixed(2)
+                            : ""}
                         </p>
 
                         <p className="time">
@@ -296,10 +256,11 @@ export default function Opened({ socket }) {
                           <p>{`$${(v.amount / 10 ** 6).toFixed(2)}`}</p>
                         </span>
 
-                        <p
-                          className={`${getPreResult(v)} benefit`}
-                        >{ v?.winamount? ((v?.winamount)/10**6).toFixed(2) :'' }
-                          {/** `$${getInitBenefit(v).toFixed(2)}`*/}</p>
+                        <p className={`${getPreResult(v)} benefit`}>
+                          {v?.winamount
+                            ? (v?.winamount / 10 ** 6).toFixed(2)
+                            : ""}
+                        </p>
 
                         <p className="time">
                           {`${

@@ -15,14 +15,15 @@ export default function ProfPopup({ off, offAll }) {
   const isMobile = useSelector((state) => state.common.isMobile);
 
   const [data, setData] = useState("");
-  let [ myinfo , setmyinfo] = useState()
+  let [myinfo, setmyinfo] = useState();
+
   function getData() {
     axios
       .get(API.MY_POSITION)
       .then(({ data }) => {
-        console.log('@mypositiondata',data.result);
+        console.log(data);
         setData(data.result);
-        setmyinfo ( data.myinfo )
+        setmyinfo(data.myinfo);
       })
       .catch(console.error);
   }
@@ -59,11 +60,13 @@ export default function ProfPopup({ off, offAll }) {
             <img src={data.level_img} alt="" />
 
             <div className="textBox">
-              <p className="id">{data.name}</p>
+              <p className="id">
+                {myinfo?.email ||
+                  `${myinfo?.countryNum} ${myinfo?.phone}` ||
+                  "-"}
+              </p>
               <strong className="pos">{t(data.level_str)}</strong>
-              <div  className="pos">{ myinfo?.email}</div>
             </div>
-
           </div>
 
           <div className="accountBox">
@@ -161,11 +164,11 @@ export default function ProfPopup({ off, offAll }) {
           <img src={data.level_img} alt="" />
 
           <div className="textBox">
-            <p className="id">{data.name}</p>
+            <p className="id">
+              {myinfo?.email || `${myinfo?.countryNum} ${myinfo?.phone}` || "-"}
+            </p>
             <strong className="pos">{t(data.level_str)}</strong>
-            <div  className="pos">{ myinfo?.email }</div>
           </div>
-
         </div>
 
         <div className="accountBox">

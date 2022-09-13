@@ -84,8 +84,10 @@ export default function Demo({ socket, notiOpt }) {
   }
 
   function getBookMark() {
-    if(localStorage.getItem( 'token')){}
-    else { return }
+    if (localStorage.getItem("token")) {
+    } else {
+      return;
+    }
     axios
       .get(API.BOOKMARKS_MY)
       .then(({ data }) => {
@@ -123,7 +125,8 @@ export default function Demo({ socket, notiOpt }) {
         if (amount > 100 || amount <= 0) throw "Not Possible Percent";
 
         return (
-          Math.floor((balance.data.respdata.DEMO.avail * amount) / 10) / 10
+          Math.floor((balance.data.respdata.DEMO.avail * amount) / 10 ** 6) *
+          10 ** 4
         );
 
       default:

@@ -15,7 +15,6 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
   const dispatch = useDispatch();
   const isMobile = useSelector((state) => state.common.isMobile);
   const dividObj = useSelector((state) => state.bet.dividObj);
-  const token = localStorage.getItem("token");
 
   const [categoryList, setCategoryList] = useState([]);
   const [category, setCategory] = useState("");
@@ -69,7 +68,7 @@ export default function TokenPopup({ off, setAssetInfo, getBookMark }) {
     axios
       .get(`${API.GET_ASSETS_GROUP}`)
       .then(({ data }) => {
-        console.log(data.listgroups);
+        console.log("group", data.listgroups);
         setCategory(data.listgroups[0].groupstr);
         setCategoryList(data.listgroups);
       })

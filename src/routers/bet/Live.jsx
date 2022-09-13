@@ -32,7 +32,7 @@ import {
 } from "../../data/D_bet";
 import { getDividFromData, setToast } from "../../util/Util";
 import { setBetFlag } from "../../reducers/bet";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import BarSizePopup from "../../components/bet/BarSizePopup";
 import ChartTypePopup from "../../components/bet/ChartTypePopup";
 import AmChart from "../../components/bet/chart/AmChart";
@@ -42,9 +42,6 @@ export default function Live({ socket, notiOpt }) {
   const hoverRef2 = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
-
-  console.log(location);
 
   const isMobile = useSelector((state) => state.common.isMobile);
   const openedData = useSelector((state) => state.bet.openedData);
@@ -148,7 +145,8 @@ export default function Live({ socket, notiOpt }) {
         if (amount > 100 || amount <= 0) throw "Not Possible Percent";
 
         return (
-          Math.floor((balance.data.respdata.DEMO.avail * amount) / 10) / 10
+          Math.floor((balance.data.respdata.LIVE.avail * amount) / 10 ** 6) *
+          10 ** 4
         );
 
       default:

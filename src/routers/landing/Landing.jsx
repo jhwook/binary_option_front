@@ -111,7 +111,7 @@ export default function Landing() {
                   <li
                     key={i}
                     onClick={() =>
-                      window.open(`https://binance.com/en/trade/${v.symbol}`)
+                      window.open(`https://binance.com/en/price/${v.name}`)
                     }
                   >
                     <span className="assetImgBox">
@@ -122,7 +122,9 @@ export default function Landing() {
                       <strong className="name">{v.name}</strong>
                       <p className="close">
                         {`${
-                          v.close && Number(v.close).toLocaleString("eu", "US")
+                          (v.close &&
+                            Number(v.close).toLocaleString("eu", "US")) ||
+                          0
                         } USD`}
                       </p>
                     </div>
@@ -134,7 +136,7 @@ export default function Landing() {
                   <li
                     key={i}
                     onClick={() =>
-                      window.open(`https://binance.com/en/trade/${v.symbol}`)
+                      window.open(`https://binance.com/en/price/${v.name}`)
                     }
                   >
                     <span className="assetImgBox">
@@ -323,7 +325,7 @@ export default function Landing() {
                 <li
                   key={i}
                   onClick={() =>
-                    window.open(`https://binance.com/en/trade/${v.symbol}`)
+                    window.open(`https://binance.com/en/price/${v.name}`)
                   }
                 >
                   <span className="assetImgBox">
@@ -335,7 +337,9 @@ export default function Landing() {
 
                     <p className="close">
                       {`${
-                        v.close && Number(v.close).toLocaleString("eu", "US")
+                        (v.close &&
+                          Number(v.close).toLocaleString("eu", "US")) ||
+                        0
                       } USD`}
                     </p>
                   </div>
@@ -348,7 +352,7 @@ export default function Landing() {
                 <li
                   key={i}
                   onClick={() =>
-                    window.open(`https://binance.com/en/trade/${v.symbol}`)
+                    window.open(`https://binance.com/en/price/${v.name}`)
                   }
                 >
                   <span className="assetImgBox">

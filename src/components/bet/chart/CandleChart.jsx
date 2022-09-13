@@ -380,11 +380,7 @@ export default function CandleChart({ assetInfo, chartOpt, socket }) {
   }, [root, chartOpt]);
 
   useEffect(() => {
-    // socket.on("get_tick er_price_05sec", (res) => {
-    //   if (!res) return;
-    //   console.log(res);
-    //   setCurrentPrice(Number(res[0].close));
-    // });
+
     socket.on("get_ticker_price", (res) => {
       if (!res) return;
 
@@ -399,7 +395,6 @@ export default function CandleChart({ assetInfo, chartOpt, socket }) {
     valueSeries.data.setAll([...apiData]);
 
     let _dataInterval = setTimeout(() => {
-      // socket.emit("get_ti cker_price_05sec", assetInfo.APISymbol);
       socket.emit("get_ticker_price", assetInfo.APISymbol);
       if (currentPrice) getData(currentPrice);
     }, 1000);
