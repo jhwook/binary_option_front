@@ -3,7 +3,7 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, Navigate } from "react-router";
 import { io } from "socket.io-client";
-import { API, CLOSED_SOCKET_URL, URL } from "../../configs/api";
+import { API,  URL } from "../../configs/api";
 import { setBetFlag, setClosedFlag, setDividObj } from "../../reducers/bet";
 import { setToast } from "../../util/Util";
 import Demo from "./Demo";
@@ -61,8 +61,10 @@ export default function Bet() {
 
     socketIo.on("dividendrate", (res) => {
       console.log("dividendrate", res);
-      if (res){}
-      else { return }
+      if (res) {
+      } else {
+        return;
+      }
       dispatch(setDividObj(res));
     });
 
@@ -80,8 +82,8 @@ export default function Bet() {
               type: "closed",
               assetInfo: { name: v.name },
               amount: v.data.amount / 10 ** 6,
-              profit: v.profit ,
-              data : v.data
+              profit: v.profit,
+              data: v.data,
             });
           }, i * 1000);
         });
@@ -90,6 +92,8 @@ export default function Bet() {
       dispatch(setClosedFlag());
       dispatch(setBetFlag());
     });
+
+    console.log("socketIo",socketIo);
   }
 
   function getDemoToken() {

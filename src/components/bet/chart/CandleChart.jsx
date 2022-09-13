@@ -68,6 +68,21 @@ export default function CandleChart({ assetInfo, chartOpt, socket }) {
     let _now = new Date().setMilliseconds(0);
 
     dispatch(setPrice({ currentPrice: price, pastPrice: _lastIndex.Close }));
+
+    if (
+      Math.floor(_now / chartOpt.barSize) !==
+      Math.floor(_lastIndex.Date / chartOpt.barSize)
+    )
+      console.log(
+        "get_ticker_price editChart",
+        "\n",
+        "now",
+        new Date(_now),
+        "\n",
+        "last time",
+        new Date(_lastIndex.Date),
+        "\n"
+      );
     if (
       Math.floor(_now / chartOpt.barSize) ===
       Math.floor(_lastIndex.Date / chartOpt.barSize)
@@ -222,7 +237,7 @@ export default function CandleChart({ assetInfo, chartOpt, socket }) {
         renderer: am5xy.AxisRendererY.new(root, {
           pan: "zoom",
         }),
-        extraMin: 0.1, // adds some space for for main series
+        extraMin: 0.1,
         tooltip: am5.Tooltip.new(root, {}),
         numberFormat: "#,###.####",
         extraTooltipPrecision: 2,
@@ -377,17 +392,21 @@ export default function CandleChart({ assetInfo, chartOpt, socket }) {
     if (!root) return;
 
     getPreData();
+    let _preInterval = setInterval(() => {
+      getPreData();
+    }, chartOpt.barSize);
+
+    return () => clearInterval(_preInterval);
   }, [root, chartOpt]);
 
   useEffect(() => {
-
     socket.on("get_ticker_price", (res) => {
       if (!res) return;
-
-      console.log(res);
-
+      console.log("get_ticker_price", res);
       setCurrentPrice(Number(res));
     });
+
+    return () => socket.off("get_ticker_price");
   }, []);
 
   useEffect(() => {
@@ -397,6 +416,7 @@ export default function CandleChart({ assetInfo, chartOpt, socket }) {
     let _dataInterval = setTimeout(() => {
       socket.emit("get_ticker_price", assetInfo.APISymbol);
       if (currentPrice) getData(currentPrice);
+      console.log("get_ticker_price socket", socket);
     }, 1000);
 
     return () => {

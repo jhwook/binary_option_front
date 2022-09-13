@@ -426,6 +426,11 @@ export default function HeikanAshiChart({ assetInfo, chartOpt, socket }) {
     if (!root) return;
 
     getPreData();
+    let _preInterval = setInterval(() => {
+      getPreData();
+    }, chartOpt.barSize);
+
+    return () => clearInterval(_preInterval);
   }, [root, chartOpt]);
 
   useEffect(() => {
@@ -434,6 +439,8 @@ export default function HeikanAshiChart({ assetInfo, chartOpt, socket }) {
 
       setCurrentPrice(Number(res));
     });
+
+    return () => socket.off("get_ticker_price");
   }, []);
 
   useEffect(() => {

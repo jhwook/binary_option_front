@@ -11,7 +11,7 @@ export default function AmChart({ assetInfo, chartOpt, socket }) {
 
     setBusy(true);
     setTimeout(() => setBusy(false), 1);
-  }, [assetInfo,chartOpt]);
+  }, [assetInfo, chartOpt]);
 
   if (busy) return <></>;
   else
