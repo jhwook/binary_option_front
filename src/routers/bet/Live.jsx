@@ -436,11 +436,11 @@ export default function Live({ socket, notiOpt }) {
                           {`+${getDividFromData({
                             id: assetInfo?.id,
                             _case: "highRate",
-                            dataObj: dividObj,
+                            dataObj: dividObj,                            duration
                           })}%  ${getDividFromData({
                             id: assetInfo?.id,
                             _case: "highAmount",
-                            dataObj: dividObj,
+                            dataObj: dividObj,                            duration
                           })}`}
                         </p>
                       </span>
@@ -459,11 +459,11 @@ export default function Live({ socket, notiOpt }) {
                           {`+${getDividFromData({
                             id: assetInfo?.id,
                             _case: "lowRate",
-                            dataObj: dividObj,
+                            dataObj: dividObj,                            duration
                           })}%  ${getDividFromData({
                             id: assetInfo?.id,
                             _case: "lowAmount",
-                            dataObj: dividObj,
+                            dataObj: dividObj,                            duration
                           })}`}
                         </p>
                       </span>
@@ -564,7 +564,7 @@ export default function Live({ socket, notiOpt }) {
                             {getDividFromData({
                               id: v.asset.id,
                               _case: "totalRate",
-                              dataObj: dividObj,
+                              dataObj: dividObj,                              duration
                             })}
                             %
                           </p>
@@ -732,13 +732,13 @@ export default function Live({ socket, notiOpt }) {
                           <strong className="percent">{`+${getDividFromData({
                             id: assetInfo?.id,
                             _case: "highRate",
-                            dataObj: dividObj,
+                            dataObj: dividObj,                            duration
                           })}%`}</strong>
                           <p className="amount">
                             {getDividFromData({
                               id: assetInfo?.id,
                               _case: "highAmount",
-                              dataObj: dividObj,
+                              dataObj: dividObj,                              duration
                             })}
                           </p>
 
@@ -746,11 +746,11 @@ export default function Live({ socket, notiOpt }) {
                             {`Dividend rate : +${getDividFromData({
                               id: assetInfo?.id,
                               _case: "highRate",
-                              dataObj: dividObj,
+                              dataObj: dividObj,                              duration
                             })}%  ${getDividFromData({
                               id: assetInfo?.id,
                               _case: "highAmount",
-                              dataObj: dividObj,
+                              dataObj: dividObj,                              duration
                             })} USDT`}
                           </p>
                         </span>
@@ -772,13 +772,13 @@ export default function Live({ socket, notiOpt }) {
                           <strong className="percent">{`+${getDividFromData({
                             id: assetInfo?.id,
                             _case: "lowRate",
-                            dataObj: dividObj,
+                            dataObj: dividObj,                            duration
                           })}%`}</strong>
                           <p className="amount">
                             {getDividFromData({
                               id: assetInfo?.id,
                               _case: "lowAmount",
-                              dataObj: dividObj,
+                              dataObj: dividObj,                              duration
                             })}
                           </p>
 
@@ -786,11 +786,11 @@ export default function Live({ socket, notiOpt }) {
                             {`Dividend rate : +${getDividFromData({
                               id: assetInfo?.id,
                               _case: "lowRate",
-                              dataObj: dividObj,
+                              dataObj: dividObj,duration                              
                             })}%  ${getDividFromData({
                               id: assetInfo?.id,
                               _case: "lowAmount",
-                              dataObj: dividObj,
+                              dataObj: dividObj,duration
                             })} USDT`}
                           </p>
                         </span>

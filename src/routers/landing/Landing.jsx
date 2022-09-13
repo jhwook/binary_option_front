@@ -41,7 +41,7 @@ export default function Landing() {
         params: { group: "coin" },
       })
       .then(({ data }) => {
-        console.log(data.resp);
+        console.log( '@asset list' , data.resp);
         setAssetList(data.resp.slice(0, 15));
       })
       .catch(console.error);
@@ -50,7 +50,8 @@ export default function Landing() {
   useEffect(() => {
     let assetInterval = setInterval(() => {
       getAssetList();
-    }, 1000);
+//    }, 4000);
+          }, 1300);
 
     return () => clearInterval(assetInterval);
   }, []);
