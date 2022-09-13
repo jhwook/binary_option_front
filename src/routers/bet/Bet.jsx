@@ -59,8 +59,8 @@ export default function Bet() {
       console.error("auth", res);
     });
 
-    socketIo.on("dividendrate", (res) => {
-      console.log("dividendrate", res);
+    socketIo.on("dividendrate_0913", (res) => {
+      console.log("dividendrate_0913", res);
       if (res) {
       } else {
         return;
@@ -129,7 +129,7 @@ export default function Bet() {
         console.log("disconnected");
       });
 
-      socketIo.disconnect("dividendrate");
+      socketIo.disconnect("dividendrate_0913");
       socketIo.disconnect("bet");
       socketIo.disconnect("bet_closed");
     };

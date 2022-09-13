@@ -217,7 +217,7 @@ export default function Live({ socket, notiOpt }) {
     _dividList = new Set(_dividList);
 
     socket.emit(
-      "dividendrate",
+      "dividendrate_0913",
       { assetList: [..._dividList], min: duration },
       () => {},
       (err) => console.error("timeout", err)
