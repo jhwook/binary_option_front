@@ -75,7 +75,7 @@ export default function Bet() {
     socketIo.on("bet_closed", (res) => {
       console.log("bet_closed", res);
 
-      if (notiOpt.betEnd) {
+      if ( notiOpt.betEnd ) {
         res.map((v, i) => {
           setTimeout(() => {
             setToast({

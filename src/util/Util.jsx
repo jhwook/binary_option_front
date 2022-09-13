@@ -340,11 +340,11 @@ export function getDividFromData({ id, _case, dataObj , duration }) {
     case "lowRate":
       return Math.floor(dividendrate.low_side_dividendrate * 100) / 100;
 
-    case "highAmount":
-      return Math.floor(_targetData.high_side_amount * 100) / 100;
-
-    case "lowAmount":
+    case "highAmount":  // return Math.floor(_targetData.high_side_amount * 100) / 100;
       return Math.floor(_targetData.low_side_amount * 100) / 100;
+
+    case "lowAmount": // return Math.floor(_targetData.low_side_amount * 100) / 100;
+      return Math.floor(_targetData.high_side_amount * 100) / 100;
     case "betCount":
       return _targetData.bet_count;
 

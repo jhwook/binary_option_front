@@ -5,10 +5,11 @@ import I_lowArwRed from "../../../img/icon/I_lowArwRed.svg";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { API } from "../../../configs/api";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ClosedChartBox from "./ClosedChart";
 import { useTranslation } from "react-i18next";
+// import cron from 'node-cron'
 
 export default function Closed({ page }) {
   const { t } = useTranslation();
@@ -78,7 +79,13 @@ export default function Closed({ page }) {
 
   useEffect(() => {
     getMyBets();
-  }, [closedFlag]);
+  }, [ closedFlag ]);
+
+/**  useMemo(_=>{
+    cron.schedule ( `2 * * * * *` , _=>{
+      getMyBets();
+    })
+  } , [] )*/ 
 
   if (isMobile)
     return (
