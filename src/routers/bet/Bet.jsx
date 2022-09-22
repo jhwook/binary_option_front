@@ -1,23 +1,23 @@
-import axios from "axios";
-import { useEffect, useLayoutEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Route, Routes, Navigate } from "react-router";
-import { io } from "socket.io-client";
-import { API, CLOSED_SOCKET_URL, URL } from "../../configs/api";
-import { setBetFlag, setClosedFlag, setDividObj } from "../../reducers/bet";
-import { setToast } from "../../util/Util";
-import Demo from "./Demo";
-import Live from "./Live";
-import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+import { useEffect, useLayoutEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Route, Routes, Navigate } from 'react-router';
+import { io } from 'socket.io-client';
+import { API, CLOSED_SOCKET_URL, URL } from '../../configs/api';
+import { setBetFlag, setClosedFlag, setDividObj } from '../../reducers/bet';
+import { setToast } from '../../util/Util';
+import Demo from './Demo';
+import Live from './Live';
+import { useNavigate } from 'react-router-dom';
 
 export default function Bet() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
-  const demoToken = localStorage.getItem("demoToken");
+  const token = localStorage.getItem('token');
+  const demoToken = localStorage.getItem('demoToken');
 
-  const [notiOpt, setNotiOpt] = useState("");
-  const [socketIo, setSocketIo] = useState("");
+  const [notiOpt, setNotiOpt] = useState('');
+  const [socketIo, setSocketIo] = useState('');
 
   function getNotiOpt() {
     axios
@@ -32,15 +32,15 @@ export default function Bet() {
 
         _notiOpt.betEnd = _resp.betend;
         _notiOpt.orderRequest = _resp.orderrequest;
-        console.log("resp", _resp);
+        console.log('resp', _resp);
         setNotiOpt({ ..._notiOpt });
       })
       .catch((err) => {
         console.error(err);
 
         if (err.response.status === 419) {
-          localStorage.removeItem("token");
-          localStorage.removeItem("demoToken");
+          localStorage.removeItem('token');
+          localStorage.removeItem('demoToken');
           window.location.reload();
         }
       });
@@ -49,47 +49,47 @@ export default function Bet() {
   useEffect(() => {
     setSocketIo(
       io(URL, {
-        transports: ["websocket"],
+        transports: ['websocket'],
         query: {
           token:
-            localStorage.getItem("token") || localStorage.getItem("demoToken"),
+            localStorage.getItem('token') || localStorage.getItem('demoToken'),
         },
       })
     );
   }, []);
 
   function getBetSocket() {
-    socketIo.on("connect", (res) => {
-      console.log("socketIo connect", socketIo);
+    socketIo.on('connect', (res) => {
+      console.log('socketIo connect', socketIo);
     });
 
-    socketIo.on("connect_error", (res) => {
-      console.error("auth", res);
+    socketIo.on('connect_error', (res) => {
+      console.error('auth', res);
     });
 
-    socketIo.on("dividendrate", (res) => {
-      console.log("dividendrate", res);
+    socketIo.on('dividendrate', (res) => {
+      console.log('dividendrate', res);
       dispatch(setDividObj(res));
     });
 
-    socketIo.on("bet", (res) => {
-      console.log("bet", res);
+    socketIo.on('bet', (res) => {
+      console.log('bet', res);
     });
 
-    socketIo.on("bet_closed", (res) => {
-      console.log("bet_closed", res);
+    socketIo.on('bet_closed', (res) => {
+      console.log('bet_closed', res);
 
       if (notiOpt.betEnd) {
-        res.map((v, i) => {
-          setTimeout(() => {
-            setToast({
-              type: "closed",
-              assetInfo: { name: v.name },
-              amount: v.data.amount / 10 ** 6,
-              profit: v.profit,
-            });
-          }, i * 1000);
-        });
+        console.log('socket bet_closed', res);
+
+        setTimeout(() => {
+          setToast({
+            type: 'closed',
+            assetInfo: { name: res.name },
+            amount: res.data.amount / 10 ** 6,
+            profit: res.profit,
+          });
+        }, 1000);
       }
 
       dispatch(setClosedFlag());
@@ -105,7 +105,7 @@ export default function Bet() {
       .then(({ data }) => {
         console.log(data.token);
 
-        localStorage.setItem("demoToken", data.token);
+        localStorage.setItem('demoToken', data.token);
         window.location.reload();
       })
       .catch((err) => console.error(err));
@@ -125,14 +125,14 @@ export default function Bet() {
     if (!socketIo) return;
 
     return () => {
-      localStorage.removeItem("demoToken");
-      socketIo.on("disconnect", () => {
-        console.log("disconnected");
+      localStorage.removeItem('demoToken');
+      socketIo.on('disconnect', () => {
+        console.log('disconnected');
       });
 
-      socketIo.disconnect("dividendrate");
-      socketIo.disconnect("bet");
-      socketIo.disconnect("bet_closed");
+      socketIo.disconnect('dividendrate');
+      socketIo.disconnect('bet');
+      socketIo.disconnect('bet_closed');
     };
   }, [socketIo]);
 
